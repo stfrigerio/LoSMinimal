@@ -37,7 +37,7 @@ class TasksTableManager extends BaseTableManager<TaskData> {
 		const endOfDay = endDate + "T23:59:59.999Z";
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE due >= ? AND due <= ? ORDER BY due;`;
 		const result = await databaseManager.executeSqlAsync(query, [startDate, endOfDay]);
-		return result.rows._array as TaskData[];
+		return result as TaskData[];
 	}
 
 	async getNextTask(): Promise<{ item: TaskData | null, timeLeft: string | null }> {
@@ -63,9 +63,9 @@ class TasksTableManager extends BaseTableManager<TaskData> {
 			return `${days}d ${hours}h ${minutes}m`;
 		}
 	
-		if (result.rows.length > 0) {
+		if (result.length > 0) {
 			// Get the first (and only) task from the result
-			const nextItem = result.rows.item(0) as TaskData;
+			const nextItem = result[0] as TaskData;
 			
 			// If the task has a due date, calculate the time left until it's due
 			if (nextItem.due) {
@@ -90,25 +90,25 @@ class TasksTableManager extends BaseTableManager<TaskData> {
 			ORDER BY due ASC;
 		`;
 		const result = await databaseManager.executeSqlAsync(query, [startOfDay.toISOString(), endOfDay.toISOString()]);
-		return result.rows._array as TaskData[];
+		return result as TaskData[];
 	}
 
 	async getRepeatingTasks(): Promise<TaskData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE repeat = 'true';`;
 		const result = await databaseManager.executeSqlAsync(query);
-		return result.rows._array as TaskData[];
+		return result as TaskData[];
 	}
 
 	async getRepeatedTaskByText(text: string): Promise<TaskData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE text = ? AND type = 'repeatedTask';`;
 		const result = await databaseManager.executeSqlAsync(query, [text]);
-		return result.rows._array as TaskData[];
+		return result as TaskData[];
 	}
 
 	async getTasksByPillar(pillarUuid: string): Promise<TaskData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE pillarUuid = ? ORDER BY due ASC;`;
 		const result = await databaseManager.executeSqlAsync(query, [pillarUuid]);
-		return result.rows._array as TaskData[];
+		return result as TaskData[];
 	}
 }
 

@@ -111,7 +111,7 @@ class LibraryManager extends BaseTableManager<LibraryData> {
 		}
 
 		const result = await databaseManager.executeSqlAsync(query, queryParams);
-		return result.rows._array as LibraryData[];
+		return result as LibraryData[];
 	}
 }
 

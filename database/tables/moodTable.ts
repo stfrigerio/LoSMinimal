@@ -31,13 +31,13 @@ class MoodNoteTableManager extends BaseTableManager<MoodNoteData> {
 	async fetchTags(): Promise<string[]> {
 		const query = `SELECT DISTINCT tag FROM ${this.tableStructure.name} ORDER BY tag;`;
 		const result = await databaseManager.executeSqlAsync(query);
-		return result.rows._array.map((row: { tag: string }) => row.tag);
+		return (result as { tag: string }[]).map(row => row.tag);
 	}
 
 	async fetchDescriptions(tag: string): Promise<string[]> {
 		const query = `SELECT DISTINCT description FROM ${this.tableStructure.name} WHERE tag = ? ORDER BY description;`;
 		const result = await databaseManager.executeSqlAsync(query, [tag]);
-		return result.rows._array.map((row: { description: string }) => row.description);
+        return (result as { description: string }[]).map(row => row.description);
 	}
 }
 

@@ -29,14 +29,14 @@ class TextNotesManager extends BaseTableManager<TextNotesData> {
 	async getByPeriod(period: string): Promise<TextNotesData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE period = ?;`;
 		const results = await databaseManager.executeSqlAsync(query, [period]);
-		return results.rows._array as TextNotesData[];
+		return results as TextNotesData[];
 	}
 
 	async getByPeriodAndKey(period: string, key: string): Promise<TextNotesData | null> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE period = ? AND key = ? LIMIT 1;`;
 		const results = await databaseManager.executeSqlAsync(query, [period, key]);
-		if (results.rows.length > 0) {
-			return results.rows.item(0) as TextNotesData;
+		if (results.length > 0) {
+			return results[0] as TextNotesData;
 		} else {
 			return null;
 		}

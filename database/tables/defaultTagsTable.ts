@@ -31,13 +31,13 @@ class TagsTableManager extends BaseTableManager<TagData> {
 	async getTagsByType(type: string): Promise<TagData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE type = ?;`;
 		const result = await databaseManager.executeSqlAsync(query, [type]);
-		return result.rows._array as TagData[];
+		return result as TagData[];
 	}
 
 	async getDescriptionsByTag(tag: string): Promise<TagData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE linkedTag = ?;`;
 		const result = await databaseManager.executeSqlAsync(query, [tag]);
-		return result.rows._array as TagData[];
+		return result as TagData[];
 	}
 }
 

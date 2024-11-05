@@ -39,8 +39,8 @@ class ContactTableManager extends BaseTableManager<ContactData> {
                 SELECT * FROM ${this.tableStructure.name}
                 ORDER BY createdAt DESC
             `;
-            const result = await databaseManager.executeSqlAsync(db, query);
-            return result.rows._array as ContactData[];
+            const result = await databaseManager.executeSqlAsync(query);
+            return result as ContactData[];
         } catch (error) {
             console.error('Error in listOrderedByDate:', error);
             throw error;

@@ -83,17 +83,16 @@ class DatabaseManager {
      * Drops all specified tables from the database.
      */
     public async dropAllTables(): Promise<void> {
-        const tables = [...capitalizedTableNames, "QuantifiableHabits", "BooleanHabits", "DeletionLog"];
-        
         if (!this.db) {
-            console.error('Database not initialized');
-            return Promise.reject('Database not initialized');
+            throw new Error('Database not initialized');
         }
 
+        const tables = [...capitalizedTableNames, "QuantifiableHabits", "BooleanHabits", "DeletionLog"];
+        
         try {
-            await this.db.withTransactionAsync(async () => {
+            await this.db.withExclusiveTransactionAsync(async (txn) => {
                 for (const table of tables) {
-                    await this.db!.execAsync(`DROP TABLE IF EXISTS ${table};`);
+                    await txn.execAsync(`DROP TABLE IF EXISTS ${table};`);
                     console.log(`${table} table dropped`);
                 }
             });
@@ -135,21 +134,18 @@ class DatabaseManager {
 
         try {
             for (const tableName of [...capitalizedTableNames, 'DeletionLog']) {
-                await this.db.prepareAsync(`SELECT * FROM ${tableName} LIMIT 1;`)
-                    .then(async (statement) => {
-                        const result = await statement.executeAsync();
-                        // You can process the result if needed
-                        await statement.finalizeAsync();
-                        console.log(`Connection successful, ${tableName} table exists`);
-                    })
-                    .catch((sqlError) => {
-                        console.log(`Error executing SQL for ${tableName}, table might not exist:`, sqlError);
-                        throw sqlError;
-                    });
+                const result = await this.db.getFirstAsync<{ count: number }>(
+                    `SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name=?;`,
+                    [tableName]
+                );
+                if (result?.count === 0) {
+                    throw new Error(`Table ${tableName} does not exist`);
+                }
+                console.log(`Connection successful, ${tableName} table exists`);
             }
             return this.db;
         } catch (error) {
-            console.error('Error opening or initializing database:', error);
+            console.error('Error checking database tables:', error);
             throw error;
         }
     }
@@ -169,26 +165,34 @@ class DatabaseManager {
      * @param sql The SQL query to execute.
      * @param params Optional parameters for the SQL query.
      */
-    public async executeSqlAsync(sql: string, params: any[] = []): Promise<any> {
+    public async executeSqlAsync<T>(sql: string, params: any[] = []): Promise<T[]> {
         if (!this.db) {
-            console.error('Database not initialized');
             throw new Error('Database not initialized');
         }
 
         try {
-            const statement = await this.db.prepareAsync(sql);
-            const result = await statement.executeAsync(...params);
-            await statement.finalizeAsync();
-            return result;
+            return await this.db.getAllAsync<T>(sql, params);
         } catch (error) {
             console.error('Error executing SQL:', error);
             throw error;
         }
     }
+    
+    public async withTransactionAsync(callback: () => Promise<void>): Promise<void> {
+        if (!this.db) {
+            throw new Error('Database not initialized');
+        }
 
-	public async withTransactionAsync(callback: () => Promise<void>): Promise<void> {
-		await this.db!.withTransactionAsync(callback);
-	}
+        try {
+            await this.db.withExclusiveTransactionAsync(async (txn) => {
+                await callback();
+            });
+        } catch (error) {
+            console.error('Transaction failed:', error);
+            throw error;
+        }
+    }
+
 
     /**
      * Generates a UUID.

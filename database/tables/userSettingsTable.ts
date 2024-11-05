@@ -29,8 +29,8 @@ class UserSettingsTableManager extends BaseTableManager<UserSettingData> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE settingKey = ? LIMIT 1;`;
 		const result = await databaseManager.executeSqlAsync(query, [settingKey]);
 
-		if (result.rows.length > 0) {
-			return result.rows.item(0) as UserSettingData;
+		if (result.length > 0) {
+			return result[0] as UserSettingData;
 		} else {
 			return null;
 		}
@@ -39,7 +39,7 @@ class UserSettingsTableManager extends BaseTableManager<UserSettingData> {
 	async getByType(type: string): Promise<UserSettingData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE type = ?;`;
 		const result = await databaseManager.executeSqlAsync(query, [type]);
-		return result.rows._array as UserSettingData[];
+		return result as UserSettingData[];
 	}
 }
 

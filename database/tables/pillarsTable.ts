@@ -29,19 +29,19 @@ class PillarsTableManager extends BaseTableManager<PillarData> {
 	async getPillars(): Promise<PillarData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} ORDER BY name;`;
 		const result = await databaseManager.executeSqlAsync(query);
-		return result.rows._array as PillarData[];
+		return result as PillarData[];
 	}
 
 	async getPillarByName(name: string): Promise<PillarData | null> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE name = ?;`;
 		const result = await databaseManager.executeSqlAsync(query, [name]);
-		return result.rows.length > 0 ? result.rows.item(0) as PillarData : null;
+		return result.length > 0 ? result[0] as PillarData : null;
 	}
 
 	async getPillarById(id: number): Promise<PillarData | null> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE id = ?;`;
 		const result = await databaseManager.executeSqlAsync(query, [id]);
-		return result.rows.length > 0 ? result.rows.item(0) as PillarData : null;
+		return result.length > 0 ? result[0] as PillarData : null;
 	}
 }
 

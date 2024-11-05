@@ -49,25 +49,25 @@ class ObjectivesTableManager extends BaseTableManager<ObjectiveData> {
 		query += ' ORDER BY createdAt DESC';
 
 		const result = await databaseManager.executeSqlAsync(query, queryParams);
-		return result.rows._array as ObjectiveData[];
+		return result as ObjectiveData[];
 	}
 
 	async fetchPeriods(): Promise<string[]> {
 		const query = `SELECT DISTINCT period FROM ${this.tableStructure.name} ORDER BY period;`;
 		const result = await databaseManager.executeSqlAsync(query);
-		return result.rows._array.map((row: { period: string }) => row.period);
+		return (result as { period: string }[]).map(row => row.period);
 	}
 
 	async getObjectivesByPillar(pillarId: number): Promise<ObjectiveData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE pillarId = ? ORDER BY createdAt DESC;`;
 		const result = await databaseManager.executeSqlAsync(query, [pillarId]);
-		return result.rows._array as ObjectiveData[];
+		return result as ObjectiveData[];
 	}
 
 	async getUncompletedObjectives(): Promise<ObjectiveData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE completed = 0 ORDER BY createdAt DESC;`;
 		const result = await databaseManager.executeSqlAsync(query);
-		return result.rows._array as ObjectiveData[];
+		return result as ObjectiveData[];
 	}
 }
 

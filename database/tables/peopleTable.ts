@@ -46,7 +46,7 @@ class PeopleTableManager extends BaseTableManager<PersonData> {
 	async getAllBirthdays(): Promise<{ uuid: string; name: string; birthDay: string }[]> {
 		const query = `SELECT uuid, name, birthDay FROM ${this.tableStructure.name} WHERE birthDay IS NOT NULL AND birthDay != ''`;
 		const results = await databaseManager.executeSqlAsync(query);
-		return results.rows._array;
+		return results as { uuid: string; name: string; birthDay: string }[];
 	}
 }
 

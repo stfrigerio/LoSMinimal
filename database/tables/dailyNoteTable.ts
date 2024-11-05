@@ -53,8 +53,8 @@ class DailyNoteTableManager extends BaseTableManager<NoteData> {
 			}
 		} = {};
 
-		for (let i = 0; i < result.rows.length; i++) {
-			const row = result.rows.item(i) as NoteData & {
+		for (let i = 0; i < result.length; i++) {
+			const row = result[i] as NoteData & {
 				qh_key?: string;
 				qh_value?: number;
 				bh_key?: string;
@@ -104,8 +104,8 @@ class DailyNoteTableManager extends BaseTableManager<NoteData> {
 			}
 		} = {};
 
-		for (let i = 0; i < result.rows.length; i++) {
-			const row = result.rows.item(i) as NoteData & {
+		for (let i = 0; i < result.length; i++) {
+			const row = result[i] as NoteData & {
 				qh_key?: string;
 				qh_value?: number;
 				bh_key?: string;

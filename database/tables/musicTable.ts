@@ -101,7 +101,7 @@ class MusicManager extends BaseTableManager<TrackData> {
 		}
 
 		const result = await databaseManager.executeSqlAsync(query, queryParams);
-		return result.rows._array as TrackData[];
+		return result as TrackData[];
 	}
 
 	async incrementPlayCount(uuid: string): Promise<void> {

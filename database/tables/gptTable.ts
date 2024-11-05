@@ -36,7 +36,7 @@ class GPTTableManager extends BaseTableManager<GPTData> {
 	async getGPTByType(type: string): Promise<GPTData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE type = ?;`;
 		const result = await databaseManager.executeSqlAsync(query, [type]);
-		return result.rows._array as GPTData[];
+		return result as GPTData[];
 	}
 }
 

@@ -28,26 +28,38 @@ class QuantifiableHabitsManager extends BaseTableManager<QuantifiableHabitsData>
 		super(quantifiableHabitsTableStructure);
 	}
 
-	async getHabitByDateAndKey(date: string, habitKey: string): Promise<QuantifiableHabitsData | null> {
-		const query = `SELECT * FROM ${this.tableStructure.name} WHERE date = ? AND habitKey = ? LIMIT 1;`;
-		const results = await databaseManager.executeSqlAsync(query, [date, habitKey]);
-		
-		if (results.rows.length > 0) {
-			return results.rows.item(0) as QuantifiableHabitsData;
-		} else {
-			return null;
-		}
-	}
+    async getHabitByDateAndKey(date: string, habitKey: string): Promise<QuantifiableHabitsData | null> {
+        try {
+            const results = await databaseManager.executeSqlAsync<QuantifiableHabitsData>(
+                `SELECT * FROM ${this.tableStructure.name} 
+                 WHERE date = ? AND habitKey = ? 
+                 LIMIT 1;`,
+                [date, habitKey]
+            );
 
-	async listOrderedByDate(): Promise<QuantifiableHabitsData[]> {
-		const query = `SELECT * FROM ${this.tableStructure.name} ORDER BY date(date) DESC, datetime(createdAt) DESC;`;
-		const results = await databaseManager.executeSqlAsync(query);
-		
-		return Array.from({ length: results.rows.length }, (_, i) => {
-			const row = results.rows.item(i);
-			return { ...row, value: Number(row.value) } as QuantifiableHabitsData;
-		});
-	}
+            if (results.length > 0) {
+                return results[0];
+            }
+            return null;
+        } catch (error) {
+            console.error('Error fetching habit by date and key:', error);
+            throw error;
+        }
+    }
+
+    async listOrderedByDate(): Promise<QuantifiableHabitsData[]> {
+        try {
+            const results = await databaseManager.executeSqlAsync<QuantifiableHabitsData>(
+                `SELECT * FROM ${this.tableStructure.name} 
+                 ORDER BY date(date) DESC, datetime(createdAt) DESC;`
+            );
+
+            return results;
+        } catch (error) {
+            console.error('Error listing habits ordered by date:', error);
+            throw error;
+        }
+    }
 }
 
 export const quantifiableHabitsManager = new QuantifiableHabitsManager();

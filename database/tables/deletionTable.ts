@@ -33,7 +33,7 @@ class DeletionLogTableManager extends BaseTableManager<DeletionLogData> {
 	async getUnsyncedDeletions(): Promise<DeletionLogData[]> {
 		const query = `SELECT * FROM ${this.tableStructure.name} WHERE synced = 0 ORDER BY deletedAt ASC;`;
 		const result = await databaseManager.executeSqlAsync(query);
-		return result.rows._array as DeletionLogData[];
+		return result as DeletionLogData[];
 	}
 
 	async markAsSynced(id: number): Promise<void> {

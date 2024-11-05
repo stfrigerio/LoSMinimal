@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, ImageBackground, Pressable, Dimensions } from 'react-native';
 
-import CustomCalendar from './components/Calendar';
+// import CustomCalendar from './components/Calendar';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
@@ -16,7 +16,7 @@ const Homepage = () => {
 		>
 			<View style={styles.overlay}>
 				<View style={styles.content}>
-					<CustomCalendar />
+					{/* <CustomCalendar /> */}
 				</View>
 			</View>
 		</ImageBackground>

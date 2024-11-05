@@ -59,26 +59,26 @@ class MoneyTableManager extends BaseTableManager<MoneyData> {
 		query += ' ORDER BY date DESC';
 
 		const result = await databaseManager.executeSqlAsync(query, queryParams);
-		return result.rows._array as MoneyData[];
+		return result as MoneyData[];
 	}
 
-	async fetchTags(): Promise<string[]> {
-		const query = `SELECT DISTINCT tag FROM ${this.tableStructure.name} ORDER BY tag;`;
-		const result = await databaseManager.executeSqlAsync(query);
-		return result.rows._array.map((row: { tag: string }) => row.tag);
-	}
+    async fetchTags(): Promise<string[]> {
+        const query = `SELECT DISTINCT tag FROM ${this.tableStructure.name} ORDER BY tag;`;
+        const result = await databaseManager.executeSqlAsync<{ tag: string }>(query);
+        return (result as { tag: string }[]).map(row => row.tag);
+    }
 
-	async fetchDescriptions(tag: string): Promise<string[]> {
-		const query = `SELECT DISTINCT description FROM ${this.tableStructure.name} WHERE tag = ? ORDER BY description;`;
-		const result = await databaseManager.executeSqlAsync(query, [tag]);
-		return result.rows._array.map((row: { description: string }) => row.description);
-	}
+    async fetchDescriptions(tag: string): Promise<string[]> {
+        const query = `SELECT DISTINCT description FROM ${this.tableStructure.name} WHERE tag = ? ORDER BY description;`;
+        const result = await databaseManager.executeSqlAsync<{ description: string }>(query, [tag]);
+        return (result as { description: string }[]).map(row => row.description);
+    }
 
-	async listAccounts(): Promise<{ account: string }[]> {
-		const query = `SELECT DISTINCT account FROM ${this.tableStructure.name} WHERE account IS NOT NULL AND account != '' ORDER BY account;`;
-		const result = await databaseManager.executeSqlAsync(query);
-		return result.rows._array as { account: string }[];
-	}
+    async listAccounts(): Promise<{ account: string }[]> {
+        const query = `SELECT DISTINCT account FROM ${this.tableStructure.name} WHERE account IS NOT NULL AND account != '' ORDER BY account;`;
+        const result = await databaseManager.executeSqlAsync<{ account: string }>(query);
+        return result;
+    }
 }
 
 export const moneyTableManager = new MoneyTableManager();
