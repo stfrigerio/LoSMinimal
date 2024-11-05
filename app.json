@@ -1,36 +1,71 @@
 {
-  "expo": {
-    "name": "LoSMinimal",
-    "slug": "LoSMinimal",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
-    "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-router"
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
-  }
+	"expo": {
+		"name": "LoS",
+		"slug": "LoS",
+		"scheme": "los",
+		"version": "1.0.0",
+		"orientation": "default",
+		"icon": "./assets/images/Los-icon.png",
+		"userInterfaceStyle": "light",
+		"splash": {
+			"image": "./assets/images/adaptive-icon.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"assetBundlePatterns": [
+			"**/*"
+		],
+		"ios": {
+			"supportsTablet": true,
+			"infoPlist": {
+				"UIBackgroundModes": [
+					"audio"
+				]
+			}
+		},
+		"android": {
+			"useNextNotificationsApi": true,
+			"enableBackgroundNotification": true,
+			"priority": "max",
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/images/Los-icon.png",
+				"backgroundColor": "#000000"
+			},
+			"package": "com.stfrigerio.LoS",
+			"permissions": [
+				"INTERNET",
+				"ACCESS_NETWORK_STATE",
+				"ACCESS_WIFI_STATE",
+				"CAMERA",
+				"android.permission.FOREGROUND_SERVICE"
+			],
+		"plugins": [
+			[
+				"expo-build-properties",
+				{
+					"android": {
+						"usesCleartextTraffic": true
+					}
+				}
+			]
+		]
+	},
+		"web": {
+			"favicon": "./assets/images/favicon.png"
+		},
+		"extra": {
+			"eas": {
+				"projectId": "37574983-c17e-4c45-90b2-683fa20f3d3b"
+			}
+		},
+		"plugins": [
+			"expo-build-properties",
+			[
+				"expo-location",
+				{
+					"locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+				}
+			]
+		]
+	}
 }
