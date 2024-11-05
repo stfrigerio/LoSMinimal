@@ -6,8 +6,8 @@ import { DrawerStateProvider, useDrawerState } from '../src/contexts/DrawerState
 import { NavbarDrawerProvider } from '../src/contexts/NavbarContext';
 import { ChecklistProvider } from '../src/contexts/checklistContext';
 // import { MusicPlayerProvider } from '../src/contexts/MusicPlayerContext';
-import LeftPanel from './components/LeftPanel/LeftPanel';
-import RightPanel from './components/RightPanel/RightPanel';
+import LeftPanel from './features/LeftPanel/LeftPanel';
+import RightPanel from './features/RightPanel/RightPanel';
 
 // Create a component for the nested drawer navigation
 function DrawerNavigator() {

@@ -1,5 +1,6 @@
 import { Drawer } from 'expo-router/drawer';
-import LeftPanel from '../components/LeftPanel/LeftPanel';
+
+import LeftPanel from '../features/LeftPanel/LeftPanel';
 import { useDrawerState } from '../../src/contexts/DrawerState';
 
 export default function DrawerLayout() {

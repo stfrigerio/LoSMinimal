@@ -10,8 +10,8 @@ import { format } from 'date-fns';
 import { Audio } from 'expo-av';
 
 // Components
-import LeftPanel from './app/components/LeftPanel/LeftPanel'
-import RightPanel from './app/components/RightPanel/RightPanel';
+import LeftPanel from './app/features/LeftPanel/LeftPanel'
+import RightPanel from './app/features/RightPanel/RightPanel';
 
 // Contexts
 import { ChecklistProvider, useChecklist } from './src/contexts/checklistContext';
