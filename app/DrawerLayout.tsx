@@ -6,44 +6,43 @@ import RightPanel from './features/RightPanel/RightPanel';
 
 import { useDrawerState } from '../src/contexts/DrawerState';
 
- // Create a component for the right drawer
- function RightDrawerNavigator() {
+function RightDrawerNavigator() {
 	const { isRightDrawerSwipeEnabled } = useDrawerState();
 	
 	return (
-	  <Drawer
-		 drawerContent={props => <RightPanel {...props} />}
-		 screenOptions={{
-			drawerType: 'front',
-			swipeEnabled: isRightDrawerSwipeEnabled,
-			swipeEdgeWidth: 100,
-			drawerStyle: {
-			  width: 300,
-			  backgroundColor: 'transparent',
-			},
-			headerShown: false,
-			drawerPosition: 'right'
-		 }}
-	  >
-		 <Drawer.Screen 
-			name="(drawer)" 
-			options={{
-			  drawerLabel: "Home"
-			}} 
-		 />
-	  </Drawer>
+		<Drawer
+			drawerContent={props => <RightPanel {...props} />}
+			screenOptions={{
+				drawerType: 'front',
+				swipeEnabled: isRightDrawerSwipeEnabled,
+				swipeEdgeWidth: 100,
+				drawerStyle: {
+				width: 300,
+				backgroundColor: 'transparent',
+				},
+				headerShown: false,
+				drawerPosition: 'right'
+			}}
+		>
+			<Drawer.Screen 
+				name="(drawer)" 
+				options={{
+				drawerLabel: "Home"
+				}} 
+			/>
+		</Drawer>
 	);
  }
  
  export default function DrawerLayout() {
 	return (
-	  <GestureHandlerRootView style={{ flex: 1 }}>
-		 <StatusBar 
-			barStyle="dark-content" 
-			translucent 
-			backgroundColor="rgba(0, 0, 0, 0.1)" 
-		 />
-		 <RightDrawerNavigator />
-	  </GestureHandlerRootView>
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<StatusBar 
+				barStyle="dark-content" 
+				translucent 
+				backgroundColor="rgba(0, 0, 0, 0.1)" 
+			/>
+			<RightDrawerNavigator />
+		</GestureHandlerRootView>
 	);
  }
