@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable, ScrollView, Platform, Modal } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable, ScrollView, Platform } from 'react-native';
 import { format } from 'date-fns';
 
-// import { UniversalModal } from '@los/shared/src/sharedComponents/UniversalModal';
-// import AlertModal from '@los/shared/src/components/modals/AlertModal';
-// import createTimePicker from '@los/shared/src/sharedComponents/DateTimePicker';
+import { UniversalModal } from '@/app/components/UniversalModal';
+import AlertModal from '@/app/components/AlertModal';
+import createTimePicker from '@/app/components/DateTimePicker';
 import { FormInput, PickerInput, SwitchInput } from '@/app/components/FormComponents';
 
-import { useTasksData } from '../hooks/useTasksData';
+import { useTasksData } from '@/app/features/Tasks/hooks/useTasksData';
+
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { TaskData } from '@/src/types/Task';
 import { PillarData } from '@/src/types/Pillar';
 import { ObjectiveData } from '@/src/types/Objective';
-
 
 interface TaskModalProps {
 	isOpen: boolean;
@@ -41,14 +41,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 
 	const { pillars, uncompletedObjectives } = useTasksData();
 
-//   const { showPicker, picker } = createTimePicker();
+	const { showPicker, picker } = createTimePicker();
 	const [showEndDateTime, setShowEndDateTime] = useState<boolean>(false);
 	const [showAlert, setShowAlert] = useState(false);
 
 	const { theme, themeColors, designs } = useThemeStyles();
 	const styles = getStyles(themeColors);
 
-  	const addNewItem = () => {
+	const addNewItem = () => {
 		if (itemName) {
 			let newTask: TaskData;
 			if (task?.uuid) {
@@ -100,25 +100,24 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 			setShowFrequency(false);
 			setShowObjective(false);
 			onClose();
-
 		} else {
 			setShowAlert(true);
 		}
-  	};
+	};
 
-//   const showDateTimePicker = (isStart: boolean, isDate: boolean) => {
-// 	const currentDate = isStart ? new Date(dateInput || Date.now()) : new Date(endDateInput || Date.now());
-	
-// 	showPicker({
-// 	  mode: isDate ? 'date' : 'time',
-// 	  value: currentDate,
-// 	  is24Hour: true,
-// 	}, (selectedDate) => {
-// 	  if (selectedDate) {
-// 		updateDateTime(selectedDate, isStart, isDate);
-// 	  }
-// 	});
-//   };
+	const showDateTimePicker = (isStart: boolean, isDate: boolean) => {
+		const currentDate = isStart ? new Date(dateInput || Date.now()) : new Date(endDateInput || Date.now());
+		
+		showPicker({
+			mode: isDate ? 'date' : 'time',
+			value: currentDate,
+			is24Hour: true,
+		}, (selectedDate) => {
+			if (selectedDate) {
+				updateDateTime(selectedDate, isStart, isDate);
+			}
+		});
+	};
 
 	const updateDateTime = (date: Date, isStart: boolean, isDate: boolean) => {
 		const updatedDate = isStart ? new Date(dateInput || Date.now()) : new Date(endDateInput || Date.now());
@@ -154,15 +153,21 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 		}))
 	];
 
-	const objectiveItems = [
+	type ObjectiveItem = {
+		label: string;
+		value: string;
+		pillarUuid?: string;
+	};
+
+	const objectiveItems: ObjectiveItem[] = [
 		{ label: 'None', value: '' },
 		...uncompletedObjectives.map((objective: ObjectiveData) => {
 			const pillar = pillars.find((p: PillarData) => p.uuid === objective.pillarUuid);
 			const emoji = pillar ? pillar.emoji : '';
 			return {
-					label: `${emoji} ${objective.objective}`,
-					value: objective.uuid,
-					pillarUuid: objective.pillarUuid
+				label: `${emoji} ${objective.objective}`,
+				value: objective.uuid || '', // Ensure value is never undefined
+				pillarUuid: objective.pillarUuid
 			};
 		})
 	];
@@ -182,9 +187,9 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 		{ label: 'Yearly', value: 'yearly' },
 	];
 
-  	const getFrequencyOptions = (selectedFrequency: string) => {
+	const getFrequencyOptions = (selectedFrequency: string) => {
 		switch (selectedFrequency) {
-	  		case 'daily':
+			case 'daily':
 				return [
 					{ label: 'Every day', value: 'daily' },
 					{ label: 'Every weekday', value: 'weekday' },
@@ -200,277 +205,285 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 					{ label: 'Every Saturday', value: 'weekly_sat' },
 					{ label: 'Every Sunday', value: 'weekly_sun' },
 				];
-		case 'monthly':
-			return [
-				{ label: 'On the 1st', value: 'monthly_1' },
-				{ label: 'On the 15th', value: 'monthly_15' },
-				{ label: 'On the last day', value: 'monthly_last' },
-			];
-		case 'yearly':
-			return [
-				{ label: 'On January 1st', value: 'yearly_0101' },
-				{ label: 'On July 1st', value: 'yearly_0701' },
-				{ label: 'On December 31st', value: 'yearly_1231' },
-			];
-		default:
-			return [];
+			case 'monthly':
+				return [
+					{ label: 'On the 1st', value: 'monthly_1' },
+					{ label: 'On the 15th', value: 'monthly_15' },
+					{ label: 'On the last day', value: 'monthly_last' },
+				];
+			case 'yearly':
+				return [
+					{ label: 'On January 1st', value: 'yearly_0101' },
+					{ label: 'On July 1st', value: 'yearly_0701' },
+					{ label: 'On December 31st', value: 'yearly_1231' },
+				];
+			default:
+				return [];
 		}
 	};
 
-  	const modalContent = (
+	const modalContent = (
 		<View style={styles.modalContent}>
 			{task ? (
 				<Text style={[designs.text.title, styles.title]}> ✏️ Edit task </Text>
 			) : (
 				<Text style={[designs.text.title, styles.title]}> ✅ Create a new task </Text>
 			)}
-	  	<View style={{ width: '100%' }}>
-			<FormInput
-			label="Task"
-			value={itemName}
-			onChangeText={setItemName}
-			placeholder="Name of the task..."
-			/>
-	  	</View>
-	  	{/* <View style={styles.dateTimeContainer}>
-			<Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(true, true)}>
-				<Text style={styles.dateTimeText}>
-					{dateInput ? new Date(dateInput).toLocaleDateString() : 'Date'}
-				</Text>
-			</Pressable>
-			<Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(true, false)}>
-				<Text style={styles.dateTimeText}>
-					{dateInput ? new Date(dateInput).toLocaleTimeString() : 'Start Time'}
-				</Text>
-			</Pressable>
-	  	</View> */}
-		{/* <View style={styles.switchContainer}>
-			<SwitchInput
-				label="Add Note"
-				value={showNote}
-				trueLabel="Add note"
-				falseLabel=""
-				leftLabelOff={true}
-				onValueChange={(value) => setShowNote(value)}
-			/>
-		</View> */}
-		{/* {showNote && (
 			<View style={{ width: '100%' }}>
 				<FormInput
-					label="Note"
-					value={noteText}
-					onChangeText={setNoteText}
-					placeholder="Enter note (optional)"
+					label="Task"
+					value={itemName}
+					onChangeText={setItemName}
+					placeholder="Name of the task..."
+				/>
+			</View>
+			<View style={styles.dateTimeContainer}>
+				<Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(true, true)}>
+					<Text style={styles.dateTimeText}>
+						{dateInput ? new Date(dateInput).toLocaleDateString() : 'Date'}
+					</Text>
+				</Pressable>
+				<Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(true, false)}>
+					<Text style={styles.dateTimeText}>
+						{dateInput ? new Date(dateInput).toLocaleTimeString() : 'Start Time'}
+					</Text>
+				</Pressable>
+			</View>
+			<View style={styles.switchContainer}>
+				<SwitchInput
+					label="Add Note"
+					value={showNote}
+					trueLabel="Add note"
+					falseLabel=""
+					leftLabelOff={true}
+					onValueChange={(value) => setShowNote(value)}
+				/>
+			</View>
+			{showNote && (
+				<View style={{ width: '100%' }}>
+					<FormInput
+						label="Note"
+						value={noteText}
+						onChangeText={setNoteText}
+						placeholder="Enter note (optional)"
+						/>
+				</View>
+			)}
+			<View style={styles.switchContainer}>
+				<SwitchInput
+					label="Add Priority"
+					value={showPriority}
+					trueLabel="Add priority"
+					falseLabel=""
+					leftLabelOff={true}
+					onValueChange={(value) => setShowPriority(value)}
+				/>
+			</View>
+			{showPriority && (
+				<View style={{ width: '100%' }}>
+					<PickerInput
+						label="Priority"
+						selectedValue={priority?.toString() || ''}
+						onValueChange={(itemValue) => setPriority(Number(itemValue))}
+						items={priorityItems}
 					/>
+				</View>
+			)}
+			<View style={styles.switchContainer}>
+				<SwitchInput
+					label="Add Repeat"
+					value={repeat ? true : false}
+					trueLabel="Repeats"
+					falseLabel=""
+					leftLabelOff={true}
+					onValueChange={(value) => {
+						setRepeat(value ? 'true' : 'false');
+						setShowFrequency(value);
+					}}
+				/>
 			</View>
-		)} */}
-		{/* <View style={styles.switchContainer}>
-			<SwitchInput
-				label="Add Priority"
-				value={showPriority}
-				trueLabel="Add priority"
-				falseLabel=""
-				leftLabelOff={true}
-				onValueChange={(value) => setShowPriority(value)}
-			/>
-		</View> */}
-	  	{/* {showPriority && (
-			<View style={{ width: '100%' }}>
-				<PickerInput
-					label="Priority"
-					selectedValue={priority?.toString() || ''}
-					onValueChange={(itemValue) => setPriority(Number(itemValue))}
-					items={priorityItems}
-			/>
+			{showFrequency && (
+				<View style={styles.switchContainer}>
+					<PickerInput
+						label="Frequency"
+						selectedValue={frequency || ''}
+						onValueChange={(itemValue) => {
+							if (itemValue === '') {
+								setFrequency('');
+							} else {
+								// Set the frequency to the first option of the selected frequency type
+								const firstOption = getFrequencyOptions(itemValue)[0];
+								setFrequency(firstOption ? firstOption.value : '');
+							}
+						}}
+						items={frequencyItems}
+					/>
+					{frequency && frequency !== '' && (
+						<PickerInput
+							label="Frequency details"
+							selectedValue={frequency}
+							onValueChange={(itemValue) => setFrequency(itemValue)}
+							items={getFrequencyOptions(frequencyItems.find(item => 
+								getFrequencyOptions(item.value).some(option => option.value === frequency)
+							)?.value || '')}
+						/>
+					)}
+				</View>
+			)}
+			<View style={styles.switchContainer}>
+				<SwitchInput
+					label="Add Pillar"
+					value={showPillar}
+					trueLabel="Add pillar"
+					falseLabel=""
+					leftLabelOff={true}
+					onValueChange={(value) => setShowPillar(value)}
+				/>
 			</View>
-	  	)} */}
-	  	{/* <View style={styles.switchContainer}>
-			<SwitchInput
-				label="Add Repeat"
-				value={repeat ? true : false}
-				trueLabel="Repeats"
-				falseLabel=""
-				leftLabelOff={true}
-				onValueChange={(value) => {
-					setRepeat(value ? 'true' : 'false');
-					setShowFrequency(value);
-				}}
-			/>
-	  	</View> */}
-	  {/* {showFrequency && (
-		<View style={styles.switchContainer}>
-		  <PickerInput
-			label="Frequency"
-			selectedValue={frequency || ''}
-			onValueChange={(itemValue) => {
-			  if (itemValue === '') {
-				setFrequency('');
-			  } else {
-				// Set the frequency to the first option of the selected frequency type
-				const firstOption = getFrequencyOptions(itemValue)[0];
-				setFrequency(firstOption ? firstOption.value : '');
-			  }
-			}}
-			items={frequencyItems}
-		  />
-		  {frequency && frequency !== '' && (
-			<PickerInput
-			  label="Frequency details"
-			  selectedValue={frequency}
-			  onValueChange={(itemValue) => setFrequency(itemValue)}
-			  items={getFrequencyOptions(frequencyItems.find(item => 
-				getFrequencyOptions(item.value).some(option => option.value === frequency)
-			  )?.value || '')}
-			/>
-		  )}
+			{showPillar && (
+				<View style={{ width: '100%' }}>
+					<PickerInput
+						label="Pillar"
+						selectedValue={selectedPillarUuid?.toString() || ''}
+						onValueChange={(itemValue) => setSelectedPillarUuid(itemValue)}
+						items={pillarItems}
+					/>
+				</View>
+			)}
+			<View style={styles.switchContainer}>
+				<SwitchInput
+					label="Add Objective"
+					value={showObjective}
+					trueLabel="Add objective"
+					falseLabel=""
+					leftLabelOff={true}
+					onValueChange={(value) => setShowObjective(value)}
+				/>
+			</View>
+			{showObjective && (
+				<View style={{ width: '100%' }}>
+					<PickerInput
+						label="Objective"
+						selectedValue={objectiveUuid || ''}
+						onValueChange={(itemValue) => {
+							setObjectiveUuid(itemValue);
+							const selectedObjective = objectiveItems.find(item => item.value === itemValue);
+							if (selectedObjective && selectedObjective.pillarUuid) {
+								setShowPillar(true);
+								setSelectedPillarUuid(selectedObjective.pillarUuid);
+							}
+						}}
+						items={objectiveItems}
+					/>
+				</View>
+			)}
+			<View style={styles.switchContainer}>
+				<SwitchInput
+					label="Add end time"
+					value={showEndDateTime}
+					trueLabel="Add end time"
+					falseLabel=""
+					leftLabelOff={true}
+					onValueChange={(value) => setShowEndDateTime(value)}
+				/>
+			</View>
+			{showEndDateTime && (
+				<View style={styles.dateTimeContainer}>
+					<Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(false, true)}>
+						<Text style={styles.dateTimeText}>
+							{endDateInput ? new Date(endDateInput).toLocaleDateString() : 'End Date'}
+						</Text>
+					</Pressable>
+					<Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(false, false)}>
+						<Text style={styles.dateTimeText}>
+							{endDateInput ? new Date(endDateInput).toLocaleTimeString() : 'End Time'}
+						</Text>
+					</Pressable>
+				</View>
+			)}
+			<Pressable style={[designs.button.marzoSecondary, styles.addButton]} onPress={addNewItem}>
+				<Text style={designs.button.buttonText}>{task ? 'Update' : 'Add Task'}</Text>
+			</Pressable>
 		</View>
-	  )} */}
-	  {/* <View style={styles.switchContainer}>
-		<SwitchInput
-		  label="Add Pillar"
-		  value={showPillar}
-		  trueLabel="Add pillar"
-		  falseLabel=""
-		  leftLabelOff={true}
-		  onValueChange={(value) => setShowPillar(value)}
-		/>
-	  </View>
-	  {showPillar && (
-		<View style={{ width: '100%' }}>
-		  <PickerInput
-			label="Pillar"
-			selectedValue={selectedPillarUuid?.toString() || ''}
-			onValueChange={(itemValue) => setSelectedPillarUuid(itemValue)}
-			items={pillarItems}
-		  />
-		</View>
-	  )}
-	  <View style={styles.switchContainer}>
-		<SwitchInput
-		  label="Add Objective"
-		  value={showObjective}
-		  trueLabel="Add objective"
-		  falseLabel=""
-		  leftLabelOff={true}
-		  onValueChange={(value) => setShowObjective(value)}
-		/>
-	  </View>
-	  {showObjective && (
-		<View style={{ width: '100%' }}>
-		  <PickerInput
-			label="Objective"
-			selectedValue={objectiveUuid || ''}
-			onValueChange={(itemValue) => {
-			  setObjectiveUuid(itemValue);
-			  const selectedObjective = objectiveItems.find(item => item.value === itemValue);
-			  if (selectedObjective && selectedObjective.pillarUuid) {
-				setShowPillar(true);
-				setSelectedPillarUuid(selectedObjective.pillarUuid);
-			  }
-			}}
-			items={objectiveItems}
-		  />
-		</View>
-	  )}
-	  <View style={styles.switchContainer}>
-		<SwitchInput
-		  label="Add end time"
-		  value={showEndDateTime}
-		  trueLabel="Add end time"
-		  falseLabel=""
-		  leftLabelOff={true}
-		  onValueChange={(value) => setShowEndDateTime(value)}
-		/>
-	  </View>
-	  {showEndDateTime && (
-		<View style={styles.dateTimeContainer}>
-		  <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(false, true)}>
-			<Text style={styles.dateTimeText}>
-			  {endDateInput ? new Date(endDateInput).toLocaleDateString() : 'End Date'}
-			</Text>
-		  </Pressable>
-		  <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(false, false)}>
-			<Text style={styles.dateTimeText}>
-			  {endDateInput ? new Date(endDateInput).toLocaleTimeString() : 'End Time'}
-			</Text>
-		  </Pressable>
-		</View>
-	  )} */}
-	  <Pressable style={[designs.button.marzoSecondary, styles.addButton]} onPress={addNewItem}>
-		<Text style={designs.button.buttonText}>{task ? 'Update' : 'Add Task'}</Text>
-	  </Pressable>
-	</View>
-  );
-  
-  return (
-	<>
-	  <Modal visible={isOpen} onRequestClose={onClose}>
-		{modalContent}
-		{/* {picker} */}
-	  </Modal>
-
-	  {/* <AlertModal
-		isVisible={showAlert}
-		  title="Error"
-		  message="Please enter an item name"
-		  onConfirm={() => setShowAlert(false)}
-		  onCancel={() => setShowAlert(false)}
-		/> */}
-	  </>
-  );
+	);
+	
+	return (
+		<>
+			<UniversalModal isVisible={isOpen} onClose={onClose}>
+				{modalContent}
+				{picker}
+			</UniversalModal>
+			{Platform.OS === 'web' ? (
+				showAlert && (
+					<AlertModal
+						isVisible={showAlert}
+						title="Error"
+						message="Please enter an item name"
+						onConfirm={() => setShowAlert(false)}
+						onCancel={() => setShowAlert(false)}
+					/>
+				)
+			) : (
+				<AlertModal
+					isVisible={showAlert}
+					title="Error"
+					message="Please enter an item name"
+					onConfirm={() => setShowAlert(false)}
+					onCancel={() => setShowAlert(false)}
+				/>
+			)}
+		</>
+	);
 };
 
 export default TaskModal;
-  
+	
 const getStyles = (theme: any) => StyleSheet.create({
-  modalContent: {
-	width: '100%',
-	alignItems: 'center',
-	paddingHorizontal: 5,
-  },
-  closeButton: {
-	position: 'absolute',
-	top: 0,
-	right: 0,
-	padding: 10,
-  },
-  closeButtonText: {
-	fontSize: 20,
-	color: 'gray',
-  },
-  title: {
-	marginBottom: 20,
-	textAlign: 'center',
-  },
-  input: {
-	width: '90%',
-	marginBottom: 20,
-  },
-  switchContainer: {
-	width: '100%',
-	// marginBottom: 20,
-	// borderWidth: 1,
-	// borderColor: 'red'
-  },
-  dateTimeContainer: {
-	flexDirection: 'row',
-	justifyContent: 'space-between',
-	width: '100%',
-	marginBottom: 20,
-  },
-  dateTimeButton: {
-	flex: 1,
-	padding: 10,
-	borderColor: theme.borderColor,
-	borderWidth: 1,
-	borderRadius: 5,
-	marginHorizontal: 5,
-	alignItems: 'center',
-  },
-  dateTimeText: {
-	color: theme.textColor,
-  },
-  addButton: {
-	width: '100%',
-  },
+	modalContent: {
+		width: '100%',
+		alignItems: 'center',
+		paddingHorizontal: 5,
+	},
+	closeButton: {
+		position: 'absolute',
+		top: 0,
+		right: 0,
+		padding: 10,
+	},
+	closeButtonText: {
+		fontSize: 20,
+		color: 'gray',
+	},
+	title: {
+		marginBottom: 20,
+		textAlign: 'center',
+	},
+	input: {
+		width: '90%',
+		marginBottom: 20,
+	},
+	switchContainer: {
+		width: '100%',
+	},
+	dateTimeContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		width: '100%',
+		marginBottom: 20,
+	},
+	dateTimeButton: {
+		flex: 1,
+		padding: 10,
+		borderColor: theme.borderColor,
+		borderWidth: 1,
+		borderRadius: 5,
+		marginHorizontal: 5,
+		alignItems: 'center',
+	},
+	dateTimeText: {
+		color: theme.textColor,
+	},
+	addButton: {
+		width: '100%',
+	},
 });

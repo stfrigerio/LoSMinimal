@@ -8,7 +8,7 @@ import CustomDay from './CustomCalendarDay';
 
 import { databaseManagers } from '@/database/tables';
 import { useChecklist } from '@/src/contexts/checklistContext';
-import ViewTaskModal from '../modals/ViewTaskModal';
+import ViewTaskModal from '@/app/features/Home/modals/ViewTaskModal';
 
 import {
 	parseChecklistItems,
@@ -22,6 +22,7 @@ import { MarkedDateDetails, ExtendedTaskData } from '@/src/types/Task';
 const CustomCalendar = () => {
 	const { theme, themeColors, designs } = useThemeStyles();
 	const styles = getStyles(themeColors);
+	
 	const isDarkMode = theme === 'dark';
 	const calendarTheme = isDarkMode ? darkCalendar : lightCalendar;
 
@@ -78,6 +79,11 @@ const CustomCalendar = () => {
 		}
 	}, [checklistUpdated, fetchMarkedDates, resetChecklistUpdate]);
 
+	const onDayPress = useCallback((day: any) => {
+		setSelectedDate(day.dateString);
+		setShowModal(true);
+	}, []);
+
 	const updateChecklistItems = useCallback(async () => {
 		if (selectedDate) {
 			const startDate = `${selectedDate}T00:00:00.000Z`;
@@ -100,24 +106,25 @@ const CustomCalendar = () => {
 		};
 	}, [markedDates]);
 
-	const onDayPress = useCallback((day: any) => {
-		setSelectedDate(day.dateString);
-		setShowModal(true);
-	}, []);
-
 	const toggleItemCompletion = useCallback(async (id: number, completed: boolean) => {
 		try {
-			const newItem = {
-				...checklistItems.find((item) => item.id === id),
-				completed: !completed,
+			// First fetch the current item from the database
+			const currentItem = await databaseManagers.tasks.getById(id);
+			if (!currentItem) {
+				throw new Error('Task not found');
 			}
-
+	
+			const newItem = {
+				...currentItem,
+				completed: !completed,
+			};
+	
 			await databaseManagers.tasks.upsert(newItem);
 			updateChecklistItems();
 		} catch (error) {
 			console.error('Error toggling item completion:', error);
 		}
-	}, [checklistItems, updateChecklistItems]);
+	}, [updateChecklistItems]); // Remove checklistItems dependency
 
 	return (
 		<>
