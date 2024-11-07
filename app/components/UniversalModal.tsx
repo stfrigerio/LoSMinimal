@@ -26,7 +26,7 @@ export const UniversalModal: React.FC<UniversalModalProps> = ({
     closeOnBackdropPress = true,
     testID = 'universal-modal'
 }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
+    const { theme, designs } = useThemeStyles();
     const styles = modalStyles(theme);
 
     const handleBackdropPress = () => {

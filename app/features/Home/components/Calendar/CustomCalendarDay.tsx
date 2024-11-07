@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
+
 interface CustomDayProps {
     date?: { day: number; month: number; year: number; timestamp: number; dateString: string };
     marking?: { dots?: Array<{ key: string; color: string }> };
@@ -14,11 +16,24 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
         return <View />;
     }
 
+    const { themeColors } = useThemeStyles();
+    const styles = getStyles(themeColors);
+
     const isCurrentMonth = date.month === currentMonth;
-    const textColor = isCurrentMonth ? '#d3c6aa' : '#424242';
+    const textColor = isCurrentMonth ? themeColors.textColor : themeColors.opaqueTextColor;
 
     return (
-        <Pressable style={styles.container} onPress={onPress}>
+        <Pressable 
+            style={({ pressed }) => [
+                styles.container,
+                pressed && { opacity: 0.7 },  // Add opacity change when pressed
+            ]} 
+            onPress={onPress}
+            android_ripple={{ 
+                color: themeColors.accentColor,
+                radius: 16,
+            }}
+        >
             <View style={[styles.contentContainer, isToday && styles.todayContainer]}>
                 <Text style={[
                     styles.text, 
@@ -44,13 +59,12 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     container: {
         width: 32,
         height: 32,
         justifyContent: 'center',
         alignItems: 'center',
-        // borderWidth: 1,
     },
     contentContainer: {
         alignItems: 'center',
@@ -66,8 +80,7 @@ const styles = StyleSheet.create({
     },
     todayText: {
         fontSize: 16,
-        color: '#CBA95F',
-        fontFamily: 'serif',
+        color: theme.textColorItalic,
         fontWeight: 'bold'
     },
     todayContainer: {

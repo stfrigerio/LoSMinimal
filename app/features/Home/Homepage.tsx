@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, ImageBackground, Pressable, Dimensions } from 'react-native';
 
-import CustomCalendar from './components/Calendar';
+import CustomCalendar from './components/Calendar/Calendar';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 

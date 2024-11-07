@@ -4,6 +4,7 @@ import { lightTheme, darkTheme } from './theme';
 export interface ModalStyles {
 	modalContainer: ViewStyle;
 	modalView: ViewStyle;
+	title: TextStyle;
 	closeButton: ViewStyle;
 	closeButtonText: TextStyle;
 	scrollView: ViewStyle;
@@ -35,16 +36,27 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 			shadowRadius: 4,
 			elevation: 5,
 		},
+		title: {
+			fontSize: 24,
+			fontWeight: 'bold',
+			color: theme.textColor,
+			textAlign: 'center',
+			marginBottom: 20,
+			textShadowColor: theme.shadowColor,
+			textShadowOffset: { width: -1, height: 1 },
+			textShadowRadius: 10,
+		},
 		closeButton: {
 			position: 'absolute',
-			top: 8,
-			right: 8,
+			top: 12,
+			right: 12,
 			padding: 8,
 			zIndex: 1,
 			borderRadius: 20,
 		},
 		closeButtonText: {
 			fontSize: 20,
+			fontWeight: 'bold',
 			color: theme.textColor,
 			lineHeight: 20,
 		},
