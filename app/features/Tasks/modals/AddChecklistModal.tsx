@@ -39,16 +39,17 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ visible, onClose,
         <>
             <UniversalModal isVisible={visible} onClose={onClose}>
                 <View style={styles.modalContent}>
-                    <Text style={designs.text.title}>{initialChecklist ? 'Edit Checklist' : 'Add New Checklist'}</Text>
+                    <Text style={designs.modal.title}>{initialChecklist ? 'Edit Checklist' : 'Add New Checklist'}</Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={setChecklistName}
                         value={checklistName}
                         placeholder="Checklist name"
                         placeholderTextColor='#969DA3'
+                        onSubmitEditing={handleAddChecklist}
                     />
                     <Pressable
-                        style={[designs.button.marzoSecondary, {width: '90%', marginTop: 20}]}
+                        style={[designs.button.marzoSecondary, {width: '100%', marginTop: 40}]}
                         onPress={handleAddChecklist}
                     >
                         <Text style={designs.button.buttonText}>{initialChecklist ? 'Update Checklist' : 'Add Checklist'}</Text>

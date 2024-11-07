@@ -9,7 +9,7 @@ export const darkTheme = {
 	opaqueTextColor: 'rgba(211, 198, 170, 0.5)',
 	borderColor: '#333232',
 	accentColor: '#CC5359',
-	accentColorShade: '#e66c72',
+	accentColorShade: '#f0868b',
 	hoverColor: '#ffffff',
 
 	shadowColor: 'rgba(0, 0, 0, 1)',

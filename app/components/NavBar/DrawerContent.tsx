@@ -91,7 +91,8 @@ const getStyles = (theme: any) => StyleSheet.create({
         left: 0,
         top: 0,
         right: 0,
-        bottom: 10,
+        bottom: 20,
+        elevation: 6,
         zIndex: 1000,
     },
     drawer: {
@@ -109,7 +110,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     drawerItem: {
         padding: 10,
-        backgroundColor: 'rgba(227, 142, 148, 1)',
+        backgroundColor: theme.accentColorShade,
         marginBottom: 8,
         borderRadius: 20,
         justifyContent: 'center',
@@ -117,10 +118,10 @@ const getStyles = (theme: any) => StyleSheet.create({
         width: '90%'
     },
     activeDrawerItem: {
-        backgroundColor: theme.hoverColor,
+        backgroundColor: theme.accentColor,
     },
     drawerItemText: {
-        color: '#1E2225',
+        color: theme.backgroundColor,
         fontSize: 14,
     },
 });
