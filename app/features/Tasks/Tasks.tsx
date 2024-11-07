@@ -7,16 +7,16 @@ import TaskListScreen from './components/TasksList';
 import ChecklistScreen from './components/Checklist';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-// import { useHomepage } from '@/app/features/Home/helpers/useHomepage';
+import { useNavigationComponents } from '@/app/features/LeftPanel/helpers/useNavigation'
 import { useTasksData } from './hooks/useTasksData';
 // import CanvasScreen from './components/TaskCanvas';
 
 import { TaskData } from '@/src/types/Task';
 
 const TasksHub: React.FC = () => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    // const { openHomepage } = useHomepage();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { themeColors } = useThemeStyles();
+    const { openHomepage } = useNavigationComponents();
+    const styles = React.useMemo(() => getStyles(themeColors), [themeColors]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [activeScreen, setActiveScreen] = useState<'tasklist' | 'checklist' | 'canvas'>('tasklist');
     const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -126,7 +126,7 @@ const TasksHub: React.FC = () => {
                 items={navItems}
                 activeIndex={screens.findIndex(screen => screen.toLowerCase().replace(' ', '') === activeScreen)}
                 title={activeScreen.charAt(0).toUpperCase() + activeScreen.slice(1)}
-                // onBackPress={openHomepage}
+                onBackPress={openHomepage}
                 quickButtonFunction={activeScreen === 'checklist' ? undefined : openAddModal}
                 screen="tasks"
             />
@@ -134,29 +134,13 @@ const TasksHub: React.FC = () => {
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => {
-    const { width } = Dimensions.get('window');
-    const isSmall = width < 1920;
-    const isDesktop = Platform.OS === 'web';
-
+const getStyles = (themeColors: any) => {    
     return StyleSheet.create({
         container: {
             flex: 1,
             backgroundColor: themeColors.backgroundColor,
             padding: 20,
-            marginTop: isDesktop ? 0 : 37,
-        },
-        floatingButton: {
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: themeColors.hoverColor,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flexDirection: 'row',
+            paddingTop: 40,
         },
     });
 };

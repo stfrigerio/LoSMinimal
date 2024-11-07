@@ -120,7 +120,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     inputLabel: {
         color: 'gray',
         marginLeft: 5,
-        marginBottom: 2,
+        marginBottom: 4,
     },
     picker: {
         height: 50,

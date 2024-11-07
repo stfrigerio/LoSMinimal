@@ -17,6 +17,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { TaskObjective } from '@/app/features/Tasks/modals/components/TaskModal/TaskObjective';
 
 interface NavbarQuickButtonProps {
     quickButtonFunction: () => void;
@@ -45,24 +46,43 @@ const NavbarQuickButton: React.FC<NavbarQuickButtonProps> = ({ quickButtonFuncti
 
     return (
         <Pressable
-            style={[styles.floatingButton]}
+            style={({ pressed }) => [
+                styles.floatingButton,
+                pressed && styles.pressed
+            ]}
             onPress={quickButtonFunction}
+            android_ripple={{ color: themeColors.accentColorShade, borderless: true }}
         >
-            <FontAwesomeIcon icon={selectedIcon} size={24} color="#1E2225" />
+            {({ pressed }) => (
+                <FontAwesomeIcon 
+                    icon={selectedIcon} 
+                    size={24} 
+                    color={pressed ? themeColors.textColor : themeColors.backgroundColor} 
+                    style={{ 
+                        transform: [
+                            { scale: pressed ? 0.9 : 1 },
+                            { rotate: pressed ? '-10deg' : '0deg' }
+                        ],
+                        opacity: pressed ? 0.8 : 1,
+                    }}
+                />
+            )}
         </Pressable>
     );
 };
 
 const getStyles = (theme: any) => StyleSheet.create({
     floatingButton: {
-        backgroundColor: '#CD535B',
+        backgroundColor: theme.accentColor,
         width: 50,
         height: 50,
         borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
     },
+    pressed: {
+        transform: [{ scale: 0.96 }],
+    },
 });
-
 
 export default NavbarQuickButton;

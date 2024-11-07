@@ -9,6 +9,7 @@ export const darkTheme = {
 	opaqueTextColor: 'rgba(211, 198, 170, 0.5)',
 	borderColor: '#333232',
 	accentColor: '#CC5359',
+	accentColorShade: '#e66c72',
 	hoverColor: '#ffffff',
 
 	shadowColor: 'rgba(0, 0, 0, 1)',
@@ -33,6 +34,7 @@ export const lightTheme = {
 	opaqueTextColor: 'rgba(92, 106, 114, 0.5)',
 	borderColor: '#dee2e6',
 	accentColor: '#f8f9fa',
+	accentColorShade: '#CD535B',
 	hoverColor: '#4a5962',
 	disabledColor: '#b0b8be',
 

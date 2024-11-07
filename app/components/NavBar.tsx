@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronLeft, faSliders } from '@fortawesome/free-solid-svg-icons';
 
 import DrawerContent from './NavBar/DrawerContent';
-import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 import DrawerIcon from './NavBar/DrawerIcon';
+import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import NavbarQuickButton from './NavBar/NavbarQuickButton';
 
@@ -66,8 +66,6 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
 };
 
 const getStyles = (theme: any) => {
-    const { width, height } = Dimensions.get('window');
-
     return StyleSheet.create({
         navbarContent: {
             height: 70,

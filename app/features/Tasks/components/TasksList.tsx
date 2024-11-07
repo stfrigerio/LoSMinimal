@@ -26,7 +26,7 @@ const TaskListScreen = ({
     pillars,
 }: TaskListProps) => {
     const [filter, setFilter] = useState<FilterType>('all');
-    const { theme, themeColors, designs } = useThemeStyles();
+    const { themeColors, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
 
     // Sort and filter the tasks
@@ -94,7 +94,7 @@ const TaskListScreen = ({
         <Pressable onPress={() => setFilter(type)} style={styles.filterIcon}>
             <FontAwesomeIcon 
                 icon={icon} 
-                color={filter === type ? themeColors.hoverColor : 'gray'} 
+                color={filter === type ? themeColors.accentColor : 'gray'} 
                 size={24} 
             />
         </Pressable>
@@ -102,19 +102,17 @@ const TaskListScreen = ({
 
     return (
         <>
-            <View style={styles.header}>
-                <View style={styles.filterContainer}>
-                    <FilterIcon type="all" icon={faList} />
-                    <FilterIcon type="active" icon={faCircle} />
-                    <FilterIcon type="completed" icon={faCheckCircle} />
-                    <FilterIcon type="repeat" icon={faRepeat} />
-                </View>
+            <View style={styles.filterContainer}>
+                <FilterIcon type="all" icon={faList} />
+                <FilterIcon type="active" icon={faCircle} />
+                <FilterIcon type="completed" icon={faCheckCircle} />
+                <FilterIcon type="repeat" icon={faRepeat} />
             </View>
+            <View style={styles.divider} />
             <FlatList
                 data={filteredAndSortedTasks}
                 renderItem={({ item, index }) => (
                     <View style={[
-                        styles.listItemContainer,
                         index === filteredAndSortedTasks.length - 1 && styles.lastItem
                     ]}>
                         {renderItem({ item, index })}
@@ -132,23 +130,9 @@ const TaskListScreen = ({
 };
 
 const getStyles = (themeColors: any, designs: any) => {
-    const { width } = Dimensions.get('window');
-    const isSmall = width < 1920;
-    const isDesktop = Platform.OS === 'web';
-
     return StyleSheet.create({
-        header: {
-            alignItems: 'center',
-            marginBottom: 10,
-            fontFamily: 'serif',
-        },
-        headerText: {
-            ...designs.text.title,
-            fontSize: 24,
-            fontFamily: 'serif',
-        },
         filterContainer: {
-            marginVertical: 20,
+            marginTop: 15,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
@@ -159,6 +143,11 @@ const getStyles = (themeColors: any, designs: any) => {
         },
         list: {
             flex: 1,
+        },
+        divider: {
+            height: 1,
+            backgroundColor: themeColors.borderColor,
+            marginVertical: 20,
         },
         todayLine: {
             flexDirection: 'row',
@@ -178,16 +167,13 @@ const getStyles = (themeColors: any, designs: any) => {
             marginLeft: 10,
         },
         todayText: {
-            color: themeColors.textColor,
+            color: themeColors.textColorItalic,
             fontSize: 12,
             fontFamily: 'serif',
             fontWeight: 'bold',
         },
-        listItemContainer: {
-            // Add any other styles you want for each list item container
-        },
         lastItem: {
-            marginBottom: 80, // Adjust this value as needed
+            marginBottom: 80,
         },
     });
 };

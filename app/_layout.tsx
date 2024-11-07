@@ -57,7 +57,7 @@ function App() {
                     {...internalState}
                     style={{ 
                         borderLeftColor: themeColors.accentColor, 
-                        backgroundColor: themeColors.backgroundColor 
+                        backgroundColor: themeColors.backgroundSecondary 
                     }}
                     text1Style={{
                         fontSize: 15,

@@ -112,9 +112,9 @@ export const useNavigationComponents = () => {
 	// 	navigate('money');
 	// }, [navigate])
 
-	// const openHomepage = useCallback(() => {
-	// 	navigate('/');
-	// }, [navigate])
+	const openHomepage = useCallback(() => {
+		navigate.navigate('features/Home/Homepage' as never);
+	}, [navigate])
 
 	// const openCurrentWeek = useCallback(() => {
 	// 	const today = new Date();
@@ -164,7 +164,7 @@ export const useNavigationComponents = () => {
 		openTasks,
 		// openMoods,
 		// openMoney,
-		// openHomepage,
+		openHomepage,
 		// openCurrentWeek,
 		// openCurrentMonth,
 		// openMusic,

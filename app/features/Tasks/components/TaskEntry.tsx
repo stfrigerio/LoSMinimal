@@ -59,11 +59,19 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
                 null
                 :
                 item.completed ?
-                    <Pressable onPress={handleToggleCompletion} style={styles.completionToggle}>
+                    <Pressable 
+                        onPress={handleToggleCompletion} 
+                        style={styles.completionToggle} 
+                        android_ripple={{ color: themeColors.redOpacity, borderless: true }}
+                    >
                         <FontAwesomeIcon icon={faCheckCircle} color={themeColors.greenOpacity} size={20} /> 
                     </Pressable>
                     : 
-                    <Pressable onPress={handleToggleCompletion} style={styles.completionToggle}>
+                    <Pressable 
+                        onPress={handleToggleCompletion} 
+                        style={styles.completionToggle} 
+                        android_ripple={{ color: themeColors.greenOpacity, borderless: true }}
+                    >
                         <FontAwesomeIcon icon={faCircle} color={'gray'} size={20} />
                     </Pressable>
             }
@@ -82,7 +90,9 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
                 </Pressable>
                 :
                 <Pressable onPress={handleEdit} style={styles.dueDateContainer}>
-                    <Text style={[styles.dueDate, item.completed && styles.completedText]} numberOfLines={2}>{new Date(item.due!).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</Text>
+                    <Text style={[styles.dueDate, item.completed && styles.completedText]} numberOfLines={2}>
+                        {new Date(item.due!).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                    </Text>
                 </Pressable>
             }
             <View style={styles.actions}>
@@ -90,8 +100,10 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
                     <View style={styles.fakeIcon}/>
                     :
                     !item.completed ?
-                        <Pressable onPress={() => handlePostponeTask({ item, onUpdateTask })} style={styles.actionButton}>
-                            <FontAwesomeIcon icon={faRotateRight} color={'gray'} size={20} />
+                        <Pressable onPress={() => handlePostponeTask({ item, onUpdateTask })} style={[styles.actionButton, { marginRight: 15}]}>
+                            {({ pressed }) => (
+                                <FontAwesomeIcon icon={faRotateRight} color={pressed ? themeColors.accentColor : 'gray'} size={20} />
+                            )}
                         </Pressable>
                         :
                         <View style={styles.fakeIcon}/>
@@ -136,25 +148,20 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         padding: 10,
     },
     titleContainer: {
-        // flex: 1,
-        width: '40%',
+        width: '30%',
         marginRight: 5,
     },
     title: {
         ...designs.text.text,
         fontWeight: 'bold',
-        fontSize: 13,
+        fontSize: 14,
     },
     dueDate: {
         ...designs.text.text,
         fontSize: 12,
-        marginRight: 10
-        // borderWidth: 1,
-        // borderColor: 'blue',
+        marginRight: 15
     },
     actions: {
-        // borderWidth: 1,
-        // borderColor: 'green',
         flexDirection: 'row',
         justifyContent: 'space-between',
         gap: 15
@@ -173,8 +180,6 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     completionToggle: {
         width: '10%',
         alignItems: 'center',
-        // borderWidth: 1,
-        // borderColor: 'gray',
         marginRight: 8,
         padding: 5,
         zIndex: 100,

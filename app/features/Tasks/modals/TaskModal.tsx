@@ -125,7 +125,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 				Toast.show({
                     type: 'success',
                     text1: 'Task Updated',
-                    text2: `${itemName} has been updated. ${dateInput ? ` Due: ${format(new Date(dateInput), 'PPpp')}` : ''}`
+                    text2: `${itemName} has been updated for ${format(new Date(dateInput), 'dd/MM')} at ${format(new Date(dateInput), 'HH:mm')}`,
+					visibilityTime: 8000
                 });
 			} else {
 				newTask = {
@@ -146,7 +147,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 				Toast.show({
                     type: 'success',
                     text1: 'Task Added',
-                    text2: `${itemName} has been added. ${dateInput ? ` Due: ${format(new Date(dateInput), 'PPpp')}` : ''}`
+                    text2: `${itemName} has been added for ${format(new Date(dateInput), 'dd/MM')} at ${format(new Date(dateInput), 'HH:mm')}`,
+					visibilityTime: 8000
                 });
 			}
 		} else {
@@ -220,9 +222,9 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
     }, [task]);
 
 	const modalContent = (
-		<View>
+		<>
 			<Text style={[designs.modal.title]}>
-				{task ? '✏️ Edit task' : '✅ Create a new task'}
+				{task ? '✏️ Edit Task' : '✅  Create Task'}
 			</Text>
 
 			<TaskBasicInfo 
@@ -240,9 +242,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
                 style={[styles.moreOptionsButton]} 
                 onPress={() => setShowMoreOptions(!showMoreOptions)}
             >
-                <Text style={styles.moreOptionsText}>
-                    {showMoreOptions ? '− Less Options' : '+ More Options'}
-                </Text>
+                {({ pressed }) => (
+                    <Text style={[styles.moreOptionsText, { color: pressed ? themeColors.accentColor : themeColors.textColor }]}>
+                        {showMoreOptions ? '− Less Options' : '+ More Options'}
+                    </Text>
+                )}
             </Pressable>
 
             {/* Collapsible section */}
@@ -326,7 +330,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 					{task ? 'Update' : 'Add Task'}
 				</Text>
 			</Pressable>
-		</View>
+		</>
 	);
 
 	return (
@@ -336,13 +340,15 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 				{picker}
 			</UniversalModal>
 			
-			<AlertModal
-				isVisible={showAlert}
-				title="Error"
-				message="Please enter an item name"
-				onConfirm={() => setShowAlert(false)}
-				singleButton={true}
-			/>
+			{showAlert && (
+				<AlertModal
+					isVisible={showAlert}
+					title="Error"
+					message="Please enter an item name"
+					onConfirm={() => setShowAlert(false)}
+					singleButton={true}
+				/>
+			)}
 		</>
 	);
 };
@@ -356,6 +362,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		justifyContent: 'space-between',
 		width: '100%',
 		marginBottom: 20,
+		gap: 10
 	},
 	dateTimeButton: {
 		flex: 1,
@@ -363,7 +370,6 @@ const getStyles = (theme: any) => StyleSheet.create({
 		borderColor: theme.borderColor,
 		borderWidth: 1,
 		borderRadius: 5,
-		marginHorizontal: 5,
 		alignItems: 'center',
 	},
 	dateTimeText: {
