@@ -27,7 +27,9 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 			padding: 20,
 			width: '90%',
 			maxHeight: '80%',
-			shadowColor: '#000',
+			borderWidth: 1,
+			borderColor: theme.borderColor,
+			shadowColor: theme.shadowColor,
 			shadowOffset: {
 				width: 0,
 				height: 2,

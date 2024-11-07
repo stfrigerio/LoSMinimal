@@ -176,7 +176,6 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 									item={item}
 									toggleItemCompletion={toggleItemCompletion}
 									onDelete={handleDeleteTask}
-									isLast={index === checklistItems.length - 1}
 									onLongPress={() => handleLongPress(item)}
 									onPostpone={() => handlePostpone(item)}
 								/>

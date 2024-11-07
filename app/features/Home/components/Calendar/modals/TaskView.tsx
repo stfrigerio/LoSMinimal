@@ -10,7 +10,6 @@ interface TaskViewProps {
     item: ExtendedTaskData;
     toggleItemCompletion: (id: number, completed: boolean) => Promise<void>;
     onDelete: (uuid: string) => void;
-    isLast: boolean;
     onLongPress: () => void;
     onPostpone: (task: ExtendedTaskData) => void;
 }
@@ -19,7 +18,6 @@ const TaskView: React.FC<TaskViewProps> = ({
     item,
     toggleItemCompletion,
     onDelete,
-    isLast,
     onLongPress,
     onPostpone,
 }) => {
@@ -40,12 +38,12 @@ const TaskView: React.FC<TaskViewProps> = ({
             <Pressable 
                 onPress={handlePress}
                 onLongPress={onLongPress}
-                delayLongPress={500} // Adjust this value as needed
+                delayLongPress={500}
                 style={styles.contentContainer}
             >
                 <View style={[styles.circle, item.completed ? styles.completedCircle : null]} />
                 <View style={styles.dueHourContainer}>
-                    <Text style={[item.completed ? styles.completedText : designs.text.text, { fontSize: 12 }]}>
+                    <Text style={[item.completed ? styles.completedText : styles.dueText]}>
                         {item.due
                             ? formatDateTimeDisplay(item.due).split(' ')[1].split(':').slice(0, 2).join(':')
                             : 'No due'
@@ -60,14 +58,26 @@ const TaskView: React.FC<TaskViewProps> = ({
                 </View>
             </Pressable>
             {!item.completed ? (
-                <Pressable onPress={() => onPostpone(item)} style={styles.iconButton}>
-                    <FontAwesomeIcon icon={faRotateRight} color={'gray'} size={15} />
+                <Pressable onPress={() => onPostpone(item)} style={[styles.iconButton, { marginRight: 5 }]}>
+                    {({ pressed }) => (
+                        <FontAwesomeIcon 
+                            icon={faRotateRight} 
+                            color={pressed ? themeColors.accentColor : 'gray'} 
+                            size={15} 
+                        />
+                    )}
                 </Pressable>
             ) : (
                 <View style={[styles.iconButton, { marginRight: 15 }]} />
             )}
             <Pressable onPress={() => onDelete(item.uuid!)} style={styles.iconButton}>
-                <FontAwesomeIcon icon={faTrash} color={'gray'} size={15} />
+                {({ pressed }) => (
+                    <FontAwesomeIcon 
+                        icon={faTrash} 
+                        color={pressed ? themeColors.accentColor : 'gray'} 
+                        size={15} 
+                    />
+                )}
             </Pressable>
         </View>
     );
@@ -76,7 +86,7 @@ const TaskView: React.FC<TaskViewProps> = ({
 const getStyles = (theme: any) => StyleSheet.create({
     container: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     contentContainer: {
         flexDirection: 'row',
@@ -84,10 +94,10 @@ const getStyles = (theme: any) => StyleSheet.create({
         flex: 1
     },
     circle: {
-        height: 12,
-        width: 12,
+        height: 18,
+        width: 18,
         borderRadius: 12,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: theme.borderColor,
     },
     completedCircle: {
@@ -98,11 +108,16 @@ const getStyles = (theme: any) => StyleSheet.create({
         alignItems: 'center',
         marginLeft: 5,
     },
+    dueText: {
+        fontSize: 12,
+        color: theme.textColorItalic,
+    },
     separator: {
         width: 1,
-        height: 40,
+        height: 50,
         backgroundColor: theme.borderColor,
         marginHorizontal: 6,
+        marginRight: 12,
     },
     textContainer: {
         flex: 1,
@@ -114,6 +129,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         padding: 10,
     },
     completedText: {
+        fontSize: 12,
         color: 'gray',
         textDecorationLine: 'line-through',
     },
