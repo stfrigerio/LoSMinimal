@@ -10,8 +10,9 @@ import { UniversalModal } from '@/app/components/UniversalModal';
 import TaskModal from '@/app/features/Tasks/modals/TaskModal';
 import TaskView from './TaskView';
 
-import { handlePostponeTask } from '@/app/features/Tasks/hooks/postponeTask';
+import { handlePostponeTask } from '@/app/features/Tasks/helpers/postponeTask';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+//todo re add this
 // import { useHomepage } from '@/app/components/Home/hooks/useHomepage';
 
 import { TaskData } from '@/src/types/Task';
@@ -184,6 +185,7 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 					<View style={styles.divider}></View>
 
 				<View style={styles.footerNavigation}>
+					{/* todo re add this */}
 					{/* <Pressable onPress={handleGoToDay} style={styles.footerButton}>
 						<FontAwesomeIcon icon={faCalendarDay} color={'gray'} size={20} />
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Day</Text>
@@ -196,6 +198,7 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 							</>
 						)}
 					</Pressable>
+					{/* todo re add this */}
 					{/* <Pressable onPress={handleGoToWeek} style={styles.footerButton}>
 						<FontAwesomeIcon icon={faCalendarWeek} color={'gray'} size={20} />
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Week</Text>
