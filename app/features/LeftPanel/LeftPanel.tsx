@@ -1,40 +1,38 @@
 import React, { useMemo } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 
-// import TimeChart from './TimeChart'
-// import MusicPlayerControls from '../Music/components/MusicPlayerControls';
-
+import { useNavigationComponents } from './helpers/useNavigation';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { theme, themeColors, designs } = useThemeStyles();
-    const styles = useMemo(() => getStyles(themeColors, theme), [themeColors, theme]);
+    const styles = useMemo(() => getStyles(themeColors), [themeColors]);
+
+    const { openTasks } = useNavigationComponents();
 
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <BlurView 
-                    intensity={20} 
+                    intensity={50} 
                     tint={theme === 'dark' ? 'dark' : 'light'} 
                     style={[StyleSheet.absoluteFill, { zIndex: 1 }]} 
                 />
                 <View style={styles.content}>
-                    <View style={styles.chartContainer}>
-                        {/* <TimeChart /> */}
-                    </View>
-                    <Text>Hello I am the left panel</Text>
-                    <View style={styles.musicControlsContainer}>
-                        {/* <MusicPlayerControls /> */}
-                    </View>
+                    <Pressable onPress={openTasks} style={styles.button}>
+                        {({ pressed }) => (
+                            <Text style={[designs.text.text, { textAlign: 'center', color: pressed ? themeColors.accentColor : themeColors.textColor }]}>Open Tasks</Text>
+                        )}
+                    </Pressable>
                 </View>
             </ScrollView>
         </View>
     );
 };
 
-const getStyles = (themeColors: any, theme: 'dark' | 'light') => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
     container: {
         flex: 1,
         height: Dimensions.get('window').height,
@@ -47,34 +45,19 @@ const getStyles = (themeColors: any, theme: 'dark' | 'light') => StyleSheet.crea
     content: {
         flex: 1,
         padding: 20,
-        paddingTop: 50,
+        marginTop: 50,
         zIndex: 1000,
         height: '100%',
     },
-    chartContainer: {
-        borderColor: 'black',
-        borderRadius: 5,
-        backgroundColor: 'transparent',
-    },
-    separator: {
-        height: 1,
-        backgroundColor: 'black',
-        marginVertical: 20, 
-    },
     button: {
         padding: 10,
-        borderWidth: 1,
-        borderColor: 'black',
+        // borderWidth: 1,
+        // borderColor: themeColors.accentColor,
         borderRadius: 10,
+        backgroundColor: themeColors.backgroundColor,
+        elevation: 10,
         marginVertical: 4,
     },
-    buttonText: {
-        alignSelf: 'center',
-        color: themeColors.textColor,
-    },
-    musicControlsContainer: {
-        marginVertical: 10
-    }
 });
 
 export default LeftPanel;

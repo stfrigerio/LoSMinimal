@@ -1,69 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, StyleSheet, ScrollView, Dimensions, Text } from 'react-native';
+import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
-import { format } from 'date-fns';
 
-// import DailyNote from '@los/shared/src/components/DailyNote/DailyNote';
-// import PeriodicNote from '@los/shared/src/components/PeriodicNote/PeriodicNote';
-// import Money from '@los/shared/src/components/Money/Money';
-// import Task from '@los/shared/src/components/Tasks/Tasks';
+// import TimeChart from './TimeChart'
+// import MusicPlayerControls from '../Music/components/MusicPlayerControls';
 
-// import { databaseManagers } from '../../database/tables';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-// import { startOfPeriod, formatDate } from '@los/shared/src/utilities/timezoneBullshit';
 
 const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
-    const [rightPanelView, setRightPanelView] = useState<string>('DailyNote');
-
-    // useEffect(() => {
-    //     databaseManagers.userSettings.getByKey('RightPanelView').then(setting => {
-    //         if (setting) setRightPanelView(setting.value);
-    //     });
-    // }, []);
-
-    const getComponentByView = () => {
-        const today = new Date();
-        
-        // switch (rightPanelView) {
-        //     case 'Money':
-        //         return <Money />;
-        //     case 'Task':
-        //         return <Task />;
-        //     case 'WeeklyNote':
-        //         const startOfWeek = startOfPeriod(today, 'week');
-        //         const endOfWeek = new Date(startOfWeek);
-        //         endOfWeek.setDate(startOfWeek.getDate() + 6);
-            
-        //         return (
-        //             <PeriodicNote
-        //                 startDate={formatDate(startOfWeek, 'yyyy-MM-dd')}
-        //                 endDate={formatDate(endOfWeek, 'yyyy-MM-dd')}
-        //             />
-        //         );
-        //     case 'DailyNote':
-        //     default:
-        //         return <DailyNote date={format(today, 'yyyy-MM-dd')} />;
-        // }
-    };
+    const { theme, themeColors, designs } = useThemeStyles();
+    const styles = useMemo(() => getStyles(themeColors, theme), [themeColors, theme]);
 
     return (
         <View style={styles.container}>
-            {/* {getComponentByView()} */}
-            <Text>Hello I am the right panel</Text>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <BlurView 
+                    intensity={20} 
+                    tint={theme === 'dark' ? 'dark' : 'light'} 
+                    style={[StyleSheet.absoluteFill, { zIndex: 1 }]} 
+                />
+                <View style={styles.content}>
+                    <View style={styles.chartContainer}>
+                        {/* <TimeChart /> */}
+                    </View>
+                    <Text>Hello I am the old left panel</Text>
+                    <View style={styles.musicControlsContainer}>
+                        {/* <MusicPlayerControls /> */}
+                    </View>
+                </View>
+            </ScrollView>
         </View>
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any, theme: 'dark' | 'light') => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        height: Dimensions.get('window').height,
+        overflow: 'hidden',
     },
-    scrollContent: {
+    scrollViewContent: {
         flexGrow: 1,
+        minHeight: '100%',
     },
+    content: {
+        flex: 1,
+        padding: 20,
+        paddingTop: 50,
+        zIndex: 1000,
+        height: '100%',
+    },
+    chartContainer: {
+        borderColor: 'black',
+        borderRadius: 5,
+        backgroundColor: 'transparent',
+    },
+    separator: {
+        height: 1,
+        backgroundColor: 'black',
+        marginVertical: 20, 
+    },
+    button: {
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 10,
+        marginVertical: 4,
+    },
+    buttonText: {
+        alignSelf: 'center',
+        color: themeColors.textColor,
+    },
+    musicControlsContainer: {
+        marginVertical: 10
+    }
 });
 
 export default RightPanel;

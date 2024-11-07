@@ -2,36 +2,9 @@ import { StyleSheet, View, Text, ImageBackground, Pressable, Dimensions, Alert }
 import CustomCalendar from './components/Calendar/Calendar';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { databaseManager } from '@/database/databaseManager';
-import Toast from 'react-native-toast-message';
 
 const Homepage = () => {
     const { designs } = useThemeStyles();
-
-    const handleResetDatabase = async () => {
-        Alert.alert(
-            "Reset Database",
-            "Are you sure you want to reset the database? This action cannot be undone.",
-            [
-                {
-                    text: "Cancel",
-                    style: "cancel"
-                },
-                {
-                    text: "Reset",
-                    style: "destructive",
-                    onPress: async () => {
-                        try {
-                            await databaseManager.hardResetDatabase();
-                            Alert.alert("Success", "Database has been reset successfully");
-                        } catch (error) {
-                            console.error('Error resetting database:', error);
-                            Alert.alert("Error", "Failed to reset database. Please try again.");
-                        }
-                    }
-                }
-            ]
-        );
-    };
 
     return (
         <View style={styles.container}>
@@ -43,14 +16,6 @@ const Homepage = () => {
                 <View style={styles.overlay}>
                     <View style={styles.content}>
                         <CustomCalendar />
-                        <Pressable 
-                            style={[styles.resetButton, designs.button.homepage]}
-                            onPress={handleResetDatabase}
-                        >
-                            <Text style={[styles.resetButtonText, designs.button.buttonText]}>
-                                Reset Database
-                            </Text>
-                        </Pressable>
                     </View>
                 </View>
             </ImageBackground>

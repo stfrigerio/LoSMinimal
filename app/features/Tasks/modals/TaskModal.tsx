@@ -14,15 +14,15 @@ import { TaskData } from '@/src/types/Task';
 import { PillarData } from '@/src/types/Pillar';
 import { ObjectiveData } from '@/src/types/Objective';
 
-import { TaskBasicInfo } from './components/TaskBasicInfo';
-import { TaskDateTime } from './components/TaskDateTime';
-import { TaskNote } from './components/TaskNote';
-import { TaskPriority } from './components/TaskPriority';
-import { TaskRepeat } from './components/TaskRepeat';
-import { TaskFrequency } from './components/TaskFrequency';
-import { TaskPillar } from './components/TaskPillar';
-import { TaskObjective } from './components/TaskObjective';
-import { TaskEndDateTime } from './components/TaskEndDateTime';
+import { TaskBasicInfo } from './components/TaskModal/TaskBasicInfo';
+import { TaskDateTime } from './components/TaskModal/TaskDateTime';
+import { TaskNote } from './components/TaskModal/TaskNote';
+import { TaskPriority } from './components/TaskModal/TaskPriority';
+import { TaskRepeat } from './components/TaskModal/TaskRepeat';
+import { TaskFrequency } from './components/TaskModal/TaskFrequency';
+import { TaskPillar } from './components/TaskModal/TaskPillar';
+import { TaskObjective } from './components/TaskModal/TaskObjective';
+import { TaskEndDateTime } from './components/TaskModal/TaskEndDateTime';
 
 interface TaskModalProps {
 	isOpen: boolean;

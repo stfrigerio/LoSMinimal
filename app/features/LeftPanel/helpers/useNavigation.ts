@@ -1,7 +1,7 @@
 //useHomepage.ts
 import { useCallback } from 'react';
 import { endOfWeek, endOfMonth, endOfQuarter, endOfYear } from 'date-fns';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from 'expo-router';  // Change this import
 
 import { formatDate, parseDate, startOfPeriod, getLocalTimeZone } from '@/src/utils/timezoneBullshit';
 
@@ -24,8 +24,8 @@ export interface HomepageSettings {
 	HideMusic?: { value: string };
 }
 
-export const useHomepage = () => {
-	const navigate = useNavigation();
+export const useNavigationComponents = () => {
+    const navigate = useNavigation();
 
 	// const openNote = useCallback((period: NotePeriod, date: string) => {
 	// 	const timeZone = getLocalTimeZone(); // Use the utility function to get the timezone
@@ -100,8 +100,9 @@ export const useHomepage = () => {
 	// }, [navigate])
 
     const openTasks = useCallback(() => {
-        navigate.navigate('Tasks' as never);
+        navigate.navigate('features/Tasks/Tasks' as never);
     }, [navigate]);
+
 
 	// const openMoods = useCallback(() => {
 	// 	navigate('moods');
