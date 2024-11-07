@@ -11,6 +11,7 @@ import ViewTaskModal from '@/app/features/Home/components/Calendar/modals/ViewTa
 
 import { useMarkedDates } from './hooks/useMarkedDates';
 import { useTaskModal } from './hooks/useTaskModal';
+import Toast from 'react-native-toast-message';
 
 const CustomCalendar = () => {
 	const { theme, themeColors, designs } = useThemeStyles();
@@ -90,6 +91,7 @@ const CustomCalendar = () => {
 					updateChecklistItems={updateChecklistItems}
 				/>
 			)}
+			{/* <Toast /> */}
 		</>
 	);
 }

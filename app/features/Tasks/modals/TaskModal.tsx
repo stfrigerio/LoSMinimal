@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { format } from 'date-fns';
+import Toast from 'react-native-toast-message';
 
 import { UniversalModal } from '@/app/components/UniversalModal';
 import AlertModal from '@/app/components/AlertModal';
@@ -41,6 +42,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 	const [priority, setPriority] = useState<number | undefined>(task?.priority || undefined);
 	const [repeat, setRepeat] = useState<string | undefined>(task?.repeat || undefined);
 	const [frequency, setFrequency] = useState<string | undefined>(task?.frequency || undefined);
+
+	const [showMoreOptions, setShowMoreOptions] = useState<boolean>(false);
 
 	const [showNote, setShowNote] = useState<boolean>(!!task?.note);
 	const [showPriority, setShowPriority] = useState<boolean>(!!task?.priority);
@@ -117,6 +120,13 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 					type: task?.type,
 				};
 				onUpdateItem(newTask);
+				resetForm();
+				onClose();
+				Toast.show({
+                    type: 'success',
+                    text1: 'Task Updated',
+                    text2: `${itemName} has been updated. ${dateInput ? ` Due: ${format(new Date(dateInput), 'PPpp')}` : ''}`
+                });
 			} else {
 				newTask = {
 					text: itemName,
@@ -131,10 +141,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 					priority: priority,
 				};
 				onAddItem(newTask);
+				resetForm();
+				onClose();
+				Toast.show({
+                    type: 'success',
+                    text1: 'Task Added',
+                    text2: `${itemName} has been added. ${dateInput ? ` Due: ${format(new Date(dateInput), 'PPpp')}` : ''}`
+                });
 			}
-
-			resetForm();
-			onClose();
 		} else {
 			setShowAlert(true);
 		}
@@ -192,6 +206,19 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 		{ label: 'Yearly', value: 'yearly' },
 	];
 
+	useEffect(() => {
+        if (task) {
+            setShowMoreOptions(!!(
+                task.note || 
+                task.priority || 
+                task.pillarUuid || 
+                task.frequency || 
+                task.objectiveUuid || 
+                task.end
+            ));
+        }
+    }, [task]);
+
 	const modalContent = (
 		<View>
 			<Text style={[designs.modal.title]}>
@@ -207,60 +234,89 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 				showDateTimePicker={showDateTimePicker}
 				styles={styles}
 			/>
-			<TaskNote
-				showNote={showNote}
-				setShowNote={setShowNote}
-				noteText={noteText}
-				setNoteText={setNoteText}
-				styles={styles}
-			/>
-			<TaskPriority
-				showPriority={showPriority}
-				setShowPriority={setShowPriority}
-				priority={priority}
-				setPriority={setPriority}
-				priorityItems={priorityItems}
-				styles={styles}
-			/>
-			<TaskRepeat
-				repeat={repeat}
-				setRepeat={setRepeat}
-				setShowFrequency={setShowFrequency}
-				styles={styles}
-			/>
-			{showFrequency && (
-				<TaskFrequency
-					frequency={frequency}
-					setFrequency={setFrequency}
-					frequencyItems={frequencyItems}
-					styles={styles}
-				/>
-			)}
-			<TaskPillar
-				showPillar={showPillar}
-				setShowPillar={setShowPillar}
-				selectedPillarUuid={selectedPillarUuid}
-				setSelectedPillarUuid={setSelectedPillarUuid}
-				pillarItems={pillarItems}
-				styles={styles}
-			/>
-			<TaskObjective
-				showObjective={showObjective}
-				setShowObjective={setShowObjective}
-				objectiveUuid={objectiveUuid}
-				setObjectiveUuid={setObjectiveUuid}
-				setShowPillar={setShowPillar}
-				setSelectedPillarUuid={setSelectedPillarUuid}
-				objectiveItems={objectiveItems}
-				styles={styles}
-			/>
-			<TaskEndDateTime
-				showEndDateTime={showEndDateTime}
-				setShowEndDateTime={setShowEndDateTime}
-				endDateInput={endDateInput}
-				showDateTimePicker={showDateTimePicker}
-				styles={styles}
-			/>
+
+            {/* More Options Toggle */}
+            <Pressable 
+                style={[styles.moreOptionsButton]} 
+                onPress={() => setShowMoreOptions(!showMoreOptions)}
+            >
+                <Text style={styles.moreOptionsText}>
+                    {showMoreOptions ? '− Less Options' : '+ More Options'}
+                </Text>
+            </Pressable>
+
+            {/* Collapsible section */}
+            {showMoreOptions && (
+                <View style={styles.moreOptionsContainer}>
+                    {/* Timing Group */}
+                    <View style={styles.optionsGroup}>
+                        <Text style={styles.groupTitle}>Timing</Text>
+                        <TaskRepeat
+                            repeat={repeat}
+                            setRepeat={setRepeat}
+                            setShowFrequency={setShowFrequency}
+                            styles={styles}
+                        />
+                        {showFrequency && (
+                            <TaskFrequency
+                                frequency={frequency}
+                                setFrequency={setFrequency}
+                                frequencyItems={frequencyItems}
+                                styles={styles}
+                            />
+                        )}
+                        <TaskEndDateTime
+                            showEndDateTime={showEndDateTime}
+                            setShowEndDateTime={setShowEndDateTime}
+                            endDateInput={endDateInput}
+                            showDateTimePicker={showDateTimePicker}
+                            styles={styles}
+                        />
+                    </View>
+
+                    {/* Organization Group */}
+                    <View style={styles.optionsGroup}>
+                        <Text style={styles.groupTitle}>Organization</Text>
+                        <TaskPriority
+                            showPriority={showPriority}
+                            setShowPriority={setShowPriority}
+                            priority={priority}
+                            setPriority={setPriority}
+                            priorityItems={priorityItems}
+                            styles={styles}
+                        />
+                        <TaskPillar
+                            showPillar={showPillar}
+                            setShowPillar={setShowPillar}
+                            selectedPillarUuid={selectedPillarUuid}
+                            setSelectedPillarUuid={setSelectedPillarUuid}
+                            pillarItems={pillarItems}
+                            styles={styles}
+                        />
+                        <TaskObjective
+                            showObjective={showObjective}
+                            setShowObjective={setShowObjective}
+                            objectiveUuid={objectiveUuid}
+                            setObjectiveUuid={setObjectiveUuid}
+                            setShowPillar={setShowPillar}
+                            setSelectedPillarUuid={setSelectedPillarUuid}
+                            objectiveItems={objectiveItems}
+                            styles={styles}
+                        />
+                    </View>
+
+                    {/* Notes Group */}
+                    <View style={styles.optionsGroup}>
+                        <TaskNote
+                            showNote={showNote}
+                            setShowNote={setShowNote}
+                            noteText={noteText}
+                            setNoteText={setNoteText}
+                            styles={styles}
+                        />
+                    </View>
+                </View>
+            )}
 
 			<Pressable 
 				style={[designs.button.marzoSecondary]} 
@@ -285,7 +341,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 				title="Error"
 				message="Please enter an item name"
 				onConfirm={() => setShowAlert(false)}
-				onCancel={() => setShowAlert(false)}
+				singleButton={true}
 			/>
 		</>
 	);
@@ -313,6 +369,32 @@ const getStyles = (theme: any) => StyleSheet.create({
 	dateTimeText: {
 		color: theme.textColor,
 	},
+	moreOptionsButton: {
+        padding: 10,
+        marginVertical: 10,
+        alignItems: 'center',
+    },
+    moreOptionsText: {
+        color: theme.textColor,
+        fontSize: 16,
+    },
+    moreOptionsContainer: {
+        borderTopWidth: 1,
+        borderTopColor: theme.borderColor,
+        paddingTop: 10,
+    },
+    optionsGroup: {
+        marginBottom: 15,
+        paddingBottom: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: theme.borderColor,
+    },
+    groupTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: theme.textColor,
+        marginBottom: 10,
+    },
 });
 
 export default TaskModal;

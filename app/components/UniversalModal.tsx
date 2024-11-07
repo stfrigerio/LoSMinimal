@@ -26,7 +26,7 @@ export const UniversalModal: React.FC<UniversalModalProps> = ({
     closeOnBackdropPress = true,
     testID = 'universal-modal'
 }) => {
-    const { theme, designs } = useThemeStyles();
+    const { theme, designs, themeColors } = useThemeStyles();
     const styles = modalStyles(theme);
 
     const handleBackdropPress = () => {
@@ -44,7 +44,16 @@ export const UniversalModal: React.FC<UniversalModalProps> = ({
                 accessibilityRole="button"
                 testID={`${testID}-close-button`}
             >
-                <Text style={styles.closeButtonText}>✕</Text>
+                {({ pressed }) => (
+                    <Text 
+                        style={[
+                            styles.closeButtonText,
+                            pressed && { color: themeColors.accentColor, transform: [{ scale: 0.88 }] }
+                        ]}
+                    >
+                        ✕
+                    </Text>
+                )}
             </Pressable>
         )
     );
@@ -76,7 +85,7 @@ export const UniversalModal: React.FC<UniversalModalProps> = ({
                         contentContainerStyle={styles.scrollViewContent}
                         style={styles.scrollView}
                         showsVerticalScrollIndicator={false}
-                        bounces={false}
+                        bounces={true}
                     >
                         {children}
                     </ScrollView>

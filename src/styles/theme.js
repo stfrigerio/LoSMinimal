@@ -11,7 +11,7 @@ export const darkTheme = {
 	accentColor: '#CC5359',
 	hoverColor: '#ffffff',
 
-	shadowColor: 'rgba(100, 100, 100, 0.75)',
+	shadowColor: 'rgba(0, 0, 0, 1)',
 
 	red: 'rgb(250, 37, 37)',
 	redOpacity: 'rgba(250, 37, 37, 0.8)',

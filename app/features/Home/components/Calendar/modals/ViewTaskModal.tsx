@@ -140,11 +140,23 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 				<Text style={styles.modalTitle}>{formattedMonth}</Text>
 				<View style={styles.dateNavigation}>
 					<Pressable onPress={() => navigateDay('prev')} style={styles.navButton}>
-						<FontAwesomeIcon icon={faChevronLeft} color={'gray'} size={18} />
+						{({ pressed }) => (
+							<FontAwesomeIcon 
+								icon={faChevronLeft} 
+								color={pressed ? themeColors.accentColor : 'gray'} 
+								size={18} 
+							/>
+						)}
 					</Pressable>
 					<Text style={styles.modalTitle}>{formattedDate}</Text>
 					<Pressable onPress={() => navigateDay('next')} style={styles.navButton}>
-						<FontAwesomeIcon icon={faChevronRight} color={'gray'} size={18} />
+						{({ pressed }) => (
+							<FontAwesomeIcon 
+								icon={faChevronRight} 
+								color={pressed ? themeColors.accentColor : 'gray'} 
+								size={18} 
+							/>
+						)}
 					</Pressable>
 				</View>
 				{birthdayDetails.isBirthday && (
@@ -178,8 +190,12 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Day</Text>
 					</Pressable> */}
 					<Pressable onPress={() => setShowTaskModal(true)} style={styles.footerButton}>
-						<FontAwesomeIcon icon={faPlus} color={'gray'} size={20} />
-						<Text style={[designs.text.text, styles.footerButtonText]}>Add Task</Text>
+						{({ pressed }) => (
+							<>
+								<FontAwesomeIcon icon={faPlus} color={pressed ? themeColors.accentColor : 'gray'} size={20} />
+								<Text style={[designs.text.text, styles.footerButtonText]}>Add Task</Text>
+							</>
+						)}
 					</Pressable>
 					{/* <Pressable onPress={handleGoToWeek} style={styles.footerButton}>
 						<FontAwesomeIcon icon={faCalendarWeek} color={'gray'} size={20} />
@@ -221,14 +237,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		textAlign: 'center',
 		fontWeight: 'bold',
 		fontSize: 18,
-		color: theme.hoverColor,
-		fontFamily: 'serif'
-	},
-	modalMonthTitle: {
-		textAlign: 'center',
-		fontWeight: 'bold',
-		fontSize: 18,
-		color: theme.hoverColor,
+		color: theme.accentColor,
 		fontFamily: 'serif'
 	},
 	birthdayText: {
