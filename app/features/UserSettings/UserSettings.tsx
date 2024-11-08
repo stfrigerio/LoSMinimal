@@ -20,7 +20,6 @@ const UserSettings: React.FC = () => {
 		'Tags', 
 		'Pillars', 
 		'General Settings', 
-		'Database', 
 		'Notifications', 
 		'Daily Settings', 
 		'Library Settings'
@@ -71,15 +70,12 @@ const UserSettings: React.FC = () => {
 };
 
 const getStyles = (theme: any) => {
-	const { width } = Dimensions.get('window');
-	const isDesktop = width > 768;
-
 	return StyleSheet.create({
 		content: {
 			flex: 1,
 		},
 		mainContainer: {
-			marginTop: isDesktop ? 0 : 37,
+			paddingTop: 37,
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
 		},
