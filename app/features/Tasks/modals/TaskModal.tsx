@@ -10,10 +10,7 @@ import createTimePicker from '@/app/components/DateTimePicker';
 import { useTasksData } from '@/app/features/Tasks/hooks/useTasksData';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
-import { TaskData } from '@/src/types/Task';
-import { PillarData } from '@/src/types/Pillar';
-import { ObjectiveData } from '@/src/types/Objective';
-
+import { PrimaryButton } from '@/app/components/Atoms/PrimaryButton';
 import { TaskBasicInfo } from './components/TaskModal/TaskBasicInfo';
 import { TaskDateTime } from './components/TaskModal/TaskDateTime';
 import { TaskNote } from './components/TaskModal/TaskNote';
@@ -23,6 +20,10 @@ import { TaskFrequency } from './components/TaskModal/TaskFrequency';
 import { TaskPillar } from './components/TaskModal/TaskPillar';
 import { TaskObjective } from './components/TaskModal/TaskObjective';
 import { TaskEndDateTime } from './components/TaskModal/TaskEndDateTime';
+
+import { TaskData } from '@/src/types/Task';
+import { PillarData } from '@/src/types/Pillar';
+import { ObjectiveData } from '@/src/types/Objective';
 
 interface TaskModalProps {
 	isOpen: boolean;
@@ -322,14 +323,11 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
                 </View>
             )}
 
-			<Pressable 
-				style={[designs.button.marzoSecondary]} 
-				onPress={addNewItem}
-			>
-				<Text style={designs.button.buttonText}>
-					{task ? 'Update' : 'Add Task'}
-				</Text>
-			</Pressable>
+			<PrimaryButton
+				// onPress={addNewItem}
+				onPress={() => console.log('addNewItem')}
+				text={task ? 'Update' : 'Add Task'}
+			/>
 		</>
 	);
 

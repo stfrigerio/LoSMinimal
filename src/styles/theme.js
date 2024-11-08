@@ -22,32 +22,32 @@ export const darkTheme = {
 	greenOpacity: 'rgba(61, 247, 52, 0.5)',
 	blue: 'rgb(0, 122, 255)',
 	blueOpacity: 'rgba(0, 122, 255, 0.5)',
+	gray: 'gray',
 };
 
 export const lightTheme = {
-	primaryColor: '#800020',
-	backgroundColor: '#fdf6e3',
+	backgroundColor: '#f7f2e4',
 	backgroundSecondary: '#efebd4',
 	textColor: '#5c6a72',
 	textColorBold: '#c79428',
-	textColorItalic: '#CBA95F',
+	textColorItalic: '#cc8f0e',
 	opaqueTextColor: 'rgba(92, 106, 114, 0.5)',
 	borderColor: '#dee2e6',
-	accentColor: '#f8f9fa',
-	accentColorShade: '#CD535B',
+	accentColor: '#0790b0',
+	accentColorShade: '#f0868b',
 	hoverColor: '#4a5962',
-	disabledColor: '#b0b8be',
 
-	shadowColor: 'rgba(0, 0, 0, 0.75)',
+	shadowColor: 'rgba(150, 150, 150, 0.75)',
 
-	red: 'rgb(219, 0, 0)',
-	redOpacity: 'rgba(219, 0, 0, 0.6)',
-	yellow: 'rgb(156, 150, 0)',
-	yellowOpacity: 'rgba(156, 150, 0, 0.6)',
-	green: 'rgb(8, 153, 0)',
-	greenOpacity: 'rgba(8, 153, 0, 0.6)',
-	blue: 'rgb(136, 30, 217)',
-	blueOpacity: 'rgba(136, 30, 217, 0.6)',
+	red: 'rgb(250, 37, 37)',
+	redOpacity: 'rgba(250, 37, 37, 0.8)',
+	yellow: 'rgb(204, 197, 20)',
+	yellowOpacity: 'rgba(204, 197, 20, 0.9)',
+	green: 'rgb(61, 247, 52)',
+	greenOpacity: 'rgba(61, 247, 52, 0.5)',
+	blue: 'rgb(0, 122, 255)',
+	blueOpacity: 'rgba(0, 122, 255, 0.5)',
+	gray: 'gray',
 };
 
 export const markdownStyles = (theme) => {
@@ -139,25 +139,3 @@ export const darkNavigationTheme = {
 		notification: darkTheme.backgroundColor,
 	},
 };
-
-export const lightCalendar = {
-	backgroundColor: 'transparent',
-	calendarBackground: 'transparent',
-	dayTextColor: lightTheme.textColor,
-	textDisabledColor: lightTheme.disabledColor,
-	todayTextColor: lightTheme.textColorItalic,
-	monthTextColor: lightTheme.textColorItalic,
-	arrowColor: 'gray',
-	textSectionTitleColor: 'gray',
-}
-
-export const darkCalendar = {
-	backgroundColor: 'transparent',
-	calendarBackground: 'transparent',
-	dayTextColor: darkTheme.textColor,
-	textDisabledColor: darkTheme.opaqueTextColor,
-	todayTextColor: darkTheme.textColorItalic,
-	monthTextColor: darkTheme.textColorItalic,
-	arrowColor: '#808080',
-	textSectionTitleColor: '#808080',
-}

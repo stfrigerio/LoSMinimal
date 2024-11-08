@@ -2,19 +2,22 @@ import React, { useMemo } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCheckCircle, faMoon, faSun, faCalendarDay } from '@fortawesome/free-solid-svg-icons';
+
+import { MenuButton } from './components/MenuButton';
 
 import { useNavigationComponents } from './helpers/useNavigation';
 import { useTheme } from '@/src/contexts/ThemeContext';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+
 
 const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { theme, toggleTheme } = useTheme();
     const { themeColors, designs } = useThemeStyles();
     const styles = useMemo(() => getStyles(themeColors), [themeColors]);
 
-    const { openTasks } = useNavigationComponents();
+    const { openTasks, openDailyNote } = useNavigationComponents();
 
     const handleOpenTasks = () => {
         setTimeout(() => {
@@ -22,57 +25,53 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
         }, 150);
     }
 
+    const handleOpenDailyNote = () => {
+        setTimeout(() => {
+            openDailyNote();
+        }, 150);
+    }
+
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <BlurView 
-                    intensity={50} 
+                    intensity={theme === 'dark' ? 50 : 20} 
                     tint={theme === 'dark' ? 'dark' : 'light'} 
                     style={[StyleSheet.absoluteFill, { zIndex: 1 }]} 
                 />
                 <View style={styles.content}>
-                    <Pressable onPress={handleOpenTasks} style={({ pressed }) => [
-                        styles.button,
-                        pressed && styles.buttonPressed
-                    ]}>
-                        {({ pressed }) => (
-                            <View style={styles.buttonContent}>
-                                <FontAwesomeIcon 
-                                    icon={faCheckCircle} 
-                                    size={20}
-                                    color={pressed ? themeColors.greenOpacity : 'gray'}
-                                />
-                                <Text style={[
-                                    designs.text.text,
-                                    styles.buttonText,
-                                    { color: pressed ? themeColors.textColor : themeColors.textColor }
-                                ]}>
-                                    Tasks
-                                </Text>
-                            </View>
-                        )}
-                    </Pressable>
-                    <Pressable onPress={toggleTheme} style={({ pressed }) => [
-                        styles.button,
-                        pressed && styles.buttonPressed
-                    ]}>
-                        {({ pressed }) => (
-                            <View style={styles.buttonContent}>
+                    {/* Menu buttons section */}
+                    <View style={styles.menuSection}>
+                        <MenuButton 
+                            icon={faCalendarDay}
+                            label="Daily Note"
+                            onPress={handleOpenDailyNote}
+                        />
+                        <MenuButton 
+                            icon={faCheckCircle}
+                            label="Tasks"
+                            onPress={handleOpenTasks}
+                        />
+                    </View>
+                    
+                    {/* Footer section */}
+                    <View style={styles.footerContainer}>
+                        <View style={styles.header}>
+                            <Pressable 
+                                onPress={toggleTheme} 
+                                style={({ pressed }) => [
+                                    styles.themeToggle,
+                                    pressed && styles.themeTogglePressed
+                                ]}
+                            >
                                 <FontAwesomeIcon 
                                     icon={theme === 'dark' ? faSun : faMoon}
                                     size={20}
-                                    color={pressed ? themeColors.greenOpacity : 'gray'}
+                                    color={theme === 'dark' ? themeColors.textColor : themeColors.borderColor}
                                 />
-                                <Text style={[
-                                    designs.text.text,
-                                    styles.buttonText,
-                                    { color: pressed ? themeColors.textColor : themeColors.textColor }
-                                ]}>
-                                    {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
-                                </Text>
-                            </View>
-                        )}
-                    </Pressable>
+                            </Pressable>
+                        </View>
+                    </View>
                 </View>
             </ScrollView>
         </View>
@@ -96,28 +95,25 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         zIndex: 1000,
         height: '100%',
     },
-    button: {
-        padding: 12,
-        borderRadius: 12,
-        backgroundColor: `${themeColors.backgroundColor}CC`, // Adding some transparency
-        elevation: 3,
-        marginVertical: 6,
-        borderWidth: 1,
-        borderColor: themeColors.borderColor,
+    menuSection: {
+        flex: 1, 
     },
-    buttonPressed: {
-        backgroundColor: `${themeColors.backgroundColor}EE`,
-        transform: [{ scale: 0.98 }],
-    },
-    buttonContent: {
+    header: {
         flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 12,
+        justifyContent: 'flex-end',
+        marginBottom: 20,
     },
-    buttonText: {
-        fontSize: 16,
-        fontWeight: '500',
+    footerContainer: {
+        width: '100%',  
+        marginTop: 'auto', 
+    },
+    themeToggle: {
+        padding: 8,
+        borderRadius: 20,
+    },
+    themeTogglePressed: {
+        backgroundColor: `${themeColors.backgroundColor}EE`,
+        transform: [{ scale: 0.9 }],
     },
 });
 

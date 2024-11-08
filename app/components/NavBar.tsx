@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Pressable, Dimensions, Platform, Animated } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Pressable, Animated, Keyboard, Platform } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';    
-import { faChevronLeft, faSliders } from '@fortawesome/free-solid-svg-icons';
+import { faSliders } from '@fortawesome/free-solid-svg-icons';
 
 import DrawerContent from './NavBar/DrawerContent';
 import DrawerIcon from './NavBar/DrawerIcon';
@@ -25,6 +25,37 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
     const styles = getStyles(themeColors);
     const { slideAnim } = useNavbarDrawer();
     const [isFilterActive, setIsFilterActive] = useState(false);
+    const [ keyboardHeight ] = useState(new Animated.Value(0));
+
+
+    useEffect(() => {
+        const keyboardWillShow = Keyboard.addListener(
+            Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+            () => {
+                Animated.timing(keyboardHeight, {
+                    toValue: -300, // Move it off screen
+                    duration: 250,
+                    useNativeDriver: true,
+                }).start();
+            }
+        );
+
+        const keyboardWillHide = Keyboard.addListener(
+            Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+            () => {
+                Animated.timing(keyboardHeight, {
+                    toValue: 0,
+                    duration: 250,
+                    useNativeDriver: true,
+                }).start();
+            }
+        );
+
+        return () => {
+            keyboardWillShow.remove();
+            keyboardWillHide.remove();
+        };
+    }, []);
 
     const handleFilterPress = () => {
         setIsFilterActive(!isFilterActive);
@@ -33,17 +64,22 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
 
     return (
         <>
-            <Animated.View style={[styles.navbarContent, { transform: [{ translateY: slideAnim }] }]}>
+            <Animated.View 
+                style={[
+                    styles.navbarContent, 
+                    { 
+                        transform: [
+                            { translateY: slideAnim },
+                            { translateY: keyboardHeight }
+                        ] 
+                    }
+                ]}
+            >
                 {items.length > 0 && (
                     <>
                         <DrawerIcon />
                         <DrawerContent items={items} activeIndex={activeIndex} />
                     </>
-                )}
-                {Platform.OS === 'web' && onBackPress && (
-                    <Pressable style={styles.backIconWrapper} onPress={onBackPress}>
-                        <FontAwesomeIcon icon={faChevronLeft} color={'gray'} />
-                    </Pressable>
                 )}
                 {showFilter && (
                     <Pressable style={styles.filterIconWrapper} onPress={handleFilterPress}>
@@ -60,7 +96,17 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                     </View>
                 )}
             </Animated.View>
-            <Animated.View style={[styles.coverUp, { transform: [{ translateY: slideAnim }] }]} />
+            <Animated.View 
+                style={[
+                    styles.coverUp, 
+                    { 
+                        transform: [
+                            { translateY: slideAnim },
+                            { translateY: keyboardHeight }
+                        ] 
+                    }
+                ]} 
+            />
         </>
     );
 };

@@ -7,17 +7,22 @@ interface BirthdayRecord {
 
 import { TaskData, TempDueDates, MarkedDateDetails, ExtendedTaskData } from '@/src/types/Task'; 
 
-export const parseChecklistItems = (items: TaskData[]): TempDueDates => {
+export const parseChecklistItems = (items: TaskData[], themeColors: any): TempDueDates => {
     const tempDueDates: TempDueDates = {};
     items.forEach(item => {
         if (item.due) {
             const datePart = item.due.split('T')[0];
             if (!tempDueDates[datePart]) {
-                tempDueDates[datePart] = { marked: true, dotColor: 'rgba(61, 247, 52, 0.5)', incompleteTasks: 0, tasks: [] };
+                tempDueDates[datePart] = { 
+                    marked: true, 
+                    dotColor: themeColors.greenOpacity,
+                    incompleteTasks: 0, 
+                    tasks: [] 
+                };
             }
             tempDueDates[datePart].tasks.push(item);
             if (!item.completed) {
-                tempDueDates[datePart].dotColor = '#CBA95F';
+                tempDueDates[datePart].dotColor = themeColors.yellowOpacity;
                 tempDueDates[datePart].incompleteTasks++;
             }
         }
@@ -25,10 +30,11 @@ export const parseChecklistItems = (items: TaskData[]): TempDueDates => {
     return tempDueDates;
 }
 
-export const getUpdatedBirthdayDates = async (currentYear: number): Promise<Record<string, MarkedDateDetails>> => {
-    // const birthdayRecords = await databaseManagers.userSettings.getByType('birthday');
+export const getUpdatedBirthdayDates = async (
+    currentYear: number,
+    themeColors: any
+): Promise<Record<string, MarkedDateDetails>> => {
     const birthdaysRecords = await databaseManagers.people.getAllBirthdays();
-
     const updatedBirthdayDates: Record<string, MarkedDateDetails> = {};
 
     birthdaysRecords.forEach((birthday: BirthdayRecord) => {
@@ -36,12 +42,12 @@ export const getUpdatedBirthdayDates = async (currentYear: number): Promise<Reco
         const fullDate = `${currentYear}-${monthDay}`;
         const age = calculateAge(birthday.birthDay);
         updatedBirthdayDates[fullDate] = {
-        marked: true,
-        dotColor: 'rgba(247, 92, 120, 0.8)',
-        isBirthday: true,
-        name: birthday.name, 
-        dateOfBirth: birthday.birthDay,
-        age
+            marked: true,
+            dotColor: themeColors.accentColor,  // Changed from hardcoded 'rgba(247, 92, 120, 0.8)'
+            isBirthday: true,
+            name: birthday.name, 
+            dateOfBirth: birthday.birthDay,
+            age
         };
     });
 

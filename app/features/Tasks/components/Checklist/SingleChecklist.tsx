@@ -39,6 +39,18 @@ const SingleChecklist: React.FC<SingleChecklistProps> = ({
         .filter(task => task.type === `checklist_${checklistData.name}`)
         .reverse();
 
+    const handleAddItem = (checklistName: string, isKeyboardSubmit = false) => {
+        onAddItem(checklistName);
+        if (isKeyboardSubmit) {
+            // Small delay to ensure state updates are processed
+            setTimeout(() => {
+                inputRef.current?.focus();
+            }, 50);
+        } else {
+            inputRef.current?.focus();
+        }
+    };
+
     return (
         <View style={[styles.container, { backgroundColor: checklistData.color }]}>
             <View style={styles.header}>
@@ -65,9 +77,9 @@ const SingleChecklist: React.FC<SingleChecklistProps> = ({
                         onChangeText={(text) => onInputChange(text, checklistData.name)}
                         placeholder="Add new item"
                         placeholderTextColor={`${textColor}99`}
-                        onSubmitEditing={() => onAddItem(checklistData.name)}
+                        onSubmitEditing={() => handleAddItem(checklistData.name, true)}
                     />
-                    <Pressable onPress={() => onAddItem(checklistData.name)} style={styles.addButton}>
+                    <Pressable onPress={() => handleAddItem(checklistData.name)} style={styles.addButton}>
                         <FontAwesomeIcon icon={faPlus} color={textColor} size={20} />
                     </Pressable>
                 </View>

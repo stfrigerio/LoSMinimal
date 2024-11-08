@@ -2,8 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { Calendar } from 'react-native-calendars';
 import { StyleSheet } from 'react-native';
 
+import { darkTheme, lightTheme } from '@/src/styles/theme';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { darkCalendar, lightCalendar} from '@/src/styles/theme'; 
 import CustomDay from './CustomCalendarDay';
 
 import { useChecklist } from '@/src/contexts/checklistContext';
@@ -11,14 +11,23 @@ import ViewTaskModal from '@/app/features/Home/components/Calendar/modals/ViewTa
 
 import { useMarkedDates } from './hooks/useMarkedDates';
 import { useTaskModal } from './hooks/useTaskModal';
-import Toast from 'react-native-toast-message';
 
 const CustomCalendar = () => {
-	const { theme, themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, themeColors } = useThemeStyles();
+	const styles = getStyles(theme);
 	
-	const isDarkMode = theme === 'dark';
-	const calendarTheme = isDarkMode ? darkCalendar : lightCalendar;
+    const isDarkMode = theme === 'dark';
+
+    const calendarTheme = {
+        backgroundColor: 'transparent',
+        calendarBackground: 'transparent',
+		//this controls the week color but for some reason only accept the dark mode color
+        textDisabledColor: isDarkMode ? darkTheme.opaqueTextColor : lightTheme.borderColor, 
+        monthTextColor: isDarkMode ? darkTheme.textColorItalic : lightTheme.textColorItalic,
+        arrowColor: isDarkMode ? darkTheme.gray : lightTheme.gray,
+        textSectionTitleColor: isDarkMode ? darkTheme.gray : lightTheme.gray,
+        weekVerticalMargin: 8
+    };
 
 	const { checklistUpdated, resetChecklistUpdate } = useChecklist();
 
@@ -62,7 +71,6 @@ const CustomCalendar = () => {
 				showWeekNumbers={true}
 				theme={{
 					...calendarTheme,
-					weekVerticalMargin: 8
 				}}
 				style={[
 					styles.calendar
@@ -70,7 +78,7 @@ const CustomCalendar = () => {
 				hideExtraDays={false}
 				markingType="custom"
 				markedDates={markedDates}
-				// enableSwipeMonths={true} // don't like it
+				enableSwipeMonths={true}
 				dayComponent={({ date, marking }: { date?: any; marking?: any }) => (
 					<CustomDay
 						date={date}
@@ -91,7 +99,6 @@ const CustomCalendar = () => {
 					updateChecklistItems={updateChecklistItems}
 				/>
 			)}
-			{/* <Toast /> */}
 		</>
 	);
 }

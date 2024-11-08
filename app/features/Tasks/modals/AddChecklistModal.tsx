@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { UniversalModal } from '@/app/components/UniversalModal';
+import { PrimaryButton } from '@/app/components/Atoms/PrimaryButton';
 
 interface AddChecklistModalProps {
     visible: boolean;
@@ -48,12 +49,10 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ visible, onClose,
                         placeholderTextColor='#969DA3'
                         onSubmitEditing={handleAddChecklist}
                     />
-                    <Pressable
-                        style={[designs.button.marzoSecondary, {width: '100%', marginTop: 40}]}
+                    <PrimaryButton
+                        text={initialChecklist ? 'Update Checklist' : 'Add Checklist'}
                         onPress={handleAddChecklist}
-                    >
-                        <Text style={designs.button.buttonText}>{initialChecklist ? 'Update Checklist' : 'Add Checklist'}</Text>
-                    </Pressable>
+                    />
                 </View>
             </UniversalModal>
         </>

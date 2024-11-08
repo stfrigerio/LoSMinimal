@@ -7,8 +7,8 @@ interface CustomDayProps {
     date?: { day: number; month: number; year: number; timestamp: number; dateString: string };
     marking?: { dots?: Array<{ key: string; color: string }> };
     onPress?: () => void;
-    currentMonth: number; // Add this prop
-    isToday: boolean; // Add this prop
+    currentMonth: number; 
+    isToday: boolean;
 }
 
 const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMonth, isToday }) => {
@@ -16,17 +16,21 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
         return <View />;
     }
 
-    const { themeColors } = useThemeStyles();
+    const { themeColors, theme } = useThemeStyles();
     const styles = getStyles(themeColors);
 
     const isCurrentMonth = date.month === currentMonth;
-    const textColor = isCurrentMonth ? themeColors.textColor : themeColors.opaqueTextColor;
+    const textColor = isCurrentMonth ? 
+        theme === 'dark' ? 
+            themeColors.textColor : themeColors.borderColor 
+        : theme === 'dark' ? 
+            themeColors.opaqueTextColor : themeColors.gray;
 
     return (
         <Pressable 
             style={({ pressed }) => [
                 styles.container,
-                pressed && { opacity: 0.7 },  // Add opacity change when pressed
+                pressed && { opacity: 0.7 },
             ]} 
             onPress={onPress}
             android_ripple={{ 

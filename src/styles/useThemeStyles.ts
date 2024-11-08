@@ -1,12 +1,10 @@
 import { useTheme } from '@/src/contexts/ThemeContext';
 import { lightTheme, darkTheme, markdownStyles as createMarkdownStyles } from '@/src/styles/theme';
-import { buttonStyles, ButtonStyles } from '@/src/styles/button';
 import { modalStyles, ModalStyles } from '@/src/styles/modal';
 import { textStyles, TextStyles } from '@/src/styles/text';
 import { StyleSheet, TextStyle } from 'react-native';
 
 type StylesType = {
-	button: ButtonStyles;
 	modal: ModalStyles;
 	text: TextStyles;
 };
@@ -24,7 +22,6 @@ export const useThemeStyles = () => {
 	const themeColors = isDark ? darkTheme : lightTheme;
 
 	const designs: StylesType = {
-		button: buttonStyles(isDark ? 'dark' : 'light'),
 		modal: modalStyles(isDark ? 'dark' : 'light'),
 		text: textStyles(isDark ? 'dark' : 'light'),
 	};

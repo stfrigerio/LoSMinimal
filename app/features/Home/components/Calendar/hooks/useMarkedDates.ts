@@ -14,8 +14,8 @@ export const useMarkedDates = (currentYear: number, themeColors: any) => {
     const fetchMarkedDates = useCallback(async () => {
         const items = await databaseManagers.tasks.list();
         const filteredItems = items.filter((item) => item.type !== 'checklist');
-        const tempDueDates = parseChecklistItems(filteredItems);    
-        const updatedBirthdayDates = await getUpdatedBirthdayDates(currentYear);
+        const tempDueDates = parseChecklistItems(filteredItems, themeColors);    
+        const updatedBirthdayDates = await getUpdatedBirthdayDates(currentYear, themeColors);
         const dueDates = mergeDates(tempDueDates, updatedBirthdayDates);
 
         const newMarkedDates = formatMarkedDates(dueDates, themeColors);

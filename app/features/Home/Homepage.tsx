@@ -1,10 +1,69 @@
-import { StyleSheet, View, Text, ImageBackground, Pressable, Dimensions, Alert } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { StyleSheet, View, ImageBackground, Dimensions, Animated, Pressable } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCog } from '@fortawesome/free-solid-svg-icons';
+
 import CustomCalendar from './components/Calendar/Calendar';
+// import TimerComponent from './components/TimerComponent';
+import QuickButton from './components/QuickButton';
+// import NextObjective from './components/NextObjective';
+
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { databaseManager } from '@/database/databaseManager';
+import { useHomepage } from './hooks/useHomepage';
+import { useNavigationComponents } from '@/app/features/LeftPanel/helpers/useNavigation';
+import { fetchNextTask } from './hooks/fetchNextTask';
 
 const Homepage = () => {
-    const { designs } = useThemeStyles();
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
+
+    const [isQuickButtonExpanded, setIsQuickButtonExpanded] = useState(false);
+    const settingsSlideAnim = useRef(new Animated.Value(0)).current;
+    const settingsRotateAnim = useRef(new Animated.Value(0)).current;
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    const { homepageSettings } = useHomepage();
+    const { openSettings } = useNavigationComponents();
+
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(settingsSlideAnim, {
+                toValue: isQuickButtonExpanded ? -80 : 0,
+                duration: 300,
+                useNativeDriver: true,
+            }),
+            Animated.timing(settingsRotateAnim, {
+                toValue: isQuickButtonExpanded ? 1 : 0,
+                duration: 400,
+                useNativeDriver: true,
+            }),
+        ]).start();
+    }, [isQuickButtonExpanded]);
+
+    useEffect(() => {
+        if (!isQuickButtonExpanded) {
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 500,
+                useNativeDriver: true,
+            }).start();
+        } else {
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: 500,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [isQuickButtonExpanded]);
+
+    const spin = settingsRotateAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '-240deg']
+    });
+
+    const shouldShow = (setting?: { value: string }) => {
+        return setting === undefined || setting.value !== "true";
+    };
 
     return (
         <View style={styles.container}>
@@ -19,11 +78,46 @@ const Homepage = () => {
                     </View>
                 </View>
             </ImageBackground>
+            <View style={styles.footerActions}>
+                {/* <Animated.View style={{ opacity: fadeAnim }}>
+                    <TimerComponent homepageSettings={homepageSettings} />
+                </Animated.View> */}
+                {shouldShow(homepageSettings.HideNextObjective) && (
+                    <Animated.View style={{
+                        opacity: fadeAnim,
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                    }}>
+                        {/* <NextObjective homepageSettings={homepageSettings} fetchNextTask={fetchNextTask} /> */}
+                    </Animated.View>
+                )}
+                <View style={styles.quickButtonContainer}>
+                    <QuickButton 
+                        isExpanded={isQuickButtonExpanded} 
+                        setIsExpanded={setIsQuickButtonExpanded} 
+                        homepageSettings={homepageSettings}
+                    />
+                    <Animated.View style={[
+                        styles.settingsButton,
+                        { 
+                            transform: [
+                                { translateX: settingsSlideAnim },
+                                { rotate: spin }
+                            ] 
+                        }
+                    ]}>
+                        <Pressable onPress={openSettings}>
+                            <FontAwesomeIcon icon={faCog} size={28} color={'gray'} />
+                        </Pressable>
+                    </Animated.View>
+                </View>
+            </View>
         </View>
     );
 };
 
-const styles = StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     container: {
         flex: 1,
     },
@@ -34,22 +128,31 @@ const styles = StyleSheet.create({
     },
     overlay: {
         flex: 1,
-        backgroundColor: 'rgba(0,0,0,0.3)',
+        backgroundColor: theme === 'dark' ? 'rgba(0,0,0,0.3)' : undefined,
     },
     content: {
         alignItems: 'center',
         padding: 20,
     },
-    resetButton: {
-        marginTop: 20,
-        padding: 12,
-        borderRadius: 8,
-        minWidth: 150,
+    quickButtonContainer: {
+        flexDirection: 'row',
         alignItems: 'center',
     },
-    resetButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
+    settingsButton: {
+        position: 'absolute',
+        right: 0,
+        padding: 10,
+        zIndex: 1,
+    },
+    footerActions: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 20,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
     },
 });
 

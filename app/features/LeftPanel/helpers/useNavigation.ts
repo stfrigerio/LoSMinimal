@@ -1,9 +1,10 @@
 //useHomepage.ts
 import { useCallback } from 'react';
 import { endOfWeek, endOfMonth, endOfQuarter, endOfYear } from 'date-fns';
-import { useNavigation } from 'expo-router';  // Change this import
+import { useNavigation } from 'expo-router';
 
 import { formatDate, parseDate, startOfPeriod, getLocalTimeZone } from '@/src/utils/timezoneBullshit';
+import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 // useHomepageSettings = require('@los/mobile/src/components/UserSettings/hooks/useSettings').useSettings;
 
@@ -24,8 +25,15 @@ export interface HomepageSettings {
 	HideMusic?: { value: string };
 }
 
+export type RootStackParamList = {
+    'features/DailyNote/DailyNote': { date: string };
+    'features/Tasks/Tasks': undefined;
+    'features/Home/Homepage': undefined;
+	'features/UserSettings/UserSettings': undefined;
+};
+
 export const useNavigationComponents = () => {
-    const navigate = useNavigation();
+    const navigate = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
 	// const openNote = useCallback((period: NotePeriod, date: string) => {
 	// 	const timeZone = getLocalTimeZone(); // Use the utility function to get the timezone
@@ -79,13 +87,21 @@ export const useNavigationComponents = () => {
 
 	// }, [navigate]);
 
-	// const openToday = useCallback(() => {
-	// 	navigate('dailyNote');
-	// }, [navigate]);
+    const openDailyNote = useCallback(() => {
+        const timeZone = getLocalTimeZone();
+        const today = new Date();
+        const formattedDate = formatDate(today, 'yyyy-MM-dd', timeZone);
+        
+        console.log('Navigating with date:', formattedDate);
+        
+        navigate.navigate('features/DailyNote/DailyNote', {
+            date: formattedDate
+        });
+    }, [navigate]);
 
-	// const openSettings = useCallback(() => {
-	// 	navigate('settings');
-	// }, [navigate]);
+	const openSettings = useCallback(() => {
+		navigate.navigate('features/UserSettings/UserSettings' as never);
+	}, [navigate]);
 
 	// const openLibrary = useCallback(() => {
 	// 	navigate('library');
@@ -134,30 +150,10 @@ export const useNavigationComponents = () => {
 	// 	navigate('time');
 	// }, [navigate])
 
-	let homepageSettings: HomepageSettings = {};
-
-	// if (typeof useHomepageSettings === 'function') {
-	// 	const { settings } = useHomepageSettings();
-	// 	homepageSettings = {
-	// 		HideNextTask: settings.HideNextTask,
-	// 		HideDots: settings.HideDots,
-	// 		HidePeople: settings.HidePeople,
-	// 		HideTasks: settings.HideTasks,
-	// 		HideJournal: settings.HideJournal,
-	// 		HideMoods: settings.HideMoods,
-	// 		HideLibrary: settings.HideLibrary,
-	// 		HideMoney: settings.HideMoney,
-	// 		HideNextObjective: settings.HideNextObjective,
-	// 		HideCarLocation: settings.HideCarLocation,
-	// 		HideTime: settings.HideTime,
-	// 		HideMusic: settings.HideMusic,
-	// 	};
-	// }
-
 	return { 
 		// openNote, 
-		// openSettings, 
-		// openToday, 
+		openSettings, 
+		openDailyNote, 
 		// openLibrary, 
 		// openJournalHub,
 		// openPeople,
@@ -169,6 +165,5 @@ export const useNavigationComponents = () => {
 		// openCurrentMonth,
 		// openMusic,
 		// openTime,
-		// homepageSettings,
 	};
 };
