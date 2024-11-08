@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faCircle, faTrash, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 import TaskModal from '../modals/TaskModal';
-import AlertModal from '@/app/components/AlertModal';
+import AlertModal from '@/app/components/modals/AlertModal';
 
 import { handlePostponeTask } from '../helpers/postponeTask';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';

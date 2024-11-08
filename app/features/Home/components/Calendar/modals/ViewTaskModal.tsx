@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus, faChevronLeft, faChevronRight, faCalendarDay, faCalendarWeek } from '@fortawesome/free-solid-svg-icons';
 import { parseISO, startOfDay,subDays, addDays } from 'date-fns';
 
-import AlertModal from '@/app/components/AlertModal';
-import { UniversalModal } from '@/app/components/UniversalModal';
+import AlertModal from '@/app/components/modals/AlertModal';
+import { UniversalModal } from '@/app/components/modals/UniversalModal';
 import TaskModal from '@/app/features/Tasks/modals/TaskModal';
 import TaskView from './TaskView';
 

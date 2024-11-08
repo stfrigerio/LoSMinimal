@@ -5,7 +5,7 @@ import * as Sharing from 'expo-sharing';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faServer, faSave, faFileExport, faFileImport, faShareAlt } from '@fortawesome/free-solid-svg-icons';
 
-import AlertModal from '@/app/components/AlertModal';
+import AlertModal from '@/app/components/modals/AlertModal';
 import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';

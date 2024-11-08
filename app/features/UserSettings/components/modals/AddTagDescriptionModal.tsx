@@ -3,7 +3,7 @@ import { View, TextInput, Text, Pressable, StyleSheet, Modal, FlatList, Platform
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMoneyBill, faClock, faSmile } from '@fortawesome/free-solid-svg-icons';
 
-import AlertModal from '@/app/components/AlertModal';
+import AlertModal from '@/app/components/modals/AlertModal';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import ColorPicker from './components/ColorPicker';

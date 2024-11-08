@@ -4,7 +4,7 @@ import { View, Text, ScrollView, StyleSheet, Platform } from 'react-native';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import DeleteButton from '@/app/components/Atoms/DeleteButton';
 import EditButton from '@/app/components/Atoms/EditButton';
-import AlertModal from '@/app/components/AlertModal';
+import AlertModal from '@/app/components/modals/AlertModal';
 
 import AddPillarModal from './modals/AddPillarModal';
 import { PillarData } from '@/src/types/Pillar';

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCog } from '@fortawesome/free-solid-svg-icons';
 
 import CustomCalendar from './components/Calendar/Calendar';
-// import TimerComponent from './components/TimerComponent';
+import TimerComponent from './components/TimerComponent';
 import QuickButton from './components/QuickButton';
 // import NextObjective from './components/NextObjective';
 
@@ -79,9 +79,9 @@ const Homepage = () => {
                 </View>
             </ImageBackground>
             <View style={styles.footerActions}>
-                {/* <Animated.View style={{ opacity: fadeAnim }}>
+                <Animated.View style={{ opacity: fadeAnim }}>
                     <TimerComponent homepageSettings={homepageSettings} />
-                </Animated.View> */}
+                </Animated.View>
                 {shouldShow(homepageSettings.HideNextObjective) && (
                     <Animated.View style={{
                         opacity: fadeAnim,

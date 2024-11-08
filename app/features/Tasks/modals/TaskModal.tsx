@@ -3,8 +3,8 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { format } from 'date-fns';
 import Toast from 'react-native-toast-message';
 
-import { UniversalModal } from '@/app/components/UniversalModal';
-import AlertModal from '@/app/components/AlertModal';
+import { UniversalModal } from '@/app/components/modals/UniversalModal';
+import AlertModal from '@/app/components/modals/AlertModal';
 import createTimePicker from '@/app/components/DateTimePicker';
 
 import { useTasksData } from '@/app/features/Tasks/hooks/useTasksData';

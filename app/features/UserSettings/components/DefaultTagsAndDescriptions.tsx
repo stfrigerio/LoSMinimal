@@ -7,7 +7,7 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import DeleteButton from '@/app/components/Atoms/DeleteButton';
 import EditButton from '@/app/components/Atoms/EditButton';
 import Collapsible from '@/app/components/Collapsible';
-import AlertModal from '@/app/components/AlertModal';
+import AlertModal from '@/app/components/modals/AlertModal';
 
 import AddTagDescriptionModal from './modals/AddTagDescriptionModal'
 import { TagData } from '@/src/types/TagsAndDescriptions';

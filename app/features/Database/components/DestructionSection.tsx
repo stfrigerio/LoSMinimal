@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Pressable, Text } from 'react-native';
 
 import { PickerInput } from '@/app/components/FormComponents';
-import AlertModal from '@/app/components/AlertModal';
+import AlertModal from '@/app/components/modals/AlertModal';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { databaseManagers } from '@/database/tables';

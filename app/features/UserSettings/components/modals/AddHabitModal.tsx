@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, Platform, Modal } from 'react-native';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { UniversalModal } from '@/app/components/UniversalModal';
-import AlertModal from '@/app/components/AlertModal'; 
+import { UniversalModal } from '@/app/components/modals/UniversalModal';
+import AlertModal from '@/app/components/modals/AlertModal'; 
 
 import { useSettings } from '../../hooks/useSettings';
 import ColorPicker from './components/ColorPicker';
