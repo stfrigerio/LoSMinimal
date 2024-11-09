@@ -12,7 +12,7 @@ type GluedQuickbuttonProps = {
 
 const GluedQuickbutton = ({ onPress, screen }: GluedQuickbuttonProps) => {
     const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const styles = getStyles(themeColors);
 
     const getIconForScreen = (screen: string) => {
         switch (screen) {
@@ -34,13 +34,25 @@ const GluedQuickbutton = ({ onPress, screen }: GluedQuickbuttonProps) => {
     const icon = getIconForScreen(screen);
 
     return (
-        <Pressable style={styles.floatingButton} onPress={() => onPress()}>
-            <FontAwesomeIcon icon={icon} color={themeColors.backgroundColor} size={24} />
+        <Pressable 
+            style={({ pressed }) => [
+                styles.floatingButton,
+                pressed && styles.pressed
+            ]} 
+            onPress={() => onPress()}
+        >
+            {({ pressed }) => (
+                <FontAwesomeIcon 
+                    icon={icon} 
+                    color={pressed ? themeColors.textColor : themeColors.backgroundColor} 
+                    size={24} 
+                />
+            )}
         </Pressable>
     );
 }
 
-const getStyles = (theme: any, designs: any) => {
+const getStyles = (themeColors: any) => {
     return StyleSheet.create({
         floatingButton: {
             position: 'absolute',
@@ -49,12 +61,15 @@ const getStyles = (theme: any, designs: any) => {
             width: 50,
             height: 50,
             borderRadius: 25,
-            backgroundColor: '#CD535B',
+            backgroundColor: themeColors.accentColor,
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',
-            zIndex: 9999
-        }
+            zIndex: 3000,
+        },
+        pressed: {
+            transform: [{ scale: 0.96 }],
+        },
     });
 }
 

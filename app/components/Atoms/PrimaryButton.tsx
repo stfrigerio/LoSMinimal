@@ -13,11 +13,11 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
     onPress, 
     text, 
     variant = 'primary',
-    disabled = false 
+    disabled = false,
 }) => {
     const { theme, themeColors } = useThemeStyles();
     const animatedScale = new Animated.Value(1);
-    const styles = getStyles(themeColors);
+    const styles = getStyles(themeColors, variant);
 
     const handlePressIn = () => {
         Animated.spring(animatedScale, {
@@ -54,14 +54,15 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (themeColors: any, variant: string) => StyleSheet.create({
     button: {
-        margin: 10,
-        padding: 10,
-        backgroundColor: themeColors.accentColor,
+        paddingVertical: 10,
+        paddingHorizontal: 20,  
+        backgroundColor: variant === 'primary' ? themeColors.textColor : variant === 'secondary' ? themeColors.accentColor : themeColors.backgroundColor,
         borderWidth: 2,
         borderColor: themeColors.borderColor,
         borderRadius: 10,
+        minWidth: 120,  
     },
     pressed: {
         opacity: 0.7,
@@ -71,7 +72,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     buttonText: {
         alignSelf: 'center',
-        color: 'white',
+        color: themeColors.backgroundColor,
         fontWeight: 'bold',
     },
 });

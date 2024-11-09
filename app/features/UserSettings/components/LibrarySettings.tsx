@@ -48,7 +48,7 @@ const LibrarySettings = () => {
                 onBlur={onBlur}
                 value={value}
                 placeholder={`Enter ${label}`}
-                placeholderTextColor={'gray'}
+                placeholderTextColor={themeColors.gray}
             />
         </View>
     );
@@ -112,7 +112,7 @@ const LibrarySettings = () => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
     container: {
         marginVertical: 10,
         padding: 30
@@ -121,13 +121,13 @@ const getStyles = (theme: any) => StyleSheet.create({
         marginBottom: 15,
     },
     inputLabel: {
-        color: 'gray',
+        color: themeColors.gray,
         fontSize: 12,
         marginBottom: 5,
     },
     input: {
         borderWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: themeColors.borderColor,
         borderRadius: 5,
         padding: 10,
     },
@@ -135,7 +135,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
-        color: theme.textColor
+        color: themeColors.textColor
     },
     section: {
         marginBottom: 20,
@@ -149,7 +149,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     syncButton: {
         padding: 10,
         borderWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: themeColors.borderColor,
         borderRadius: 10,
         alignItems: 'center',
         marginTop: 10,
@@ -157,10 +157,10 @@ const getStyles = (theme: any) => StyleSheet.create({
         alignSelf: 'center',
     },
     syncingButton: {
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: themeColors.backgroundSecondary,
     },
     syncButtonText: {
-        color: theme.textColor,
+        color: themeColors.textColor,
         fontWeight: 'bold',
         fontSize: 16,
     },
@@ -169,7 +169,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 20,
         marginBottom: 10,
-        color: theme.textColor,
+        color: themeColors.textColor,
     },
 });
 

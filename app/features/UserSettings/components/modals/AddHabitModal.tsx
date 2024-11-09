@@ -214,7 +214,7 @@ const AddHabitModal: React.FC<AddHabitModalProps> = ({ visible, onClose, initial
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
 	modalContent: {
 		width: '100%',
 		alignItems: 'center',
@@ -226,10 +226,10 @@ const getStyles = (theme: any) => StyleSheet.create({
 		alignSelf: 'center',
 		borderWidth: 1,
 		borderRadius: 10,
-		borderColor: theme.borderColor,
+		borderColor: themeColors.borderColor,
 		paddingHorizontal: 18,
 		width: '100%',
-		color: theme.textColor,
+		color: themeColors.textColor,
 		height: 60
 	},
 	habitTypeContainer: {
@@ -241,20 +241,20 @@ const getStyles = (theme: any) => StyleSheet.create({
 		flex: 1,
 		padding: 10,
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: themeColors.borderColor,
 		borderRadius: 10,
 		marginHorizontal: 5,
 		alignItems: 'center',
 	},
 	selectedHabitType: {
-		borderColor: theme.hoverColor,
+		borderColor: themeColors.accentColor,
 	},
 	habitTypeText: {
-		color: theme.textColor,
+		color: themeColors.textColor,
 		fontSize: 10,
 	},
 	selectedHabitTypeText: {
-		color: theme.hoverColor,
+		color: themeColors.accentColor,
 		fontWeight: 'bold',
 	},
 	colorSelectionContainer: {
@@ -268,7 +268,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		height: 30,
 		borderRadius: 15,
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: themeColors.borderColor,
 	},
 	colorPickerButton: {
 		flexDirection: 'row',
@@ -280,12 +280,12 @@ const getStyles = (theme: any) => StyleSheet.create({
 	},
 	colorPickerButtonText: {
 		marginLeft: 15,
-		color: 'gray',
+		color: themeColors.gray,
 		textAlign: 'center',
 		fontWeight: 'bold',
 	},
 	colorPickerContent: {
-		backgroundColor: theme.backgroundColor,
+		backgroundColor: themeColors.backgroundColor,
 		borderRadius: 10,
 		padding: 20,
 		width: '90%',
@@ -297,8 +297,6 @@ const getStyles = (theme: any) => StyleSheet.create({
 		marginTop: 20,
 		marginLeft: -50,
 		width: 250,
-		// borderWidth: 1,
-		// borderColor: 'red',
 	},
 });
 

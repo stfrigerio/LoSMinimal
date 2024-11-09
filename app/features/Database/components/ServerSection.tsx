@@ -195,7 +195,7 @@ const ServerSection = () => {
 				<View style={styles.buttonAndLabelContainer}>
 				<Text style={styles.buttonLabel}>Export Backup</Text>
 				<Pressable style={styles.button} onPress={exportDatabase}>
-					<FontAwesomeIcon icon={faFileExport} size={20} color={'gray'} />
+					<FontAwesomeIcon icon={faFileExport} size={20} color={themeColors.gray} />
 					{/* <Text style={styles.buttonText}>Export</Text> */}
 				</Pressable>
 				</View>
@@ -211,7 +211,7 @@ const ServerSection = () => {
 					<ActivityIndicator color={themeColors.hoverColor} />
 					) : (
 					<>
-						<FontAwesomeIcon icon={faFileImport} size={20} color={'gray'} />
+						<FontAwesomeIcon icon={faFileImport} size={20} color={themeColors.gray} />
 						{/* <Text style={styles.buttonText}>Import</Text> */}
 					</>
 					)}
@@ -221,7 +221,7 @@ const ServerSection = () => {
 				<View style={styles.buttonAndLabelContainer}>
 				<Text style={styles.buttonLabel}>Share Backup</Text>
 				<Pressable style={styles.button} onPress={shareBackupFile}>
-					<FontAwesomeIcon icon={faShareAlt} size={20} color={'gray'} />
+					<FontAwesomeIcon icon={faShareAlt} size={20} color={themeColors.gray} />
 					{/* <Text style={styles.buttonText}>Share</Text> */}
 				</Pressable>
 				</View>
@@ -235,7 +235,7 @@ const ServerSection = () => {
 						onBlur={handleServerURLBlur}
 						value={serverURL}
 						placeholder="192.168.1.46"
-						placeholderTextColor={'gray'}
+						placeholderTextColor={themeColors.gray}
 						keyboardType="numeric"
 					/>
 				</View>
@@ -256,7 +256,7 @@ const ServerSection = () => {
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
 	container: {
 		marginVertical: 10,
 	},
@@ -271,7 +271,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		margin: 5,
 	},
 	buttonLabel: {
-		color: 'gray',
+		color: themeColors.gray,
 		fontSize: 10,
 		marginBottom: 5,
 	},
@@ -279,7 +279,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: themeColors.borderColor,
 		padding: 10,
 		borderRadius: 10,
 		minWidth: 90,

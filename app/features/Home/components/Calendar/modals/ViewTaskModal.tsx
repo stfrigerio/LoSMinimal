@@ -144,7 +144,7 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 						{({ pressed }) => (
 							<FontAwesomeIcon 
 								icon={faChevronLeft} 
-								color={pressed ? themeColors.accentColor : 'gray'} 
+								color={pressed ? themeColors.accentColor : themeColors.gray} 
 								size={18} 
 							/>
 						)}
@@ -154,7 +154,7 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 						{({ pressed }) => (
 							<FontAwesomeIcon 
 								icon={faChevronRight} 
-								color={pressed ? themeColors.accentColor : 'gray'} 
+								color={pressed ? themeColors.accentColor : themeColors.gray} 
 								size={18} 
 							/>
 						)}
@@ -187,20 +187,20 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 				<View style={styles.footerNavigation}>
 					{/* todo re add this */}
 					{/* <Pressable onPress={handleGoToDay} style={styles.footerButton}>
-						<FontAwesomeIcon icon={faCalendarDay} color={'gray'} size={20} />
+						<FontAwesomeIcon icon={faCalendarDay} color={themeColors.gray} size={20} />
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Day</Text>
 					</Pressable> */}
 					<Pressable onPress={() => setShowTaskModal(true)} style={styles.footerButton}>
 						{({ pressed }) => (
 							<>
-								<FontAwesomeIcon icon={faPlus} color={pressed ? themeColors.accentColor : 'gray'} size={20} />
+								<FontAwesomeIcon icon={faPlus} color={pressed ? themeColors.accentColor : themeColors.gray} size={20} />
 								<Text style={[designs.text.text, styles.footerButtonText]}>Add Task</Text>
 							</>
 						)}
 					</Pressable>
 					{/* todo re add this */}
 					{/* <Pressable onPress={handleGoToWeek} style={styles.footerButton}>
-						<FontAwesomeIcon icon={faCalendarWeek} color={'gray'} size={20} />
+						<FontAwesomeIcon icon={faCalendarWeek} color={themeColors.gray} size={20} />
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Week</Text>
 					</Pressable> */}
 				</View>
@@ -234,24 +234,24 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
 	modalTitle: {
 		textAlign: 'center',
 		fontWeight: 'bold',
 		fontSize: 18,
-		color: theme.accentColor,
+		color: themeColors.accentColor,
 		fontFamily: 'serif'
 	},
 	birthdayText: {
 		fontStyle: 'italic',
-		color: theme.textColor,
+		color: themeColors.textColor,
 		fontSize: 16,
 		marginBottom: 10
 	},
 	divider: {
 		height: 1,
 		width: '100%',
-		backgroundColor: theme.borderColor,
+		backgroundColor: themeColors.borderColor,
 		marginBottom: 10
 	},
 	dateNavigation: {
@@ -277,7 +277,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 	footerButtonText: {
 		marginTop: 5,
 		fontSize: 12,
-		color: 'gray'
+		color: themeColors.gray
 	},
 });
 

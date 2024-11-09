@@ -3,6 +3,9 @@ import { View, TextInput, Text, Pressable, StyleSheet, Modal } from 'react-nativ
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { PillarData } from '@/src/types/Pillar';
 import { PrimaryButton } from '@/app/components/Atoms/PrimaryButton';
+import { UniversalModal } from '@/app/components/modals/UniversalModal';
+import Toast from 'react-native-toast-message';
+import AlertModal from '@/app/components/modals/AlertModal';
 
 interface AddPillarModalProps {
     isVisible: boolean;
@@ -23,7 +26,7 @@ const AddPillarModal: React.FC<AddPillarModalProps> = ({
         emoji: '',
         description: '',
     });
-
+    const [showAlert, setShowAlert] = useState(false);
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
 
@@ -37,10 +40,15 @@ const AddPillarModal: React.FC<AddPillarModalProps> = ({
 
     const handleAdd = () => {
         if (!pillarData.name) {
-        // You might want to show an alert here
-        return;
+            setShowAlert(true);
+            return;
         }
         onAdd(pillarData);
+        Toast.show({
+            text1: 'Pillar added successfully',
+            text2: `${pillarData.emoji} ${pillarData.name} added to your pillars`,
+            type: 'success',
+        });
         onClose();
     };
 
@@ -49,29 +57,31 @@ const AddPillarModal: React.FC<AddPillarModalProps> = ({
     };
 
     return (
-        <Modal visible={isVisible} transparent animationType="fade">
-            <View style={designs.modal.modalContainer}>
-                <View style={designs.modal.modalView}>
-                <Text style={designs.text.title}>
+        <>
+            <UniversalModal
+                isVisible={isVisible}
+                onClose={onClose}
+            >
+                <Text style={designs.modal.title}>
                     {initialData ? 'Edit Pillar' : 'Add New Pillar'}
                 </Text>
                 <TextInput
                     placeholder="Pillar Name"
-                    placeholderTextColor="gray"
+                    placeholderTextColor={themeColors.gray}
                     value={pillarData.name}
                     onChangeText={(text) => updatePillarData('name', text)}
                     style={designs.text.input}
                 />
                 <TextInput
                     placeholder="Emoji (optional)"
-                    placeholderTextColor="gray"
+                    placeholderTextColor={themeColors.gray}
                     value={pillarData.emoji}
                     onChangeText={(emoji) => updatePillarData('emoji', emoji)}
                     style={designs.text.input}
                 />
                 <TextInput
                     placeholder="Description (optional)"
-                    placeholderTextColor="gray"
+                    placeholderTextColor={themeColors.gray}
                     value={pillarData.description}
                     onChangeText={(description) => updatePillarData('description', description)}
                     style={designs.text.input}
@@ -79,16 +89,26 @@ const AddPillarModal: React.FC<AddPillarModalProps> = ({
                 <View style={styles.modalButtonContainer}>
                     <PrimaryButton
                         text='Cancel'
+                        variant='secondary'
                         onPress={onClose}
                     />
                     <PrimaryButton
                         text={initialData ? 'Update' : 'Add'}
+                        variant='primary'
                         onPress={handleAdd}
                     />
                 </View>
-                </View>
-            </View>
-        </Modal>
+            </UniversalModal>
+            {showAlert && (
+                <AlertModal
+                    isVisible={showAlert}
+                    title="Error"
+                    message="Pillar name is required"
+                    singleButton={true}
+                    onConfirm={() => setShowAlert(false)}
+                />
+            )}
+        </>
     );
 };
 

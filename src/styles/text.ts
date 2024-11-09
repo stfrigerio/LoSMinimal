@@ -13,7 +13,7 @@ export const textStyles = (themeName: any): TextStyles => {
 
 	return StyleSheet.create({
 		title: {
-			fontSize: 40,
+			fontSize: 36,
 			fontWeight: 'bold',
 			color: theme.textColor,
 			textAlign: 'center',

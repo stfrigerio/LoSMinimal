@@ -76,7 +76,7 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
 								keyExtractor={(item, index) => `tag-${item.id || index}`}
 							/>
 						) : (
-							<Text style={[designs.text.text, { textAlign: 'center', color: 'gray' }]}>No tags available</Text>
+							<Text style={[designs.text.text, { textAlign: 'center', color: themeColors.gray }]}>No tags available</Text>
 						)}
 						<PrimaryButton
 							text="Add New Tag"

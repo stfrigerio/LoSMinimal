@@ -14,7 +14,7 @@ import { useNavigationComponents } from '@/app/features/LeftPanel/helpers/useNav
 import { fetchNextTask } from './hooks/fetchNextTask';
 
 const Homepage = () => {
-    const { theme } = useThemeStyles();
+    const { theme, themeColors } = useThemeStyles();
     const styles = getStyles(theme);
 
     const [isQuickButtonExpanded, setIsQuickButtonExpanded] = useState(false);
@@ -107,8 +107,15 @@ const Homepage = () => {
                             ] 
                         }
                     ]}>
-                        <Pressable onPress={openSettings}>
-                            <FontAwesomeIcon icon={faCog} size={28} color={'gray'} />
+                        <Pressable onPress={openSettings} >
+                            { ({ pressed }) => (
+                                <FontAwesomeIcon 
+                                    icon={faCog} 
+                                    size={28} 
+                                    color={pressed ? themeColors.accentColor : themeColors.gray}
+                                    style={{ transform: [{ scale: pressed ? 0.8 : 1 }] }}
+                                />
+                            )}
                         </Pressable>
                     </Animated.View>
                 </View>

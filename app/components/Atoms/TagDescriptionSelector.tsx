@@ -44,7 +44,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         backgroundColor: themeColors.backgroundColor,
     },
     displayText: {
-        color: 'gray',
+        color: themeColors.gray,
         textAlign: 'center',
         fontSize: 16,
     },

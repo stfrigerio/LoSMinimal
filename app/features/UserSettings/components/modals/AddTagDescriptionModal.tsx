@@ -1,13 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, TextInput, Text, Pressable, StyleSheet, Modal, FlatList, Platform } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMoneyBill, faClock, faSmile } from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
+import { View, TextInput, Text, Pressable, Modal, FlatList, StyleSheet } from 'react-native';
 
-import AlertModal from '@/app/components/modals/AlertModal';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { TagData } from '@/src/types/TagsAndDescriptions';
+import { SectionSelector } from './components/SectionSelector';
+import { TagTypeSelector } from './components/TagTypeSelector';
 import ColorPicker from './components/ColorPicker';
+import AlertModal from '@/app/components/modals/AlertModal';
 import { PrimaryButton } from '@/app/components/Atoms/PrimaryButton';
+
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useTagDescriptionForm } from './hooks/useTagDescriptionModal';
+
+import { TagData } from '@/src/types/TagsAndDescriptions';
+import { UniversalModal } from '@/app/components/modals/UniversalModal';
 
 interface AddTagDescriptionModalProps {
 	isVisible: boolean;
@@ -28,163 +32,73 @@ const AddTagDescriptionModal: React.FC<AddTagDescriptionModalProps> = ({
 	currentSection,
 	getLinkedDescriptions,
 }) => {
-	const { themeColors, designs } = useThemeStyles();
+	const { designs, themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
 
-	const [itemData, setItemData] = useState<TagData>({
-		text: '',
-		type: '',
-		emoji: '',
-		linkedTag: '',
-		color: '#FFFFFF'
+	const {
+		itemData,
+		selectedSection,
+		isTagSelected,
+		selectedColor,
+		showColorPicker,
+		tempColor,
+		alertModalVisible,
+		alertMessage,
+		showWarning,
+		linkedDescriptions,
+		isTagSelectionModalVisible,
+		handleSectionChange,
+		handleTypeChange,
+		handleAdd,
+		updateItemData,
+		setAlertModalVisible,
+		setShowWarning,
+		handleColorSelect,
+		confirmColor,
+		setShowColorPicker,
+		openTagSelectionModal,
+		setIsTagSelectionModalVisible,
+	} = useTagDescriptionForm({
+		initialData,
+		currentSection,
+		getLinkedDescriptions,
+		onAdd,
+		onClose,
 	});
-	const [availableTags, setAvailableTags] = useState<TagData[]>([]);
-	const [selectedSection, setSelectedSection] = useState(currentSection);
-	const [isTagSelected, setIsTagSelected] = useState(true);
-	const [isTagSelectionModalVisible, setIsTagSelectionModalVisible] = useState(false);
 
-	const [selectedColor, setSelectedColor] = useState('#FFFFFF');
-	const [tempColor, setTempColor] = useState('#FFFFFF');
-	const [showColorPicker, setShowColorPicker] = useState(false);
-
-	const [showWarning, setShowWarning] = useState(false);
-	const [alertModalVisible, setAlertModalVisible] = useState(false);
-	const [alertMessage, setAlertMessage] = useState('');
-	const [linkedDescriptions, setLinkedDescriptions] = useState<TagData[]>([]);
-
-	useEffect(() => {
-		if (initialData) {
-			setItemData(initialData);
-			setIsTagSelected(initialData.type.includes('Tag'));
-			setSelectedSection(initialData.type.includes('money') ? 'money' : initialData.type.includes('time') ? 'time' : 'mood');
-			setSelectedColor(initialData.color || '#FFFFFF');
-		} else {
-			resetForm();
-		}
-	}, [initialData, currentSection]);
-
-	const resetForm = () => {
-		setItemData({
-			text: '',
-			type: `${currentSection}Tag`,
-			emoji: '',
-			linkedTag: '',
-			color: '#FFFFFF'
-		});
-		setSelectedSection(currentSection);
-		setIsTagSelected(true);
-		setSelectedColor('#FFFFFF');
-	};
-
-	const openTagSelectionModal = useCallback(() => {
-		const tags = getTagsForSelection(selectedSection);
-		setAvailableTags(tags);
-		setIsTagSelectionModalVisible(true);
-	}, [selectedSection, getTagsForSelection])
-
-
-	const handleAdd = () => {
-		if (!itemData.text) {
-			setAlertMessage('Please enter a tag or description');
-			setAlertModalVisible(true);
-			return;
-		}
-		if ((itemData.type === 'moneyDescription' || itemData.type === 'timeDescription') && !itemData.linkedTag) {
-			setAlertMessage('Linked tag should be set for descriptions');
-			setAlertModalVisible(true);
-			return;
-		}
-
-		// Ensure the type is correctly set before adding
-		const updatedItemData = {
-			...itemData,
-			type: `${selectedSection}${isTagSelected ? 'Tag' : 'Description'}`,
-			color: isTagSelected ? selectedColor : undefined
-		};
-
-		onAdd(updatedItemData);
-		onClose();
-		resetForm();
-	};
-
-	const updateItemData = (key: keyof TagData, value: string) => {
-		setItemData(prev => ({ ...prev, [key]: value }));
-	};
-
-	const renderSectionSelector = () => (
-		<View style={styles.sectionSelectorContainer}>
-			{[
-				{ key: 'money', icon: faMoneyBill },
-				{ key: 'time', icon: faClock },
-				{ key: 'mood', icon: faSmile }
-			].map((section) => (
-				<Pressable
-					key={section.key}
-					style={[styles.sectionButton, selectedSection === section.key && styles.activeSectionButton]}
-					onPress={() => {
-						setSelectedSection(section.key);
-						updateItemData('type', `${section.key}${isTagSelected ? 'Tag' : 'Description'}`);
-					}}
-				>
-					<FontAwesomeIcon 
-						icon={section.icon} 
-						color={selectedSection === section.key ? themeColors.backgroundColor : themeColors.textColor} 
-						size={24} 
+	const renderColorPicker = () => (
+		<Modal visible={showColorPicker} transparent animationType="fade">
+			<View style={styles.colorPickerContainer}>
+				<View style={styles.colorPickerContent}>
+					<ColorPicker
+						onColorSelected={handleColorSelect}
+						style={{ width: '100%', height: 600 }}
+						initialColor={selectedColor}
 					/>
-				</Pressable>
-			))}
-		</View>
+					<View style={styles.colorPickerButtons}>
+						<PrimaryButton
+							text='Cancel'
+							variant='secondary'
+							onPress={() => setShowColorPicker(false)}
+						/>
+						<PrimaryButton
+							text='Confirm'
+							variant='primary'
+							onPress={confirmColor}
+						/>
+					</View>
+				</View>
+			</View>
+		</Modal>
 	);
-
-	const renderTagTypeSelector = () => (
-		<View style={styles.tagTypeSelectorContainer}>
-			<Pressable
-				style={[styles.tagTypeButton, isTagSelected && styles.activeTagTypeButton]}
-				onPress={() => {
-					setIsTagSelected(true);
-					updateItemData('type', `${selectedSection}Tag`);
-					updateItemData('linkedTag', '');
-					setShowWarning(false);
-				}}
-			>
-				<Text style={[designs.text.text, isTagSelected && styles.activeTagTypeText]}>Tag</Text>
-			</Pressable>
-			{selectedSection !== 'mood' && (
-				<Pressable
-					style={[styles.tagTypeButton, !isTagSelected && styles.activeTagTypeButton]}
-					onPress={() => {
-						if (initialData && initialData.type.includes('Tag') && getLinkedDescriptions) {
-							const descriptions = getLinkedDescriptions(initialData.text);
-							if (descriptions.length > 0) {
-								setLinkedDescriptions(descriptions);
-								setShowWarning(true);
-							} else {
-								handleTagTypeChange();
-							}
-						} else {
-							handleTagTypeChange();
-						}
-					}}
-				>
-					<Text style={[designs.text.text, !isTagSelected && styles.activeTagTypeText]}>Description</Text>
-				</Pressable>
-			)}
-		</View>
-	);
-
-	const handleTagTypeChange = () => {
-		setIsTagSelected(false);
-		updateItemData('type', `${selectedSection}Description`);
-		setShowWarning(false);
-	};
 
 	const renderTagSelectionModal = () => (
 		<Modal visible={isTagSelectionModalVisible} transparent animationType="fade">
 			<View style={designs.modal.modalContainer}>
 				<View style={designs.modal.modalView}>
-					<Text style={designs.text.title}>Select a Tag</Text>
+					<Text style={designs.modal.title}>Select a Tag</Text>
 					<FlatList
-						data={availableTags}
+						data={getTagsForSelection(selectedSection)}
 						keyExtractor={(item) => item.uuid!}
 						renderItem={({ item }) => (
 							<Pressable
@@ -206,219 +120,138 @@ const AddTagDescriptionModal: React.FC<AddTagDescriptionModalProps> = ({
 			</View>
 		</Modal>
 	);
-	
-	const handleColorSelect = (color: string) => {
-		setTempColor(color);
-	};
-
-	const confirmColor = () => {
-		setSelectedColor(tempColor);
-		updateItemData('color', tempColor);
-		setShowColorPicker(false);
-	};
-
-	const renderColorPicker = () => {
-		if (!ColorPicker) return null;
-
-		return (
-			<Modal visible={showColorPicker} transparent animationType="fade">
-				<View style={styles.colorPickerContainer}>
-					<View style={styles.colorPickerContent}>
-						<ColorPicker
-							onColorSelected={handleColorSelect}
-							style={{ width: '100%', height: 600 }}
-							initialColor={selectedColor}
-						/>
-						<View style={styles.colorPickerButtons}>
-							<PrimaryButton
-								text='Cancel'
-								onPress={() => setShowColorPicker(false)}
-							/>
-							<PrimaryButton
-								text='Confirm'
-								onPress={confirmColor}
-							/>
-						</View>
-					</View>
-				</View>
-			</Modal>
-		);
-	};
-
-	const renderWarningModal = () => (
-		<Modal visible={showWarning} transparent animationType="fade">
-			<View style={designs.modal.modalContainer}>
-				<View style={designs.modal.modalView}>
-					<Text style={designs.text.title}>Warning</Text>
-					<Text style={designs.text.text}>
-						This tag has {linkedDescriptions.length} linked description(s). Changing it to a description may cause inconsistencies.
-					</Text>
-					<Text style={designs.text.text}>Do you want to proceed?</Text>
-					<View style={styles.modalButtonContainer}>
-						<PrimaryButton
-							text='Cancel'
-							onPress={() => setShowWarning(false)}
-						/>
-						<PrimaryButton
-							text='Proceed'
-							onPress={handleTagTypeChange}
-						/>
-					</View>
-				</View>
-			</View>
-		</Modal>
-	);
-
-	const renderInputFields = () => {
-		return (
-			<>
-				<TextInput
-					placeholder={isTagSelected ? "Tag" : "Description"}
-					placeholderTextColor="gray"
-					value={itemData.text}
-					onChangeText={(text) => updateItemData('text', text)}
-					style={[designs.text.input]}
-				/>
-				{selectedSection !== 'mood' && (
-					<>
-						<TextInput
-							placeholder="Emoji (optional)"
-							placeholderTextColor="gray"
-							value={itemData.emoji}
-							onChangeText={(emoji) => updateItemData('emoji', emoji)}
-							style={[designs.text.input]}
-						/>
-						{!isTagSelected && (
-							<Pressable
-								style={[designs.text.input, { marginVertical: 10 }]}
-								onPress={openTagSelectionModal}
-							>
-								<Text style={designs.text.text}>{itemData.linkedTag || "Select a Tag"}</Text>
-							</Pressable>
-						)}
-					</>
-				)}
-			</>
-		);
-	};
 
 	return (
-		<Modal visible={isVisible} transparent animationType="fade">
-			<View style={designs.modal.modalContainer}>
-				<View style={designs.modal.modalView}>
-				<Text style={[designs.text.title]}>
-						{initialData
-							? 'Edit Item'
-							: `Add ${isTagSelected ? 'Tag' : 'Description'} for ${selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1)}`}
-					</Text>
-					<>
-						{renderSectionSelector()}
-						{renderTagTypeSelector()}
-					</>
-					{renderInputFields()}
-					{renderTagSelectionModal()}
-					{isTagSelected && (
-						<View style={styles.colorSelectionContainer}>
-							<Pressable
-								style={styles.colorPickerButton}
-								onPress={() => setShowColorPicker(true)}
-							>
-								<View style={[styles.colorDot, { backgroundColor: selectedColor }]} />
-								<Text style={styles.colorPickerButtonText}>Open Color Picker</Text>
-							</Pressable>
-						</View>
+		<UniversalModal
+			isVisible={isVisible}
+			onClose={onClose}
+		>
+			<Text style={[designs.modal.title, { marginTop: 20, marginBottom: 40 }]}>
+				{initialData
+					? 'Edit Item'
+					: `Add ${isTagSelected ? 'Tag' : 'Description'} for ${selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1)}`}
+			</Text>
+			
+			<SectionSelector
+				selectedSection={selectedSection}
+				onSectionChange={handleSectionChange}
+			/>
+			
+			<TagTypeSelector
+				isTagSelected={isTagSelected}
+				selectedSection={selectedSection}
+				onTypeChange={handleTypeChange}
+				onDescriptionWarning={() => setShowWarning(true)}
+				hasLinkedDescriptions={linkedDescriptions.length > 0}
+			/>
+
+			<TextInput
+				placeholder={isTagSelected ? "Tag" : "Description"}
+				placeholderTextColor={themeColors.gray}
+				value={itemData.text}
+				onChangeText={(text) => updateItemData('text', text)}
+				style={[designs.text.input]}
+			/>
+			
+			{selectedSection !== 'mood' && (
+				<>
+					<TextInput
+						placeholder="Emoji (optional)"
+						placeholderTextColor={themeColors.gray}
+						value={itemData.emoji}
+						onChangeText={(emoji) => updateItemData('emoji', emoji)}
+						style={[designs.text.input]}
+					/>
+					{!isTagSelected && (
+						<Pressable
+							style={[designs.text.input, { marginVertical: 10 }]}
+							onPress={openTagSelectionModal}
+						>
+							<Text style={designs.text.text}>{itemData.linkedTag || "Select a Tag"}</Text>
+						</Pressable>
 					)}
-					{renderColorPicker()}
-					<View style={styles.modalButtonContainer}>
-						<PrimaryButton
-							text='Cancel'
-							onPress={onClose}
-						/>
-						<PrimaryButton
-							text={initialData ? 'Update' : 'Add'}
-							onPress={handleAdd}
-						/>
-					</View>
-					{renderWarningModal()}
+				</>
+			)}
+
+			{isTagSelected && (
+				<View style={styles.colorSelectionContainer}>
+					<Pressable
+						style={styles.colorPickerButton}
+						onPress={() => setShowColorPicker(true)}
+					>
+						<View style={[styles.colorDot, { backgroundColor: selectedColor }]} />
+						<Text style={styles.colorPickerButtonText}>Open Color Picker</Text>
+					</Pressable>
 				</View>
+			)}
+
+			{renderColorPicker()}
+			{renderTagSelectionModal()}
+
+			<View style={styles.modalButtonContainer}>
+				<PrimaryButton
+					variant='secondary'
+					text='Cancel'
+					onPress={onClose}
+				/>
+				<PrimaryButton
+					variant='primary'
+					text={initialData ? 'Update' : 'Add'}
+					onPress={handleAdd}
+				/>
 			</View>
-			{alertModalVisible && 
+
+			{showWarning && (
+				<Modal visible={showWarning} transparent animationType="fade">
+					<View style={designs.modal.modalContainer}>
+						<View style={designs.modal.modalView}>
+							<Text style={designs.text.title}>Warning</Text>
+							<Text style={designs.text.text}>
+								This tag has {linkedDescriptions.length} linked description(s). 
+								Changing it to a description may cause inconsistencies.
+							</Text>
+							<Text style={designs.text.text}>Do you want to proceed?</Text>
+							<View style={styles.modalButtonContainer}>
+								<PrimaryButton
+									variant='secondary'
+									text='Cancel'
+									onPress={() => setShowWarning(false)}
+								/>
+								<PrimaryButton
+									variant='primary'
+									text='Proceed'
+									onPress={() => handleTypeChange(false)}
+								/>
+							</View>
+						</View>
+					</View>
+				</Modal>
+			)}
+
+			{alertModalVisible && (
 				<AlertModal
 					isVisible={alertModalVisible}
 					title="Warning"
 					message={alertMessage}
 					onConfirm={() => setAlertModalVisible(false)}
-					onCancel={() => setAlertModalVisible(false)}
+					singleButton={true}
 				/>
-			}
-		</Modal>
+			)}
+		</UniversalModal>
 	);
 };
 
-
-const getStyles = (theme: any) => StyleSheet.create({
-	modalButtonContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginTop: 20,
-	},
-	tagItem: {
-		padding: 10,
-		borderBottomWidth: 1,
-		borderBottomColor: theme.borderColor,
-	},
-	sectionSelectorContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		gap: 20,
-		marginBottom: 20,
-	},
-	sectionButton: {
-		padding: 10,
-		borderRadius: 5,
-	},
-	activeSectionButton: {
-		backgroundColor: theme.hoverColor,
-	},
-	tagTypeSelectorContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-around',
-		marginBottom: 20,
-	},
-	tagTypeButton: {
-		padding: 10,
-		borderRadius: 5,
-		borderWidth: 1,
-		borderColor: theme.borderColor,
-		flex: 1,
-		marginHorizontal: 5,
-		alignItems: 'center',
-	},
-	activeTagTypeButton: {
-		backgroundColor: theme.hoverColor,
-	},
-	activeTagTypeText: {
-		color: theme.backgroundColor,
-	},
-	colorPickerContainer: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.5)',
-	},
-	colorPickerContent: {
-		backgroundColor: theme.backgroundColor,
-		borderRadius: 10,
-		padding: 20,
-		width: '90%',
-		height: 500,
-	},
+const getStyles = (themeColors: any) => StyleSheet.create({
+    modalButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+        gap: 10, 
+    },
 	colorSelectionContainer: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'center',
-		// borderWidth: 1,
-		// borderColor: 'red',
 		marginVertical: 10,
 	},
 	colorDot: {
@@ -426,7 +259,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		height: 30,
 		borderRadius: 15,
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: themeColors.borderColor,
 	},
 	colorPickerButton: {
 		flexDirection: 'row',
@@ -435,20 +268,36 @@ const getStyles = (theme: any) => StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		// borderWidth: 1,
-		// borderColor: 'blue',
 	},
 	colorPickerButtonText: {
 		marginLeft: 15,
-		color: theme.textColor,
 		textAlign: 'center',
 		fontWeight: 'bold',
+		color: themeColors.textColor,
+	},
+	colorPickerContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+	},
+	colorPickerContent: {
+		backgroundColor: themeColors.backgroundColor,
+		borderRadius: 10,
+		padding: 20,
+		width: '90%',
+		height: 500,
 	},
 	colorPickerButtons: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		marginTop: 20,
 	},
-});
+	tagItem: {
+		padding: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: themeColors.borderColor,
+	},
+}); 
 
 export default AddTagDescriptionModal;

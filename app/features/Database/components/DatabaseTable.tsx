@@ -82,7 +82,7 @@ const DatabaseTable: React.FC<DatabaseTableProps> = ({
 
 export default DatabaseTable;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
 	container: {
 		flex: 1,
 		marginBottom: 100,
@@ -95,12 +95,12 @@ const getStyles = (theme: any) => StyleSheet.create({
 	},
 	toggleText: {
 		marginRight: 10,
-		color: 'gray',
+		color: themeColors.gray,
 	},
 	tableWrapper: {
 		flex: 1,
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: themeColors.borderColor,
 		borderRadius: 5,
 		overflow: 'hidden',
 	},

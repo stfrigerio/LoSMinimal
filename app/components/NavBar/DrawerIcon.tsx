@@ -91,7 +91,7 @@ const DrawerIcon: React.FC<DrawerIconProps> = () => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
     iconWrapper: {
         width: 60,
         height: 60,
@@ -117,7 +117,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         position: 'absolute',
         width: 24,
         height: 2,
-        backgroundColor: 'gray',
+        backgroundColor: themeColors.gray,
     },
     topLine: {
         top: 0,

@@ -72,7 +72,7 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
                         style={styles.completionToggle} 
                         android_ripple={{ color: themeColors.greenOpacity, borderless: true }}
                     >
-                        <FontAwesomeIcon icon={faCircle} color={'gray'} size={20} />
+                        <FontAwesomeIcon icon={faCircle} color={themeColors.gray} size={20} />
                     </Pressable>
             }
 
@@ -102,14 +102,14 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
                     !item.completed ?
                         <Pressable onPress={() => handlePostponeTask({ item, onUpdateTask })} style={[styles.actionButton, { marginRight: 15}]}>
                             {({ pressed }) => (
-                                <FontAwesomeIcon icon={faRotateRight} color={pressed ? themeColors.accentColor : 'gray'} size={20} />
+                                <FontAwesomeIcon icon={faRotateRight} color={pressed ? themeColors.accentColor : themeColors.gray} size={20} />
                             )}
                         </Pressable>
                         :
                         <View style={styles.fakeIcon}/>
                 }
                 <Pressable onPress={handleDelete} style={styles.actionButton}>
-                    <FontAwesomeIcon icon={faTrash} color={'gray'} size={20} />
+                    <FontAwesomeIcon icon={faTrash} color={themeColors.gray} size={20} />
                 </Pressable>
             </View>
             {isEditModalVisible && (
@@ -197,7 +197,7 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         fontSize: 12,
     },
     completedText: {
-        color: 'gray',
+        color: themeColors.gray,
         textDecorationLine: 'line-through',
     },
 });

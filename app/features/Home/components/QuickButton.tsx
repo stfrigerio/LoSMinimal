@@ -20,25 +20,27 @@ interface QuickButtonProps {
 import { useTasksData } from '@/app/features/Tasks/hooks/useTasksData';
 
 const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, homepageSettings }) => {
-	const { theme, themeColors, designs } = useThemeStyles();
+	const { themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
 	const [buttonsVisible, setButtonsVisible] = useState(false);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-	const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
-	const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
-	const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-	const [isJournalModalOpen, setIsJournalModalOpen] = useState(false);
-	const [isCarLocationModalOpen, setIsCarLocationModalOpen] = useState(false);
+	// const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
+	// const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
+	// const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+	// const [isJournalModalOpen, setIsJournalModalOpen] = useState(false);
+	// const [isCarLocationModalOpen, setIsCarLocationModalOpen] = useState(false);
+
+	const scaleAnim = useRef(new Animated.Value(1)).current;
 
 	const { addTask, updateTask } = useTasksData();
 
 	const buttonConfig = [
-		{ key: 'contact', settingKey: 'HidePeople' },
-		{ key: 'journal', settingKey: 'HideJournal' },
-		{ key: 'mood', settingKey: 'HideMoods' },
+		// { key: 'contact', settingKey: 'HidePeople' },
+		// { key: 'journal', settingKey: 'HideJournal' },
+		// { key: 'mood', settingKey: 'HideMoods' },
 		{ key: 'task', settingKey: 'HideTasks' },
-		{ key: 'transaction', settingKey: 'HideMoney' },
-		{ key: 'carLocation', settingKey: 'HideCarLocation' },
+		// { key: 'transaction', settingKey: 'HideMoney' },
+		// { key: 'carLocation', settingKey: 'HideCarLocation' },
 	];
 
 	const visibleButtons = buttonConfig.filter(
@@ -87,6 +89,24 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 		}
 	}, [isExpanded]);
 
+	const handlePressIn = () => {
+        Animated.spring(scaleAnim, {
+            toValue: 0.9,
+            useNativeDriver: true,
+            speed: 100,
+            bounciness: 30
+        }).start();
+    };
+
+    const handlePressOut = () => {
+        Animated.spring(scaleAnim, {
+            toValue: 1,
+            useNativeDriver: true,
+            speed: 100,
+            bounciness: 30
+        }).start();
+    };
+
 	const animatedElevation = elevationAnim.interpolate({
 		inputRange: [0, 0.8, 0.9, 1],
 		outputRange: [0, 0, 10, 10],
@@ -95,11 +115,10 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-
-	const handleNewJournal = () => {
-		setIsJournalModalOpen(true);
-		setIsExpanded(false); // Close the quick button menu
-	};
+	// const handleNewJournal = () => {
+	// 	setIsJournalModalOpen(true);
+	// 	setIsExpanded(false); // Close the quick button menu
+	// };
 
 	const getButtonText = (key: string) => {
 		switch (key) {
@@ -115,12 +134,12 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 	
 	const handleButtonPress = (key: string) => {
 		switch (key) {
-			case 'journal': handleNewJournal(); break;
-			case 'contact': setIsContactModalOpen(true); break;
+			// case 'journal': handleNewJournal(); break;
+			// case 'contact': setIsContactModalOpen(true); break;
 			case 'task': setIsAddModalOpen(true); break;
-			case 'mood': setIsMoodModalOpen(true); break;
-			case 'transaction': setIsTransactionModalOpen(true); break;
-			case 'carLocation': setIsCarLocationModalOpen(true); break;
+			// case 'mood': setIsMoodModalOpen(true); break;
+			// case 'transaction': setIsTransactionModalOpen(true); break;
+			// case 'carLocation': setIsCarLocationModalOpen(true); break;
 		}
 	};
 
@@ -148,12 +167,20 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 					))}
 				</View>
 			)}
-			<Pressable
-				style={[styles.floatingButton, { width: 56 }]}
-				onPress={() => setIsExpanded(!isExpanded)}
-			>
-				<FontAwesomeIcon icon={isExpanded ? faMinus : faPlus} size={24} color="#1E2225" />
-			</Pressable>
+            <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+                <Pressable
+                    style={[styles.floatingButton, { width: 56 }]}
+                    onPress={() => setIsExpanded(!isExpanded)}
+                    onPressIn={handlePressIn}
+                    onPressOut={handlePressOut}
+                >
+                    <FontAwesomeIcon 
+                        icon={isExpanded ? faMinus : faPlus} 
+                        size={24} 
+                        color={themeColors.borderColor} 
+                    />
+                </Pressable>
+            </Animated.View>
 
 			{/* {isJournalModalOpen &&
 				<Modal
@@ -207,7 +234,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
 	container: {
 		alignItems: 'flex-end',
 		zIndex: 2
@@ -217,7 +244,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		alignItems: 'center',
 	},
 	floatingButton: {
-		backgroundColor: '#CD535B',
+		backgroundColor: themeColors.accentColor,
 		width: 56,
 		height: 56,
 		borderRadius: 28,
@@ -226,7 +253,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		elevation: 4,
 	},
 	secondaryButton: {
-		backgroundColor: 'rgba(227, 142, 148, 0.9)',
+		backgroundColor: `${themeColors.accentColorShade}99`,
 		marginBottom: 16,
 		width: 150,
 		height: 40,
@@ -235,7 +262,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		alignItems: 'center',  
 	},
 	buttonText: {
-		color: '#1E2225',
+		color: themeColors.borderColor,
 		fontSize: 16,
 	},
 	buttonContainer: {
@@ -245,13 +272,13 @@ const getStyles = (theme: any) => StyleSheet.create({
 		alignItems: 'flex-end',
 	},
 	mainButtonText: {
-		color: '#1E2225',
+		color: themeColors.borderColor,
 		fontSize: 16,
 		marginBottom: 3
 	},
 	modalContainer: {
 		flex: 1,
-		backgroundColor: theme.backgroundColor,
+		backgroundColor: themeColors.backgroundColor,
 		marginTop: -40,
 	},
 });

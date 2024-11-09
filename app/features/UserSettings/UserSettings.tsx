@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import GeneralSettings from './components/GeneralSettings';
 import DefaultTagsAndDescriptions from './components/DefaultTagsAndDescriptions'
@@ -7,7 +7,7 @@ import DailyNoteSettings from './components/DailyNoteSettings';
 import Navbar from '@/app/components/NavBar';
 import PillarManager from './components/Pillars';
 import LibrarySettings from './components/LibrarySettings';
-import NotificationManager from './components/NotificationManager';
+import { NotificationManager } from './components/NotificationManager';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
@@ -61,7 +61,6 @@ const UserSettings: React.FC = () => {
 				<Navbar
 					items={navItems}
 					activeIndex={pageIndex}
-					title="User Settings"
 					screen="userSettings"
 				/>
 			)}

@@ -17,7 +17,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { TaskObjective } from '@/app/features/Tasks/modals/components/TaskModal/TaskObjective';
 
 interface NavbarQuickButtonProps {
     quickButtonFunction: () => void;
@@ -51,7 +50,6 @@ const NavbarQuickButton: React.FC<NavbarQuickButtonProps> = ({ quickButtonFuncti
                 pressed && styles.pressed
             ]}
             onPress={quickButtonFunction}
-            android_ripple={{ color: themeColors.accentColorShade, borderless: true }}
         >
             {({ pressed }) => (
                 <FontAwesomeIcon 

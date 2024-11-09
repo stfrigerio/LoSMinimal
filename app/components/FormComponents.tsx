@@ -33,7 +33,7 @@ interface SwitchInputProps {
 }
 
 export const FormInput: React.FC<FormInputProps> = ({ label, value, isNumeric = false, onChangeText, editable = true, ...props }) => {
-    const { designs } = useThemeStyles();
+    const { designs, themeColors } = useThemeStyles();
     const styles = getStyles(useThemeStyles().themeColors);
 
     return (
@@ -41,7 +41,7 @@ export const FormInput: React.FC<FormInputProps> = ({ label, value, isNumeric = 
             <Text style={styles.inputLabel}>{label}</Text>
             <TextInput
                 style={designs.text.input}
-                placeholderTextColor='gray'
+                placeholderTextColor={themeColors.gray}
                 keyboardType={isNumeric ? 'numeric' : props.keyboardType}
                 onChangeText={onChangeText}
                 value={value}
@@ -118,7 +118,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         minWidth: '100%',
     },
     inputLabel: {
-        color: 'gray',
+        color: theme.gray,
         marginLeft: 5,
         marginBottom: 4,
     },
@@ -128,7 +128,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         color: theme.textColor,
     },
     pickerLabel: {
-        color: 'gray',
+        color: theme.gray,
         marginLeft: 5,
         marginBottom: 0,
     },
@@ -151,7 +151,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     switchLabel: {
         flex: 1,
-        color: 'gray',
+        color: theme.gray,
         opacity: 0.6,
         fontSize: 14,
     },

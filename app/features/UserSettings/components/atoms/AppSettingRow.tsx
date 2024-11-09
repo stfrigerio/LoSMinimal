@@ -11,10 +11,9 @@ interface AppSettingRowProps {
 	type: 'appSettings';
 	settings: Settings;
 	updateSetting: (newHabit: UserSettingData) => Promise<void>;
-	explainerText: string;
 }
 
-const AppSettingRow: React.FC<AppSettingRowProps> = ({ settingKey, label, type, settings, updateSetting, explainerText }) => {
+const AppSettingRow: React.FC<AppSettingRowProps> = ({ settingKey, label, type, settings, updateSetting }) => {
 	const { themeColors, designs } = useThemeStyles();
 	const styles = getStyles(themeColors, designs);
 
@@ -45,13 +44,12 @@ const AppSettingRow: React.FC<AppSettingRowProps> = ({ settingKey, label, type, 
 			<View style={styles.container}>
 				<Text style={styles.label}>{label}</Text>
 				<Switch
-					trackColor={{ false: themeColors.backgroundSecondary, true: themeColors.backgroundSecondary }}
-					thumbColor={isEnabled ? themeColors.hoverColor : 'gray'}
+					trackColor={{ false: themeColors.backgroundColor, true: themeColors.backgroundColor }}
+					thumbColor={isEnabled ? themeColors.accentColor : themeColors.gray}
 					onValueChange={handleToggle}
 					value={isEnabled}
 				/>
 			</View>
-			<Text style={styles.explainerText}>{explainerText}</Text>
 		</View>
 	);
 };
@@ -59,21 +57,19 @@ const AppSettingRow: React.FC<AppSettingRowProps> = ({ settingKey, label, type, 
 const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
 	outsideContainer: {
 		borderBottomWidth: 1,
-		borderBottomColor: themeColors.borderColor,
+		borderBottomColor: themeColors.backgroundColor,
 		paddingHorizontal: 16,
-		paddingVertical: 12,
 	},
 	container: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-
 	},
 	label: {
 		color: themeColors.textColor,
 	},
 	explainerText: {
-		color: 'gray',
+		color: themeColors.gray,
 	},
 });
 

@@ -62,7 +62,7 @@ const TaskView: React.FC<TaskViewProps> = ({
                     {({ pressed }) => (
                         <FontAwesomeIcon 
                             icon={faRotateRight} 
-                            color={pressed ? themeColors.accentColor : 'gray'} 
+                            color={pressed ? themeColors.accentColor : themeColors.gray} 
                             size={15} 
                         />
                     )}
@@ -74,7 +74,7 @@ const TaskView: React.FC<TaskViewProps> = ({
                 {({ pressed }) => (
                     <FontAwesomeIcon 
                         icon={faTrash} 
-                        color={pressed ? themeColors.accentColor : 'gray'} 
+                        color={pressed ? themeColors.accentColor : themeColors.gray} 
                         size={15} 
                     />
                 )}
@@ -83,7 +83,7 @@ const TaskView: React.FC<TaskViewProps> = ({
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -98,10 +98,10 @@ const getStyles = (theme: any) => StyleSheet.create({
         width: 18,
         borderRadius: 12,
         borderWidth: 2,
-        borderColor: theme.borderColor,
+        borderColor: themeColors.borderColor,
     },
     completedCircle: {
-        backgroundColor: theme.greenOpacity,
+        backgroundColor: themeColors.greenOpacity,
     },
     dueHourContainer: {
         width: '20%',
@@ -110,12 +110,12 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     dueText: {
         fontSize: 12,
-        color: theme.textColorItalic,
+        color: themeColors.textColorItalic,
     },
     separator: {
         width: 1,
         height: 50,
-        backgroundColor: theme.borderColor,
+        backgroundColor: themeColors.borderColor,
         marginHorizontal: 6,
         marginRight: 12,
     },
@@ -130,7 +130,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     completedText: {
         fontSize: 12,
-        color: 'gray',
+        color: themeColors.gray,
         textDecorationLine: 'line-through',
     },
 });

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Pressable, StyleSheet, Platform } from 'react-native';
+import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faMoneyBill, faClock, faSmile, faTag } from '@fortawesome/free-solid-svg-icons';
+import { faMoneyBill, faClock, faSmile } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import DeleteButton from '@/app/components/Atoms/DeleteButton';
 import EditButton from '@/app/components/Atoms/EditButton';
 import Collapsible from '@/app/components/Collapsible';
 import AlertModal from '@/app/components/modals/AlertModal';
-
 import AddTagDescriptionModal from './modals/AddTagDescriptionModal'
-import { TagData } from '@/src/types/TagsAndDescriptions';
 import GluedQuickbutton from '@/app/components/NavBar/GluedQuickbutton';
+
+import { TagData } from '@/src/types/TagsAndDescriptions';
 import { useTagsAndDescriptions } from '@/app/features/UserSettings/hooks/useTagsAndDescriptions';
 
 const DefaultTagsAndDescriptions = () => {
@@ -27,7 +27,13 @@ const DefaultTagsAndDescriptions = () => {
 
 	const { themeColors, designs } = useThemeStyles();
 	const styles = getStyles(themeColors);
-	const { fetchItems, handleDeleteItem, handleAddOrUpdateItem, getTagsForSelection } = useTagsAndDescriptions();
+	
+	const { 
+		fetchItems, 
+		handleDeleteItem, 
+		handleAddOrUpdateItem, 
+		getTagsForSelection 
+	} = useTagsAndDescriptions();
 
 	useEffect(() => {
 		const loadItems = async () => {
@@ -108,12 +114,12 @@ const DefaultTagsAndDescriptions = () => {
 			].map((section) => (
 				<Pressable
 					key={section.key}
-					style={[styles.sectionButton, currentSection === section.key && styles.activeSectionButton]}
+					style={[styles.sectionButton]}
 					onPress={() => handleSectionChange(section.key)}
 				>
 					<FontAwesomeIcon 
 						icon={section.icon} 
-						color={currentSection === section.key ? themeColors.hoverColor : themeColors.textColor} 
+						color={currentSection === section.key ? themeColors.accentColor : themeColors.textColor} 
 						size={24} 
 					/>
 				</Pressable>
@@ -122,10 +128,10 @@ const DefaultTagsAndDescriptions = () => {
 	);
 
 	const renderSection = (title: string, tagType: string) => (
-		<>
-			<Text style={[designs.text.title, {fontSize: 18, marginBottom: 20, color: 'gray'}]}>{title}</Text>
+		<View style={styles.sectionContainer}>
+			<Text style={[designs.text.title, {fontSize: 18, marginBottom: 20 }]}>{title}</Text>
 			{renderItems(tagType)}
-		</>
+		</View>
 	);
 
 	const getLinkedDescriptions = (tagText: string): TagData[] => {
@@ -141,7 +147,7 @@ const DefaultTagsAndDescriptions = () => {
 		const sortedTags = tags.sort((a, b) => a.text.localeCompare(b.text));
 
 		return sortedTags.map((tag, index) => (
-			<View key={index} style={styles.tagContainer}>
+			<View key={index}>
 				<View style={styles.tagHeader}>
 					<Pressable 
 						onPress={() => filterType !== 'moodTag' && toggleTag(tag.text)} 
@@ -185,12 +191,12 @@ const DefaultTagsAndDescriptions = () => {
 		<>
 			<ScrollView style={styles.container}>
 				{renderSectionSelector()}
-				<Text style={{ color: 'gray', marginLeft: 10 }}>
+				<Text style={{ color: themeColors.gray, marginLeft: 10 }}>
 					Tags and Descriptions help you quickly categorize timers and expenses.
 					Tags are broad categories (e.g., "Work", "Exercise"), while descriptions are specific activities or items (e.g., "Meeting", "Groceries").
 					Each description is linked to one tag, but a tag can have multiple descriptions.
 				</Text>
-				<Text style={{ color: 'gray', marginLeft: 10, marginTop: 10 }}>
+				<Text style={{ color: themeColors.gray, marginLeft: 10, marginTop: 10 }}>
 					Moods are the exception as they do not have descriptions, and a single mood entry can have many tags.
 				</Text>
 				<View style={{height: 20}} />
@@ -243,26 +249,10 @@ const getStyles = (theme: any) => StyleSheet.create({
 		marginHorizontal: 10,
 		borderRadius: 5,
 	},
-	activeSectionButton: {
-	},
-	switchContainer: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginBottom: 20,
-	},
-	pickerContainer: {
-		borderWidth: 1,
-		borderColor: theme.borderColor,
+	sectionContainer: {
+		backgroundColor: theme.backgroundSecondary,
+		padding: 20,
 		borderRadius: 10,
-		height: 60,
-		marginVertical: 10
-	},
-	itemText: {
-		flex: 1,
-	},
-	tagContainer: {
-		paddingHorizontal: 30,
 	},
 	tagHeader: {
 		flexDirection: 'row',
@@ -281,13 +271,13 @@ const getStyles = (theme: any) => StyleSheet.create({
 	},
 	descriptionText: {
 		flex: 1,
-		color: 'lightgray'
+		color: theme.gray
 	},
 	tagNameContainer: {
 		flex: 1,
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'space-between',
+		gap: 10,
 	},
 	tagText: {
 		color: theme.textColor,
@@ -297,9 +287,9 @@ const getStyles = (theme: any) => StyleSheet.create({
 	},
 	arrow: {
 		fontSize: 16,
-		color: 'gray',
+		color: theme.gray,
 		transform: [{ rotate: '0deg' }],
-		marginRight: 15,
+		marginRight: 20,
 		marginBottom: 5
 	},
 	arrowExpanded: {
@@ -312,19 +302,6 @@ const getStyles = (theme: any) => StyleSheet.create({
 		borderRadius: 5,
 		marginRight: 5,
 	},
-	floatingButton: {
-		position: 'absolute',
-		bottom: 5,
-		right: 25,
-		width: 50,
-		height: 50,
-		borderRadius: 25,
-		backgroundColor: '#CD535B',
-		justifyContent: 'center',
-		alignItems: 'center',
-		flexDirection: 'row',
-		zIndex: 9999
-},
 });
 
 export default DefaultTagsAndDescriptions;

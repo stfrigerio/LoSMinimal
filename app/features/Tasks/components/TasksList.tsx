@@ -94,7 +94,7 @@ const TaskListScreen = ({
         <Pressable onPress={() => setFilter(type)} style={styles.filterIcon}>
             <FontAwesomeIcon 
                 icon={icon} 
-                color={filter === type ? themeColors.accentColor : 'gray'} 
+                color={filter === type ? themeColors.accentColor : themeColors.gray} 
                 size={24} 
             />
         </Pressable>

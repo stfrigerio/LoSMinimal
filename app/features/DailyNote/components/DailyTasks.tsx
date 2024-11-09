@@ -92,14 +92,14 @@ const DailyTasks: React.FC<DailyTasksProps> = ({ tasks, onToggleTaskCompletion, 
                         </Pressable>
                         {!task.completed ? (
                                 <Pressable onPress={() => handleHandlePostponeTask(task)} style={[styles.deleteIcon]}>
-                                    <FontAwesomeIcon icon={faRotateRight} color={'gray'} size={15} />
+                                    <FontAwesomeIcon icon={faRotateRight} color={themeColors.gray} size={15} />
                                 </Pressable>
                             ) : (
                                 <View style={[styles.deleteIcon, { marginRight: 15 }]} />
                             )
                         }
                         <Pressable onPress={() => handleDeleteTask(task.uuid!)} style={styles.deleteIcon}>
-                            <FontAwesomeIcon icon={faTrash} color={'gray'} size={15} />
+                            <FontAwesomeIcon icon={faTrash} color={themeColors.gray} size={15} />
                         </Pressable> 
                     </View>
                 ))}
@@ -116,12 +116,11 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
         ...designs.text.title,
         marginTop: 10,
         marginBottom: 30,
-        color: 'gray',
+        color: theme.gray,
     },
     taskContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        // marginBottom: 10,
     },
     contentContainer: {
         flexDirection: 'row',
@@ -158,7 +157,7 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
         padding: 10,
     },
     completedTaskText: {
-        color: 'gray',
+        color: theme.gray,
         textDecorationLine: 'line-through',
     },
 });

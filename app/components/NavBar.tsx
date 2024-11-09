@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, StyleSheet, Pressable, Animated, Keyboard, Platform } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';    
 import { faSliders } from '@fortawesome/free-solid-svg-icons';
@@ -14,8 +14,6 @@ import { MobileNavbarProps } from './NavBar/NavbarTypes';
 const MobileNavbar: React.FC<MobileNavbarProps> = ({ 
     items, 
     activeIndex, 
-    title, 
-    onBackPress,
     showFilter = false,
     onFilterPress,
     quickButtonFunction,
@@ -25,15 +23,14 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
     const styles = getStyles(themeColors);
     const { slideAnim } = useNavbarDrawer();
     const [isFilterActive, setIsFilterActive] = useState(false);
-    const [ keyboardHeight ] = useState(new Animated.Value(0));
-
+    const keyboardHeight = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         const keyboardWillShow = Keyboard.addListener(
             Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
             () => {
                 Animated.timing(keyboardHeight, {
-                    toValue: -300, // Move it off screen
+                    toValue: 80, // Adjusted to move navbar downward
                     duration: 250,
                     useNativeDriver: true,
                 }).start();
@@ -55,7 +52,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
             keyboardWillShow.remove();
             keyboardWillHide.remove();
         };
-    }, []);
+    }, [keyboardHeight]);
 
     const handleFilterPress = () => {
         setIsFilterActive(!isFilterActive);
@@ -85,7 +82,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                     <Pressable style={styles.filterIconWrapper} onPress={handleFilterPress}>
                         <FontAwesomeIcon 
                             icon={faSliders} 
-                            color={isFilterActive ? themeColors.hoverColor : 'gray'} 
+                            color={isFilterActive ? themeColors.hoverColor : themeColors.gray} 
                             size={24} 
                         />
                     </Pressable>
@@ -165,3 +162,4 @@ const getStyles = (theme: any) => {
 };
 
 export default MobileNavbar;
+ 

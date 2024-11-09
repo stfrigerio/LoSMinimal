@@ -71,7 +71,7 @@ const PillarManager = () => {
 					<EditButton onEdit={() => openEditModal(pillar)} />
 					<DeleteButton onDelete={() => handlePillarDelete(pillar.id!)} />
 				</View>
-				<Text style={[designs.text.text, styles.pillarDescription]}>{pillar.description}</Text>
+				<Text style={[designs.text.text, styles.pillarDescription]}>{pillar.description ? pillar.description : 'No description'}</Text>
 			</View>
 		));
 	};
@@ -97,7 +97,6 @@ const PillarManager = () => {
 				<Text style={styles.bulletPoint}>
 				• Ensure your daily activities support your long-term vision
 				</Text>
-				<View style={{ height: 30 }} />
 				{renderPillars()}
 				<View style={styles.bottomPadding} />
 			</ScrollView>
@@ -132,9 +131,10 @@ const PillarManager = () => {
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
 	container: { 
 		flex: 1,
+		paddingTop: 0,
 		padding: 20,
 	},
 	scrollView: {
@@ -145,18 +145,19 @@ const getStyles = (theme: any) => StyleSheet.create({
 		paddingBottom: 100, // Extra padding at the bottom
 	},
 	title: {
-		fontSize: 24,
 		marginBottom: 20,
 	},
 	pillarWrapper: {
-		marginBottom: 20,
+		marginTop: 20,
+		backgroundColor: themeColors.backgroundSecondary,
+		borderRadius: 10,
 	},
 	pillarContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		padding: 10,
-		backgroundColor: theme.cardColor,
+		backgroundColor: themeColors.cardColor,
 		borderRadius: 5,
 	},
 	pillarText: {
@@ -164,9 +165,10 @@ const getStyles = (theme: any) => StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	pillarDescription: {
-		marginTop: 5,
+		// marginTop: 5,
 		marginLeft: 10,
-		color: theme.textColorItalic,
+		marginBottom: 10,
+		color: themeColors.textColorItalic,
 	},   
 	bottomPadding: {
 		height: 60, // Adjust this value based on your GluedQuickbutton height
@@ -178,11 +180,11 @@ const getStyles = (theme: any) => StyleSheet.create({
 		right: 0,
 	},
 	description: {
-		color: 'gray',
+		color: themeColors.gray,
 		marginBottom: 10,
 	},
 	bulletPoint: {
-		color: 'gray',
+		color: themeColors.gray,
 		marginBottom: 5,
 		marginLeft: 10,
 	},

@@ -3,26 +3,31 @@ import { Pressable, Text, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
+
 interface DeleteButtonProps {
-  onDelete: () => void;
+	onDelete: () => void;
 }
 
 const DeleteButton: React.FC<DeleteButtonProps> = ({ onDelete }) => {
-  const styles = getStyles('dark');
+	const { themeColors } = useThemeStyles();
+	const styles = getStyles(themeColors);
 
-  return (
-    <Pressable onPress={onDelete} style={styles.deleteButton}>
-      <FontAwesomeIcon icon={faTrash} color='gray' />
-    </Pressable>
-  );
+	return (
+		<Pressable onPress={onDelete} style={styles.deleteButton}>
+      		{({ pressed }) => (
+				<FontAwesomeIcon icon={faTrash} color={pressed ? themeColors.accentColor : themeColors.gray} />
+			)}
+		</Pressable>
+	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
-  deleteButton: {
-    padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+const getStyles = (themeColors: any) => StyleSheet.create({
+	deleteButton: {
+		padding: 10,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 });
 
 export default DeleteButton;

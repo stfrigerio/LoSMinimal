@@ -106,7 +106,7 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
                         value={morningData.wakeHour}
                         editable={false}
                         placeholder="Tap to set time"
-                        placeholderTextColor={'gray'}
+                        placeholderTextColor={themeColors.gray}
                     />
                 </Pressable>
             </View>

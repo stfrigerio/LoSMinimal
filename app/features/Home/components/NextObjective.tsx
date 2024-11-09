@@ -259,7 +259,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     miniHeader: {
         fontSize: 16,
-        color: 'gray',
+        color: themeColors.gray,
         fontWeight: 'bold',
         marginBottom: 5,
         alignSelf: 'center',
@@ -267,7 +267,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     miniHeaderSeparator: {
         height: 1,
         width: '100%',
-        backgroundColor: 'gray',
+        backgroundColor: themeColors.gray,
         marginBottom: 12,
     },
     nextTaskWrapper: {
@@ -284,13 +284,13 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     nextTask: {
         fontSize: 10,
-        color: 'gray',
+        color: themeColors.gray,
         textAlign: 'center',
     },
     timeLeft: {
         fontSize: 12,
         marginTop: 8,
-        color: 'gray',
+        color: themeColors.gray,
         fontStyle: 'italic',
     },
 });

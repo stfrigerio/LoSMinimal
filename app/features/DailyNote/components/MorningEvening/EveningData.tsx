@@ -120,7 +120,7 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
                             value={eveningData.sleepTime}
                             editable={false}
                             placeholder="Tap to set time"
-                            placeholderTextColor={'gray'}
+                            placeholderTextColor={themeColors.gray}
                         />
                     </Pressable>
                 </View>

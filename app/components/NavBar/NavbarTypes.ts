@@ -6,8 +6,6 @@ export interface NavItem {
 export interface MobileNavbarProps {
     items: NavItem[];
     activeIndex: number;
-    title: string;
-    onBackPress?: () => void;
     showFilter?: boolean;
     onFilterPress?: () => void;
     quickButtonFunction?: () => void;

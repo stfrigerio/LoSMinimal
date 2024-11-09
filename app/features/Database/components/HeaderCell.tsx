@@ -15,7 +15,7 @@ const HeaderCell: React.FC<{ value: string }> = ({ value }) => {
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
 	headerCellContent: {
 		padding: 10,
 		justifyContent: 'center',
@@ -24,7 +24,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 	},
 	headerText: {
 		fontWeight: 'bold',
-		color: 'gray',
+		color: themeColors.gray,
 		fontSize: 12, // Match the font size of EditableField
 	},
 });
