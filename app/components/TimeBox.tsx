@@ -15,11 +15,14 @@ import {
 
 interface TimeBoxProps {
 	startDate: string;
-	endDate: string;
 	currentViewType?: string;
 }
 
-const TimeBox: React.FC<TimeBoxProps> = ({ startDate, endDate, currentViewType }) => {
+const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
+    if (typeof startDate !== 'string' || !startDate.match(/^\d{4}-\d{2}-\d{2}/)) {
+        return null;
+    }
+
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 

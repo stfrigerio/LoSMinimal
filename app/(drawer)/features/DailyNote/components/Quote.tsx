@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Text, StyleSheet, Animated, Pressable } from 'react-native';
+import { Text, StyleSheet, Animated, Pressable, View } from 'react-native';
+import { Svg, Path } from 'react-native-svg';
 
 import quotes from '@/assets/quotes.json';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
@@ -13,6 +14,23 @@ interface QuoteProps {
     isCollapse: boolean;
     isFixed: boolean;
 }
+
+const FlourishBorder = ({ style, color }: { style?: any, color: string }) => (
+    <Svg 
+        height="50" 
+        width="300" 
+        viewBox="-6.6 -15 40 20" 
+        style={[{ alignSelf: 'center', }, style]}
+    >
+        <Path
+            d="M0-1C1-1 1.3333-2.3333 2-3 1-2 0-2 0-1 1-2 0-2 0-4 0-2-1-2 0-1 0-2-1-2-2-3-1-2-1-1 0-1 0-2 0-2 0-1M13-1C13-2 15.343-1.645 14 0 11 4 4-3 1 0M-13-1C-13-2-15.153-1.545-14 0-11 4-4-3-1 0M9-1C8 1 6-1 7-2 9-4 11-2 10 0 8 4 2-3-1 1M-8.611-1.494C-8.577 1.181-5.794-.864-6.986-2.005-9-4-11-2-10 0-8 4-2-3 1 1"
+            stroke={color}
+            strokeWidth={0.2}
+            fill="none"
+            transform="scale(2.5, 2)"  // Scale 3x horizontally, 1x vertically
+        />
+    </Svg>
+);
 
 const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
     const [quote, setQuote] = useState<QuoteType>({ content: '', author: '' });
@@ -72,6 +90,11 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
     return (
         <Pressable onPress={toggleExpanded}>
             <Animated.View style={[styles.quoteContainer, { opacity: fadeAnim }]}>
+                <FlourishBorder 
+                    color={themeColors.borderColor} 
+                    style={{ marginLeft: 1}}
+                />
+                <View style={[styles.horizontalSeparator, { marginBottom: 10}]} />
                 {expanded ? (
                     <>
                         <Text style={styles.quoteContent}>{quote.content}</Text>
@@ -80,6 +103,11 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
                 ) : (
                     <Text style={styles.quoteAuthor}>- {quote.author}</Text>
                 )}
+                <View style={[styles.horizontalSeparator, { marginTop: 10}]} />
+                <FlourishBorder 
+                    color={themeColors.borderColor} 
+                    style={{ transform: [{ rotate: '180deg' }] }}
+                />
             </Animated.View>
         </Pressable>
     );
@@ -88,13 +116,10 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
 const getStyles = (theme: any) => StyleSheet.create({
     quoteContainer: {
         padding: 20,
-        paddingBottom: 5,
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        borderColor: theme.borderColor,
         margin: 10,
         maxWidth: 600,
         alignSelf: 'center',
+        backgroundColor: theme.backgroundColor,
     },
     quoteContent: {
         lineHeight: 28,
@@ -102,14 +127,23 @@ const getStyles = (theme: any) => StyleSheet.create({
         fontStyle: 'italic',
         color: theme.textColor,
         marginBottom: 20,
+        fontSize: 14,
+        letterSpacing: 0.5,
+        fontFamily: 'serif',
     },
     quoteAuthor: {
         textAlign: 'right',
         fontFamily: 'serif',
-        fontSize: 14,
+        fontSize: 12,
         marginTop: 5,
-        color: 'rgba(212, 212, 212, 0.4)',
-        marginBottom: 14
+        color: theme.gray,
+        fontWeight: '600',
+        letterSpacing: 1,
+    },
+    horizontalSeparator: {
+        marginHorizontal: 50,
+        borderTopWidth: 2,
+        borderColor: theme.borderColor,
     },
 });
 

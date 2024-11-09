@@ -1,6 +1,5 @@
 import { Drawer } from 'expo-router/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-// import { StatusBar } from 'react-native';
 import { usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
@@ -15,7 +14,6 @@ import Toast, { BaseToast } from 'react-native-toast-message';
 import RightPanel from './(drawer)/features/RightPanel/RightPanel';
 import { InitializeDatabasesWrapper } from '@/database/databaseInitializer';
 import { AppInitializer } from './AppInitializer';
-
 
 function DrawerNavigator() {
 	const { isRightDrawerSwipeEnabled } = useDrawerState();
@@ -72,8 +70,9 @@ function App() {
     return (
         <>
             <StatusBar 
+                key={`status-bar-${isHomepage}-${isDarkMode}`}
                 style={isHomepage ? 'light' : (isDarkMode ? 'light' : 'dark')}
-                translucent
+                backgroundColor="transparent"
             />
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <AppInitializer />

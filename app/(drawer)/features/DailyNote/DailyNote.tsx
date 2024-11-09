@@ -34,22 +34,24 @@ import  { UseTaskDataType } from '@/app/(drawer)/features/Tasks/hooks/useTasksDa
 import { TaskData } from '@/src/types/Task';
 
 const DailyNote = () => {
-	const { date } = useGlobalSearchParams();
+    const params = useGlobalSearchParams();
+    const dateParam = params.date ? String(params.date) : getStartOfToday(getLocalTimeZone()).toString();
+	
 	const { openDailyNote } = useNavigationComponents();
 
-    if (!date || Array.isArray(date)) {
-        return null;
-    }
+    // if (!date) {
+    //     return null;
+    // }
 
 	const timeZone = getLocalTimeZone();
-	const title = format(date as string, 'EEEE, dd MMMM');
+    const title = format(dateParam, 'EEEE, dd MMMM');
 
 	// const [lastSubmissionTime, setLastSubmissionTime] = useState(Date.now());
 	// const [tasks, setTasks] = useState<TaskData[]>([]);
 
 	// const { dailyData, onUpdateDaySections } = useDailyData(currentDate, lastSubmissionTime);
 	// const { toggleTaskCompletion, getTasksDueOnDate: fetchDailyTasks } = useTaskData();
-	// const [ settings ] = useDailySettings();
+	const [ settings ] = useDailySettings();
 
 	const { themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
@@ -69,7 +71,7 @@ const DailyNote = () => {
             newDate = getStartOfToday(timeZone);
         } else {
             const offset = direction === 'previous' ? -1 : 1;
-            newDate = navigateDate(new Date(date), offset, timeZone);
+            newDate = navigateDate(new Date(dateParam), offset, timeZone);
         }
         
         openDailyNote(newDate.toString());
@@ -77,14 +79,13 @@ const DailyNote = () => {
 
 	return (
 		<View style={styles.mainContainer}>
-			<ColorfulTimeline title={date as string} />
+			<ColorfulTimeline title={dateParam} />
 			<ScrollView style={{ flex: 1 }}>
 				<View style={styles.noteContainer}>
 					<DateHeader formattedDate={title} periodType='day' />
 					<View style={styles.navigation}>
 						<TimeBox
-							startDate={date}
-							endDate={date}
+							startDate={dateParam}
 							currentViewType={'daily'}
 						/>
 						<DateNavigation
@@ -92,12 +93,12 @@ const DailyNote = () => {
 							onNavigate={handleNavigatePeriod}
 						/>
 					</View>
-					{/* {settings && !settings.hideQuote && (
+					{settings && !settings.hideQuote && (
 						<Quote
 							isCollapse={settings.quoteCollapse}
 							isFixed={settings.fixedQuote}
 						/>
-					)} */}
+					)}
 					{/* <QuantifiableHabits data={dailyData?.quantifiableHabits || []} date={dateStr} /> */}
 					{/* <BooleanHabits data={dailyData?.booleanHabits || []} date={dateStr} booleanHabitsName={settings?.booleanHabitsName ?? false} /> */}
 					{/* <DailyTasks tasks={tasks || []} onToggleTaskCompletion={toggleTaskCompletion} fetchDailyTasks={fetchDailyTasks} currentDate={currentDate} /> */}
@@ -106,6 +107,7 @@ const DailyNote = () => {
 					{/* <ImagePickerComponent date={dateStr} /> */}
 				</View>
 			</ScrollView>
+			{/* <View style={styles.verticalCenterLine} /> */}
 		</View>
 	);
 };
@@ -129,6 +131,15 @@ const getStyles = (theme: any) => {
 			justifyContent: 'space-between',
 			alignItems: 'center',
 			marginBottom: 20,
+		},
+		verticalCenterLine: {
+			position: 'absolute',
+			left: '50%',
+			top: 0,
+			bottom: 0,
+			width: 1,
+			backgroundColor: 'red', // or any other color you prefer
+			opacity: 0.2, // optional: makes the line subtle
 		},
 	});
 };
