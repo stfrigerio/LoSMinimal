@@ -1,7 +1,7 @@
 import { Drawer } from 'expo-router/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import { DrawerStateProvider, useDrawerState } from '../src/contexts/DrawerState';
@@ -9,12 +9,9 @@ import { NavbarDrawerProvider } from '../src/contexts/NavbarContext';
 import { ChecklistProvider } from '../src/contexts/checklistContext';
 // import { MusicPlayerProvider } from '../src/contexts/MusicPlayerContext';
 
-import TasksHub from './features/Tasks/Tasks';
-import Homepage from './features/Home/Homepage';
-
 import { useThemeStyles } from '../src/styles/useThemeStyles';
 import Toast, { BaseToast } from 'react-native-toast-message';
-import RightPanel from './features/RightPanel/RightPanel';
+import RightPanel from './(drawer)/features/RightPanel/RightPanel';
 import { InitializeDatabasesWrapper } from '@/database/databaseInitializer';
 import { AppInitializer } from './AppInitializer';
 
@@ -37,18 +34,16 @@ function DrawerNavigator() {
 				drawerPosition: 'right'
 			}}
 		>
-			<Drawer.Screen 
-				name="(drawer)" 
-				options={{
-					drawerLabel: "Home"
-				}} 
-			/>
+            <Drawer.Screen name="(drawer)" />
 		</Drawer>
 	);
 }
 
 function App() {
-    const { themeColors } = useThemeStyles();
+    const { themeColors, theme } = useThemeStyles();
+    const isDarkMode = theme === 'dark';
+    const pathname = usePathname();
+    const isHomepage = pathname === '/features/Home/Homepage';
 
 	const toastConfig = {
         success: (internalState: any) => (
@@ -78,7 +73,8 @@ function App() {
             <AppInitializer />
             <StatusBar 
                 translucent 
-                backgroundColor="rgba(0, 0, 0, 0.1)" 
+                backgroundColor="transparent"
+                barStyle={isHomepage ? 'light-content' : (isDarkMode ? 'light-content' : 'dark-content')}
             />
             <InitializeDatabasesWrapper />
             <DrawerNavigator />

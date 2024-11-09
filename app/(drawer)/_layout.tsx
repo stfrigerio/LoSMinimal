@@ -1,6 +1,6 @@
 import { Drawer } from 'expo-router/drawer';
 
-import LeftPanel from '../features/LeftPanel/LeftPanel';
+import LeftPanel from './features/LeftPanel/LeftPanel';
 import { useDrawerState } from '../../src/contexts/DrawerState';
 
 export default function DrawerLayout() {
@@ -14,12 +14,37 @@ export default function DrawerLayout() {
 				swipeEnabled: isLeftDrawerSwipeEnabled,
 				swipeEdgeWidth: 100,
 				drawerStyle: {
-				width: 300,
-				backgroundColor: 'transparent',
+					width: 300,
+					backgroundColor: 'transparent',
 				},
 				headerShown: false,
 				drawerPosition: 'left'
 			}}
-		/>
+		>
+            <Drawer.Screen 
+                name="features/Home/Homepage" 
+                options={{
+                    drawerLabel: "Home"
+                }} 
+            />
+            <Drawer.Screen 
+                name="features/DailyNote/DailyNote" 
+                options={{
+                    drawerLabel: "Daily Note"
+                }} 
+            />
+            <Drawer.Screen 
+                name="features/Tasks/Tasks" 
+                options={{
+                    drawerLabel: "Tasks"
+                }} 
+            />
+			<Drawer.Screen 
+				name="features/UserSettings/UserSettings" 
+				options={{
+					drawerLabel: "Settings"
+				}} 
+			/>
+        </Drawer>
 	);
 }

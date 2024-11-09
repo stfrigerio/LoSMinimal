@@ -1,15 +1,15 @@
 import React, { useState, useMemo } from 'react';
 import { Modal, View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 
-import { SelectionData } from '@/app/features/Home/components/TimerComponent';
-import AddTagDescriptionModal from '@/app/features/UserSettings/components/modals/AddTagDescriptionModal';
+import { SelectionData } from '@/app/(drawer)/features/Home/components/TimerComponent';
+import AddTagDescriptionModal from '@/app/(drawer)/features/UserSettings/components/modals/AddTagDescriptionModal';
 
 import { useDescriptionModal } from './helpers/useDescriptionModal';
 import { useTagsAndDescriptions } from './helpers/useTagsAndDescriptions';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 import { TagData } from '@/src/types/TagsAndDescriptions';
-import { PrimaryButton } from '../Atoms/PrimaryButton';
+import { PrimaryButton } from '../atoms/PrimaryButton';
 
 interface DescriptionModalProps {
     isOpen: boolean;

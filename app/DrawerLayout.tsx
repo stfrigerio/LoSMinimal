@@ -2,7 +2,7 @@ import { Drawer } from 'expo-router/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
 
-import RightPanel from './features/RightPanel/RightPanel';
+import RightPanel from './(drawer)/features/RightPanel/RightPanel';
 
 import { useDrawerState } from '../src/contexts/DrawerState';
 

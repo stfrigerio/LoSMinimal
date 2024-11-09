@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { databaseManagers } from '@/database/tables';
 
-import { SelectionData } from '@/app/features/Home/components/TimerComponent';
+import { SelectionData } from '@/app/(drawer)/features/Home/components/TimerComponent';
 import { TagData } from '@/src/types/TagsAndDescriptions';
 
 export const useTagModal = (isOpen: boolean, sourceTable: string, setSelectionData: (updateFunc: (prevData: SelectionData) => SelectionData) => void) => {

@@ -15,6 +15,16 @@ export const getLocalTimeZone = (): string =>
     Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 /**
+ * Get the start of the current day in the local timezone.
+ */
+export const getStartOfToday = (timeZone?: string): Date => {
+    const tz = timeZone || getLocalTimeZone();
+    const now = new Date();
+    const zonedNow = toZonedTime(now, tz);
+    return startOfDay(zonedNow);
+};
+
+/**
  * Convert a UTC date to a date in the specified timezone.
  * @param date - The Date object to convert.
  * @param timeZone - The timezone identifier.
@@ -101,4 +111,17 @@ export const getISOWeekData = (date: Date): { week: number; year: number } => {
         week: Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7),
         year: d.getUTCFullYear()
     };
+};
+
+/**
+ * Navigate between periods (e.g., days) by adding or subtracting days.
+ * @param date - The current date.
+ * @param offset - The number of days to add (positive) or subtract (negative).
+ * @param timeZone - The timezone identifier.
+ */
+export const navigateDate = (date: Date, offset: number, timeZone?: string): Date => {
+    const tz = timeZone || getLocalTimeZone();
+    const zonedDate = toZonedTime(date, tz);
+    const newDate = addDays(zonedDate, offset);
+    return newDate;
 };
