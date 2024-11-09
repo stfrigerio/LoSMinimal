@@ -1,7 +1,8 @@
 import { Drawer } from 'expo-router/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { StatusBar } from 'react-native';
-import { Tabs, usePathname } from 'expo-router';
+// import { StatusBar } from 'react-native';
+import { usePathname } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import { DrawerStateProvider, useDrawerState } from '../src/contexts/DrawerState';
@@ -43,7 +44,7 @@ function App() {
     const { themeColors, theme } = useThemeStyles();
     const isDarkMode = theme === 'dark';
     const pathname = usePathname();
-    const isHomepage = pathname === '/features/Home/Homepage';
+    const isHomepage = pathname === '/' || pathname === '/features/Home/Homepage';
 
 	const toastConfig = {
         success: (internalState: any) => (
@@ -69,17 +70,18 @@ function App() {
     };
     
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <AppInitializer />
+        <>
             <StatusBar 
-                translucent 
-                backgroundColor="transparent"
-                barStyle={isHomepage ? 'light-content' : (isDarkMode ? 'light-content' : 'dark-content')}
+                style={isHomepage ? 'light' : (isDarkMode ? 'light' : 'dark')}
+                translucent
             />
-            <InitializeDatabasesWrapper />
-            <DrawerNavigator />
-            <Toast config={toastConfig} />
-        </GestureHandlerRootView>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <AppInitializer />
+                <InitializeDatabasesWrapper />
+                <DrawerNavigator />
+                <Toast config={toastConfig} />
+            </GestureHandlerRootView>
+        </>
     );
 }
 
