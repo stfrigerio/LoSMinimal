@@ -30,7 +30,8 @@ export default function DrawerLayout() {
             <Drawer.Screen 
                 name="features/DailyNote/DailyNote" 
                 options={{
-                    drawerLabel: "Daily Note"
+                    drawerLabel: "Daily Note",
+					unmountOnBlur: true
                 }} 
             />
             <Drawer.Screen 

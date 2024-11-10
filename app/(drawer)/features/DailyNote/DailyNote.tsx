@@ -39,17 +39,12 @@ const DailyNote = () => {
 	
 	const { openDailyNote } = useNavigationComponents();
 
-    // if (!date) {
-    //     return null;
-    // }
-
 	const timeZone = getLocalTimeZone();
     const title = format(dateParam, 'EEEE, dd MMMM');
-
-	// const [lastSubmissionTime, setLastSubmissionTime] = useState(Date.now());
+	const [lastSubmissionTime, setLastSubmissionTime] = useState(Date.now());
 	// const [tasks, setTasks] = useState<TaskData[]>([]);
 
-	// const { dailyData, onUpdateDaySections } = useDailyData(currentDate, lastSubmissionTime);
+	const { dailyData, onUpdateDaySections } = useDailyData(new Date(dateParam), lastSubmissionTime);
 	// const { toggleTaskCompletion, getTasksDueOnDate: fetchDailyTasks } = useTaskData();
 	const [ settings ] = useDailySettings();
 
@@ -99,8 +94,8 @@ const DailyNote = () => {
 							isFixed={settings.fixedQuote}
 						/>
 					)}
-					{/* <QuantifiableHabits data={dailyData?.quantifiableHabits || []} date={dateStr} /> */}
-					{/* <BooleanHabits data={dailyData?.booleanHabits || []} date={dateStr} booleanHabitsName={settings?.booleanHabitsName ?? false} /> */}
+					<QuantifiableHabits data={dailyData?.quantifiableHabits || []} date={dateParam} />
+					<BooleanHabits data={dailyData?.booleanHabits || []} date={dateParam} booleanHabitsName={settings?.booleanHabitsName ?? false} />
 					{/* <DailyTasks tasks={tasks || []} onToggleTaskCompletion={toggleTaskCompletion} fetchDailyTasks={fetchDailyTasks} currentDate={currentDate} /> */}
 					{/* <MorningData data={dailyData} onUpdate={onUpdateDaySections}/> */}
 					{/* <EveningData data={dailyData} onUpdate={onUpdateDaySections}/> */}

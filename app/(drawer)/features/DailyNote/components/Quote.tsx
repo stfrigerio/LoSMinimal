@@ -88,7 +88,7 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
     };
 
     return (
-        <Pressable onPress={toggleExpanded}>
+        <Pressable onPress={toggleExpanded} style={{ marginTop: -30 }}>
             <Animated.View style={[styles.quoteContainer, { opacity: fadeAnim }]}>
                 <FlourishBorder 
                     color={themeColors.borderColor} 
@@ -101,7 +101,7 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
                         <Text style={styles.quoteAuthor}>- {quote.author}</Text>
                     </>
                 ) : (
-                    <Text style={styles.quoteAuthor}>- {quote.author}</Text>
+                    <Text style={[styles.quoteAuthor, { textAlign: 'center', marginRight: 0 }]}>- {quote.author}</Text>
                 )}
                 <View style={[styles.horizontalSeparator, { marginTop: 10}]} />
                 <FlourishBorder 
@@ -115,8 +115,6 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
 
 const getStyles = (theme: any) => StyleSheet.create({
     quoteContainer: {
-        padding: 20,
-        margin: 10,
         maxWidth: 600,
         alignSelf: 'center',
         backgroundColor: theme.backgroundColor,
@@ -126,8 +124,8 @@ const getStyles = (theme: any) => StyleSheet.create({
         textAlign: 'center',
         fontStyle: 'italic',
         color: theme.textColor,
-        marginBottom: 20,
-        fontSize: 14,
+        marginHorizontal: 50,
+        fontSize: 12,
         letterSpacing: 0.5,
         fontFamily: 'serif',
     },
@@ -135,14 +133,15 @@ const getStyles = (theme: any) => StyleSheet.create({
         textAlign: 'right',
         fontFamily: 'serif',
         fontSize: 12,
-        marginTop: 5,
+        marginTop: 10,
         color: theme.gray,
         fontWeight: '600',
         letterSpacing: 1,
+        marginRight: 60,
     },
     horizontalSeparator: {
         marginHorizontal: 50,
-        borderTopWidth: 2,
+        borderTopWidth: 1,
         borderColor: theme.borderColor,
     },
 });

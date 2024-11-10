@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
@@ -20,6 +20,7 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ name, value, colo
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
+            borderWidth: 1,
         },
         habitName: {
             flexGrow: 1,
@@ -37,20 +38,14 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ name, value, colo
             lineHeight: 24, // Align text vertically
         },
         button: {
-            marginLeft: 50, // Reduce the left margin for the button
-            padding: 8, // Adjust padding for touch area
+            padding: 8,
+            width: 40, // Fixed width for buttons
             justifyContent: 'center',
             alignItems: 'center',
         },
         buttonText: {
             color: theme.textColor,
-            fontSize: 20, 
-        },
-        incrementButton: {
-            marginLeft: 50, 
-        },
-        decrementButton: {
-            marginLeft: 30, 
+            fontSize: 20,
         },
     });
 
@@ -59,13 +54,13 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ name, value, colo
     return (
         <View style={styles.habit}>
             <Text style={styles.habitName}>{`${name}`}</Text>
-            <Text style={styles.habitValue}>{value}</Text>
-            <TouchableOpacity style={[styles.button, styles.incrementButton]} onPress={onIncrement}>
-                <Text style={styles.buttonText}>+</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.decrementButton]} onPress={onDecrement}>
+            <Pressable style={[styles.button]} onPress={onDecrement}>
                 <Text style={styles.buttonText}>-</Text>
-            </TouchableOpacity>
+            </Pressable>
+            <Text style={styles.habitValue}>{value}</Text>
+            <Pressable style={[styles.button]} onPress={onIncrement}>
+                <Text style={styles.buttonText}>+</Text>
+            </Pressable>
         </View>
     );
 }
