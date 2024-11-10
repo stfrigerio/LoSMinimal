@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { formatInTimeZone, toDate } from 'date-fns-tz';
 
 import { databaseManagers } from '@/database/tables';
@@ -8,143 +8,183 @@ import { UseDailyDataReturnType } from '@/app/(drawer)/features/DailyNote/types/
 import { BooleanHabitsData } from '@/src/types/BooleanHabits';
 import { QuantifiableHabitsData } from '@/src/types/QuantifiableHabits';
 
-export const useDailyData = (currentDate: Date, lastSubmissionTime: number): UseDailyDataReturnType => {
-  const [dailyData, setDailyData] = useState<DailyNoteData | null>(null);
+export const useDailyData = (
+	currentDate: Date,
+	lastSubmissionTime: number
+): UseDailyDataReturnType => {
+	const [dailyData, setDailyData] = useState<DailyNoteData | null>(null);
 
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const localDate = toDate(currentDate, { timeZone });
-  const dateStr = formatInTimeZone(localDate, timeZone, 'yyyy-MM-dd');
+	// Ref to prevent concurrent fetches
+	const isFetchingRef = useRef(false);
 
-  useEffect(() => {
-    fetchDailyNoteAndHabits();
-  }, [currentDate, lastSubmissionTime]);
+	// Memoize timeZone to ensure it doesn't change on every render
+	const timeZone = useMemo(
+		() => Intl.DateTimeFormat().resolvedOptions().timeZone,
+		[]
+	);
 
-  const fetchDailyNoteAndHabits = async () => {
-    try {
-      // Fetch user settings for boolean and quantifiable habits
-      const userSettingsBooleans = await databaseManagers.userSettings.getByType('booleanHabits');
-      const userSettingsQuantifiables = await databaseManagers.userSettings.getByType('quantifiableHabits');
-      
-      // Fetch or create daily note for the current date
-      let dailyNotes = await databaseManagers.dailyNotes.getByDate(dateStr);
-      let dailyNote: NoteData | null = dailyNotes[0] || null;
-      
-      if (!dailyNote) {
-        // Create a new daily note if it doesn't exist
-        dailyNote = await databaseManagers.dailyNotes.upsert({
-          date: dateStr,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          synced: 0
-        });
-      }
+	// Memoize localDate based on currentDate and timeZone
+	const localDate = useMemo(() => {
+		return toDate(currentDate, { timeZone });
+	}, [currentDate, timeZone]);
 
-      // Create boolean habits if they don't exist for the current date
-      const booleanPromises = userSettingsBooleans.map(async (setting) => {
-        const existingHabit = await databaseManagers.booleanHabits.getHabitByDateAndKey(dateStr, setting.settingKey);
-        if (!existingHabit) {
-          await databaseManagers.booleanHabits.upsert({ 
-            date: dateStr, 
-            habitKey: setting.settingKey, 
-            value: 0 
-          } as BooleanHabitsData);
-        }
-      });
+	// Memoize dateStr based on localDate and timeZone
+	const dateStr = useMemo(() => {
+		return formatInTimeZone(localDate, timeZone, 'yyyy-MM-dd');
+	}, [localDate, timeZone]);
 
-      // Create quantifiable habits if they don't exist for the current date
-      const quantifiablePromises = userSettingsQuantifiables.map(async (setting) => {
-        const existingHabit = await databaseManagers.quantifiableHabits.getHabitByDateAndKey(dateStr, setting.settingKey);
-        if (!existingHabit) {
-          await databaseManagers.quantifiableHabits.upsert({ 
-            date: dateStr, 
-            habitKey: setting.settingKey, 
-            value: 0 
-          } as QuantifiableHabitsData);
-        }
-      });
+  	// Fetch daily note and habits
+  	const fetchDailyNoteAndHabits = useCallback(async () => {
+		if (isFetchingRef.current) {
+		// Prevent overlapping fetches
+		return;
+		}
 
-      // Wait for all habit creation operations to complete
-      await Promise.all([...booleanPromises, ...quantifiablePromises]);
+		isFetchingRef.current = true;
 
-      // Fetch updated habits for the current date
-      const booleanHabits = await databaseManagers.booleanHabits.getByDate(dateStr);
-      const quantifiableHabits = await databaseManagers.quantifiableHabits.getByDate(dateStr);
+		try {
+			// Fetch user settings for boolean and quantifiable habits
+			const [userSettingsBooleans, userSettingsQuantifiables] =
+				await Promise.all([
+					databaseManagers.userSettings.getByType('booleanHabits'),
+					databaseManagers.userSettings.getByType('quantifiableHabits'),
+				]);
 
-      // Filter habits to only include those in current user settings
-      const filteredBooleanHabits = booleanHabits.filter(habit => 
-        userSettingsBooleans.some(setting => setting.settingKey === habit.habitKey)
-      );
-      const filteredQuantifiableHabits = quantifiableHabits.filter(habit => 
-        userSettingsQuantifiables.some(setting => setting.settingKey === habit.habitKey)
-      );
+			// Fetch or create daily note for the current date
+			let dailyNotes = await databaseManagers.dailyNotes.getByDate(dateStr);
+			let dailyNote: NoteData | null = dailyNotes[0] || null;
 
-      setDailyData({
-        ...dailyNote,
-        booleanHabits: filteredBooleanHabits,
-        quantifiableHabits: filteredQuantifiableHabits,
-      } as DailyNoteData);
+			if (!dailyNote) {
+				// Create a new daily note if it doesn't exist
+				dailyNote = await databaseManagers.dailyNotes.upsert({
+					date: dateStr,
+					createdAt: new Date().toISOString(),
+					updatedAt: new Date().toISOString(),
+					synced: 0,
+				});
+			}
 
-    } catch (error) {
-      console.error('Error in fetchDailyNoteAndHabits:', error);
-    }
-  };
+			// Create boolean habits if they don't exist for the current date
+			const booleanPromises = userSettingsBooleans.map(async (setting) => {
+				const existingHabit =
+				await databaseManagers.booleanHabits.getHabitByDateAndKey(
+					dateStr,
+					setting.settingKey
+				);
+				if (!existingHabit) {
+					await databaseManagers.booleanHabits.upsert({
+						date: dateStr,
+						habitKey: setting.settingKey,
+						value: 0,
+					} as BooleanHabitsData);
+				}
+			});
 
-  const onUpdateDaySections = async (updatedFields: Partial<NoteData>) => {
-    try {
-      let currentNotes = await databaseManagers.dailyNotes.getByDate(dateStr);
-      let currentNote: NoteData | null = currentNotes[0] || null;
-  
-      if (!currentNote) {
-        currentNote = {
-          date: dateStr,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          synced: 0,
-        };
-      }
-  
-      const newNoteData: NoteData = {
-        ...currentNote,
-        ...updatedFields,
-        updatedAt: new Date().toISOString(),
-      };
-        
-      await databaseManagers.dailyNotes.upsert(newNoteData);
-      setDailyData(prevData => ({ ...prevData, ...newNoteData } as DailyNoteData));
-  
-    } catch (error) {
-      console.error("Error updating note data:", error);
-    }
-  };
+			// Create quantifiable habits if they don't exist for the current date
+			const quantifiablePromises = userSettingsQuantifiables.map(async (setting) => {
+				const existingHabit =
+					await databaseManagers.quantifiableHabits.getHabitByDateAndKey(
+					dateStr,
+					setting.settingKey
+					);
+				if (!existingHabit) {
+					await databaseManagers.quantifiableHabits.upsert({
+						date: dateStr,
+						habitKey: setting.settingKey,
+						value: 0,
+					} as QuantifiableHabitsData);
+				}
+			});
 
-  // const fetchDailyTasks = async (date: Date) => {
-  //   try {
-  //     const todaysTasks = await databaseManagers.tasks.getTasksDueOnDate(date);
-  //     setTasks(todaysTasks);
-  //   } catch (error) {
-  //     console.error("Error fetching daily tasks:", error);
-  //   }
-  // };
+			// Wait for all habit creation operations to complete
+			await Promise.all([...booleanPromises, ...quantifiablePromises]);
 
-  // const toggleTaskCompletion = async (uuid: string, completed: boolean): Promise<void> => {
-  //   try {
-  //     const task = await databaseManagers.tasks.getByUuid(uuid);
-  //     if (!task) {
-  //       throw new Error('Task not found');
-  //     }
-  
-  //     const updatedTask: TaskData = {
-  //       ...task,
-  //       completed: completed,
-  //       updatedAt: new Date().toISOString(),
-  //       synced: 0,
-  //     };
-  //       await databaseManagers.tasks.upsert(updatedTask);
-  //   } catch (error) {
-  //     console.error('Error toggling task completion:', error);
-  //     throw error;
-  //   }
-  // };
+			// Fetch updated habits for the current date
+			const [booleanHabits, quantifiableHabits] = await Promise.all([
+				databaseManagers.booleanHabits.getByDate(dateStr),
+				databaseManagers.quantifiableHabits.getByDate(dateStr),
+			]);
 
-  return { dailyData, setDailyData, onUpdateDaySections };
+			// Filter habits to only include those in current user settings
+			const filteredBooleanHabits = booleanHabits.filter((habit) =>
+				userSettingsBooleans.some(
+					(setting) => setting.settingKey === habit.habitKey
+				)
+			);
+
+			const filteredQuantifiableHabits = quantifiableHabits.filter((habit) =>
+				userSettingsQuantifiables.some(
+					(setting) => setting.settingKey === habit.habitKey
+				)
+			);
+
+			// Prepare the new daily data
+			const newDailyData: DailyNoteData = {
+				...dailyNote,
+				booleanHabits: filteredBooleanHabits,
+				quantifiableHabits: filteredQuantifiableHabits,
+			};
+
+			// Update state only if data has changed to prevent unnecessary re-renders
+			setDailyData((prevData) => {
+				if (JSON.stringify(prevData) !== JSON.stringify(newDailyData)) {
+					return newDailyData;
+				}
+				return prevData;
+			});
+		} catch (error) {
+			console.error('Error in fetchDailyNoteAndHabits:', error);
+		} finally {
+			isFetchingRef.current = false;
+		}
+	}, [dateStr]);
+
+	// Update day sections
+  	const onUpdateDaySections = useCallback(
+    	async (updatedFields: Partial<NoteData>) => {
+			if (isFetchingRef.current) {
+				// Prevent updates while fetching is in progress
+				return;
+			}
+
+      		isFetchingRef.current = true;
+
+			try {
+				const currentNotes = await databaseManagers.dailyNotes.getByDate(dateStr);
+				let currentNote: NoteData | null = currentNotes[0] || null;
+
+				if (!currentNote) {
+					currentNote = {
+						date: dateStr,
+						createdAt: new Date().toISOString(),
+						updatedAt: new Date().toISOString(),
+						synced: 0,
+					};
+				}
+
+				const newNoteData: NoteData = {
+					...currentNote,
+					...updatedFields,
+					updatedAt: new Date().toISOString(),
+				};
+
+				await databaseManagers.dailyNotes.upsert(newNoteData);
+
+				// After updating, fetch the latest data to ensure consistency
+				await fetchDailyNoteAndHabits();
+			} catch (error) {
+				console.error('Error updating note data:', error);
+			} finally {
+				isFetchingRef.current = false;
+			}
+		},
+		[dateStr, fetchDailyNoteAndHabits]
+	);
+
+	// Effect to fetch data when dateStr or lastSubmissionTime changes
+	useEffect(() => {
+		fetchDailyNoteAndHabits();
+	}, [fetchDailyNoteAndHabits, lastSubmissionTime]);
+
+  	return { dailyData, setDailyData, onUpdateDaySections };
 };

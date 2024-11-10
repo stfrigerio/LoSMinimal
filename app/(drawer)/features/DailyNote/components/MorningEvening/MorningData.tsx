@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Pressable, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 
-import { getStyles } from './style';
+import createTimePicker from '@/app/components/DateTimePicker';
+import EnergyButtons from './components/EnergyButtons';
+
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { DailyNoteData } from '@/src/types/DailyNote';
-
-import createTimePicker from '@/app/components/DateTimePicker';
 
 type MorningDataProps = {
     data?: DailyNoteData | null;
@@ -20,17 +21,8 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
         energy: data?.energy || 0,
     };
     const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(theme);
+    const styles = getStyles(themeColors);
     const [morningData, setMorningData] = useState(initialData);
-
-
-    useEffect(() => {
-        setMorningData({
-            morningComment: data?.morningComment || '',
-            wakeHour: data?.wakeHour || '',
-            energy: data?.energy || 0,
-        });
-    }, [data]);
 
     const handleInputChange = (field: keyof typeof initialData, value: string | number) => {
         const updatedData = { ...morningData, [field]: value };
@@ -39,10 +31,6 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
     };
 
     const { showPicker, picker } = createTimePicker();
-    
-    const red = themeColors.red;
-    const yellow = themeColors.yellow;
-    const green = themeColors.green;
 
     const handleWakeHourChange = (date: Date | undefined) => {
         if (date) {
@@ -68,46 +56,49 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
     const getWakeHourColor = (wakeHour: string): string => {
         const [hours, minutes] = wakeHour.split(':').map(Number);
         const decimalHour = hours + minutes / 60;
-        if (decimalHour < 9.5) return green;
-        if (decimalHour <= 11) return yellow;
-        return red;
-    };
-
-    const getEnergyColor = (energy: number): string => {
-        if (energy <= 4) return red;
-        if (energy <= 7) return yellow;
-        return green;
+        if (decimalHour < 9.5) return themeColors.greenOpacity;
+        if (decimalHour <= 11) return themeColors.yellowOpacity;
+        return themeColors.redOpacity;
     };
 
     return (
-        <View style={styles.MorningContainer}>
+        <View style={styles.morningContainer}>
+            <Text style={styles.sectionTitle}>Morning Check-in</Text>
+            
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Morning Comment: </Text>
+                {/* <Text style={styles.label}>💬 How are you feeling?</Text> */}
                 <TextInput
                     style={styles.input}
                     value={morningData.morningComment}
                     onChangeText={(value) => handleInputChange('morningComment', value)}
+                    placeholder="Share your morning thoughts..."
+                    placeholderTextColor={themeColors.gray}
+                    multiline
+                    numberOfLines={1}
                 />
             </View>
+
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Energy Level: </Text>
-                <TextInput
-                    style={[styles.input, { color: getEnergyColor(morningData.energy) }]}
-                    value={morningData.energy.toString()}
-                    keyboardType="numeric"
-                    onChangeText={(value) => handleInputChange('energy', Number(value))}
+                {/* <Text style={styles.label}>🔋 Energy Level (0-10)</Text> */}
+                <EnergyButtons 
+                    selectedValue={morningData.energy} 
+                    onChange={(value) => handleInputChange('energy', value)} 
                 />
             </View>
+
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Wake Hour: </Text>
+                {/* <Text style={styles.label}>🌞 Wake-up Time</Text> */}
                 <Pressable style={styles.timeInputWrapper} onPress={showWakeHourPicker}>
-                    <TextInput
-                        style={[styles.input, { color: getWakeHourColor(morningData.wakeHour) }]}
-                        value={morningData.wakeHour}
-                        editable={false}
-                        placeholder="Tap to set time"
-                        placeholderTextColor={themeColors.gray}
-                    />
+                    <View style={[styles.input, styles.timeInput]}>
+                        <Text style={{ color: morningData.wakeHour ? getWakeHourColor(morningData.wakeHour) : themeColors.gray }}>
+                            {morningData.wakeHour || 'Set time'}
+                        </Text>
+                        <MaterialCommunityIcons 
+                            name="clock-outline" 
+                            size={20} 
+                            color={themeColors.opaqueTextColor} 
+                        />
+                    </View>
                 </Pressable>
             </View>
             {picker}
@@ -116,3 +107,51 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
 };
 
 export default MorningData;
+
+const getStyles = (themeColors: any) => StyleSheet.create({
+    morningContainer: {
+        padding: 20,
+        backgroundColor: themeColors.backgroundColor,
+        borderRadius: 16,
+        marginVertical: 10,
+        // shadowColor: themeColors.shadowColor,
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 8,
+        // elevation: 3,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: themeColors.textColor,
+        marginBottom: 15,
+        alignSelf: 'center',
+    },
+    inputGroup: {
+        marginBottom: 15,
+    },
+    label: {
+        fontSize: 14,
+        color: themeColors.opaqueTextColor,
+        marginBottom: 8,
+        fontWeight: '500',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: themeColors.borderColor,
+        borderRadius: 10,
+        padding: 10,
+        color: themeColors.textColor,
+        backgroundColor: themeColors.backgroundSecondary,
+        fontSize: 16,
+    },
+    timeInputWrapper: {
+        position: 'relative',
+    },
+    timeInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: 10,
+    },
+});

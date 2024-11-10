@@ -15,11 +15,14 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+
 import {
     getImageUrisForDate,
     addImageUri,
     removeImageUri,
 } from '@/src/Images/ImageFileManager';
+
+import AlertModal from '@/app/components/modals/AlertModal';
 
 interface ImagePickerComponentProps {
     date: string; // Date in 'YYYY-MM-DD' format
@@ -29,8 +32,20 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
     const [images, setImages] = useState<string[]>([]);
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [alertConfig, setAlertConfig] = useState<{
+        visible: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+    }>({
+        visible: false,
+        title: '',
+        message: '',
+        onConfirm: () => {},
+    });
 
     const { designs, themeColors } = useThemeStyles();
+    const styles = getStyles(themeColors);
 
     useEffect(() => {
         // Load images for the given date when the component mounts or date changes
@@ -44,31 +59,37 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
     // Request permissions for camera and media library
     const requestPermissions = async (): Promise<boolean> => {
         try {
-            // Request camera permissions
             const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
             if (cameraStatus.status !== 'granted') {
-                Alert.alert(
-                    'Permission Denied',
-                    'Camera permissions are required to capture images.'
-                );
+                setAlertConfig({
+                    visible: true,
+                    title: 'Permission Denied',
+                    message: 'Camera permissions are required to capture images.',
+                    onConfirm: () => setAlertConfig(prev => ({ ...prev, visible: false })),
+                });
                 return false;
             }
 
-            // Request media library permissions
-            const mediaLibraryStatus =
-                await ImagePicker.requestMediaLibraryPermissionsAsync();
+            const mediaLibraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (mediaLibraryStatus.status !== 'granted') {
-                Alert.alert(
-                    'Permission Denied',
-                    'Media library permissions are required to select images.'
-                );
+                setAlertConfig({
+                    visible: true,
+                    title: 'Permission Denied',
+                    message: 'Media library permissions are required to select images.',
+                    onConfirm: () => setAlertConfig(prev => ({ ...prev, visible: false })),
+                });
                 return false;
             }
 
             return true;
         } catch (error) {
             console.error('Error requesting permissions:', error);
-            Alert.alert('Error', 'An error occurred while requesting permissions.');
+            setAlertConfig({
+                visible: true,
+                title: 'Error',
+                message: 'An error occurred while requesting permissions.',
+                onConfirm: () => setAlertConfig(prev => ({ ...prev, visible: false })),
+            });
             return false;
         }
     };
@@ -81,8 +102,8 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
         try {
             const result = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true, // Allows user to edit the image (crop, etc.)
-                quality: 0.7, // Adjust image quality as needed
+                allowsEditing: true,
+                quality: 0.7,
             });
 
             if (!result.canceled) {
@@ -92,7 +113,12 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
             }
         } catch (error) {
             console.error('Error capturing image:', error);
-            Alert.alert('Error', 'Failed to capture image. Please try again.');
+            setAlertConfig({
+                visible: true,
+                title: 'Error',
+                message: 'Failed to capture image. Please try again.',
+                onConfirm: () => setAlertConfig(prev => ({ ...prev, visible: false })),
+            });
         }
     };
 
@@ -115,30 +141,27 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
             }
         } catch (error) {
             console.error('Error selecting image:', error);
-            Alert.alert('Error', 'Failed to select image. Please try again.');
+            setAlertConfig({
+                visible: true,
+                title: 'Error',
+                message: 'Failed to select image. Please try again.',
+                onConfirm: () => setAlertConfig(prev => ({ ...prev, visible: false })),
+            });
         }
     };
 
     // Handle image deletion
     const handleDeleteImage = async (index: number) => {
-        Alert.alert(
-            'Delete Image',
-            'Are you sure you want to delete this image?',
-            [
-                {
-                    text: 'Cancel',
-                    style: 'cancel',
-                },
-                {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: async () => {
-                        await removeImageUri(date, index);
-                        setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-                    },
-                },
-            ]
-        );
+        setAlertConfig({
+            visible: true,
+            title: 'Delete Image',
+            message: 'Are you sure you want to delete this image?',
+            onConfirm: async () => {
+                await removeImageUri(date, index);
+                setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+                setAlertConfig(prev => ({ ...prev, visible: false }));
+            },
+        });
     };
 
     // Handle image preview
@@ -155,35 +178,55 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
 
     return (
         <View style={styles.container}>
-            <Text style={designs.text.title}>Daily Pics 📸</Text>
+            <Text style={[designs.text.subtitle, styles.title]}>Daily Pics 📸</Text>
             
             {/* Buttons for capturing and selecting images */}
             <View style={styles.buttonContainer}>
-                <Pressable style={[designs.button.primaryButton]} onPress={handleCaptureImage}>
-                    <Text style={designs.text.text}>Capture Image</Text>
+                <Pressable 
+                    style={[styles.button]} 
+                    onPress={handleCaptureImage}
+                >
+                    <MaterialIcons name="camera-alt" size={24} color={themeColors.opaqueTextColor} />
+                    <Text style={[designs.text.text, styles.buttonText]}>
+                        Take Photo
+                    </Text>
                 </Pressable>
-                <Pressable style={[designs.button.primaryButton]} onPress={handleSelectImage}>
-                    <Text style={designs.text.text}>Select from Gallery</Text>
+                <Pressable 
+                    style={[styles.button]} 
+                    onPress={handleSelectImage}
+                >
+                    <MaterialIcons name="photo-library" size={24} color={themeColors.opaqueTextColor} />
+                    <Text style={[designs.text.text, styles.buttonText]}>
+                        Gallery
+                    </Text>
                 </Pressable>
             </View>
-
+    
             {/* Display selected images */}
-            <ScrollView horizontal style={styles.imageScroll}>
+            <ScrollView 
+                horizontal 
+                style={styles.imageScroll}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.imageScrollContent}
+            >
                 {images.map((uri, index) => (
                     <View key={index} style={styles.imageWrapper}>
-                        <Pressable onPress={() => handlePreviewImage(uri)}>
+                        <Pressable 
+                            onPress={() => handlePreviewImage(uri)}
+                            style={styles.imagePressable}
+                        >
                             <Image source={{ uri }} style={styles.imageThumbnail} />
                         </Pressable>
                         <Pressable
                             style={styles.deleteIcon}
                             onPress={() => handleDeleteImage(index)}
                         >
-                            <MaterialIcons name="close" size={20} color="#fff" />
+                            <MaterialIcons name="close" size={18} color="#fff" />
                         </Pressable>
                     </View>
                 ))}
             </ScrollView>
-
+    
             {/* Modal for image preview */}
             {selectedImage && (
                 <Modal
@@ -193,9 +236,25 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
                     onRequestClose={closeModal}
                 >
                     <Pressable style={styles.modalContainer} onPress={closeModal}>
-                        <Image source={{ uri: selectedImage }} style={styles.fullImage} />
+                        <View style={styles.modalImageContainer}>
+                            <Image source={{ uri: selectedImage }} style={styles.fullImage} />
+                            <Pressable style={styles.modalCloseButton} onPress={closeModal}>
+                                <MaterialIcons name="close" size={24} color="#fff" />
+                            </Pressable>
+                        </View>
                     </Pressable>
                 </Modal>
+            )}
+
+            {alertConfig.visible && (
+                <AlertModal
+                    isVisible={alertConfig.visible}
+                    title={alertConfig.title}
+                    message={alertConfig.message}
+                    onConfirm={alertConfig.onConfirm}
+                    onCancel={() => setAlertConfig(prev => ({ ...prev, visible: false }))}
+                    singleButton={alertConfig.title !== 'Delete Image'} // Only show both buttons for delete confirmation
+                />
             )}
         </View>
     );
@@ -203,50 +262,111 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
 
 export default ImagePickerComponent;
 
-// Styles
-const { width } = Dimensions.get('window');
-const isSmallDevice = width < 375;
-
-const styles = StyleSheet.create({
+const getStyles = (themeColors: any) => StyleSheet.create({
     container: {
         marginVertical: 20,
+        backgroundColor: themeColors.backgroundColor,
+        borderRadius: 16,
+        padding: 20,
+        // shadowColor: themeColors.shadowColor,
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 8,
+        // elevation: 3,
+    },
+    title: {
+        marginBottom: 16,
+        textAlign: 'center',
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginHorizontal: 10
+        gap: 12,
+        marginBottom: 20,
+    },
+    button: {
+        flex: 1,
+        padding: 12,
+        backgroundColor: themeColors.backgroundSecondary,
+        borderWidth: 1,
+        borderColor: themeColors.borderColor,
+        borderRadius: 12,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 8,
+    },
+    buttonText: {
+        color: themeColors.opaqueTextColor,
+        textAlign: 'center',
+        fontSize: 15,
+        fontWeight: '500',
     },
     imageScroll: {
-        marginTop: 10,
+        marginTop: 4,
+        marginHorizontal: -16,
+        paddingHorizontal: 16,
+    },
+    imageScrollContent: {
+        paddingRight: 40, // Shows partial next image
+        gap: 12,
     },
     imageWrapper: {
         position: 'relative',
-        marginRight: 10,
+    },
+    imagePressable: {
+        borderRadius: 12,
+        overflow: 'hidden',
+        shadowColor: themeColors.shadowColor,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     imageThumbnail: {
-        width: 100,
-        height: 100,
-        borderRadius: 8,
+        width: 120,
+        height: 120,
+        borderRadius: 12,
         resizeMode: 'cover',
     },
     deleteIcon: {
         position: 'absolute',
-        top: 5,
-        right: 5,
+        top: 8,
+        right: 8,
         backgroundColor: 'rgba(0,0,0,0.6)',
-        borderRadius: 12,
-        padding: 2,
+        borderRadius: 14,
+        width: 28,
+        height: 28,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     modalContainer: {
         flex: 1,
         backgroundColor: 'rgba(0,0,0,0.9)',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 20,
+    },
+    modalImageContainer: {
+        width: '100%',
+        height: '80%',
+        position: 'relative',
     },
     fullImage: {
-        width: '90%',
-        height: '70%',
+        width: '100%',
+        height: '100%',
         resizeMode: 'contain',
-        borderRadius: 10,
+        borderRadius: 16,
+    },
+    modalCloseButton: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        borderRadius: 20,
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });

@@ -11,7 +11,6 @@ import {
 	MorningData,
 	EveningData,
 	DateHeader,
-	DailyTasks
 } from './components'
 
 import TimeBox from '@/app/components/TimeBox';
@@ -26,12 +25,6 @@ import { useNavigationComponents } from '@/app/(drawer)/features/LeftPanel/helpe
 import ColorfulTimeline from '@/app/(drawer)/features/DailyNote/components/ColorfulTimeline';
 import { useDailyData } from '@/app/(drawer)/features/DailyNote/helpers/useDailyData';
 import { useDailySettings } from '@/app/(drawer)/features/DailyNote/helpers/useDailySettings';
-import { useTasksData } from '@/app/(drawer)/features/Tasks/hooks/useTasksData';
-
-// Types
-import { UseDailyDataType } from './types/DailyData';
-import  { UseTaskDataType } from '@/app/(drawer)/features/Tasks/hooks/useTasksData';
-import { TaskData } from '@/src/types/Task';
 
 const DailyNote = () => {
     const params = useGlobalSearchParams();
@@ -42,23 +35,12 @@ const DailyNote = () => {
 	const timeZone = getLocalTimeZone();
     const title = format(dateParam, 'EEEE, dd MMMM');
 	const [lastSubmissionTime, setLastSubmissionTime] = useState(Date.now());
-	const [tasks, setTasks] = useState<TaskData[]>([]);
 
 	const { dailyData, onUpdateDaySections } = useDailyData(new Date(dateParam), lastSubmissionTime);
-	const { toggleTaskCompletion, getTasksDueOnDate: fetchDailyTasks } = useTasksData();
 	const [ settings ] = useDailySettings();
 
 	const { themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
-
-	useEffect(() => {
-		const fetchTasks = async () => {
-			const dailyTasks = await fetchDailyTasks(new Date(dateParam));
-			setTasks(dailyTasks);
-		};
-
-		fetchTasks();
-	}, [dateParam]);
 
     const handleNavigatePeriod = (direction: 'previous' | 'next' | 'current') => {
         let newDate;
@@ -96,7 +78,6 @@ const DailyNote = () => {
 					)}
 					<QuantifiableHabits data={dailyData?.quantifiableHabits || []} date={dateParam} quantifiableHabitsName={settings?.quantifiableHabitsName ?? false} />
 					<BooleanHabits data={dailyData?.booleanHabits || []} date={dateParam} booleanHabitsName={settings?.booleanHabitsName ?? false} />
-					<DailyTasks tasks={tasks || []} onToggleTaskCompletion={toggleTaskCompletion} fetchDailyTasks={fetchDailyTasks} currentDate={new Date(dateParam)} />
 					<MorningData data={dailyData} onUpdate={onUpdateDaySections}/>
 					<EveningData data={dailyData} onUpdate={onUpdateDaySections}/>
 					<ImagePickerComponent date={dateParam} />

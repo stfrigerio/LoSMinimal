@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Platform, Text } from 'react-native';
-import Habit from './Habit';
+import { View, StyleSheet, Text } from 'react-native';
+import Habit from './BooleanHabit';
 import { capitalize } from '@/src/utils/textManipulations';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
@@ -57,7 +57,15 @@ const getStyles = (theme: any) => StyleSheet.create({
     BooleanHabitsContainer: {
         flex: 1,
         marginTop: 10,
-        padding: 15,
+        padding: 10,
+        backgroundColor: theme.backgroundColor,
+        borderRadius: 16,
+        marginVertical: 10,
+        // shadowColor: theme.shadowColor,
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 8,
+        // elevation: 3,
     },
     separator: {
         height: 1,

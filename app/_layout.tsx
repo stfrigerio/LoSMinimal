@@ -24,7 +24,7 @@ function DrawerNavigator() {
 			screenOptions={{
 				drawerType: 'front',
 				swipeEnabled: isRightDrawerSwipeEnabled,
-				swipeEdgeWidth: 100,
+				swipeEdgeWidth: 50,
 				drawerStyle: {
 					width: 300,
 					backgroundColor: 'transparent',

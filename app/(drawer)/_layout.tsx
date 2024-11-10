@@ -12,14 +12,15 @@ export default function DrawerLayout() {
 			screenOptions={{
 				drawerType: 'front',
 				swipeEnabled: isLeftDrawerSwipeEnabled,
-				swipeEdgeWidth: 100,
+				swipeEdgeWidth: 50,
 				drawerStyle: {
 					width: 300,
 					backgroundColor: 'transparent',
 				},
 				headerShown: false,
-				drawerPosition: 'left'
+				drawerPosition: 'left',
 			}}
+			id="root-drawer"
 		>
             <Drawer.Screen 
                 name="features/Home/Homepage" 
@@ -31,7 +32,7 @@ export default function DrawerLayout() {
                 name="features/DailyNote/DailyNote" 
                 options={{
                     drawerLabel: "Daily Note",
-					unmountOnBlur: true
+					unmountOnBlur: true,
                 }} 
             />
             <Drawer.Screen 

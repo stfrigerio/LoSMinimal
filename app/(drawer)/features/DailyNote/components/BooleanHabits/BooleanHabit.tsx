@@ -32,11 +32,13 @@ const getStyles = (theme: any, value: boolean) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between', 
-        marginBottom: 2,
     },
     habitNameContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        flexGrow: 1,
+        marginLeft: 25,
+        flexShrink: 1,
     },
     habitName: {
         marginRight: 10, 

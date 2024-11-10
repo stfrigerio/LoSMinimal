@@ -76,6 +76,14 @@ const getStyles = (theme: any) => StyleSheet.create({
     QuantifiableHabitsContainer: {
         flex: 1,
         marginTop: 10,
-        padding: 15,
+        padding: 10,
+        backgroundColor: theme.backgroundColor,
+        borderRadius: 16,
+        marginVertical: 10,
+        // shadowColor: theme.shadowColor,
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 8,
+        // elevation: 3,
     },
 });

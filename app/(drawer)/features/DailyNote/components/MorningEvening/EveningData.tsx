@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Pressable, Platform } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 
 import createTimePicker from '@/app/components/DateTimePicker';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { getStyles } from './style';
 import { DailyNoteData } from '@/src/types/DailyNote';
+import EnergyButtons from './components/EnergyButtons';
 
 type EveningDataProps = {
     data?: DailyNoteData | null;
@@ -21,7 +22,7 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
         sleepTime: data?.sleepTime || '',
     };
     const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(theme);
+    const styles = getStyles(themeColors);
     const [eveningData, setEveningData] = useState(initialData);
 
     useEffect(() => {
@@ -62,68 +63,70 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
         }, handleSleepTimeChange);
     };
 
-    const red = themeColors.red;
-    const yellow = themeColors.yellow;
-    const green = themeColors.green;
-
-    const getDayRatingColor = (rating: number): string => {
-        if (rating <= 4) return red;
-        if (rating <= 7) return yellow;
-        return green;
-    };
-
     const getSleepTimeColor = (bedTime: string | null): string => {
         const time = parseFloat(bedTime || '0');
     
         if ((time >= 23 && time <= 24) || (time >= 0 && time < 1)) {
-            return green;
+            return themeColors.greenOpacity;
         } else if (time >= 1 && time < 5) {
-            return yellow;
+            return themeColors.yellowOpacity;
         } else {
-            return red;
+            return themeColors.redOpacity;
         }
     };
 
     return (
-        <View style={styles.EveningContainer}>
+        <View style={styles.eveningContainer}>
+            <Text style={styles.sectionTitle}>Evening Check-in</Text>
+            
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Success: </Text>
+                {/* <Text style={styles.label}>🏆 What went well today?</Text> */}
                 <TextInput
                     style={styles.input}
                     value={eveningData.success}
                     onChangeText={(value) => handleInputChange('success', value)}
+                    placeholder="Share your successes..."
+                    placeholderTextColor={themeColors.gray}
+                    multiline
+                    numberOfLines={1}
                 />
             </View>
+
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Be Better: </Text>
+                {/* <Text style={styles.label}>🛠️ What could be improved?</Text> */}
                 <TextInput
                     style={styles.input}
                     value={eveningData.beBetter}
                     onChangeText={(value) => handleInputChange('beBetter', value)}
+                    placeholder="Areas for improvement..."
+                    placeholderTextColor={themeColors.gray}
+                    multiline
+                    numberOfLines={1}
                 />
             </View>
+
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Day Rating: </Text>
-                <TextInput
-                    style={[styles.input, { color: getDayRatingColor(eveningData.dayRating) }]}
-                    value={eveningData.dayRating.toString()}
-                    keyboardType="numeric"
-                    onChangeText={(value) => handleInputChange('dayRating', Number(value))}
+                {/* <Text style={styles.label}>🌟 Day Rating (0-10)</Text> */}
+                <EnergyButtons 
+                    selectedValue={eveningData.dayRating} 
+                    onChange={(value) => handleInputChange('dayRating', value)} 
                 />
             </View>
+
             <View style={styles.inputGroup}>
-                <Text style={styles.label}>Sleep Time: </Text>
-                <View style={styles.timeInputContainer}>
-                    <Pressable style={styles.timeInputWrapper} onPress={showSleepTimePicker}>
-                        <TextInput
-                            style={[styles.input, { color: getSleepTimeColor(eveningData.sleepTime) }]}
-                            value={eveningData.sleepTime}
-                            editable={false}
-                            placeholder="Tap to set time"
-                            placeholderTextColor={themeColors.gray}
+                {/* <Text style={styles.label}>🛏️ Bedtime</Text> */}
+                <Pressable style={styles.timeInputWrapper} onPress={showSleepTimePicker}>
+                    <View style={[styles.input, styles.timeInput]}>
+                        <Text style={{ color: eveningData.sleepTime ? getSleepTimeColor(eveningData.sleepTime) : themeColors.opaqueTextColor }}>
+                            {eveningData.sleepTime || 'Set time'}
+                        </Text>
+                        <MaterialCommunityIcons 
+                            name="clock-outline" 
+                            size={20} 
+                            color={themeColors.opaqueTextColor} 
                         />
-                    </Pressable>
-                </View>
+                    </View>
+                </Pressable>
             </View>
             {picker}
         </View>
@@ -131,3 +134,51 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
 };
 
 export default EveningData;
+
+const getStyles = (themeColors: any) => StyleSheet.create({
+    eveningContainer: {
+        padding: 20,
+        backgroundColor: themeColors.backgroundColor,
+        borderRadius: 16,
+        marginVertical: 10,
+        // shadowColor: themeColors.shadowColor,
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.1,
+        // shadowRadius: 8,
+        // elevation: 3,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: themeColors.textColor,
+        marginBottom: 15,
+        alignSelf: 'center',
+    },
+    inputGroup: {
+        marginBottom: 15,
+    },
+    label: {
+        fontSize: 14,
+        color: themeColors.opaqueTextColor,
+        marginBottom: 8,
+        fontWeight: '500',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: themeColors.borderColor,
+        borderRadius: 10,
+        padding: 10,
+        color: themeColors.textColor,
+        backgroundColor: themeColors.backgroundSecondary,
+        fontSize: 16,
+    },
+    timeInputWrapper: {
+        position: 'relative',
+    },
+    timeInput: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingRight: 10,
+    },
+});

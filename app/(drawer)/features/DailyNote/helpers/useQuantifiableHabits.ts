@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import * as Notifications from 'expo-notifications';
 
 import { databaseManagers } from '@/database/tables';
@@ -8,15 +8,24 @@ import { capitalize } from '@/src/utils/textManipulations';
 import { QuantifiableHabitsData } from '@/src/types/QuantifiableHabits';
 
 export const useQuantifiableHabits: UseQuantifiableHabitsType = (data: any, date: any): UseQuantifiableHabitsReturnType => {
-	const [habits, setHabits] = useState<{ [key: string]: { value: number; uuid: string } }>({});
+	const [optimisticUpdates, setOptimisticUpdates] = useState<{ [key: string]: number }>({});
 	const [emojis, setEmojis] = useState<{ [key: string]: string }>({});
 
-	useEffect(() => {
-		const initialHabits = Object.fromEntries(
+	// Convert data into habits object, incorporating any optimistic updates
+	const habits = useMemo(() => {
+		const baseHabits = Object.fromEntries(
 			data.map((item: any) => [item.habitKey, { value: item.value, uuid: item.uuid || '' }])
 		);
-		setHabits(initialHabits);
-	}, [data]);
+
+		// Apply any optimistic updates
+		return Object.entries(baseHabits).reduce((acc, [key, habit]) => {
+			acc[key] = {
+				...habit,
+				value: optimisticUpdates[key] ?? habit.value
+			};
+			return acc;
+		}, {} as { [key: string]: { value: number; uuid: string } });
+	}, [data, optimisticUpdates]);
 
 	useEffect(() => {
 		const fetchEmojis = async () => {
@@ -54,27 +63,29 @@ export const useQuantifiableHabits: UseQuantifiableHabitsType = (data: any, date
 		const key = habitKey as keyof typeof habitThresholds;
 		const currentValue = habits[key]?.value ?? 0;
 		const newValue = currentValue + 1;
-
-		setHabits(prev => ({ ...prev, [key]: { ...prev[key], value: newValue } }));
-
+	
+		// Set optimistic update
+		setOptimisticUpdates(prev => ({ ...prev, [key]: newValue }));
+	
 		if (habitThresholds[key] && newValue >= habitThresholds[key].red) {
-			const habitForReminder = emojis[key] || capitalize(key);
-			scheduleMindfulReminder(habitForReminder);
+		  const habitForReminder = emojis[key] || capitalize(key);
+		  scheduleMindfulReminder(habitForReminder);
 		}
-
+	
 		await updateDatabaseAndPropagate(uuid, key, newValue);
 	};
-
+	
 	const handleDecrement = async (uuid: string, habitKey: string) => {
 		const key = habitKey as keyof typeof habitThresholds;
 		const currentValue = habits[key]?.value ?? 0;
 		const newValue = Math.max(0, currentValue - 1);
-
-		setHabits(prev => ({ ...prev, [key]: { ...prev[key], value: newValue } }));
-
+	
+		// Set optimistic update
+		setOptimisticUpdates(prev => ({ ...prev, [key]: newValue }));
+	
 		await updateDatabaseAndPropagate(uuid, key, newValue);
 	};
-
+	
 	const updateDatabaseAndPropagate = async (uuid: string, habitKey: string, newValue: number) => {
 		habitKey = capitalize(habitKey);
 		await databaseManagers.quantifiableHabits.upsert({

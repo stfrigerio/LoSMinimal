@@ -6,8 +6,6 @@ import { useNavigation } from 'expo-router';
 import { formatDate, parseDate, startOfPeriod, getLocalTimeZone } from '@/src/utils/timezoneBullshit';
 import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
-// useHomepageSettings = require('@los/mobile/src/components/UserSettings/hooks/useSettings').useSettings;
-
 export type NotePeriod = 'day' | 'week' | 'lastWeek' | 'month' | 'quarter' | 'year' | 'allYears';
 
 export interface HomepageSettings {
