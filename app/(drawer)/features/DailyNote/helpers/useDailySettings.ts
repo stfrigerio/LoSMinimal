@@ -4,6 +4,7 @@ import { UserSettingData } from '@/src/types/UserSettings';
 
 export interface DailyNoteSettings {
     booleanHabitsName: boolean;
+    quantifiableHabitsName: boolean;
     hideQuote: boolean;
     quoteCollapse: boolean;
     fixedQuote: boolean;
@@ -26,6 +27,7 @@ export const useDailySettings = (): [DailyNoteSettings | null, boolean, Error | 
 
                 setSettings({
                     booleanHabitsName: settingsMap.BooleanHabitsName?.value === 'true',
+                    quantifiableHabitsName: settingsMap.QuantifiableHabitsName?.value === 'true',
                     hideQuote: settingsMap.HideQuote?.value === 'true',
                     quoteCollapse: settingsMap.QuoteCollapse?.value === 'true',
                     fixedQuote: settingsMap.FixedQuote?.value === 'true',

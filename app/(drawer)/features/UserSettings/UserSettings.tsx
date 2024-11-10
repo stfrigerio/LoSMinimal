@@ -21,7 +21,6 @@ const UserSettings: React.FC = () => {
 		'General Settings', 
 		'Notifications', 
 		'Daily Settings', 
-		'Library Settings'
 	];
 
 	const renderContent = () => {

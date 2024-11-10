@@ -117,11 +117,11 @@ const DailyNoteSettings: React.FC = () => {
                 contentContainerStyle={styles.scrollViewContent}
                 showsVerticalScrollIndicator={false}
             >
+                {renderSectionHeader('Daily Note Settings', SECTION_TYPES.DAILY_NOTE)}
+                <Text style={[styles.explainerText, { marginBottom: 15, marginHorizontal: 20 }]}>
+                    Customize the appearance and behavior of your daily note.
+                </Text>
                 <View style={styles.sectionContainer}>
-                    {renderSectionHeader('Daily Note Settings', SECTION_TYPES.DAILY_NOTE)}
-                    <Text style={styles.explainerText}>
-                        Customize the appearance and behavior of your daily note.
-                    </Text>
                     <View style={styles.settingsGroup}>
                         <AppSettingRow
                             settingKey="QuoteCollapse"
@@ -147,6 +147,13 @@ const DailyNoteSettings: React.FC = () => {
                         <AppSettingRow
                             settingKey="BooleanHabitsName"
                             label="Toggle Boolean Habits Name"
+                            type="appSettings"
+                            settings={settings}
+                            updateSetting={updateSetting}
+                        />
+                        <AppSettingRow
+                            settingKey="QuantifiableHabitsName"
+                            label="Toggle Quantifiable Habits Name"
                             type="appSettings"
                             settings={settings}
                             updateSetting={updateSetting}

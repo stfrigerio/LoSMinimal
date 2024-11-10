@@ -1,3 +1,4 @@
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 export const habitThresholds = {
     Cigarettes: { green: 0, yellow: 4, red: 6 },
@@ -19,7 +20,7 @@ export const getColorForValue = (
     red: string,
     yellow: string,
     green: string,
-    defaultColor: string = 'rgba(255, 255, 255, 1)'
+    defaultColor: string,
 ): string => {
     if (typeof value !== 'number' || isNaN(value)) {
         return defaultColor;
@@ -38,10 +39,10 @@ export const getColorForValue = (
             color = red;
         } else if (value >= thresholds.yellow) {
             const ratio = (value - thresholds.yellow) / (thresholds.red - thresholds.yellow);
-            color = interpolateColor(yellow, red, ratio, opacity);
+            color = interpolateColor(yellow, red, ratio, opacity, defaultColor);
         } else {
             const ratio = value / thresholds.yellow;
-            color = interpolateColor(green, yellow, ratio, opacity);
+            color = interpolateColor(green, yellow, ratio, opacity, defaultColor);
         }
 
         // Validate the resulting color
@@ -57,7 +58,8 @@ export const getColorForValue = (
 };
 
 // Modify the interpolateColor function to handle potential errors
-export const interpolateColor = (color1: string, color2: string, ratio: number, opacity: number = 1): string => {
+export const interpolateColor = (color1: string, color2: string, ratio: number, opacity: number = 1, defaultColor: string): string => {
+
     try {
         const clamp = (num: number, min: number, max: number) => Math.min(Math.max(num, min), max);
         const lerp = (a: number, b: number, u: number) => clamp((1 - u) * a + u * b, 0, 255);
@@ -76,6 +78,6 @@ export const interpolateColor = (color1: string, color2: string, ratio: number, 
         return `rgba(${r}, ${g}, ${b}, ${opacity})`;
     } catch (error) {
         console.error('Error interpolating color:', error);
-        return 'rgba(255, 255, 255, 1)'; // Return white as a fallback
+        return defaultColor;
     }
 };

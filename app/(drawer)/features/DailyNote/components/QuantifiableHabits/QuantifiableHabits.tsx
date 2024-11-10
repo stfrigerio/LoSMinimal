@@ -12,10 +12,11 @@ import { useQuantifiableHabits } from '@/app/(drawer)/features/DailyNote/helpers
 export interface QuantifiableHabitsProps {
     data: QuantifiableHabitsData[];
     date: string;
+    quantifiableHabitsName: boolean;
 }
 
-const QuantifiableHabits: React.FC<QuantifiableHabitsProps> = ({ data, date }) => {
-    const { habits, emojis, handleIncrement, handleDecrement, scheduleMindfulReminder } = useQuantifiableHabits(data, date);
+const QuantifiableHabits: React.FC<QuantifiableHabitsProps> = ({ data, date, quantifiableHabitsName }) => {
+    const { habits, emojis, handleIncrement, handleDecrement } = useQuantifiableHabits(data, date);
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 
@@ -40,22 +41,26 @@ const QuantifiableHabits: React.FC<QuantifiableHabitsProps> = ({ data, date }) =
     return (
         <View style={styles.QuantifiableHabitsContainer}>
             {sortedHabits.map(([key, habitData]) => {
-                const habitDisplay = emojis[key] || capitalize(key);
+                const emoji = emojis[key] || '';
+                const habitName = capitalize(key);
+
                 const color = getColorForValue(
                     key as keyof typeof habitThresholds,
                     habitData.value,
-                    'rgba(250, 37, 37, 0.8)', // Color for high values (red)
-                    'rgba(204, 197, 20, 0.9)', // Color for medium values (yellow)
-                    'rgba(61, 247, 52, 0.5)', // Color for low values (green)
-                    'rgba(200, 200, 200, 0.6)' // Default color for unspecified habits
+                    'rgba(250, 37, 37, 0.8)',
+                    'rgba(204, 197, 20, 0.9)',
+                    'rgba(61, 247, 52, 0.5)',
+                    themeColors.textColor
                 );
 
                 return (
                     <QuantifiableHabit
                         key={key}
-                        name={habitDisplay}
+                        emoji={emoji}
+                        name={habitName}
                         value={habitData.value}
                         color={color}
+                        showName={quantifiableHabitsName}
                         onIncrement={() => handleIncrement(habitData.uuid, key)}
                         onDecrement={() => handleDecrement(habitData.uuid, key)}
                     />

@@ -99,7 +99,7 @@ export const useNavigationComponents = () => {
 	}, [navigate]);
 
 	const openSettings = useCallback(() => {
-		navigate.navigate('eatures/UserSettings/UserSettings' as never);
+		navigate.navigate('features/UserSettings/UserSettings' as never);
 	}, [navigate]);
 
 	// const openLibrary = useCallback(() => {

@@ -96,5 +96,5 @@ export const useQuantifiableHabits: UseQuantifiableHabitsType = (data: any, date
 		
 	};
 
-	return { habits, emojis, handleIncrement, handleDecrement, scheduleMindfulReminder };
+	return { habits, emojis, handleIncrement, handleDecrement };
 };
