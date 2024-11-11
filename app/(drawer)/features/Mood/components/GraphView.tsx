@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Dimensions } from 'react-native';
 import { MoodNoteData } from '@/src/types/Mood';
-// import MoodChart from '@/app/(drawer)/features/Mood/components/Charts/Scatter/MoodChart';
+import MoodChart from '@/src/charts/MoodChart';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 interface GraphViewProps {
@@ -15,11 +15,11 @@ const GraphView: React.FC<GraphViewProps> = ({ moodData }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: themeColors.backgroundColor }}>
-            {/* <MoodChart
+            <MoodChart
                 moodData={moodData}
                 width={width - 40} // Subtracting padding
                 height={height}
-            /> */}
+            />
         </View>
     );
 };

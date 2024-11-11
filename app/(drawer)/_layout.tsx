@@ -53,6 +53,12 @@ export default function DrawerLayout() {
 					drawerLabel: "Settings"
 				}} 
 			/>
+			<Drawer.Screen 
+				name="features/Database/Database" 
+				options={{
+					drawerLabel: "Database"
+				}} 
+			/>
         </Drawer>
 	);
 }

@@ -3,6 +3,11 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { UniversalModal } from './UniversalModal';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
+interface CustomButton {
+    text: string;
+    onPress: () => void;
+}
+
 interface AlertModalProps {
     isVisible: boolean;
     title: string;
@@ -10,6 +15,7 @@ interface AlertModalProps {
     onConfirm: () => void;
     onCancel?: () => void;
     singleButton?: boolean;
+    customButtons?: CustomButton[];
 }
 
 const AlertModal: React.FC<AlertModalProps> = ({
@@ -18,53 +24,87 @@ const AlertModal: React.FC<AlertModalProps> = ({
     message,
     onConfirm,
     onCancel,
-    singleButton = false
+    singleButton = false,
+    customButtons,
 }) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+
+    const renderButtons = () => {
+        if (customButtons && customButtons.length > 0) {
+            return (
+                <>
+                    {customButtons.map((button, index) => (
+                        <Pressable 
+                            key={index}
+                            style={({ pressed }) => [
+                                styles.button,
+                                styles.buttonCustom,
+                                pressed && styles.buttonPressed
+                            ]} 
+                            onPress={button.onPress}
+                        >
+                            <Text style={styles.textStyle}>{button.text}</Text>
+                        </Pressable>
+                    ))}
+                </>
+            );
+        }
+
+        if (singleButton) {
+            return (
+                <Pressable 
+                    style={({ pressed }) => [
+                        styles.button,
+                        styles.buttonConfirm,
+                        pressed && styles.buttonPressed
+                    ]} 
+                    onPress={onConfirm}
+                >
+                    <Text style={styles.textStyle}>OK</Text>
+                </Pressable>
+            );
+        }
+
+        return (
+            <>
+                <Pressable 
+                    style={({ pressed }) => [
+                        styles.button,
+                        styles.buttonCancel,
+                        pressed && styles.buttonPressedCancel
+                    ]} 
+                    onPress={onCancel}
+                >
+                    <Text style={styles.textStyle}>Cancel</Text>
+                </Pressable>
+                <Pressable 
+                    style={({ pressed }) => [
+                        styles.button,
+                        styles.buttonConfirm,
+                        pressed && styles.buttonPressed
+                    ]} 
+                    onPress={onConfirm}
+                >
+                    <Text style={styles.textStyle}>OK</Text>
+                </Pressable>
+            </>
+        );
+    };
 
     return (
         <UniversalModal isVisible={isVisible} onClose={onCancel || (() => {})}>
             <Text style={designs.modal.title}>{title}</Text>
             <Text style={styles.modalText}>{message}</Text>
-            <View style={styles.buttonContainer}>
-                {singleButton ? (
-                    <Pressable 
-                        style={({ pressed }) => [
-                            styles.button,
-                            styles.buttonConfirm,
-                            pressed && styles.buttonPressed
-                        ]} 
-                        onPress={onConfirm}>
-                        <Text style={styles.textStyle}>OK</Text>
-                    </Pressable>
-                ) : (
-                    <>
-                        <Pressable 
-                            style={({ pressed }) => [
-                                styles.button,
-                                styles.buttonCancel,
-                                pressed && styles.buttonPressedCancel
-                            ]} 
-                            onPress={onCancel}>
-                            <Text style={styles.textStyle}>Cancel</Text>
-                        </Pressable>
-                        <Pressable 
-                            style={({ pressed }) => [
-                                styles.button,
-                                styles.buttonConfirm,
-                                pressed && styles.buttonPressed
-                            ]} 
-                            onPress={onConfirm}>
-                            <Text style={styles.textStyle}>OK</Text>
-                        </Pressable>
-                    </>
-                )}
+            <View style={[
+                styles.buttonContainer,
+                customButtons && customButtons.length > 2 && styles.buttonContainerWrap
+            ]}>
+                {renderButtons()}
             </View>
         </UniversalModal>
     );
 };
-
 
 const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     modalText: {
@@ -80,6 +120,10 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         marginTop: 10,
         gap: 25,
     },
+    buttonContainerWrap: {
+        flexWrap: 'wrap',
+        gap: 15,
+    },
     button: {
         borderRadius: 25,
         paddingVertical: 12,
@@ -93,6 +137,11 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     buttonConfirm: {
         borderWidth: 1,
         borderColor: themeColors.greenOpacity,
+        backgroundColor: themeColors.backgroundColor,
+    },
+    buttonCustom: {
+        borderWidth: 1,
+        borderColor: themeColors.borderColor,
         backgroundColor: themeColors.backgroundColor,
     },
     buttonPressed: {

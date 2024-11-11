@@ -1,0 +1,228 @@
+{
+  "dailyNotes": [
+    {
+      "id": 1,
+      "uuid": "a81bb436-9e0d-48fa-9d50-1f6964e433a4",
+      "date": "2024-11-11",
+      "morningComment": "Ciao Roma ",
+      "energy": 0,
+      "wakeHour": "",
+      "success": null,
+      "beBetter": null,
+      "dayRating": null,
+      "sleepTime": null,
+      "createdAt": "2024-11-11T20:06:29.048Z",
+      "updatedAt": "2024-11-11T20:06:34.871Z",
+      "synced": 0
+    }
+  ],
+  "booleanHabits": [],
+  "quantifiableHabits": [],
+  "userSettings": [
+    {
+      "id": 1,
+      "uuid": "ccb0ce1c-dad7-4fcf-9d25-e3bd673bdb9b",
+      "settingKey": "QuoteCollapse",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.186Z",
+      "updatedAt": "2024-11-11T20:05:29.186Z"
+    },
+    {
+      "id": 2,
+      "uuid": "39f7b8aa-5066-4b88-a586-322be6e83c89",
+      "settingKey": "HideQuote",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.202Z",
+      "updatedAt": "2024-11-11T20:05:29.202Z"
+    },
+    {
+      "id": 3,
+      "uuid": "bdd6dde7-2277-4e7c-87d4-22f2bf87421c",
+      "settingKey": "FixedQuote",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.224Z",
+      "updatedAt": "2024-11-11T20:05:29.224Z"
+    },
+    {
+      "id": 4,
+      "uuid": "1304035b-8e42-48ac-8c3d-698a5331d784",
+      "settingKey": "BooleanHabitsName",
+      "value": "true",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.235Z",
+      "updatedAt": "2024-11-11T20:05:29.235Z"
+    },
+    {
+      "id": 5,
+      "uuid": "f9c2d623-b784-49e0-9e26-a4cddce3ad75",
+      "settingKey": "NotificationEnabled",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.246Z",
+      "updatedAt": "2024-11-11T20:05:29.246Z"
+    },
+    {
+      "id": 6,
+      "uuid": "9a094a83-3ec1-44fb-bb69-f8281d997c50",
+      "settingKey": "HideDots",
+      "value": "true",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.257Z",
+      "updatedAt": "2024-11-11T20:05:29.257Z"
+    },
+    {
+      "id": 7,
+      "uuid": "fa84c4c0-0892-4c75-a72b-6a3af7db4db4",
+      "settingKey": "HideNextTask",
+      "value": "true",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.265Z",
+      "updatedAt": "2024-11-11T20:05:29.265Z"
+    },
+    {
+      "id": 8,
+      "uuid": "73e57822-eb19-4f8c-842b-a4e359e1b3bf",
+      "settingKey": "HideNextObjective",
+      "value": "true",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.276Z",
+      "updatedAt": "2024-11-11T20:05:29.276Z"
+    },
+    {
+      "id": 9,
+      "uuid": "a7e74120-b516-4f4b-aebe-004e783b9ee6",
+      "settingKey": "HidePeople",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.286Z",
+      "updatedAt": "2024-11-11T20:05:29.286Z"
+    },
+    {
+      "id": 10,
+      "uuid": "81eaed75-6ec6-4aad-80f0-ea43223a5d52",
+      "settingKey": "HideTasks",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.297Z",
+      "updatedAt": "2024-11-11T20:05:29.297Z"
+    },
+    {
+      "id": 11,
+      "uuid": "010dbd26-c41a-4a0d-99d6-03240e5c4a91",
+      "settingKey": "HideJournal",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.311Z",
+      "updatedAt": "2024-11-11T20:05:29.311Z"
+    },
+    {
+      "id": 12,
+      "uuid": "1e0070a7-d1bb-4d13-91ba-39b22763ec74",
+      "settingKey": "HideMoods",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.322Z",
+      "updatedAt": "2024-11-11T20:05:29.322Z"
+    },
+    {
+      "id": 13,
+      "uuid": "7f90a66e-373d-4cb3-b34d-a1025331b8dd",
+      "settingKey": "HideLibrary",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.333Z",
+      "updatedAt": "2024-11-11T20:05:29.333Z"
+    },
+    {
+      "id": 14,
+      "uuid": "df6a812c-fc5c-4297-bee7-0850010ab51b",
+      "settingKey": "HideMoney",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.344Z",
+      "updatedAt": "2024-11-11T20:05:29.344Z"
+    },
+    {
+      "id": 15,
+      "uuid": "780ad040-18de-42ca-8396-40af0f38c4de",
+      "settingKey": "HideTime",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.356Z",
+      "updatedAt": "2024-11-11T20:05:29.356Z"
+    },
+    {
+      "id": 16,
+      "uuid": "3f75ea43-e52c-44d4-98cb-8edc79af0876",
+      "settingKey": "HideMusic",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.370Z",
+      "updatedAt": "2024-11-11T20:05:29.370Z"
+    },
+    {
+      "id": 17,
+      "uuid": "737639d7-df01-4b21-a51d-d0bb4c18c7fb",
+      "settingKey": "HideCarLocation",
+      "value": "false",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.382Z",
+      "updatedAt": "2024-11-11T20:05:29.382Z"
+    },
+    {
+      "id": 18,
+      "uuid": "5c2aa32b-0dd0-45b1-a472-2c5d7e1155ba",
+      "settingKey": "RightPanelView",
+      "value": "\"DailyNote\"",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:05:29.395Z",
+      "updatedAt": "2024-11-11T20:05:29.395Z"
+    },
+    {
+      "id": 19,
+      "uuid": "29008b32-cf0d-409d-8069-cf9cd91c9c69",
+      "settingKey": "serverUrl",
+      "value": "192.168.1.3",
+      "type": "appSettings",
+      "color": null,
+      "createdAt": "2024-11-11T20:08:01.893Z",
+      "updatedAt": "2024-11-11T20:08:01.893Z"
+    }
+  ],
+  "tasks": [],
+  "tags": [],
+  "library": [],
+  "money": [],
+  "mood": [],
+  "text": [],
+  "time": [],
+  "gpt": [],
+  "journal": [],
+  "people": [],
+  "contact": [],
+  "pillars": [],
+  "objectives": [],
+  "music": [],
+  "deletionLog": []
+}

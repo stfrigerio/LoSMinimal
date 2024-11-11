@@ -1,13 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as FileSystem from 'expo-file-system';
 
 import { databaseManagers } from './tables';
 import { databaseManager} from './databaseManager';
 
 import { defaultAppSettings } from '@/src/constants/constants';
 import { UserSettingData } from '@/src/types/UserSettings';
+import AlertModal from '@/app/components/modals/AlertModal';
 
 const DB_INITIALIZED_KEY = 'DB_INITIALIZED';
+
+const nuclearReset = async (): Promise<void> => {
+    try {
+        console.log('🚀 Starting nuclear reset...');
+        
+        // Clear AsyncStorage DB flag
+        await AsyncStorage.removeItem(DB_INITIALIZED_KEY);
+        console.log('Cleared DB initialization flag');
+        
+        // Nuke SQLite directory
+        const sqliteDir = `${FileSystem.documentDirectory}SQLite`;
+        const files = await FileSystem.readDirectoryAsync(sqliteDir);
+        console.log('Found files to delete:', files);
+        
+        // Delete all files
+        for (const file of files) {
+            const path = `${sqliteDir}/${file}`;
+            await FileSystem.deleteAsync(path, { idempotent: true });
+            console.log(`Deleted: ${file}`);
+        }
+        
+        // Delete and recreate directory
+        await FileSystem.deleteAsync(sqliteDir, { idempotent: true });
+        await FileSystem.makeDirectoryAsync(sqliteDir);
+        console.log('SQLite directory reset');
+        
+        console.log('🎯 Nuclear reset complete!');
+    } catch (error) {
+        console.error('💥 Nuclear reset failed:', error);
+    }
+};
+
 
 export const InitializeDatabasesWrapper = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -20,6 +54,9 @@ export const InitializeDatabasesWrapper = () => {
 
     const initializeDatabasesIfNeeded = async () => {
         try {
+            // NUCLEAR OPTION: Uncomment the next line when needed
+            // await nuclearReset();
+
             const isInitialized = await AsyncStorage.getItem(DB_INITIALIZED_KEY);
 
             if (isInitialized !== 'true') {
@@ -130,16 +167,13 @@ export const InitializeDatabasesWrapper = () => {
         }
     };
 
-    // todo i will need to put something here
-    // return (
-    //     <AlertModal
-    //         isVisible={isModalVisible}
-    //         title={modalTitle}
-    //         message={modalMessage}
-    //         onConfirm={() => setIsModalVisible(false)}
-    //         onCancel={() => setIsModalVisible(false)}
-    //     />
-    // );
-
-    return null;
+    return (
+        <AlertModal
+            isVisible={isModalVisible}
+            title={modalTitle}
+            message={modalMessage}
+            onConfirm={() => setIsModalVisible(false)}
+            singleButton={true}
+        />
+    );
 };

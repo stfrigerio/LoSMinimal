@@ -1,4 +1,3 @@
-//useHomepage.ts
 import { useCallback } from 'react';
 import { endOfWeek, endOfMonth, endOfQuarter, endOfYear } from 'date-fns';
 import { useNavigation } from 'expo-router';
@@ -25,11 +24,12 @@ export type NotePeriod = 'day' | 'week' | 'lastWeek' | 'month' | 'quarter' | 'ye
 
 export type RootStackParamList = {
     'features/DailyNote/DailyNote': { date: string };
+	'features/PeriodicNote/PeriodicNote': { startDate: string; endDate: string };
     'features/Tasks/Tasks': undefined;
     'features/Home/Homepage': undefined;
 	'features/UserSettings/UserSettings': undefined;
-	'features/PeriodicNote/PeriodicNote': { startDate: string; endDate: string };
 	'features/Mood/Mood': undefined;
+	'features/Database/Database': undefined;
 };
 
 export const useNavigationComponents = () => {
@@ -122,6 +122,10 @@ export const useNavigationComponents = () => {
 		navigate.navigate('features/Mood/Mood' as never);
 	}, [navigate])
 
+	const openDatabase = useCallback(() => {
+		navigate.navigate('features/Database/Database' as never);
+	}, [navigate])
+
 	// const openMoney = useCallback(() => {
 	// 	navigate('money');
 	// }, [navigate])
@@ -163,5 +167,6 @@ export const useNavigationComponents = () => {
 		// openCurrentMonth,
 		// openMusic,
 		// openTime,
+		openDatabase
 	};
 };

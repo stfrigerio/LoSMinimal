@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getNodeServerURL } from './databaseConfig';
+import { getNodeServerURL } from '../helpers/databaseConfig';
 
 import { TableData } from '@/app/(drawer)/features/Database/types/types';
 
