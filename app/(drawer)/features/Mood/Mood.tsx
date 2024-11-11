@@ -99,6 +99,7 @@ const getStyles = (themeColors: any, designs: any) => {
             flex: 1,
             backgroundColor: themeColors.backgroundColor,
             paddingHorizontal: 10,
+            paddingTop: 30
         },
         content: {
             flex: 1,

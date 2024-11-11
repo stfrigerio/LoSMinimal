@@ -53,8 +53,10 @@ export const useMoodData = () => {
 
     const addMood = useCallback(async (newMood: Omit<MoodNoteData, 'id'>) => {
         try {
-            const addedMood = await databaseManagers.mood.upsert(newMood);
-            setEntries(prevEntries => [...prevEntries, addedMood]);
+            await databaseManagers.mood.upsert(newMood);
+            // Fetch fresh data instead of manually updating the state
+            const updatedMoods = await databaseManagers.mood.list();
+            setEntries(updatedMoods);
         } catch (err) {
             setError('Error adding mood');
             console.error('Error adding mood:', err);

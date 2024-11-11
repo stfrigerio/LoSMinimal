@@ -1,14 +1,18 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Dimensions, Platform } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faChevronDown, faPencil, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import Color from 'color';
 
+import AlertModal from '@/app/components/modals/AlertModal';
 import MoodModal from '@/app/(drawer)/features/Mood/modals/MoodModal';
+import Collapsible from '@/app/components/Collapsible';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { MoodNoteData } from '@/src/types/Mood';
 import { useColors } from '@/src/utils/useColors';
+import EditButton from '@/app/components/atoms/EditButton';
+import DeleteButton from '@/app/components/atoms/DeleteButton';
 
 interface MoodEntryProps {
     item: MoodNoteData;
@@ -23,21 +27,7 @@ const MoodEntry: React.FC<MoodEntryProps> = ({ item, isExpanded, toggleExpand, d
     const { colors: tagColors, loading, error } = useColors();
     const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-
-    const rotateAnim = useRef(new Animated.Value(0)).current;
-
-    useEffect(() => {
-        Animated.timing(rotateAnim, {
-        toValue: isExpanded ? 1 : 0,
-        duration: 200,
-        useNativeDriver: true,
-        }).start();
-    }, [isExpanded, rotateAnim]);
-
-    const rotate = rotateAnim.interpolate({
-        inputRange: [0, 1],
-        outputRange: ['0deg', '180deg'],
-    });
+    const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
     const handleEditPress = () => {
         setIsEditModalVisible(true);
@@ -50,6 +40,15 @@ const MoodEntry: React.FC<MoodEntryProps> = ({ item, isExpanded, toggleExpand, d
     const getContrastColor = (bgColor: string) => {
         const color = Color(bgColor);
         return color.isLight() ? '#000000' : '#FFFFFF';
+    };
+
+    const handleDeletePress = () => {
+        setIsDeleteModalVisible(true);
+    };
+
+    const handleConfirmDelete = () => {
+        deleteMood(item.id!);
+        setIsDeleteModalVisible(false);
     };
 
     const renderTags = () => {
@@ -85,27 +84,26 @@ const MoodEntry: React.FC<MoodEntryProps> = ({ item, isExpanded, toggleExpand, d
                 <Text style={styles.dateText}>{new Date(item.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</Text>
             </View>
             <View style={styles.entryContent}>
-                <Pressable onPress={() => toggleExpand(item.id!)}>
+            <Pressable onPress={() => toggleExpand(item.id!)}>
                     <View style={styles.entryHeader}>
                         {renderTags()}
-                        <Animated.View style={[ styles.actionIcon, { transform: [{ rotate }] }]}>
-                            <FontAwesomeIcon icon={faChevronDown} size={16} color="gray" />
-                        </Animated.View>
+                        <View style={styles.actionIcon}>
+                            <FontAwesomeIcon 
+                                icon={faChevronDown} 
+                                size={16} 
+                                color="gray" 
+                                style={{ transform: [{ rotate: isExpanded ? '180deg' : '0deg' }] }}
+                            />
+                        </View>
                     </View>
                 </Pressable>
-                <Pressable onPress={() => toggleExpand(item.id!)}>
-                    <Animated.View style={{ maxHeight: isExpanded ? 1000 : 0, overflow: 'hidden' }}>
-                        <Text style={styles.comment}>{item.comment}</Text>
-                        <View style={styles.actionIcons}>
-                            <Pressable style={styles.actionIcon} onPress={handleEditPress}>
-                                <FontAwesomeIcon icon={faPencil} size={18} color="gray" />
-                            </Pressable>
-                            <Pressable style={styles.actionIcon} onPress={() => deleteMood(item.id!)}>
-                                <FontAwesomeIcon icon={faTrash} size={18} color="gray" />
-                            </Pressable>
-                        </View>
-                    </Animated.View>
-                </Pressable>
+                <Collapsible collapsed={!isExpanded}>
+                    <Text style={styles.comment}>{item.comment}</Text>
+                    <View style={styles.actionIcons}>
+                        <EditButton onEdit={handleEditPress} />
+                        <DeleteButton onDelete={handleDeletePress} />
+                    </View>
+                </Collapsible>
             </View>
             {isEditModalVisible && (
                 <MoodModal
@@ -117,10 +115,18 @@ const MoodEntry: React.FC<MoodEntryProps> = ({ item, isExpanded, toggleExpand, d
                     isEdit={true}
                 />
             )}
+            {isDeleteModalVisible && (
+                <AlertModal
+                    isVisible={isDeleteModalVisible}
+                    title="Delete Mood"
+                    message="Are you sure you want to delete this mood entry?"
+                    onConfirm={handleConfirmDelete}
+                    onCancel={() => setIsDeleteModalVisible(false)}
+                />
+            )}
         </View>
     );
 };
-
 
 const getStyles = (themeColors: any, designs: any) => {
     return StyleSheet.create({
@@ -128,58 +134,72 @@ const getStyles = (themeColors: any, designs: any) => {
             flexDirection: 'row',
             marginBottom: 20,
             borderBottomWidth: 1,
-            borderBottomColor: 'gray',
-            paddingBottom: 10,
+            borderBottomColor: themeColors.borderColor,
+            paddingBottom: 15,
+            paddingHorizontal: 10,
         },
         ratingContainer: {
             flexDirection: 'column',
             alignItems: 'center',
-            marginRight: 15,
+            marginRight: 20,
+            padding: 10,
+            borderRadius: 12,
+            minWidth: 60,
         },
         rating: {
-            fontSize: 24,
+            fontSize: 28,
             fontWeight: 'bold',
-            color: themeColors.textColor,
+            color: themeColors.accentColor,
+            marginBottom: 4,
         },
         dateText: {
-            fontSize: 12,
-            color: 'gray',
+            fontSize: 11,
+            color: themeColors.opaqueTextColor,
+            marginBottom: 2,
         },
         entryHeader: {
             flexDirection: 'row',
             justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 8,
         },
         entryContent: {
             flex: 1,
             justifyContent: 'center',
         },
         comment: {
-            fontSize: 14,
-            color: 'gray',
+            fontSize: 15,
+            color: themeColors.textColor,
+            lineHeight: 20,
+            marginTop: 6,
         },
         actionIcons: {
             flexDirection: 'row',
             alignItems: 'center',
-            gap: 25,
-            marginLeft: 20,
+            gap: 20,
             justifyContent: 'flex-end',
-            marginTop: 20,
+            marginTop: 15,
+            paddingTop: 10,
+            borderTopWidth: 1,
+            borderTopColor: `${themeColors.borderColor}50` || '#F0F0F0',
         },
         actionIcon: {
-            padding: 5
+            padding: 8,
+            borderRadius: 8,
+            backgroundColor: `${themeColors.backgroundColor}80`,
         },
         tagContainer: {
             flexDirection: 'row',
             flexWrap: 'wrap',
             flex: 1,
+            gap: 6,
         },
         tag: {
             flexDirection: 'row',
             alignItems: 'center',
-            borderRadius: 20,
-            paddingHorizontal: 8,
-            paddingVertical: 4,
-            margin: 2,
+            borderRadius: 16,
+            paddingHorizontal: 10,
+            paddingVertical: 5,
         },
         tagText: {
             fontSize: 12,

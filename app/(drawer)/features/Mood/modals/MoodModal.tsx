@@ -96,8 +96,7 @@ const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, i
 		};
 		handleSave(updatedMoodNote).catch((error: any) => alert(error.message));
 		Toast.show({
-			text1: 'Mood note saved',
-			text2: '💭',
+			text1: '💭 Mood note saved',
 		});
 		closeMoodModal();
 		if (refreshMoods) {
@@ -162,7 +161,7 @@ const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, i
 			{showCommentScreen ? 'Add Detailed Comment' : '💭 Mood Entry'}</Text>
 			{showCommentScreen ? (
 				<>
-					<View style={{ width: '100%', height: 200 }}>
+					<View style={{ width: '100%', flex: 1, minHeight: 200 }}>
 						<TextInput
                             style={[designs.text.input, styles.inputText, { minHeight: 120, width: '100%' }]}
                             onChangeText={handleCommentChange}

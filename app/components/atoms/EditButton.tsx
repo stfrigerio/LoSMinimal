@@ -15,9 +15,9 @@ const EditButton: React.FC<EditButtonProps> = ({ onEdit }) => {
 
 	return (
         <Pressable onPress={onEdit} style={styles.editButton}>
-      		{({ pressed }) => (
-				<FontAwesomeIcon icon={faPencilAlt} color={pressed ? themeColors.accentColor : themeColors.gray} />
-			)}
+            {({ pressed }) => (
+                <FontAwesomeIcon icon={faPencilAlt} color={pressed ? themeColors.accentColor : themeColors.gray} />
+            )}
         </Pressable>
     );
 };
