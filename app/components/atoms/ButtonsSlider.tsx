@@ -1,18 +1,19 @@
 import React, { useRef } from 'react';
-import { ScrollView, Pressable, Text, StyleSheet } from 'react-native';
+import { ScrollView, Pressable, Text, StyleSheet, View } from 'react-native';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
-type EnergyButtonsProps = {
+type ButtonsSliderProps = {
     selectedValue: number;
     onChange: (value: number) => void;
+    twoRows?: boolean;
 };
 
-const EnergyButtons: React.FC<EnergyButtonsProps> = ({ selectedValue, onChange }) => {
+const ButtonsSlider: React.FC<ButtonsSliderProps> = ({ selectedValue, onChange, twoRows = false }) => {
     const scrollViewRef = useRef<ScrollView>(null);
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 
-    const handleEnergyChange = (value: number) => {
+    const handleChange = (value: number) => {
         setTimeout(() => {
             onChange(value);
         }, 0);
@@ -28,41 +29,56 @@ const EnergyButtons: React.FC<EnergyButtonsProps> = ({ selectedValue, onChange }
         return color;
     };
 
-    const getEnergyColor = (energy: number): string => {
-        if (energy <= 4) return adjustOpacity(themeColors.redOpacity, 0.5); 
-        if (energy <= 7) return adjustOpacity(themeColors.yellowOpacity, 0.5); 
+    const getColor = (value: number): string => {
+        if (value <= 4) return adjustOpacity(themeColors.redOpacity, 0.5); 
+        if (value <= 7) return adjustOpacity(themeColors.yellowOpacity, 0.5); 
         return adjustOpacity(themeColors.greenOpacity, 0.3);
     };
+
+    const buttons = [...Array(11)].map((_, index) => (
+        <Pressable
+            key={index}
+            style={[
+                styles.button,
+                selectedValue === index && styles.selectedButton,
+                { backgroundColor: selectedValue === index ? getColor(index) : themeColors.backgroundSecondary }
+            ]}
+            onPress={() => handleChange(index)}
+        >
+            <Text style={[
+                styles.buttonText,
+                selectedValue === index && styles.selectedButtonText
+            ]}>
+                {index}
+            </Text>
+        </Pressable>
+    ));
+
+    if (twoRows) {
+        return (
+            <View style={styles.twoRowsContainer}>
+                <View style={styles.row}>
+                    {buttons.slice(0, 6)}
+                </View>
+                <View style={[styles.row, styles.secondRow]}>
+                    {buttons.slice(6)}
+                </View>
+            </View>
+        );
+    }
 
     return (
         <ScrollView 
             ref={scrollViewRef}
             horizontal 
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.energyButtonsContainer}
+            contentContainerStyle={styles.buttonsContainer}
             automaticallyAdjustContentInsets={false}
             automaticallyAdjustsScrollIndicatorInsets={false}
             scrollEventThrottle={16}
             style={styles.scrollView}
         >
-            {[...Array(11)].map((_, index) => (
-                <Pressable
-                    key={index}
-                    style={[
-                        styles.energyButton,
-                        selectedValue === index && styles.selectedEnergyButton,
-                        { backgroundColor: selectedValue === index ? getEnergyColor(index) : themeColors.backgroundSecondary }
-                    ]}
-                    onPress={() => handleEnergyChange(index)}
-                >
-                    <Text style={[
-                        styles.energyButtonText,
-                        selectedValue === index && styles.selectedEnergyButtonText
-                    ]}>
-                        {index}
-                    </Text>
-                </Pressable>
-            ))}
+            {buttons}
         </ScrollView>
     );
 };
@@ -72,13 +88,13 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         marginHorizontal: -16,  // Negative margin to allow padding
         paddingHorizontal: 16,  // Padding to show partial next button
     },
-    energyButtonsContainer: {
+    buttonsContainer: {
         flexDirection: 'row',
         gap: 8,
         paddingVertical: 4,
         paddingRight: 40,  // Add extra padding to show partial next button
     },
-    energyButton: {
+    button: {
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -87,17 +103,29 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         borderWidth: 1,
         borderColor: themeColors.borderColor,
     },
-    selectedEnergyButton: {
+    selectedButton: {
         borderColor: 'transparent',
     },
-    energyButtonText: {
+    buttonText: {
         color: themeColors.textColor,
         fontSize: 16,
         fontWeight: '500',
     },
-    selectedEnergyButtonText: {
+    selectedButtonText: {
         color: themeColors.borderColor,
+    },
+    twoRowsContainer: {
+        width: '100%',
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 8,
+        paddingVertical: 4,
+    },
+    secondRow: {
+        marginTop: 8,
     },
 });
 
-export default EnergyButtons;
+export default ButtonsSlider;

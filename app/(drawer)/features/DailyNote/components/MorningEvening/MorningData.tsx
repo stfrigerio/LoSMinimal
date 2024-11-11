@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 
 import createTimePicker from '@/app/components/DateTimePicker';
-import EnergyButtons from './components/EnergyButtons';
+import ButtonsSlider from '@/app/components/atoms/ButtonsSlider';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { DailyNoteData } from '@/src/types/DailyNote';
@@ -23,6 +23,14 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
     const { theme, themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
     const [morningData, setMorningData] = useState(initialData);
+
+    useEffect(() => {
+        setMorningData({
+            morningComment: data?.morningComment || '',
+            wakeHour: data?.wakeHour || '',
+            energy: data?.energy || 0,
+        });
+    }, [data]);
 
     const handleInputChange = (field: keyof typeof initialData, value: string | number) => {
         const updatedData = { ...morningData, [field]: value };
@@ -80,7 +88,7 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
 
             <View style={styles.inputGroup}>
                 {/* <Text style={styles.label}>🔋 Energy Level (0-10)</Text> */}
-                <EnergyButtons 
+                <ButtonsSlider 
                     selectedValue={morningData.energy} 
                     onChange={(value) => handleInputChange('energy', value)} 
                 />

@@ -5,7 +5,7 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 
 import TaskModal from '@/app/(drawer)/features/Tasks/modals/TaskModal';
 // import TransactionModal from '@/components/modals/TransactionModal';
-// import MoodModal from '@/components/modals/MoodModal';
+import MoodModal from '@/app/(drawer)/features/Mood/modals/MoodModal';
 // import ContactModal from '@/components/modals/ContactModal';
 // import Journal from '@/components/Journal/components/Journal';
 
@@ -25,7 +25,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 	const [buttonsVisible, setButtonsVisible] = useState(false);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	// const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
-	// const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
+	const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
 	// const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 	// const [isJournalModalOpen, setIsJournalModalOpen] = useState(false);
 	// const [isCarLocationModalOpen, setIsCarLocationModalOpen] = useState(false);
@@ -37,7 +37,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 	const buttonConfig = [
 		// { key: 'contact', settingKey: 'HidePeople' },
 		// { key: 'journal', settingKey: 'HideJournal' },
-		// { key: 'mood', settingKey: 'HideMoods' },
+		{ key: 'mood', settingKey: 'HideMoods' },
 		{ key: 'task', settingKey: 'HideTasks' },
 		// { key: 'transaction', settingKey: 'HideMoney' },
 		// { key: 'carLocation', settingKey: 'HideCarLocation' },
@@ -137,7 +137,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 			// case 'journal': handleNewJournal(); break;
 			// case 'contact': setIsContactModalOpen(true); break;
 			case 'task': setIsAddModalOpen(true); break;
-			// case 'mood': setIsMoodModalOpen(true); break;
+			case 'mood': setIsMoodModalOpen(true); break;
 			// case 'transaction': setIsTransactionModalOpen(true); break;
 			// case 'carLocation': setIsCarLocationModalOpen(true); break;
 		}
@@ -161,7 +161,11 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 								]}
 								onPress={() => handleButtonPress(key)}
 							>
-								<Text style={styles.buttonText}>{getButtonText(key)}</Text>
+								{({ pressed }) => (
+									<Text style={[styles.buttonText, { transform: [{ scale: pressed ? 0.9 : 1 }] }]}>
+										{getButtonText(key)}
+									</Text>
+								)}
 							</AnimatedPressable>
 						</Animated.View>
 					))}
@@ -206,19 +210,13 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded, ho
 					onUpdateItem={updateTask}
 				/>
 			}
-			{/* {isContactModalOpen &&
-				<ContactModal
-					isOpen={isContactModalOpen}
-					onClose={() => setIsContactModalOpen(false)}
-				/>
-			}
 			{isMoodModalOpen &&
 				<MoodModal
 					isOpen={isMoodModalOpen}
 					closeMoodModal={() => setIsMoodModalOpen(false)}
 				/>
 			}
-			{isTransactionModalOpen &&
+			{/* {isTransactionModalOpen &&
 				<TransactionModal
 					isOpen={isTransactionModalOpen}
 					closeTransactionModal={() => setIsTransactionModalOpen(false)}

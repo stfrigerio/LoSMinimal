@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faMoon, faSun, faCalendarDay } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots } from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './components/MenuButton';
 
@@ -17,7 +17,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = useMemo(() => getStyles(themeColors), [themeColors]);
 
-    const { openTasks, openDailyNote } = useNavigationComponents();
+    const { openTasks, openDailyNote, openMoods } = useNavigationComponents();
 
     const handleOpenTasks = () => {
         setTimeout(() => {
@@ -28,6 +28,12 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const handleOpenDailyNote = () => {
         setTimeout(() => {
             openDailyNote(getStartOfToday().toString());
+        }, 150);
+    }
+
+    const handleOpenMood = () => {
+        setTimeout(() => {
+            openMoods();
         }, 150);
     }
 
@@ -53,6 +59,11 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                             icon={faCheckCircle}
                             label="Tasks"
                             onPress={handleOpenTasks}
+                        />
+                        <MenuButton 
+                            icon={faCommentDots}
+                            label="Mood"
+                            onPress={handleOpenMood}
                         />
                     </View>
                     

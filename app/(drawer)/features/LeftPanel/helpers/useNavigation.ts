@@ -8,20 +8,20 @@ import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/n
 
 export type NotePeriod = 'day' | 'week' | 'lastWeek' | 'month' | 'quarter' | 'year' | 'allYears';
 
-export interface HomepageSettings {
-	HideNextTask?: { value: string };
-	HideDots?: { value: string };
-	HidePeople?: { value: string };
-	HideTasks?: { value: string };
-	HideJournal?: { value: string };
-	HideMoods?: { value: string };
-	HideLibrary?: { value: string };
-	HideMoney?: { value: string };
-	HideNextObjective?: { value: string };
-	HideCarLocation?: { value: string };
-	HideTime?: { value: string };
-	HideMusic?: { value: string };
-}
+// export interface HomepageSettings {
+// 	HideNextTask?: { value: string };
+// 	HideDots?: { value: string };
+// 	HidePeople?: { value: string };
+// 	HideTasks?: { value: string };
+// 	HideJournal?: { value: string };
+// 	HideMoods?: { value: string };
+// 	HideLibrary?: { value: string };
+// 	HideMoney?: { value: string };
+// 	HideNextObjective?: { value: string };
+// 	HideCarLocation?: { value: string };
+// 	HideTime?: { value: string };
+// 	HideMusic?: { value: string };
+// }
 
 export type RootStackParamList = {
     'features/DailyNote/DailyNote': { date: string };
@@ -29,6 +29,7 @@ export type RootStackParamList = {
     'features/Home/Homepage': undefined;
 	'features/UserSettings/UserSettings': undefined;
 	'features/PeriodicNote/PeriodicNote': { startDate: string; endDate: string };
+	'features/Mood/Mood': undefined;
 };
 
 export const useNavigationComponents = () => {
@@ -117,9 +118,9 @@ export const useNavigationComponents = () => {
     }, [navigate]);
 
 
-	// const openMoods = useCallback(() => {
-	// 	navigate('moods');
-	// }, [navigate])
+	const openMoods = useCallback(() => {
+		navigate.navigate('features/Mood/Mood' as never);
+	}, [navigate])
 
 	// const openMoney = useCallback(() => {
 	// 	navigate('money');
@@ -155,7 +156,7 @@ export const useNavigationComponents = () => {
 		// openJournalHub,
 		// openPeople,
 		openTasks,
-		// openMoods,
+		openMoods,
 		// openMoney,
 		openHomepage,
 		// openCurrentWeek,

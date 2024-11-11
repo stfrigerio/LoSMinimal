@@ -42,6 +42,12 @@ export default function DrawerLayout() {
                 }} 
             />
 			<Drawer.Screen 
+				name="features/Mood/Mood" 
+				options={{
+					drawerLabel: "Mood"
+				}} 
+			/>
+			<Drawer.Screen 
 				name="features/UserSettings/UserSettings" 
 				options={{
 					drawerLabel: "Settings"

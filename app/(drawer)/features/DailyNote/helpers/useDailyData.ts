@@ -34,10 +34,10 @@ export const useDailyData = (
 	}, [localDate, timeZone]);
 
   	// Fetch daily note and habits
-  	const fetchDailyNoteAndHabits = useCallback(async () => {
+	const fetchDailyNoteAndHabits = useCallback(async () => {
 		if (isFetchingRef.current) {
-		// Prevent overlapping fetches
-		return;
+			// Prevent overlapping fetches
+			return;
 		}
 
 		isFetchingRef.current = true;
@@ -140,14 +140,14 @@ export const useDailyData = (
 	}, [dateStr]);
 
 	// Update day sections
-  	const onUpdateDaySections = useCallback(
-    	async (updatedFields: Partial<NoteData>) => {
+	const onUpdateDaySections = useCallback(
+		async (updatedFields: Partial<NoteData>) => {
 			if (isFetchingRef.current) {
 				// Prevent updates while fetching is in progress
 				return;
 			}
 
-      		isFetchingRef.current = true;
+			isFetchingRef.current = true;
 
 			try {
 				const currentNotes = await databaseManagers.dailyNotes.getByDate(dateStr);
@@ -186,5 +186,5 @@ export const useDailyData = (
 		fetchDailyNoteAndHabits();
 	}, [fetchDailyNoteAndHabits, lastSubmissionTime]);
 
-  	return { dailyData, setDailyData, onUpdateDaySections };
+	return { dailyData, setDailyData, onUpdateDaySections };
 };

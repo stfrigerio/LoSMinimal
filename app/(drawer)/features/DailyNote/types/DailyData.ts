@@ -1,5 +1,4 @@
 import { DailyNoteData, NoteData } from '@/src/types/DailyNote';
-import { TaskData } from '@/src/types/Task';
 
 export type UpdateParam = {
   type: 'booleanHabit' | 'quantifiableHabit';

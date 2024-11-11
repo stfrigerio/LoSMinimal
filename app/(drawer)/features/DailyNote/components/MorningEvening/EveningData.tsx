@@ -7,7 +7,7 @@ import createTimePicker from '@/app/components/DateTimePicker';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { DailyNoteData } from '@/src/types/DailyNote';
-import EnergyButtons from './components/EnergyButtons';
+import ButtonsSlider from '@/app/components/atoms/ButtonsSlider';
 
 type EveningDataProps = {
     data?: DailyNoteData | null;
@@ -107,7 +107,7 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
 
             <View style={styles.inputGroup}>
                 {/* <Text style={styles.label}>🌟 Day Rating (0-10)</Text> */}
-                <EnergyButtons 
+                <ButtonsSlider 
                     selectedValue={eveningData.dayRating} 
                     onChange={(value) => handleInputChange('dayRating', value)} 
                 />
