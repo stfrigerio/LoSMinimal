@@ -16,4 +16,5 @@ web-build/
 .env
 .env.*
 losso/
+python/database_files
 
