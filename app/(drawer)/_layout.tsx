@@ -1,6 +1,6 @@
 import { Drawer } from 'expo-router/drawer';
 
-import LeftPanel from './features/LeftPanel/LeftPanel';
+import LeftPanel from '../../src/features/LeftPanel/LeftPanel';
 import { useDrawerState } from '../../src/contexts/DrawerState';
 
 export default function DrawerLayout() {
@@ -20,41 +20,39 @@ export default function DrawerLayout() {
 				headerShown: false,
 				drawerPosition: 'left',
 			}}
-			id="root-drawer"
 		>
             <Drawer.Screen 
-                name="features/Home/Homepage" 
+                name="home" 
                 options={{
                     drawerLabel: "Home"
                 }} 
             />
             <Drawer.Screen 
-                name="features/DailyNote/DailyNote" 
+                name="daily-note" 
                 options={{
                     drawerLabel: "Daily Note",
-					unmountOnBlur: true,
-                }} 
+                }}
             />
             <Drawer.Screen 
-                name="features/Tasks/Tasks" 
+                name="tasks" 
                 options={{
                     drawerLabel: "Tasks"
                 }} 
             />
 			<Drawer.Screen 
-				name="features/Mood/Mood" 
+				name="mood" 
 				options={{
 					drawerLabel: "Mood"
 				}} 
 			/>
 			<Drawer.Screen 
-				name="features/UserSettings/UserSettings" 
+				name="user-settings" 
 				options={{
 					drawerLabel: "Settings"
 				}} 
 			/>
 			<Drawer.Screen 
-				name="features/Database/Database" 
+				name="database" 
 				options={{
 					drawerLabel: "Database"
 				}} 

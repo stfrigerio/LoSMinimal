@@ -7,7 +7,7 @@ import { databaseManager} from './databaseManager';
 
 import { defaultAppSettings } from '@/src/constants/constants';
 import { UserSettingData } from '@/src/types/UserSettings';
-import AlertModal from '@/app/components/modals/AlertModal';
+import AlertModal from '@/src/components/modals/AlertModal';
 
 const DB_INITIALIZED_KEY = 'DB_INITIALIZED';
 

@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 
-import Homepage from './features/Home/Homepage';
+import Homepage from '../../src/features/Home/Homepage';
 
 export default function Home() {
 	return (

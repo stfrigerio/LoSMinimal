@@ -3,6 +3,7 @@
 		"name": "LoS",
 		"slug": "LoS",
 		"scheme": "los",
+		"platforms": ["ios", "android", "web"],
 		"version": "1.0.0",
 		"orientation": "default",
 		"icon": "./assets/images/Los-icon.png",
@@ -39,17 +40,17 @@
 				"CAMERA",
 				"android.permission.FOREGROUND_SERVICE"
 			],
-		"plugins": [
-			[
-				"expo-build-properties",
-				{
-					"android": {
-						"usesCleartextTraffic": true
+			"plugins": [
+				[
+					"expo-build-properties",
+					{
+						"android": {
+							"usesCleartextTraffic": true
+						}
 					}
-				}
+				]
 			]
-		]
-	},
+		},
 		"web": {
 			"favicon": "./assets/images/favicon.png"
 		},
@@ -65,7 +66,11 @@
 				{
 					"locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
 				}
-			]
-		]
+			],
+			"expo-router",
+			"expo-sqlite",
+			"expo-notifications"
+		],
+		"newArchEnabled": true
 	}
 }

@@ -11,9 +11,9 @@ import { ChecklistProvider } from '../src/contexts/checklistContext';
 
 import { useThemeStyles } from '../src/styles/useThemeStyles';
 import Toast, { BaseToast } from 'react-native-toast-message';
-import RightPanel from './(drawer)/features/RightPanel/RightPanel';
+import RightPanel from '../src/features/RightPanel/RightPanel';
 import { InitializeDatabasesWrapper } from '@/database/databaseInitializer';
-import { AppInitializer } from './AppInitializer';
+import { AppInitializer } from '../src/AppInitializer';
 
 function DrawerNavigator() {
 	const { isRightDrawerSwipeEnabled } = useDrawerState();
