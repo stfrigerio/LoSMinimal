@@ -1,6 +1,5 @@
 import { compareTwoStrings } from 'string-similarity';
 import { databaseManagers } from '@/database/tables';
-import { TrackData } from '@/src/types/Library';
 
 interface AutoLinkOptions {
     similarityThreshold?: number;

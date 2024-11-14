@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Alert } from 'react-native';
 
+import AlertModal from '@/src/components/modals/AlertModal';
 import { databaseManagers } from '@/database/tables';
 import { autoLinkTracks } from '../helpers/autoLinkTracks';
 
@@ -11,6 +11,18 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
     const [trackDetails, setTrackDetails] = useState<{ [key: string]: TrackData }>({});
     const [selectedSongForLinking, setSelectedSongForLinking] = useState<string | null>(null);
     const [availableTracks, setAvailableTracks] = useState<ExtendedTrackData[]>([]);
+    const [alertModal, setAlertModal] = useState<{
+        isVisible: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+    }>({
+        isVisible: false,
+        title: '',
+        message: '',
+        onConfirm: () => {},
+    });
+
 
     useEffect(() => {
         if (selectedAlbum) {
@@ -81,20 +93,31 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
             );
 
             if (result.success) {
-                Alert.alert(
-                    'Auto-link Complete', 
-                    `Successfully linked ${result.linkedCount} tracks.`
-                );
-                loadTrackDetails();
+                setAlertModal({
+                    isVisible: true,
+                    title: 'Auto-link Complete',
+                    message: `Successfully linked ${result.linkedCount} tracks.`,
+                    onConfirm: () => {
+                        setAlertModal(prev => ({ ...prev, isVisible: false }));
+                        loadTrackDetails();
+                    }
+                });
             } else {
-                Alert.alert(
-                    'Auto-link Failed',
-                    result.errors?.join('\n') || 'Unknown error occurred'
-                );
+                setAlertModal({
+                    isVisible: true,
+                    title: 'Auto-link Failed',
+                    message: result.errors?.join('\n') || 'Unknown error occurred',
+                    onConfirm: () => setAlertModal(prev => ({ ...prev, isVisible: false }))
+                });
             }
         } catch (error) {
             console.error('Error during auto-link:', error);
-            Alert.alert('Error', 'Failed to auto-link tracks');
+            setAlertModal({
+                isVisible: true,
+                title: 'Error',
+                message: 'Failed to auto-link tracks',
+                onConfirm: () => setAlertModal(prev => ({ ...prev, isVisible: false }))
+            });
         }
     };
 
@@ -105,6 +128,7 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
         availableTracks,
         loadAvailableTracks,
         loadTrackDetails,
-        handleAutoLink
+        handleAutoLink,
+        alertModal
     };
 }; 

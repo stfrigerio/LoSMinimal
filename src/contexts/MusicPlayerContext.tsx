@@ -125,13 +125,17 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     }, [currentTrackData]);
 
-	const incrementPlayCount = useCallback(async () => {
+    const incrementPlayCount = useCallback(async () => {
         if (!currentTrackData) return;
-
+    
         try {
+            // Fetch the latest data first to ensure we have the most recent rating
+            let tracks = await databaseManagers.music.getMusicTracks({ fileName: currentTrackData.fileName });
+            const latestTrackData = tracks?.[0] || currentTrackData;
+    
             const updatedTrack = {
-                ...currentTrackData,
-                playCount: (currentTrackData.playCount || 0) + 1,
+                ...latestTrackData,
+                playCount: (latestTrackData.playCount || 0) + 1,
                 updatedAt: new Date().toISOString()
             };
             await databaseManagers.music.upsert(updatedTrack);
@@ -159,15 +163,15 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     const playNextSong = useCallback(async () => {
         if (isLoadingRef.current || songsRef.current.length === 0) return;
-
+    
         const nextIndex = (currentIndexRef.current + 1) % songsRef.current.length;
         const nextSong = songsRef.current[nextIndex];
         setCurrentIndex(nextIndex);
         setCurrentSong(nextSong);
-
+    
         if (albumNameRef.current) {
             isLoadingRef.current = true;
-            await fetchTrackData(nextSong);  // Add this line
+            await fetchTrackData(nextSong);  // This line fetches fresh data and overwrites any recent changes
             await loadSound(albumNameRef.current, nextSong);
             isLoadingRef.current = false;
         } else {

@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, BackHandler, Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 
+import AlertModal from '@/src/components/modals/AlertModal';
 import { AlbumList } from './components/AlbumList';
 import { SongList } from './components/SongList';
 import { MusicHeader } from './components/MusicHeader';
@@ -36,7 +37,8 @@ const Music = () => {
         availableTracks,
         loadAvailableTracks,
         handleAutoLink,
-        loadTrackDetails
+        loadTrackDetails,
+        alertModal
     } = useTrackManagement(selectedAlbum);
 
     useFocusEffect(
@@ -75,45 +77,56 @@ const Music = () => {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={[designs.text.title, { marginTop: 20 }]}>🎵 Music Library</Text>
-            
-            {selectedAlbum ? (
-                <>
-                    <MusicHeader 
-                        album={selectedAlbum}
-                        onBack={() => setSelectedAlbum(null)}
-                        onAutoLink={handleAutoLink}
+        <>
+            <View style={styles.container}>
+                <Text style={[designs.text.title, { marginTop: 20 }]}>🎵 Music Library</Text>
+                
+                {selectedAlbum ? (
+                    <>
+                        <MusicHeader 
+                            album={selectedAlbum}
+                            onBack={() => setSelectedAlbum(null)}
+                            onAutoLink={handleAutoLink}
+                        />
+                        <SongList 
+                            album={selectedAlbum}
+                            trackDetails={trackDetails}
+                            onPlaySound={playSound}
+                            onLinkTrack={(song) => {
+                                loadAvailableTracks();
+                                setSelectedSongForLinking(song);
+                            }}
+                        />
+                    </>
+                ) : (
+                    <AlbumList 
+                        albums={albums}
+                        onSelectAlbum={setSelectedAlbum}
                     />
-                    <SongList 
-                        album={selectedAlbum}
-                        trackDetails={trackDetails}
-                        onPlaySound={playSound}
-                        onLinkTrack={(song) => {
-                            loadAvailableTracks();
-                            setSelectedSongForLinking(song);
-                        }}
-                    />
-                </>
-            ) : (
-                <AlbumList 
-                    albums={albums}
-                    onSelectAlbum={setSelectedAlbum}
+                )}
+
+                <View style={styles.playerControlsContainer}>
+                    <MusicPlayerControls screen='music'/>
+                </View>
+
+                <LinkTrackModal 
+                    isVisible={!!selectedSongForLinking}
+                    onClose={() => setSelectedSongForLinking(null)}
+                    fileName={selectedSongForLinking || ''}
+                    availableTracks={availableTracks}
+                    onLinkTrack={handleLinkTrack}
+                />
+            </View>
+            {alertModal.isVisible && (
+                <AlertModal 
+                    isVisible={alertModal.isVisible}
+                    title={alertModal.title}
+                    message={alertModal.message}
+                    onConfirm={alertModal.onConfirm}
+                    singleButton={true}
                 />
             )}
-
-            <View style={styles.playerControlsContainer}>
-                <MusicPlayerControls screen='music'/>
-            </View>
-
-            <LinkTrackModal 
-                isVisible={!!selectedSongForLinking}
-                onClose={() => setSelectedSongForLinking(null)}
-                fileName={selectedSongForLinking || ''}
-                availableTracks={availableTracks}
-                onLinkTrack={handleLinkTrack}
-            />
-        </View>
+        </>
     );
 };
 
