@@ -3,47 +3,38 @@ import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './components/MenuButton';
 
-import { useNavigationComponents } from './helpers/useNavigation';
+import { NotePeriod, useNavigationComponents } from './helpers/useNavigation';
 import { useTheme } from '@/src/contexts/ThemeContext';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { getStartOfToday } from '@/src/utils/timezoneBullshit';
+import { getISOWeekData, getStartOfToday } from '@/src/utils/timezoneBullshit';
 
 const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { theme, toggleTheme } = useTheme();
     const { themeColors, designs } = useThemeStyles();
     const styles = useMemo(() => getStyles(themeColors), [themeColors]);
 
-    const { openTasks, openDailyNote, openMoods, openDatabase } = useNavigationComponents();
+    const { openTasks, openDailyNote, openMoods, openDatabase, openNote, openMoney } = useNavigationComponents();
 
-    const handleOpenTasks = () => {
-        setTimeout(() => {
-            openTasks();
-        }, 150);
-    }
-
-    const handleOpenDailyNote = () => {
-        setTimeout(() => {
-            openDailyNote(getStartOfToday().toString());
-        }, 150);
-    }
-
-    const handleOpenMood = () => {
-        setTimeout(() => {
-            openMoods();
-        }, 150);
-    }
-
-    const handleOpenDatabase = () => {
-        setTimeout(() => {
-            openDatabase();
-        }, 150);
-    }
+    const withNavigationDelay = <T extends (...args: any[]) => void>(action: T) => {
+        return ((...args: Parameters<T>): void => {
+            setTimeout(() => action(...args), 150);
+        }) as unknown as T;
+    };
+    
+    const handleOpenTasks = withNavigationDelay(() => openTasks());
+    const handleOpenDailyNote = withNavigationDelay(() => openDailyNote(getStartOfToday().toString()));
+    const handleOpenNote = withNavigationDelay((type: string, date: string) => openNote(type as NotePeriod, date));
+    const handleOpenMood = withNavigationDelay(() => openMoods());
+    const handleOpenDatabase = withNavigationDelay(() => openDatabase());
+    const handleOpenMoney = withNavigationDelay(() => openMoney());
 
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
+    const { week, year } = getISOWeekData(new Date());
+    const weekString = `${year}-W${week.toString().padStart(2, '0')}`;
 
     return (
         <View style={styles.container}>
@@ -60,6 +51,17 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                             icon={faCalendarDay}
                             label={today}
                             onPress={handleOpenDailyNote}
+                        />
+                        <MenuButton
+                            icon={faCalendarDay}
+                            label={weekString}
+                            onPress={() => handleOpenNote('week', weekString)}
+                        />
+                        <View style={styles.separator} />
+                        <MenuButton
+                            icon={faMoneyBill}
+                            label="Money"
+                            onPress={handleOpenMoney}
                         />
                         <MenuButton 
                             icon={faCheckCircle}
@@ -121,6 +123,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     menuSection: {
         flex: 1, 
+    },
+    separator: {
+        height: 1,
+        backgroundColor: themeColors.borderColor,
+        marginVertical: 10,
     },
     header: {
         flexDirection: 'row',

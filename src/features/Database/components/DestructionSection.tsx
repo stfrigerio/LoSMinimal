@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Pressable, Text } from 'react-native';
+import { View } from 'react-native';
 
 import { PickerInput } from '@/src/components/FormComponents';
 import AlertModal from '@/src/components/modals/AlertModal';
@@ -74,10 +74,12 @@ const DestructionSection = () => {
 			/>
 			<PrimaryButton
 				text="⚠️DELETE selected table⚠️"
+				variant="secondary"
 				onPress={() => dropDatabases(false)}
 			/>
 			<PrimaryButton
 				text="💥NUKE DATABASE💥"
+				variant="secondary"
 				onPress={() => dropDatabases(true)}
 			/>
 			{alertModalVisible && (

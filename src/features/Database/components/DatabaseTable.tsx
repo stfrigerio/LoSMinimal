@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View, StyleSheet, Text, Switch, useWindowDimensions } from 'react-native';
 
-import TableView from './TableView';
-import Pagination from './Pagination';
+import TableView from './Table/TableView';
+import Pagination from './Table/Pagination';
 import { TableData } from '../types/types';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 

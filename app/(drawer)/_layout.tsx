@@ -32,6 +32,7 @@ export default function DrawerLayout() {
                 options={{
                     drawerLabel: "Daily Note",
                 }}
+				initialParams={{ date: undefined }}
             />
             <Drawer.Screen 
                 name="tasks" 
@@ -55,6 +56,19 @@ export default function DrawerLayout() {
 				name="database" 
 				options={{
 					drawerLabel: "Database"
+				}} 
+			/>
+			<Drawer.Screen 
+				name="periodic-note" 
+				options={{
+					drawerLabel: "Periodic Note"
+				}} 
+				initialParams={{ startDate: undefined, endDate: undefined }}
+			/>
+			<Drawer.Screen 
+				name="money" 
+				options={{
+					drawerLabel: "Money"
 				}} 
 			/>
         </Drawer>

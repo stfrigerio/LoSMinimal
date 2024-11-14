@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, Platform, StyleSheet, Pressable, Alert, ScrollView } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faLaptop, faMobile, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, ScrollView } from 'react-native';
 
 import { SwitchInput } from '@/src/components/FormComponents';
 import DatabaseTable from './components/DatabaseTable';
@@ -10,7 +8,7 @@ import { useData } from './hooks/useData';
 import { sortTableData } from './helpers/sortTableData'
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
-import TableSelector from './components/TableSelector';
+import TableSelector from './components/Table/TableSelector';
 import DestructionSection from './components/DestructionSection';
 import ServerSection from './components/ServerSection';
 
@@ -22,7 +20,6 @@ const Database: React.FC = () => {
 
 	const { themeColors, designs } = useThemeStyles();
 	const styles = getStyles(themeColors);
-
 
 	const {
 		tableData,
@@ -84,7 +81,7 @@ const Database: React.FC = () => {
 					onValueChange={(value) => setShowDestructionSection(value)}
 					trueLabel='Engage Database Destruction'
 					falseLabel=''
-					trackColorTrue={themeColors.hoverColor}
+					trackColorTrue={themeColors.accentColor}
 					leftLabelOff={true}
 				/>
 			</View>
@@ -180,6 +177,5 @@ const getStyles = (theme: any) => StyleSheet.create({
 	arrowIcon: {
 		marginHorizontal: 8,
 	},
-
 });
 

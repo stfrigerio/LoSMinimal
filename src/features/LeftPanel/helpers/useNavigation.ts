@@ -1,9 +1,8 @@
 import { useCallback } from 'react';
 import { endOfWeek, endOfMonth, endOfQuarter, endOfYear } from 'date-fns';
-import { useNavigation } from 'expo-router';
+import { router } from 'expo-router';
 
 import { formatDate, parseDate, startOfPeriod, getLocalTimeZone } from '@/src/utils/timezoneBullshit';
-import { NativeStackNavigationProp } from 'react-native-screens/lib/typescript/native-stack/types';
 
 export type NotePeriod = 'day' | 'week' | 'lastWeek' | 'month' | 'quarter' | 'year' | 'allYears';
 
@@ -22,18 +21,8 @@ export type NotePeriod = 'day' | 'week' | 'lastWeek' | 'month' | 'quarter' | 'ye
 // 	HideMusic?: { value: string };
 // }
 
-export type RootStackParamList = {
-    'features/DailyNote/DailyNote': { date: string };
-	'features/PeriodicNote/PeriodicNote': { startDate: string; endDate: string };
-    'features/Tasks/Tasks': undefined;
-    'features/Home/Homepage': undefined;
-	'features/UserSettings/UserSettings': undefined;
-	'features/Mood/Mood': undefined;
-	'features/Database/Database': undefined;
-};
 
 export const useNavigationComponents = () => {
-    const navigate = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
 	const openNote = useCallback((period: NotePeriod, date: string) => {
 		const timeZone = getLocalTimeZone();
@@ -41,9 +30,10 @@ export const useNavigationComponents = () => {
 	
 		if (period === 'day') {
 			const formattedDate = formatDate(parsedDate, 'yyyy-MM-dd', timeZone);
-			navigate.navigate('features/DailyNote/DailyNote', { 
-				date: formattedDate 
-			});
+			router.push({
+				pathname: "daily-note",
+				params: { date: formattedDate }
+			});	
 			return;
 		}
 	
@@ -82,24 +72,25 @@ export const useNavigationComponents = () => {
 		const endDate = formatDate(end, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timeZone);
 	
 		// Add periodicNote to RootStackParamList if not already there
-		navigate.navigate('features/PeriodicNote/PeriodicNote', {
-			startDate,
-			endDate
+		router.push({
+			pathname: "periodic-note",
+			params: { startDate, endDate }
 		});
-	}, [navigate]);
+	}, []);
 
 	const openDailyNote = useCallback((dateStr: string) => {
 		const timeZone = getLocalTimeZone();
 		const formattedDate = formatDate(new Date(dateStr), 'yyyy-MM-dd', timeZone);
 		
-		navigate.navigate('features/DailyNote/DailyNote', {
-			date: formattedDate
-		});
-	}, [navigate]);
+		router.push({
+			pathname: "daily-note",
+			params: { date: formattedDate }
+		});	
+	}, []);
 
 	const openSettings = useCallback(() => {
-		navigate.navigate('features/UserSettings/UserSettings' as never);
-	}, [navigate]);
+		router.push('/user-settings');
+	}, []);
 
 	// const openLibrary = useCallback(() => {
 	// 	navigate('library');
@@ -114,25 +105,25 @@ export const useNavigationComponents = () => {
 	// }, [navigate])
 
     const openTasks = useCallback(() => {
-        navigate.navigate('features/Tasks/Tasks' as never);
-    }, [navigate]);
+        router.push('/tasks');
+    }, []);
 
 
 	const openMoods = useCallback(() => {
-		navigate.navigate('features/Mood/Mood' as never);
-	}, [navigate])
+		router.push('/mood');
+	}, []);
 
 	const openDatabase = useCallback(() => {
-		navigate.navigate('features/Database/Database' as never);
-	}, [navigate])
+		router.push('/database');
+	}, []);
 
-	// const openMoney = useCallback(() => {
-	// 	navigate('money');
-	// }, [navigate])
+	const openMoney = useCallback(() => {
+		router.push('/money');
+	}, []);
 
 	const openHomepage = useCallback(() => {
-		navigate.navigate('features/Home/Homepage' as never);
-	}, [navigate])
+		router.push('/home');
+	}, []);
 
 	// const openCurrentWeek = useCallback(() => {
 	// 	const today = new Date();
@@ -161,7 +152,7 @@ export const useNavigationComponents = () => {
 		// openPeople,
 		openTasks,
 		openMoods,
-		// openMoney,
+		openMoney,
 		openHomepage,
 		// openCurrentWeek,
 		// openCurrentMonth,

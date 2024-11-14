@@ -136,7 +136,6 @@ const getStyles = (themeColors: any, designs: any) => {
             borderBottomWidth: 1,
             borderBottomColor: themeColors.borderColor,
             paddingBottom: 15,
-            paddingHorizontal: 10,
         },
         ratingContainer: {
             flexDirection: 'column',

@@ -1,5 +1,8 @@
 import * as FileSystem from 'expo-file-system';
+import * as SQLite from 'expo-sqlite';
 import { getFlaskServerURL } from '../helpers/databaseConfig';
+import axios from 'axios';
+import { capitalizedTableNames } from '@/src/constants/tableNames';
 
 const LOCAL_DB_PATH = `${FileSystem.documentDirectory}SQLite/LocalDB.db`;
 
@@ -31,102 +34,129 @@ export const uploadDatabase = async (
                 type: 'application/x-sqlite3'
             } as any);
 
-            const response = await fetch(`${flaskURL}/upload_${format}`, {
-                method: 'POST',
-                body: formData,
+            const response = await axios.post(`${flaskURL}/upload_${format}`, formData, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
-            if (response.ok) {
-                return { 
-                    success: true, 
-                    message: `${format.toUpperCase()} data uploaded successfully` 
-                };
-            } else {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Upload failed');
-            }
+            return { 
+                success: true, 
+                message: `${format.toUpperCase()} data uploaded successfully` 
+            };
         } else {
-            // Handle JSON data upload
             if (!data) {
                 throw new Error('No JSON data provided');
             }
             
-            // Create a temporary file with the formatted JSON
             const tempPath = `${FileSystem.documentDirectory}temp_upload.json`;
             const formattedJson = JSON.stringify(JSON.parse(data), null, 2);
             await FileSystem.writeAsStringAsync(tempPath, formattedJson);
 
-            // Verify file exists
             const fileInfo = await FileSystem.getInfoAsync(tempPath);
-            console.log('Temp file info:', fileInfo); // Debug log
+            console.log('Temp file info:', fileInfo);
 
             if (!fileInfo.exists) {
                 throw new Error('Failed to create temporary file');
             }
 
             formData.append('file', {
-                uri: `file://${tempPath}`, // Add file:// prefix
+                uri: `file://${tempPath}`,
                 name: 'database_backup.json',
                 type: 'application/json'
             } as any);
 
             try {
-                const response = await fetch(`${flaskURL}/upload_${format}`, {
-                    method: 'POST',
-                    body: formData,
+                const response = await axios.post(`${flaskURL}/upload_${format}`, formData, {
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'multipart/form-data',
                     },
                 });
 
-                console.log('Response status:', response.status); // Debug log
-                const responseText = await response.text();
-                console.log('Response text:', responseText); // Debug log
+                console.log('Response status:', response.status);
+                console.log('Response data:', response.data);
 
-                if (response.ok) {
-                    await FileSystem.deleteAsync(tempPath, { idempotent: true });
-                    return { 
-                        success: true, 
-                        message: `${format.toUpperCase()} data uploaded successfully` 
-                    };
-                } else {
-                    throw new Error(responseText || 'Upload failed');
-                }
-            } catch (fetchError) {
-                console.error('Fetch error details:', fetchError); // Debug log
-                throw fetchError;
+                await FileSystem.deleteAsync(tempPath, { idempotent: true });
+                return { 
+                    success: true, 
+                    message: `${format.toUpperCase()} data uploaded successfully` 
+                };
             } finally {
-                // Ensure cleanup happens even if upload fails
                 await FileSystem.deleteAsync(tempPath, { idempotent: true });
             }
         }
     } catch (error: any) {
-        console.error('Upload error details:', error); // Debug log
-        return { success: false, message: `Upload failed: ${error.message}` };
+        console.error('Upload error details:', error);
+        const errorMessage = error.response?.data?.error || error.message || 'Upload failed';
+        return { success: false, message: `Upload failed: ${errorMessage}` };
     }
 };
 
 export const downloadDatabase = async (): Promise<{ success: boolean; message: string }> => {
+    const tempDBPath = `${FileSystem.documentDirectory}temp_download.db`;
+
     try {
         const flaskURL = await getFlaskServerURL();
         
+        // First check if the database exists on server
+        await axios.get(`${flaskURL}/download_db`, {
+            responseType: 'blob'
+        });
+
+        // Download to temporary location first
         const { uri } = await FileSystem.downloadAsync(
             `${flaskURL}/download_db`,
-            LOCAL_DB_PATH
+            tempDBPath
         );
 
-        if (uri) {
-            return { success: true, message: 'Database downloaded successfully' };
-        } else {
+        if (!uri) {
             throw new Error('Download failed');
         }
+
+        // Validate that it's a SQLite file
+        const fileContent = await FileSystem.readAsStringAsync(tempDBPath, { length: 16 });
+        if (!fileContent.startsWith('SQLite format')) {
+            await FileSystem.deleteAsync(tempDBPath, { idempotent: true });
+            throw new Error('Downloaded file is not a valid SQLite database');
+        }
+
+        // Validate database structure
+        const tempDB = await SQLite.openDatabaseAsync(tempDBPath);
+        
+        // Check for required tables
+        for (const tableName of [...capitalizedTableNames, 'DeletionLog']) {
+            const result = await tempDB.getFirstAsync<{ count: number }>(
+                `SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name=?;`,
+                [tableName]
+            );
+            
+            if (result?.count === 0) {
+                await tempDB.closeAsync();
+                await FileSystem.deleteAsync(tempDBPath, { idempotent: true });
+                throw new Error(`Downloaded database is missing required table: ${tableName}`);
+            }
+        }
+
+        // Close the temporary database connection
+        await tempDB.closeAsync();
+
+        // If all validations pass, move the temp file to final location
+        await FileSystem.moveAsync({
+            from: tempDBPath,
+            to: LOCAL_DB_PATH
+        });
+
+        return { success: true, message: 'Database downloaded and validated successfully' };
     } catch (error: any) {
+        // Clean up temp file if it exists
+        try {
+            await FileSystem.deleteAsync(tempDBPath, { idempotent: true });
+        } catch {}
+
         console.error('Download error:', error);
-        return { success: false, message: `Download failed: ${error.message}` };
+        const errorMessage = error.response?.data?.error || error.message || 'Download failed';
+        return { success: false, message: `Download failed: ${errorMessage}` };
     }
 };

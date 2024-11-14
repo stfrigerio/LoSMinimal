@@ -98,7 +98,6 @@ const getStyles = (themeColors: any, designs: any) => {
         container: {
             flex: 1,
             backgroundColor: themeColors.backgroundColor,
-            paddingHorizontal: 10,
             paddingTop: 30
         },
         content: {
