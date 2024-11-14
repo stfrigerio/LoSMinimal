@@ -6,22 +6,6 @@ import { formatDate, parseDate, startOfPeriod, getLocalTimeZone } from '@/src/ut
 
 export type NotePeriod = 'day' | 'week' | 'lastWeek' | 'month' | 'quarter' | 'year' | 'allYears';
 
-// export interface HomepageSettings {
-// 	HideNextTask?: { value: string };
-// 	HideDots?: { value: string };
-// 	HidePeople?: { value: string };
-// 	HideTasks?: { value: string };
-// 	HideJournal?: { value: string };
-// 	HideMoods?: { value: string };
-// 	HideLibrary?: { value: string };
-// 	HideMoney?: { value: string };
-// 	HideNextObjective?: { value: string };
-// 	HideCarLocation?: { value: string };
-// 	HideTime?: { value: string };
-// 	HideMusic?: { value: string };
-// }
-
-
 export const useNavigationComponents = () => {
 
 	const openNote = useCallback((period: NotePeriod, date: string) => {
@@ -92,17 +76,17 @@ export const useNavigationComponents = () => {
 		router.push('/user-settings');
 	}, []);
 
-	// const openLibrary = useCallback(() => {
-	// 	navigate('library');
-	// }, [navigate])
+	const openLibrary = useCallback(() => {
+		router.push('/library');
+	}, [])
 
-	// const openJournalHub = useCallback(() => {
-	// 	navigate('journalHub');
-	// }, [navigate])
+	const openJournal = useCallback(() => {
+		router.push('/journal');
+	}, [])
 
-	// const openPeople = useCallback(() => {
-	// 	navigate('people');
-	// }, [navigate])
+	const openPeople = useCallback(() => {
+		router.push('/people');
+	}, [])
 
     const openTasks = useCallback(() => {
         router.push('/tasks');
@@ -125,39 +109,27 @@ export const useNavigationComponents = () => {
 		router.push('/home');
 	}, []);
 
-	// const openCurrentWeek = useCallback(() => {
-	// 	const today = new Date();
-	// 	openNote('week', today.toString());
-	// }, [openNote]);
+	const openMusic = useCallback(() => {
+		router.push('/music');
+	}, [])
 
-	// const openCurrentMonth = useCallback(() => {
-	// 	const today = new Date();
-	// 	openNote('month', today.toString());
-	// }, [openNote]);
-
-	// const openMusic = useCallback(() => {
-	// 	navigate('music');
-	// }, [navigate])
-
-	// const openTime = useCallback(() => {
-	// 	navigate('time');
-	// }, [navigate])
+	const openTime = useCallback(() => {
+		router.push('/time');
+	}, [])
 
 	return { 
 		openNote, 
 		openSettings, 
 		openDailyNote, 
-		// openLibrary, 
-		// openJournalHub,
-		// openPeople,
+		openLibrary, 
+		openJournal,
+		openPeople,
 		openTasks,
 		openMoods,
 		openMoney,
 		openHomepage,
-		// openCurrentWeek,
-		// openCurrentMonth,
-		// openMusic,
-		// openTime,
+		openMusic,
+		openTime,
 		openDatabase
 	};
 };

@@ -7,7 +7,7 @@ import TimerDisplay from './TimerDisplay';
 import TagModal from '@/src/components/modals/TagModal';
 import DescriptionModal from '@/src/components/modals/DescriptionModal';
 
-import { useTimer } from '@/src/features/Home/_hooks/useTimer';
+import { useTimer } from '@/src/features/Home/hooks/useTimer';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { TagData } from '@/src/types/TagsAndDescriptions';
 
@@ -20,24 +20,19 @@ export interface SelectionData {
 	newDescriptionName?: string;
 }
 
-interface TimerComponentProps {
-  	homepageSettings?: any;
-}
 
-const TimerComponent: React.FC<TimerComponentProps> = ({ homepageSettings }) => {
+const TimerComponent: React.FC = () => {
 	const [selectionData, setSelectionData] = useState<SelectionData>({
 		isTagModalOpen: false,
 		isDescriptionModalOpen: false,
 	});
-
-	const hideNextObjective = homepageSettings?.HideNextObjective?.value === 'true';
 
 	const { timerRunning, initialSeconds, startTimer, stopTimer, getCurrentTimerSecondsRef, tag, description, fetchActiveTimer, checkAndClearStuckNotification } = useTimer();
 	
 	const { theme, themeColors, designs } = useThemeStyles();
 	const styles = getStyles(themeColors);
 
-  	const handleTagDescriptionSelection = () => {
+	const handleTagDescriptionSelection = () => {
 		if (selectionData.selectedTag && selectionData.selectedDescription) {
 			startTimer(selectionData.selectedTag.text, selectionData.selectedDescription.text);
 			setSelectionData(prev => ({
@@ -48,9 +43,11 @@ const TimerComponent: React.FC<TimerComponentProps> = ({ homepageSettings }) => 
 		}
 	};
 
-  	useEffect(handleTagDescriptionSelection, [selectionData.selectedTag, selectionData.selectedDescription]);
+	useEffect(() => {
+		handleTagDescriptionSelection();
+	}, [selectionData.selectedTag, selectionData.selectedDescription]);
 
-  	const handleStopTimer = async () => {
+	const handleStopTimer = async () => {
 		await stopTimer();
 		setSelectionData(prevData => ({
 			...prevData,
@@ -63,8 +60,8 @@ const TimerComponent: React.FC<TimerComponentProps> = ({ homepageSettings }) => 
 	return (
 		<View style={styles.container}>
 			{!timerRunning && (
-				<Pressable style={styles.floatingButton} onPress={() => setSelectionData(prev => ({ ...prev, isTagModalOpen: true }))}>
-					<FontAwesomeIcon icon={faPlay} size={16} color={'#1E2225'} style={{ marginLeft: 3}}/>
+				<Pressable style={styles.wfloatingButton} onPress={() => setSelectionData(prev => ({ ...prev, isTagModalOpen: true }))}>
+					<FontAwesomeIcon icon={faPlay} size={16} color={themeColors.backgroundColor} style={{ marginLeft: 3}}/>
 				</Pressable>
 			)}
 			{timerRunning && (
@@ -79,7 +76,7 @@ const TimerComponent: React.FC<TimerComponentProps> = ({ homepageSettings }) => 
 					[
 						styles.timerDisplayWrapper,
 						{
-							height: hideNextObjective ? 80 : 20,
+							height: 80,
 						}
 					]
 				}>
@@ -88,21 +85,24 @@ const TimerComponent: React.FC<TimerComponentProps> = ({ homepageSettings }) => 
 						tagName={selectionData.selectedTag?.text || tag || ''}
 						description={selectionData.selectedDescription?.text || description || ''}
 						registerTimer={(timerFunction) => getCurrentTimerSecondsRef.current = timerFunction}
-						homepageSettings={homepageSettings}
 					/>
 				</Pressable>
 			)}
-			<TagModal
-				isOpen={selectionData.isTagModalOpen}
-				setSelectionData={setSelectionData}
-				sourceTable='TimeTable'
-			/>
-			<DescriptionModal
-				isOpen={selectionData.isDescriptionModalOpen}
-				selectedTag={selectionData.selectedTag!}
-				setSelectionData={setSelectionData}
-				sourceTable='TimeTable'
-			/>
+			{selectionData.isTagModalOpen && (
+				<TagModal
+					isOpen={selectionData.isTagModalOpen}
+					setSelectionData={setSelectionData}
+					sourceTable='TimeTable'
+				/>
+			)}
+			{selectionData.isDescriptionModalOpen && (
+				<DescriptionModal
+					isOpen={selectionData.isDescriptionModalOpen}
+					selectedTag={selectionData.selectedTag!}
+					setSelectionData={setSelectionData}
+					sourceTable='TimeTable'
+				/>
+			)}
 		</View>
 	);
 };
@@ -112,7 +112,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		alignItems: 'flex-start',
 	},
 	floatingButton: {
-		backgroundColor: '#CD535B',
+		backgroundColor: theme.accentColor,
 		width: 56,
 		height: 56,
 		borderRadius: 28,

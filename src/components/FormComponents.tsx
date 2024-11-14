@@ -12,6 +12,8 @@ interface FormInputProps {
     multiline?: boolean;
     isNumeric?: boolean;
     editable?: boolean;
+    containerStyle?: StyleSheet;
+    inputStyle?: StyleSheet;
 }
 
 interface PickerInputProps {
@@ -55,6 +57,7 @@ export const FormInput: React.FC<FormInputProps> = ({ label, value, isNumeric = 
 export const PickerInput: React.FC<PickerInputProps> = ({ label, items, ...props }) => {
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
+    
     return (
         <View style={styles.inputContainer}>
             <Text style={styles.pickerLabel}>{label}</Text>

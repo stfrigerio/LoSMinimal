@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers } from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './components/MenuButton';
 
@@ -17,7 +17,16 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = useMemo(() => getStyles(themeColors), [themeColors]);
 
-    const { openTasks, openDailyNote, openMoods, openDatabase, openNote, openMoney } = useNavigationComponents();
+    const { 
+        openTasks, 
+        openDailyNote, 
+        openMoods, 
+        openDatabase, 
+        openNote, 
+        openMoney,
+        openJournal,
+        openPeople
+    } = useNavigationComponents();
 
     const withNavigationDelay = <T extends (...args: any[]) => void>(action: T) => {
         return ((...args: Parameters<T>): void => {
@@ -31,7 +40,9 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const handleOpenMood = withNavigationDelay(() => openMoods());
     const handleOpenDatabase = withNavigationDelay(() => openDatabase());
     const handleOpenMoney = withNavigationDelay(() => openMoney());
-
+    const handleOpenJournal = withNavigationDelay(() => openJournal());
+    const handleOpenPeople = withNavigationDelay(() => openPeople());
+    
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
     const { week, year } = getISOWeekData(new Date());
     const weekString = `${year}-W${week.toString().padStart(2, '0')}`;
@@ -72,6 +83,16 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                             icon={faCommentDots}
                             label="Mood"
                             onPress={handleOpenMood}
+                        />
+                        <MenuButton 
+                            icon={faJournalWhills}
+                            label="Journal"
+                            onPress={handleOpenJournal}
+                        />
+                        <MenuButton 
+                            icon={faUsers}
+                            label="People"
+                            onPress={handleOpenPeople}
                         />
                         <MenuButton 
                             icon={faDatabase}

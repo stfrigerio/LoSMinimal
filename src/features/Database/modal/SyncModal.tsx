@@ -53,7 +53,7 @@ const SyncModal: React.FC<SyncModalProps> = ({ visible, syncInfo, changes, onCon
 					</ScrollView>
 					<View style={styles.buttonContainer}>
 						{isLoading ? (
-								<ActivityIndicator size="large" color={themeColors.hoverColor} />
+								<ActivityIndicator size="large" color={themeColors.accentColor} />
 							) : (
 								<>
 									<PrimaryButton text="Confirm Sync" onPress={onConfirm} />

@@ -27,7 +27,7 @@ const BooleansHeatmap: React.FC<HeatmapChartProps> = ({
     const chartHeight = height || 200;
     const { colors: tagColors } = useColors();
 
-    const trueColor = tagColors[habitName] || themeColors.hoverColor;
+    const trueColor = tagColors[habitName] || themeColors.accentColor;
     const falseColor = themeColors.borderColor;
     const noDataColor = themeColors.backgroundColor;
 

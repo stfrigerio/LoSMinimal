@@ -82,7 +82,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                     <Pressable style={styles.filterIconWrapper} onPress={handleFilterPress}>
                         <FontAwesomeIcon 
                             icon={faSliders} 
-                            color={isFilterActive ? themeColors.hoverColor : themeColors.gray} 
+                            color={isFilterActive ? themeColors.accentColor : themeColors.gray} 
                             size={24} 
                         />
                     </Pressable>

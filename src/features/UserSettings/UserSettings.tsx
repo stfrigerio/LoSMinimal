@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import GeneralSettings from './components/GeneralSettings';
 import DefaultTagsAndDescriptions from './components/DefaultTagsAndDescriptions'
 import DailyNoteSettings from './components/DailyNoteSettings';
 import Navbar from '@/src/components/NavBar';
@@ -18,7 +17,6 @@ const UserSettings: React.FC = () => {
 	const screens = [
 		'Tags', 
 		'Pillars', 
-		'General Settings', 
 		'Notifications', 
 		'Daily Settings', 
 	];
@@ -30,10 +28,8 @@ const UserSettings: React.FC = () => {
 			case 1:
 				return <PillarManager />;
 			case 2:
-				return <GeneralSettings />;
-			case 3:
 				return <NotificationManager />;
-			case 4:
+			case 3:
 				return <DailyNoteSettings />;
 			default:
 				return null;
@@ -82,7 +78,7 @@ const getStyles = (theme: any) => {
 			alignSelf: 'flex-start',
 		},
 		activeButton: {
-			backgroundColor: theme.hoverColor,
+			backgroundColor: theme.accentColor,
 		},
 		text: {
 			color: theme.textColor,

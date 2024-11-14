@@ -1,18 +1,12 @@
-import React, { useRef, useMemo } from 'react';
-import { View, Dimensions, Platform } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, Dimensions } from 'react-native';
 import Svg, { Path, G, Text } from 'react-native-svg';
 import * as d3 from 'd3';
 import { colorPalette, adjustRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
 
-import { useThemeStyles } from '@los/shared/src/styles/useThemeStyles';
-import { TimeData } from '@los/shared/src/types/Time';
-
-let useColors: any;
-if (Platform.OS === 'web') {
-    useColors = require('@los/desktop/src/components/useColors').useColors;
-} else {
-    useColors = require('@los/mobile/src/components/useColors').useColors;
-}
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { TimeData } from '@/src/types/Time';
+import { useColors } from '@/src/utils/useColors';
 
 interface TagData {
     tag: string;

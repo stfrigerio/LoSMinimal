@@ -71,6 +71,18 @@ export default function DrawerLayout() {
 					drawerLabel: "Money"
 				}} 
 			/>
+			<Drawer.Screen 
+				name="journal" 
+				options={{
+					drawerLabel: "Journal"
+				}} 
+			/>
+			<Drawer.Screen 
+				name="people" 
+				options={{
+					drawerLabel: "People"
+				}} 
+			/>
         </Drawer>
 	);
 }

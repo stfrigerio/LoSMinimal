@@ -166,6 +166,6 @@ const getStyles = (theme: any) => StyleSheet.create({
         borderColor: theme.borderColor,
     },
     selectedPillarButton: {
-        backgroundColor: theme.hoverColor,
+        backgroundColor: theme.accentColor,
     },
 });

@@ -9,6 +9,7 @@ import { useTagsAndDescriptions } from '@/src/features/UserSettings/hooks/useTag
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import { useTagModal } from '@/src/components/modals/helpers/useTagModal';
 import { PrimaryButton } from '../atoms/PrimaryButton';
+import { UniversalModal } from './UniversalModal';
 
 interface TagModalProps {
 	isOpen: boolean;
@@ -42,50 +43,44 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
 
 	return (
 		<>
-			<Modal 
-				visible={isOpen} 
-				onRequestClose={() => closeTagModal()} 
-				transparent={true}
-				animationType="fade"
+			<UniversalModal
+				isVisible={isOpen}
+				onClose={() => closeTagModal()}
 			>
-				<View style={designs.modal.modalContainer}>
-					<View style={designs.modal.tagsDescriptionModalView}>
-						<Text style={designs.text.title}>Select Tag</Text>
-						{tags && tags.length > 0 ? (
-							<FlatList
-								data={sortedTags}
-								renderItem={({ item, index }) => {
-									const isLastItem = index === tags.length - 1; 
-									return (
-										<Pressable
-											style={[
-												styles.tagItem,
-												isLastItem ? styles.lastItem : null,
-												{ backgroundColor: themeColors.backgroundColor },
-											]}
-											onPress={() => handleTagSelect(item)}
-										>
-											<View style={styles.tagContent}>
-												<Text style={designs.text.text}>{item.emoji}</Text>
-												<View style={[styles.colorDot, { backgroundColor: item.color }]} />
-												<Text style={designs.text.text}>{item.text}</Text>
-											</View>
-										</Pressable>
-									);
-								}}
-								keyExtractor={(item, index) => `tag-${item.id || index}`}
-							/>
-						) : (
-							<Text style={[designs.text.text, { textAlign: 'center', color: themeColors.gray }]}>No tags available</Text>
-						)}
-						<PrimaryButton
-							text="Add New Tag"
-							onPress={() => setIsAddModalOpen(true)}
-						/>
-					</View>
-				</View>
-			</Modal>
-			{ isAddModalOpen && 
+					<Text style={designs.modal.title}>Select Tag</Text>
+					{tags && tags.length > 0 ? (
+						<View style={styles.tagsContainer}>
+							{sortedTags.map((item, index) => (
+								<Pressable
+									key={`tag-${item.id || index}`}
+									style={[
+										styles.tagItem,
+										index === tags.length - 1 ? styles.lastItem : null,
+										{ backgroundColor: themeColors.backgroundColor },
+									]}
+									onPress={() => handleTagSelect(item)}
+									testID={`tag-item-${index}`}
+								>
+									<View style={styles.tagContent}>
+										<Text style={designs.text.text}>{item.emoji}</Text>
+										<View style={[styles.colorDot, { backgroundColor: item.color }]} />
+										<Text style={designs.text.text}>{item.text}</Text>
+									</View>
+								</Pressable>
+							))}
+						</View>
+					) : (
+						<Text style={[designs.text.text, { textAlign: 'center', color: themeColors.gray }]}>
+							No tags available
+						</Text>
+					)}
+					<View style={{ height: 20 }} />
+					<PrimaryButton
+						text="Add New Tag"
+						onPress={() => setIsAddModalOpen(true)}
+					/>
+			</UniversalModal>
+			{isAddModalOpen && 
 				<AddTagDescriptionModal
 					isVisible={isAddModalOpen}
 					onClose={() => setIsAddModalOpen(false)}
@@ -101,7 +96,7 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
 
 const getStyles = (theme: any) => StyleSheet.create({
 	tagItem: {
-		paddingHorizontal: 50,
+		alignItems: 'center',
 		padding: 15,
 		marginVertical: 2,
 		borderBottomWidth: 1,
@@ -114,6 +109,9 @@ const getStyles = (theme: any) => StyleSheet.create({
 	addButton: {
 		marginTop: 20,
 		width: '100%',
+	},
+	tagsContainer: {
+		marginHorizontal: 40,
 	},
 	tagContent: {
 		flexDirection: 'row',

@@ -6,12 +6,11 @@ import { faCog } from '@fortawesome/free-solid-svg-icons';
 import CustomCalendar from './components/Calendar/Calendar';
 import TimerComponent from './components/TimerComponent';
 import QuickButton from './components/QuickButton';
-// import NextObjective from './components/NextObjective';
+import NextObjective from './components/NextObjective';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useHomepage } from './_hooks/useHomepage';
+import { fetchNextTask } from './hooks/fetchNextTask';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
-import { fetchNextTask } from './_hooks/fetchNextTask';
 
 const Homepage = () => {
     const { theme, themeColors } = useThemeStyles();
@@ -22,7 +21,6 @@ const Homepage = () => {
     const settingsRotateAnim = useRef(new Animated.Value(0)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
-    const { homepageSettings } = useHomepage();
     const { openSettings } = useNavigationComponents();
 
     useEffect(() => {
@@ -61,10 +59,6 @@ const Homepage = () => {
         outputRange: ['0deg', '-240deg']
     });
 
-    const shouldShow = (setting?: { value: string }) => {
-        return setting === undefined || setting.value !== "true";
-    };
-
     return (
         <View style={styles.container}>
             <ImageBackground 
@@ -75,28 +69,32 @@ const Homepage = () => {
                 <View style={styles.overlay}>
                     <View style={styles.content}>
                         <CustomCalendar />
+                        <Animated.View style={{
+                            opacity: fadeAnim,
+                            position: 'absolute',
+                            bottom: 0,
+                            right: 0,
+                        }}>
+                            <NextObjective 
+                                fetchNextTask={(setTask, setTime) => {
+                                    fetchNextTask(
+                                        (task) => setTask(task ?? ''),  // Convert null to empty string
+                                        (time) => setTime(time ?? '')
+                                    );
+                                }} 
+                            />                    
+                        </Animated.View>
                     </View>
                 </View>
             </ImageBackground>
             <View style={styles.footerActions}>
                 <Animated.View style={{ opacity: fadeAnim }}>
-                    <TimerComponent homepageSettings={homepageSettings} />
+                    <TimerComponent />
                 </Animated.View>
-                {shouldShow(homepageSettings.HideNextObjective) && (
-                    <Animated.View style={{
-                        opacity: fadeAnim,
-                        position: 'absolute',
-                        bottom: 0,
-                        right: 0,
-                    }}>
-                        {/* <NextObjective homepageSettings={homepageSettings} fetchNextTask={fetchNextTask} /> */}
-                    </Animated.View>
-                )}
                 <View style={styles.quickButtonContainer}>
                     <QuickButton 
                         isExpanded={isQuickButtonExpanded} 
                         setIsExpanded={setIsQuickButtonExpanded} 
-                        homepageSettings={homepageSettings}
                     />
                     <Animated.View style={[
                         styles.settingsButton,

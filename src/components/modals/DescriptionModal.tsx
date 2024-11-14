@@ -10,6 +10,7 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import { PrimaryButton } from '../atoms/PrimaryButton';
+import { UniversalModal } from './UniversalModal';
 
 interface DescriptionModalProps {
     isOpen: boolean;
@@ -44,40 +45,40 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({ isOpen, selectedTag
 
     return (
         <>
-            <Modal visible={isOpen} onRequestClose={() => closeDescriptionModal()} transparent={true}>
-                <View style={designs.modal.modalContainer}>
-                    <View style={designs.modal.tagsDescriptionModalView}>
-                        <Text style={designs.text.title}>Select a Description</Text>
-                        {descriptions && descriptions.length > 0 ? (
-                            <FlatList
-                                data={sortedDescriptions}
-                                renderItem={({ item, index }) => {
-                                    const isLastItem = index === descriptions.length - 1; 
-                                    return (
-                                        <Pressable
-                                            style={[
-                                                styles.descriptionItem,
-                                                isLastItem ? styles.lastItem : null,
-                                                { backgroundColor: item.color || themeColors.backgroundColor },
-                                            ]}
-                                            onPress={() => handleDescriptionSelect(item)}
-                                        >
-                                            <Text style={designs.text.text}>{item.emoji} {item.text}</Text>
-                                        </Pressable>
-                                    );
-                                }}
-                                keyExtractor={(item, index) => `description-${item.id || index}`}
-                            />
-                        ) : (
-                            <Text style={designs.text.text}>No descriptions available</Text>
-                        )}
-                        <PrimaryButton
-                            text="Add Description"
-                            onPress={() => setIsAddModalOpen(true)}
-                        />
+            <UniversalModal
+                isVisible={isOpen}
+                onClose={() => closeDescriptionModal()}
+            >
+                <Text style={designs.modal.title}>Select a Description</Text>
+                {descriptions && descriptions.length > 0 ? (
+                    <View style={styles.descriptionsContainer}>
+                        {sortedDescriptions.map((item, index) => (
+                            <Pressable
+                                key={`tag-${item.id || index}`}
+                                style={[
+                                    styles.descriptionItem,
+                                    index === descriptions.length - 1 ? styles.lastItem : null,
+                                    { backgroundColor: themeColors.backgroundColor },
+                                ]}
+                                onPress={() => handleDescriptionSelect(item)}
+                                testID={`description-item-${index}`}
+                            >
+                                <View style={styles.descriptionContent}>
+                                    <Text style={designs.text.text}>{item.emoji}</Text>
+                                    <Text style={designs.text.text}>{item.text}</Text>
+                                </View>
+                            </Pressable>
+                        ))}
                     </View>
-                </View>
-            </Modal>
+                ) : (
+                    <Text style={designs.text.text}>No descriptions available</Text>
+                )}
+                <View style={{ height: 20 }} />
+                <PrimaryButton
+                    text="Add Description"
+                    onPress={() => setIsAddModalOpen(true)}
+                />
+            </UniversalModal>
             {isAddModalOpen && 
                 <AddTagDescriptionModal
                     isVisible={isAddModalOpen}
@@ -101,14 +102,20 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({ isOpen, selectedTag
 
 const getStyles = (theme: any) => StyleSheet.create({
     descriptionItem: {
-        paddingHorizontal: 50,
-        padding: 15,
-        marginVertical: 2,
-        backgroundColor: theme.backgroundColor,
-        borderBottomWidth: 1,
-        borderColor: theme.borderColor,
-        borderRadius: 5,
+		alignItems: 'center',
+		padding: 15,
+		marginVertical: 2,
+		borderBottomWidth: 1,
+		borderColor: theme.borderColor,
+		borderRadius: 5,
     },
+    descriptionsContainer: {
+		marginHorizontal: 40,
+	},
+	descriptionContent: {
+		flexDirection: 'row',
+		alignItems: 'center',
+	},
     lastItem: {
         borderBottomWidth: 0
     },

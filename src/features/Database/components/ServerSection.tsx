@@ -66,7 +66,7 @@ const ServerSection = () => {
                         disabled={isImporting}
                     >
                         {isImporting ? (
-                            <ActivityIndicator color={themeColors.hoverColor} />
+                            <ActivityIndicator color={themeColors.accentColor} />
                         ) : (
                             <FontAwesomeIcon icon={faFileImport} size={20} color={themeColors.gray} />
                         )}

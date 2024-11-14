@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-// import { formatSecondsToHMS } from '@/src/utils/timeUtils';
+import { formatSecondsToHMS } from '@/src/utils/timeUtils';
 import { databaseManagers } from '@/database/tables';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
@@ -11,10 +11,9 @@ interface TimerDisplayProps {
 	tagName?: string;
 	description?: string;
 	registerTimer: (timerFunction: () => number) => void;
-	homepageSettings: any;
 }
 
-const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, description, registerTimer, homepageSettings }) => {
+const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, description, registerTimer }) => {
 	const [seconds, setSeconds] = useState(initialSeconds);
 	const secondsRef = useRef(initialSeconds);
 	const [emoji, setEmoji] = useState<string>('');
@@ -65,35 +64,33 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, de
 		fetchEmojis();
 	}, [tagName, description]);
 
-	const hideNextObjective = homepageSettings?.HideNextObjective?.value === 'true';
-
 	return (
 		<View style={[
 			styles.timerFlexContainer,
 			{
 				left: 0,
 				right: 0,
-				bottom: 0,
+				bottom: 5,
 			}
 		]}>
 			<View style={[
 				styles.timerContentWrapper, 
 				{ 
-					flexDirection: hideNextObjective ? 'column' : 'row', 
-					gap: hideNextObjective ? 4 : 0,
+					flexDirection: 'column', 
+					gap: 6,
 				}
 			]}>
 				<View style={styles.tagContainer}>
-					<Text style={[styles.timerTag, { fontSize: hideNextObjective ? 12 : 10 }]} numberOfLines={1} ellipsizeMode="tail">
+					<Text style={[styles.timerTag, { fontSize: 10 }]} numberOfLines={1} ellipsizeMode="tail">
 						{emoji} {tagName}
 					</Text>
 				</View>
 				<View style={styles.descriptionContainer}>
-					<Text style={[styles.timerDescription, { fontSize: hideNextObjective ? 12 : 10 }]} numberOfLines={1} ellipsizeMode="tail">
+					<Text style={[styles.timerDescription, { fontSize: 10 }]} numberOfLines={1} ellipsizeMode="tail">
 						{descriptionEmoji} {description}
 					</Text>
 				</View>
-				{/* <Text style={[styles.timer, { fontSize: hideNextObjective ? 12 : 10 }]}>{formatSecondsToHMS(seconds)}</Text> */}
+				<Text style={[styles.timer, { fontSize: 10 }]}>{formatSecondsToHMS(seconds)}</Text>
 			</View>
 		</View>
 	);
@@ -107,7 +104,6 @@ const getStyles = (theme: any) => StyleSheet.create({
 		bottom: 0,
 		paddingVertical: 4,
 		paddingHorizontal: 8,
-		// backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	timerContentWrapper: {
 		alignItems: 'center',

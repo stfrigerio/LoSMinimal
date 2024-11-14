@@ -106,7 +106,7 @@ const getStyles = (themeColors: any, designs: any) => {
             width: 60,
             height: 60,
             borderRadius: 30,
-            backgroundColor: themeColors.hoverColor,
+            backgroundColor: themeColors.accentColor,
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',

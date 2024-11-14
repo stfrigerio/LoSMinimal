@@ -109,7 +109,7 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
                             >
                                 <FontAwesomeIcon 
                                     icon={objective.completed ? faCheckCircle : faCircle} 
-                                    color={objective.completed ? themeColors.hoverColor : 'gray'} 
+                                    color={objective.completed ? themeColors.accentColor : themeColors.gray} 
                                     size={20} 
                                 /> 
                             </Pressable>

@@ -3,8 +3,7 @@ import { View, StyleSheet, ScrollView, Dimensions, Text } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 
-// import TimeChart from './TimeChart'
-// import MusicPlayerControls from '../Music/components/MusicPlayerControls';
+import TimeChart from './TimeChart'
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
@@ -16,17 +15,13 @@ const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <BlurView 
-                    intensity={20} 
+                    intensity={100} 
                     tint={theme === 'dark' ? 'dark' : 'light'} 
                     style={[StyleSheet.absoluteFill, { zIndex: 1 }]} 
                 />
                 <View style={styles.content}>
                     <View style={styles.chartContainer}>
-                        {/* <TimeChart /> */}
-                    </View>
-                    <Text>Hello I am the old left panel</Text>
-                    <View style={styles.musicControlsContainer}>
-                        {/* <MusicPlayerControls /> */}
+                        <TimeChart />
                     </View>
                 </View>
             </ScrollView>

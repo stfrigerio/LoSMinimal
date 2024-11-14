@@ -4,7 +4,7 @@ import { MoneyData } from '@/src/types/Money';
 
 export const useTransactionModal = (closeTransactionModal: () => void, initialTransaction?: MoneyData) => {
     const [accounts, setAccounts] = useState<Array<{ label: string; value: string }>>([]);
-    const [selectedAccount, setSelectedAccount] = useState<string>(initialTransaction?.account || '');
+    const [selectedAccount, setSelectedAccount] = useState<string>(initialTransaction?.account || 'Revolut');
 
     useEffect(() => {
         fetchAccounts();

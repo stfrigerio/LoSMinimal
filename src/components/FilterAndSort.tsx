@@ -200,7 +200,7 @@ const getStyles = (themeColors: any, isActive: boolean) => StyleSheet.create({
         backgroundColor: themeColors.backgroundSecondary,
     },
     tagButtonSelected: {
-        backgroundColor: themeColors.hoverColor,
+        backgroundColor: themeColors.accentColor,
     },
     tagText: {
         color: themeColors.textColor,

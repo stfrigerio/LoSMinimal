@@ -29,7 +29,7 @@ const ChartToggle: React.FC<ChartToggleProps> = ({
 							type === 'monthly' ? faCalendar :
 							faChartPie
 						}
-						color={viewType === type ? themeColors.hoverColor : themeColors.textColor}
+						color={viewType === type ? themeColors.accentColor : themeColors.textColor}
 					/>
 					<Text style={[styles.chartButtonText, viewType === type && styles.activeChartButtonText]}>
 						{type.charAt(0).toUpperCase() + type.slice(1)}

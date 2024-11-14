@@ -163,7 +163,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
                     isVisible={isOpen}
                     onClose={closeTransactionModal}
                 >
-                    <Text style={designs.text.title}>💸 New transaction</Text>
+                    <Text style={designs.modal.title}>💸 New transaction</Text>
                     <Pressable onPress={showDatePicker} style={styles.datePickerButton}>
                         <FormInput
                             label="Date"
@@ -195,7 +195,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
                         onValueChange={handleAccountChange}
                         items={accounts}
                     />
-                    <View style={{ width: '100%' }}>
+                    <View style={{ width: '100%', marginBottom: 20 }}>
                         <TagDescriptionSelector
                             tag={transaction.tag}
                             description={transaction.description}

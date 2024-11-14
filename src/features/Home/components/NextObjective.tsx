@@ -3,8 +3,8 @@ import { View, Text, Pressable, StyleSheet, Animated, Platform } from 'react-nat
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { databaseManagers } from '@/database/tables';
-// import { getWeekNumber } from '@/src/utils/timeUtils';
-import { useTimer } from '@/src/features/Home/_hooks/useTimer';
+import { getISOWeekData } from '@/src/utils/timezoneBullshit';
+import { useTimer } from '@/src/features/Home/hooks/useTimer';
 
 import { ObjectiveData } from '@/src/types/Objective';
 
@@ -13,11 +13,10 @@ interface ObjectiveWithPillarEmoji extends ObjectiveData {
 }
 
 interface NextObjectiveProps {
-    homepageSettings: any;
     fetchNextTask: (setNextTask: (task: string) => void, setTimeLeft: (time: string) => void) => void;
 }
 
-const NextObjective: React.FC<NextObjectiveProps> = ({ homepageSettings, fetchNextTask }) => {
+const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
     const { theme, themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
 
@@ -34,32 +33,32 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ homepageSettings, fetchNe
 
     const { timerRunning } = useTimer();
 
-    // useEffect(() => {
-    //     fetchWeeklyObjectives();
-    // }, []);
+    useEffect(() => {
+        fetchWeeklyObjectives();
+    }, []);
 
-    // const fetchWeeklyObjectives = async () => {
-    //     try {
-    //         const currentWeek = getWeekNumber(new Date());
-    //         const formattedWeek = `2024-W${currentWeek}`;
-    //         const response = await databaseManagers.objectives.getObjectives({ period: formattedWeek });
-    //         const pillars = await databaseManagers.pillars.getPillars();
+    const fetchWeeklyObjectives = async () => {
+        try {
+            const currentWeek = getISOWeekData(new Date());
+            const formattedWeek = `2024-W${currentWeek}`;
+            const response = await databaseManagers.objectives.getObjectives({ period: formattedWeek });
+            const pillars = await databaseManagers.pillars.getPillars();
 
-    //         const objectivesWithPillarEmoji = response.map(objective => {
-    //             const pillar = pillars.find(p => p.uuid === objective.pillarUuid);
-    //             return {
-    //                 ...objective,
-    //                 pillarEmoji: pillar?.emoji,
-    //             };
-    //         });
+            const objectivesWithPillarEmoji = response.map(objective => {
+                const pillar = pillars.find(p => p.uuid === objective.pillarUuid);
+                return {
+                    ...objective,
+                    pillarEmoji: pillar?.emoji,
+                };
+            });
 
-    //         if (objectivesWithPillarEmoji && objectivesWithPillarEmoji.length > 0) {
-    //             setObjectives(objectivesWithPillarEmoji as ObjectiveWithPillarEmoji[]);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching objectives:", error);
-    //     }
-    // };
+            if (objectivesWithPillarEmoji && objectivesWithPillarEmoji.length > 0) {
+                setObjectives(objectivesWithPillarEmoji as ObjectiveWithPillarEmoji[]);
+            }
+        } catch (error) {
+            console.error("Error fetching objectives:", error);
+        }
+    };
 
     const handleFetchNextTask = () => {
         const animateOpacity = () => {
@@ -219,7 +218,7 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ homepageSettings, fetchNe
                         {objectives[nextIndex].pillarEmoji} {objectives[nextIndex].objective}
                     </Text>
                 </Animated.View>
-                {homepageSettings.HideNextTask?.value === "false" && isExpanded && ( 
+                {isExpanded && ( 
                     <View style={styles.nextTaskWrapper}>
                         <Text style={styles.miniHeader}>Next Task</Text>
                         <View style={styles.miniHeaderSeparator} />
