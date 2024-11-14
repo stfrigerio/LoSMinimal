@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { databaseManagers } from '@los/mobile/src/database/tables';
+import { databaseManagers } from '@/database/tables';
 
 // Interface for search results
 export interface SearchResult {

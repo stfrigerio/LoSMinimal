@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
-import { databaseManagers } from '@los/mobile/src/database/tables';
+import { databaseManagers } from '@/database/tables';
 
-import { MovieItem } from '../../../types/Library';
+import { MovieItem } from '@/src/types/Library';
 
 const API_URL = "https://www.omdbapi.com/";
 let API_KEY = "";

@@ -13,7 +13,7 @@ interface DetailedViewProps {
     item: LibraryData;
     onClose: () => void;
     onDelete: (item: LibraryData) => void;
-    onToggleDownload?: (item: LibraryData) => void;
+    onToggleDownload?: (item: LibraryData) => Promise<void>;
     updateItem: (item: LibraryData) => Promise<void>;
 }
 
@@ -194,7 +194,6 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
             </View>
         );
     };
-
 
     const renderSpecificDetails = () => {
         switch (item.type) {

@@ -7,9 +7,9 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles } from '../../../styles/useThemeStyles';
 import { TrackData } from '../../../types/Library';
-import { UniversalModal } from '../../../sharedComponents/UniversalModal';
+import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
-import { databaseManagers } from '@los/mobile/src/database/tables';
+import { databaseManagers } from '@/database/tables';
 
 interface TrackDetailModalProps {
     isVisible: boolean;
@@ -192,7 +192,6 @@ const TrackDetailModal: React.FC<TrackDetailModalProps> = ({ isVisible, onClose,
         <UniversalModal 
             isVisible={isVisible} 
             onClose={onClose}
-            modalViewStyle="taller"
         >
             {modalContent}
         </UniversalModal>

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Platform, Dimensions } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
-import Navbar from '@los/shared/src/sharedComponents/NavBar';
+import Navbar from '@/src/components/NavBar';
 import Card from './components/Card';
 import DetailedView from './components/DetailedView';
 
@@ -12,20 +12,8 @@ import MusicSearchModal from './modals/MusicModal';
 import SeriesSearchModal from './modals/SeriesModal';
 
 import { useThemeStyles } from '../../styles/useThemeStyles';
-import { useHomepage } from '../Home/helpers/useHomepage';
-
-let Pager: any
-let MediaList: any
-let DrawerStateManager: any
-if (Platform.OS === 'web') {
-	Pager = require('@los/desktop/src/components/Library/components/DesktopPager').default
-	MediaList = require('@los/desktop/src/components/Library/components/MediaList').default
-	DrawerStateManager = null
-} else {
-	Pager = require('@los/mobile/src/components/Library/components/MobilePager').default
-	MediaList = require('@los/mobile/src/components/Library/components/MediaList').default
-	DrawerStateManager = require('@los/mobile/src/components/Contexts/DrawerState').DrawerStateManager;
-}
+import Pager from '@/src/features/Library/components/MobilePager';
+import MediaList from '@/src/features/Library/components/MediaList';
 
 const LibraryHub: React.FC = () => {
 	const [pageIndex, setPageIndex] = useState(0); // Use pageIndex as the source of truth
@@ -35,24 +23,10 @@ const LibraryHub: React.FC = () => {
 	const [videogameModalVisible, setVideogameModalVisible] = useState(false);
 	const [musicModalVisible, setMusicModalVisible] = useState(false);
 
-	const { themeColors, designs } = useThemeStyles();
+	const { themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
-	const { openHomepage } = useHomepage();
 
 	const pagerViewRef = useRef<any>(null);
-
-	useEffect(() => {
-		if (DrawerStateManager) {
-			DrawerStateManager.disableAllSwipeInteractions();
-		}
-	
-		// Cleanup function to re-enable swipe interactions when component unmounts
-		return () => {
-			if (DrawerStateManager) {
-				DrawerStateManager.enableAllSwipeInteractions();
-			}
-		};
-	}, []); 
 
 	const onPageSelected = (e: any) => {
 		const newIndex = e.nativeEvent.position;
@@ -97,7 +71,7 @@ const LibraryHub: React.FC = () => {
 					ref={pagerViewRef}
 				>
 					{mediaTypes.map((media, index) => (
-						<View key={index}>
+						<View key={index} style={styles.pageWrapper}>
 							<MediaList
 								mediaType={media.type}
 								CardComponent={Card}
@@ -113,8 +87,6 @@ const LibraryHub: React.FC = () => {
 			<Navbar
 				items={navItems}
 				activeIndex={pageIndex}
-				title="Library"
-				onBackPress={Platform.OS === 'web' ? openHomepage : undefined}
 				screen={mediaTypes[pageIndex].type}
 				quickButtonFunction={mediaTypes[pageIndex].openModal}
 			/>
@@ -122,17 +94,12 @@ const LibraryHub: React.FC = () => {
 	);
 };
 
-
 export default LibraryHub;
 
 const getStyles = (theme: any) => {
-	const { width, height } = Dimensions.get('window');
-	const isSmall = width < 1920;
-	const isDesktop = Platform.OS === 'web';
-
 	return StyleSheet.create({
 		mainContainer: {
-			marginTop: isDesktop ? 0 : 37,
+			paddingTop: 37,
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
 			height: '100%'
@@ -153,8 +120,12 @@ const getStyles = (theme: any) => {
 		text: {
 			color: theme.textColor
 		},
-		pagerView: {
-			flex: 1, // Ensure PagerView takes up the remaining space
-		},
+        pagerView: {
+            flex: 1,
+        },
+        pageWrapper: {
+            flex: 1,
+            width: '100%',
+        },
 	});
 }

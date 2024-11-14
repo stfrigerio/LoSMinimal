@@ -1,13 +1,12 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, FlatList, Pressable, NativeSyntheticEvent, NativeScrollEvent, Platform, Dimensions, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { ScrollView } from 'react-native-gesture-handler';
 
-import SearchComponent from '@los/shared/src/components/Library/components/SearchComponent';
-import { useThemeStyles } from '@los/shared/src/styles//useThemeStyles';
-import { useMediaList } from '@los/mobile/src/components/Library/hooks/useMediaList';
+import SearchComponent from '@/src/features/Library/components/SearchComponent';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useMediaList } from '@/src/features/Library/hooks/useMediaList';
 
-import { LibraryData } from '@los/shared/src/types/Library';
+import { LibraryData } from '@/src/types/Library';
 
 interface MediaListProps {
     mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music';
@@ -29,12 +28,10 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
         items,
         selectedItem,
         sortOption,
-        hasMore,
         searchQuery,
         setSearchQuery,
         setSortOption,
         onSaveToLibrary,
-        loadMoreItems,
         handleItemSelect,
         handleCloseDetail,
         handleDelete,
@@ -42,20 +39,15 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
         updateItem,
     } = useMediaList(mediaType);
 
-    const scrollViewRef = useRef(null);
-
-    const { themeColors, designs } = useThemeStyles();
+    const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 
-    const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        if (isCloseToBottom(event.nativeEvent)) {
-            loadMoreItems();
-        }
-    };
-
-    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent) => {
-        const paddingToBottom = 20;
-        return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+    const renderItem = ({ item }: { item: LibraryData }) => {
+        return (
+            <View style={styles.cardWrapper}>
+                <CardComponent item={item} onPress={handleItemSelect} />
+            </View>
+        );
     };
 
     return (
@@ -70,11 +62,7 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
                         updateItem={updateItem}
                     />
                 ) : (
-                    <ScrollView
-                        ref={scrollViewRef}
-                        onScroll={onScroll}
-                        scrollEventThrottle={400}
-                    >
+                    <View style={styles.listContainer}>
                         <View style={styles.filteringView}>
                             <View style={styles.searchContainer}>
                                 <SearchComponent searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -84,7 +72,7 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
                                 <Picker
                                     selectedValue={sortOption}
                                     onValueChange={(itemValue) => setSortOption(itemValue)}
-                                    style={styles.picker}
+                                    style={{ color: themeColors.textColor }}
                                 >
                                     <Picker.Item label="Seen" value="seen" />
                                     <Picker.Item label="Release Year" value="year" />
@@ -93,14 +81,15 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
                             </View>
                         </View>
                         <FlatList
+                            style={styles.flatList}
                             data={items}
                             keyExtractor={item => item.id.toString()}
-                            renderItem={({ item }) => (
-                                <CardComponent item={item} onPress={handleItemSelect} />
-                            )}
-                            scrollEnabled={false}
+                            renderItem={renderItem}
+                            initialNumToRender={10}
+                            maxToRenderPerBatch={5}
+                            windowSize={5}
+                            removeClippedSubviews={true}
                         />
-                        {hasMore && <Text style={styles.buttonText}>Loading more...</Text>}
                         {modalVisible && 
                             <SearchModalComponent
                                 isOpen={modalVisible}
@@ -108,7 +97,7 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
                                 onSaveToLibrary={onSaveToLibrary}
                             />
                         }
-                    </ScrollView>
+                    </View>
                 )}
             </View>
         </>
@@ -116,40 +105,12 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
 };
 
 const getStyles = (theme: any) => {
-    const { width } = Dimensions.get('window');
-    const isSmall = width < 1920;
-    const isDesktop = Platform.OS === 'web';
-
     return StyleSheet.create({
         container: {
             flex: 1,
+            height: '100%',
+            backgroundColor: theme.backgroundColor,
             padding: 10,
-        },
-        input: {
-            height: 40,
-            borderColor: theme.borderColor,
-            borderWidth: 1,
-            padding: 10,
-            marginBottom: 10,
-        },
-        text: {
-            color: theme.textColor,
-        },
-        item: {
-            padding: 10,
-            marginVertical: 8,
-            marginHorizontal: 16,
-            borderBottomWidth: 1,
-            borderBottomColor: theme.borderColor,
-        },
-        button: {
-            margin: 10,
-            marginHorizontal: 20,
-            padding: 10,
-            backgroundColor: '#CC5359',
-            borderWidth: 2,
-            borderColor: theme.borderColor,
-            borderRadius: 10,
         },
         buttonText: {
             color: '#1E2225',
@@ -157,17 +118,22 @@ const getStyles = (theme: any) => {
             fontSize: 16,
             fontWeight: 'bold'
         },
+        flatList: {
+            flex: 1,
+            width: '100%',
+        },
         filteringView: {
             flexDirection: 'row',
             margin: 10,
             padding: 15,
             marginBottom: -10
         },
+        listContainer: {
+            flex: 1,
+            height: '100%',
+        },
         pickerContainer: {
             flexDirection: 'column',
-        },
-        picker: {
-            color: theme.textColor,
         },
         sortText: {
             color: theme.textColor,
@@ -175,7 +141,16 @@ const getStyles = (theme: any) => {
         },
         searchContainer: {
             flexGrow: 1,
-        }
+        },
+        cardWrapper: {
+            marginVertical: 6,
+            marginHorizontal: 2, // Slight horizontal margin
+            shadowColor: theme.shadowColor,
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 4,
+            elevation: 3, // Android shadow
+        },
     });
 };
 

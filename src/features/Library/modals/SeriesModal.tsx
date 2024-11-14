@@ -5,6 +5,7 @@ import { fetchSeries, isImdbId, getByImdbId, Series } from '../api/seriesFetcher
 import { useThemeStyles } from '../../../styles/useThemeStyles';
 
 import { LibraryData } from '../../../types/Library';
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface SeriesSearchModalProps {
     isOpen: boolean;
@@ -80,9 +81,10 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
                                 placeholderTextColor={'gray'}
                                 onSubmitEditing={handleSearch}
                             />
-                            <Pressable style={designs.button.marzoPrimary} onPress={handleSearch}>
-                                <Text style={designs.button.buttonText}>Search</Text>
-                            </Pressable>
+                            <PrimaryButton
+                                text="Search"
+                                onPress={handleSearch}
+                            />
                         </>
                     )}
                     {showSeriesList && (
@@ -114,9 +116,10 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
                                 keyboardType="numeric"
                                 onSubmitEditing={handleSave}
                             />
-                            <Pressable style={designs.button.marzoSecondary} onPress={handleSave}>
-                                <Text style={designs.button.buttonText}>Save to Library</Text>
-                            </Pressable>
+                            <PrimaryButton
+                                text="Save to Library"
+                                onPress={handleSave}
+                            />
                         </View>
                             )}
                     </View>

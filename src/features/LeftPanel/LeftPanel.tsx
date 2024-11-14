@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers, faMusic } from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './components/MenuButton';
 
@@ -23,6 +23,8 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
         openMoods, 
         openDatabase, 
         openNote, 
+        openMusic,
+        openLibrary,
         openMoney,
         openJournal,
         openPeople
@@ -42,7 +44,9 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const handleOpenMoney = withNavigationDelay(() => openMoney());
     const handleOpenJournal = withNavigationDelay(() => openJournal());
     const handleOpenPeople = withNavigationDelay(() => openPeople());
-    
+    const handleOpenMusic = withNavigationDelay(() => openMusic());
+    const handleOpenLibrary = withNavigationDelay(() => openLibrary());
+
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
     const { week, year } = getISOWeekData(new Date());
     const weekString = `${year}-W${week.toString().padStart(2, '0')}`;
@@ -93,6 +97,11 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                             icon={faUsers}
                             label="People"
                             onPress={handleOpenPeople}
+                        />
+                        <MenuButton
+                            icon={faMusic}
+                            label="Library"
+                            onPress={handleOpenLibrary}
                         />
                         <MenuButton 
                             icon={faDatabase}

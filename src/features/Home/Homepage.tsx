@@ -10,7 +10,10 @@ import NextObjective from './components/NextObjective';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { fetchNextTask } from './hooks/fetchNextTask';
+import { DrawerStateManager } from '@/src/contexts/DrawerState';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
+import DayNotesStatus from './components/DayNotesStatus';
+import MusicPlayerControls from '../Music/components/MusicPlayerControls';
 
 const Homepage = () => {
     const { theme, themeColors } = useThemeStyles();
@@ -22,6 +25,12 @@ const Homepage = () => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const { openSettings } = useNavigationComponents();
+
+    useEffect(() => {
+        if (DrawerStateManager) {
+            DrawerStateManager.enableAllSwipeInteractions();
+        }
+    }, []);
 
     useEffect(() => {
         Animated.parallel([
@@ -69,21 +78,22 @@ const Homepage = () => {
                 <View style={styles.overlay}>
                     <View style={styles.content}>
                         <CustomCalendar />
+                        <DayNotesStatus />
                         <Animated.View style={{
-                            opacity: fadeAnim,
-                            position: 'absolute',
-                            bottom: 0,
-                            right: 0,
+                            width: '80%',
                         }}>
                             <NextObjective 
                                 fetchNextTask={(setTask, setTime) => {
                                     fetchNextTask(
-                                        (task) => setTask(task ?? ''),  // Convert null to empty string
+                                        (task) => setTask(task ?? ''),
                                         (time) => setTime(time ?? '')
                                     );
                                 }} 
                             />                    
                         </Animated.View>
+                        <View style={styles.playerControlsContainer}>
+                            <MusicPlayerControls screen='home'/>
+                        </View>
                     </View>
                 </View>
             </ImageBackground>
@@ -139,6 +149,9 @@ const getStyles = (theme: any) => StyleSheet.create({
         alignItems: 'center',
         padding: 20,
     },
+    playerControlsContainer: {
+        marginTop: 20,
+    },
     quickButtonContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -155,7 +168,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         alignItems: 'center',
         padding: 20,
         position: 'absolute',
-        bottom: 0,
+        bottom: 5,
         left: 0,
         right: 0,
     },

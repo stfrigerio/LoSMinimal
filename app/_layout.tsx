@@ -7,7 +7,7 @@ import { ThemeProvider } from '../src/contexts/ThemeContext';
 import { DrawerStateProvider, useDrawerState } from '../src/contexts/DrawerState';
 import { NavbarDrawerProvider } from '../src/contexts/NavbarContext';
 import { ChecklistProvider } from '../src/contexts/checklistContext';
-// import { MusicPlayerProvider } from '../src/contexts/MusicPlayerContext';
+import { MusicPlayerProvider } from '../src/contexts/MusicPlayerContext';
 
 import { useThemeStyles } from '../src/styles/useThemeStyles';
 import Toast, { BaseToast } from 'react-native-toast-message';
@@ -90,9 +90,9 @@ export default function RootLayout() {
             <DrawerStateProvider>
                 <NavbarDrawerProvider>
                     <ChecklistProvider>
-                        {/* <MusicPlayerProvider> */}
+                        <MusicPlayerProvider>
                             <App />
-                        {/* </MusicPlayerProvider> */}
+                        </MusicPlayerProvider>
                     </ChecklistProvider>
                 </NavbarDrawerProvider>
             </DrawerStateProvider>

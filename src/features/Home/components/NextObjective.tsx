@@ -30,8 +30,7 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
     const [nextTask, setNextTask] = useState<string | null>(null);
     const [timeLeft, setTimeLeft] = useState<string | null>(null);
     const opacity = useRef(new Animated.Value(1)).current;
-
-    const { timerRunning } = useTimer();
+    const [bgColorAnim] = useState(new Animated.Value(0)); // Add this new animated value
 
     useEffect(() => {
         fetchWeeklyObjectives();
@@ -40,10 +39,10 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
     const fetchWeeklyObjectives = async () => {
         try {
             const currentWeek = getISOWeekData(new Date());
-            const formattedWeek = `2024-W${currentWeek}`;
+            const formattedWeek = `2024-W${currentWeek.week}`;
             const response = await databaseManagers.objectives.getObjectives({ period: formattedWeek });
             const pillars = await databaseManagers.pillars.getPillars();
-
+            
             const objectivesWithPillarEmoji = response.map(objective => {
                 const pillar = pillars.find(p => p.uuid === objective.pillarUuid);
                 return {
@@ -113,11 +112,20 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
 
     const toggleExpand = () => {
         setIsExpanded(!isExpanded);
-        Animated.timing(expandAnim, {
-            toValue: isExpanded ? 40 : 200, // Adjust this value as needed
-            duration: 300,
-            useNativeDriver: false,
-        }).start();
+        
+        // Animate both height and background color
+        Animated.parallel([
+            Animated.timing(expandAnim, {
+                toValue: isExpanded ? 40 : 200,
+                duration: 300,
+                useNativeDriver: false,
+            }),
+            Animated.timing(bgColorAnim, {
+                toValue: isExpanded ? 0 : 1,
+                duration: 300,
+                useNativeDriver: false,
+            })
+        ]).start();
 
         // Fetch next task when expanding
         if (!isExpanded) {
@@ -136,6 +144,11 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
     if (objectives.length === 0) {
         return null;
     }
+
+    const backgroundColor = bgColorAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['rgba(255, 255, 255, 0.05)', 'rgba(0, 0, 0, 0.8)']
+    });
 
     const renderNextTask = () => {
         return (
@@ -160,7 +173,7 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
                 styles.container, 
                 { 
                     height: expandAnim, 
-                    backgroundColor: isExpanded ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.05)' 
+                    backgroundColor
                 }
             ]
         }>
@@ -235,12 +248,8 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         padding: 10,
         backgroundColor: 'rgba(255, 255, 255, 0.05)',
         borderRadius: 10,
-        width: 140,
-        height: 50,
         overflow: 'hidden',
-        position: 'absolute',
-        bottom: 34,
-        right: 112,
+        width: '100%',
     },
     objectiveWrapper: {
         flex: 1,

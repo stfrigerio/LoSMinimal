@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, Image, Pressable, Dimensions, Platform, StyleSheet } from 'react-native';
 
-import { getStarRating } from '@los/shared/src/components/Library/helpers/getStarRating';
-import { useThemeStyles } from '@los/shared/src/styles//useThemeStyles';
+import { getStarRating } from '@/src/features/Library/helpers/getStarRating';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
-import { LibraryData } from '@los/shared/src/types/Library';
+import { LibraryData } from '@/src/types/Library';
 
 interface CardProps {
     item: LibraryData;
@@ -78,24 +78,20 @@ const Card: React.FC<CardProps> = ({ item, onPress }) => {
 };
 
 const getStyles = (theme: any) => {
-    const { width } = Dimensions.get('window');
-    const isSmall = width < 1920;
-    const isDesktop = Platform.OS === 'web';
-
     return StyleSheet.create({
         card: {
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.backgroundSecondary,
             borderRadius: 10,
             padding: 10,
             marginVertical: 5,
             marginHorizontal: 10,
-            shadowColor: theme.borderColor,
+            shadowColor: theme.shadowColor,
             shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.2,
+            shadowOpacity: 1,
             shadowRadius: 3,
             elevation: 12,
-            borderWidth: 0.6,
-            borderColor: theme.borderColor
+            borderWidth: 1,
+            borderColor: theme.backgroundColor
         },
         flexContainer: {
             flexDirection: 'row',
@@ -108,7 +104,7 @@ const getStyles = (theme: any) => {
         title: {
             fontSize: 18,
             fontWeight: 'bold',
-            color: theme.textColor
+            color: theme.textColorBold
         },
         rating: {
             fontSize: 14,
@@ -116,8 +112,8 @@ const getStyles = (theme: any) => {
             marginTop: 10,
         },
         poster: {
-            width: 100, // Adjust size as needed
-            height: 100, // Adjust size as needed
+            width: 100,
+            height: 100,
             borderRadius: 10,
             marginRight: 10,
         },
@@ -133,7 +129,7 @@ const getStyles = (theme: any) => {
             marginTop: 5,
             fontSize: 12,
             color: theme.textColor,
-            flexGrow: 1, // Take up the remaining space
+            flexGrow: 1,
         },
         text: {
             color: theme.textColor,
@@ -141,7 +137,7 @@ const getStyles = (theme: any) => {
             marginTop: 5
         },
         seenText: {
-            color: 'gray',
+            color: theme.gray,
             fontSize: 10,
             marginTop: 5
         }

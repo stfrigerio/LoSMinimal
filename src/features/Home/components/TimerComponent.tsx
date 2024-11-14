@@ -60,7 +60,7 @@ const TimerComponent: React.FC = () => {
 	return (
 		<View style={styles.container}>
 			{!timerRunning && (
-				<Pressable style={styles.wfloatingButton} onPress={() => setSelectionData(prev => ({ ...prev, isTagModalOpen: true }))}>
+				<Pressable style={styles.floatingButton} onPress={() => setSelectionData(prev => ({ ...prev, isTagModalOpen: true }))}>
 					<FontAwesomeIcon icon={faPlay} size={16} color={themeColors.backgroundColor} style={{ marginLeft: 3}}/>
 				</Pressable>
 			)}

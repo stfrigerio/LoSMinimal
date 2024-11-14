@@ -1,8 +1,15 @@
-import { makeRedirectUri, exchangeCodeAsync, refreshAsync, TokenResponse, useAuthRequest } from 'expo-auth-session';
-import * as SecureStore from 'expo-secure-store';
-import { databaseManagers } from '@los/mobile/src/database/tables';
 import { useState, useEffect } from 'react';
+import { 
+    makeRedirectUri, 
+    exchangeCodeAsync, 
+    refreshAsync, 
+    TokenResponse, 
+    useAuthRequest 
+} from 'expo-auth-session';
+import * as SecureStore from 'expo-secure-store';
 import Constants from 'expo-constants';
+
+import { databaseManagers } from '@/database/tables';
 
 const discovery = {
     authorizationEndpoint: 'https://accounts.spotify.com/authorize',

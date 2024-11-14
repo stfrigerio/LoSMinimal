@@ -1,50 +1,39 @@
 import { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 
-import { sortOptions, PAGE_SIZE } from '@los/shared/src/components/Library/helpers/sortOptions';
-import { databaseManagers } from '../../../database/tables';
+import { sortOptions, PAGE_SIZE } from '@/src/features/Library/helpers/sortOptions';
+import { databaseManagers } from '@/database/tables';
 
-import { LibraryData, SortOptionType } from '@los/shared/src/types/Library';
+import { LibraryData, SortOptionType } from '@/src/types/Library';
 
 export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music') => {
     const [items, setItems] = useState<LibraryData[]>([]);
     const [sortedItems, setSortedItems] = useState<LibraryData[]>([]);
     const [selectedItem, setSelectedItem] = useState<LibraryData | null>(null);
     const [sortOption, setSortOption] = useState<SortOptionType>('seen');
-    const [hasMore, setHasMore] = useState(true);
-    const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState<string>('');
 
-    const fetchItems = async (page = 1, sort = sortOption, search = '') => {
+    const fetchItems = async (sort = sortOption, search = '') => {
         try {
-        const fetchedItems = await databaseManagers.library.getLibrary({ 
-            type: mediaType,
-            sort: sort,
-            search: search,
-            limit: PAGE_SIZE,
-            offset: (page - 1) * PAGE_SIZE
-        });
-
-        if (page === 1) {
+            const fetchedItems = await databaseManagers.library.getLibrary({ 
+                type: mediaType,
+                sort: sort,
+                search: search
+            });
             setItems(fetchedItems);
-        } else {
-            const itemsMap = new Map([...items, ...fetchedItems].map(item => [item.id, item]));
-            setItems(Array.from(itemsMap.values()));
-        }
-        setHasMore(fetchedItems.length === PAGE_SIZE);
         } catch (error) {
-        console.error(`Error fetching ${mediaType}:`, error);
+            console.error(`Error fetching ${mediaType}:`, error);
         }
     };
 
     useEffect(() => {
-        fetchItems(1, sortOption, searchQuery);
+        fetchItems(sortOption, searchQuery);
     }, [sortOption, searchQuery]);
 
     useEffect(() => {
         const filteredAndSorted = items
-        .filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
-        .sort(sortOptions[sortOption]);
+            .filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
+            .sort(sortOptions[sortOption]);
         setSortedItems(filteredAndSorted);
     }, [items, sortOption, searchQuery]);
 
@@ -57,14 +46,6 @@ export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame
             console.error(`Error saving ${mediaType} to library:`, error);
             Alert.alert("Error", `Failed to save the ${mediaType} to your library. Please try again.`);
             throw error; // Re-throw to handle in the modal
-        }
-    };
-
-    const loadMoreItems = () => {
-        if (hasMore) {
-        const nextPage = currentPage + 1;
-        setCurrentPage(nextPage);
-        fetchItems(nextPage, sortOption, searchQuery);
         }
     };
 
@@ -167,12 +148,10 @@ export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame
         items: sortedItems,
         selectedItem,
         sortOption,
-        hasMore,
         searchQuery,
         setSearchQuery,
         setSortOption,
         onSaveToLibrary,
-        loadMoreItems,
         handleItemSelect,
         handleCloseDetail,
         handleDelete,

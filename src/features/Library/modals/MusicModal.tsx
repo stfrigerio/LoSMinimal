@@ -4,8 +4,9 @@ import { View, Text, Modal, TextInput, Pressable, FlatList, StyleSheet, Image, A
 import { useSpotifyFetcher, Album } from '../api/musicFetcher';
 import { useThemeStyles } from '../../../styles/useThemeStyles';
 
-import { LibraryData, TrackData } from '../../../types/Library';
-import { databaseManagers } from '@los/mobile/src/database/tables';
+import { LibraryData, TrackData } from '@/src/types/Library';
+import { databaseManagers } from '@/database/tables';
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface MusicSearchModalProps {
     isOpen: boolean;
@@ -207,13 +208,15 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
                                 placeholder="Enter album title"
                                 placeholderTextColor={'gray'}
                                 onSubmitEditing={handleSearch}
+                            />  
+                            <PrimaryButton
+                                text="Search"
+                                onPress={handleSearch}
                             />
-                            <Pressable style={[designs.button.marzoPrimary, {width: '100%'}]} onPress={handleSearch}>
-                                <Text style={designs.button.buttonText}>Search</Text>
-                            </Pressable>
-                            <Pressable style={[designs.button.marzoSecondary, {width: '100%'}]} onPress={handleSaveCustomAlbumFromQuery}>
-                                <Text style={designs.button.buttonText}>Add Custom Album</Text>
-                            </Pressable>
+                            <PrimaryButton
+                                text="Add Custom Album"
+                                onPress={handleSaveCustomAlbumFromQuery}
+                            />
                         </>
                     )}
                     {showAlbumsList && !loadingTrack && (
@@ -247,9 +250,10 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
                                 keyboardType="numeric"
                                 onSubmitEditing={handleSave}
                             />
-                            <Pressable style={[designs.button.marzoSecondary, {width: '100%'}]} onPress={handleSave}>
-                                <Text style={designs.button.buttonText}>Save to Library</Text>
-                            </Pressable>
+                            <PrimaryButton
+                                text="Save to Library"
+                                onPress={handleSave}
+                            />
                         </View>
                     )}
                 </View>

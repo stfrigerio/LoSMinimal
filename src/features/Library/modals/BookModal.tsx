@@ -5,6 +5,7 @@ import { searchBooks, getBookDetails, SearchResult, DetailedBook } from '../api/
 import { useThemeStyles } from '../../../styles/useThemeStyles';
 
 import { LibraryData } from '../../../types/Library';
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface BookSearchModalProps {
     isOpen: boolean;
@@ -89,9 +90,10 @@ const BookSearchModal: React.FC<BookSearchModalProps> = ({ isOpen, onClose, onSa
                                 placeholderTextColor={'gray'}
                                 onSubmitEditing={handleSearch}
                             />
-                            <Pressable style={designs.button.marzoPrimary} onPress={handleSearch}>
-                                <Text style={designs.button.buttonText}>Search</Text>
-                            </Pressable>
+                            <PrimaryButton
+                                text="Search"
+                                onPress={handleSearch}
+                            />
                         </>
                     )}
                     {showBooksList && (
@@ -123,9 +125,10 @@ const BookSearchModal: React.FC<BookSearchModalProps> = ({ isOpen, onClose, onSa
                                 keyboardType="numeric"
                                 onSubmitEditing={handleSave}
                             />
-                            <Pressable style={designs.button.marzoSecondary} onPress={handleSave}>
-                                <Text style={designs.button.buttonText}>Save to Library</Text>
-                            </Pressable>
+                            <PrimaryButton
+                                text="Save to Library"
+                                onPress={handleSave}
+                            />
                         </View>
                     )}
                 </View>

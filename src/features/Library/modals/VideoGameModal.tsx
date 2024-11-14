@@ -5,6 +5,7 @@ import { searchGames, GameSearchResult } from '../api/videogameFetcher';
 import { useThemeStyles } from '../../../styles/useThemeStyles';
 
 import { LibraryData } from '../../../types/Library';
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface GameSearchModalProps {
     isOpen: boolean;
@@ -93,9 +94,10 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
                                 placeholderTextColor={'gray'}
                                 onSubmitEditing={handleSearch}
                             />
-                            <Pressable style={designs.button.marzoPrimary} onPress={handleSearch}>
-                                <Text style={designs.button.buttonText}>Search</Text>
-                            </Pressable>
+                            <PrimaryButton
+                                text="Search"
+                                onPress={handleSearch}
+                            />
                         </>
                     )}
                     {isLoading && (
@@ -132,10 +134,11 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
                                 keyboardType="numeric"
                                 onSubmitEditing={handleSave}
                             />
-                            <Pressable style={designs.button.marzoSecondary} onPress={handleSave}>
-                            <Text style={designs.button.buttonText}>Save to Library</Text>
-                        </Pressable>
-                    </View>
+                            <PrimaryButton
+                                text="Save to Library"
+                                onPress={handleSave}
+                            />
+                        </View>
                     )}
                 </View>
             </View>

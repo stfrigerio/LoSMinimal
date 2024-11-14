@@ -83,6 +83,12 @@ export default function DrawerLayout() {
 					drawerLabel: "People"
 				}} 
 			/>
+			<Drawer.Screen 
+				name="library" 
+				options={{
+					drawerLabel: "Library"
+				}} 
+			/>
         </Drawer>
 	);
 }
