@@ -16,9 +16,10 @@ interface GameSearchModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSaveToLibrary: (game: LibraryData) => void;
+    showWantToList: boolean;
 }
 
-const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary }) => {
+const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary, showWantToList }) => {
     const [query, setQuery] = useState('');
     const [games, setGames] = useState<GameSearchResult[]>([]);
     const [personalRating, setPersonalRating] = useState(0);
@@ -26,7 +27,6 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
     const [showGamesList, setShowGamesList] = useState(false);
     const [showRatingInput, setShowRatingInput] = useState(false);
     const [detailedGame, setDetailedGame] = useState<GameSearchResult | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
     const { themeColors, designs } = useThemeStyles();
@@ -64,21 +64,40 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
             const genreNames = detailedGame.genres ? detailedGame.genres.map(genre => genre.name).join(', ') : '';
             const companyNames = detailedGame.involved_companies ? detailedGame.involved_companies.map(ic => ic.company.name).join(', ') : '';
 
-            onSaveToLibrary({
-                id: detailedGame.id,
-                title: detailedGame.name,
-                seen: todayString,
-                type: 'videogame',
-                genre: genreNames,
-                creator: companyNames,
-                releaseYear: detailedGame.first_release_date ? detailedGame.first_release_date.toString() : 'Unknown',
-                mediaImage: detailedGame.cover.url.replace('thumb', 'cover_big'),
-                plot: detailedGame.summary,
-                metascore: detailedGame.igdbRating,
-                comments: '',
-                rating: personalRating,
-                finished: 1,
-            });
+
+            if (showWantToList) {
+                onSaveToLibrary({
+                    id: detailedGame.id,
+                    title: detailedGame.name,
+                    seen: '',
+                    type: 'videogame',
+                    genre: genreNames,
+                    creator: companyNames,
+                    releaseYear: detailedGame.first_release_date ? detailedGame.first_release_date.toString() : 'Unknown',
+                    mediaImage: detailedGame.cover.url.replace('thumb', 'cover_big'),
+                    plot: detailedGame.summary,
+                    metascore: detailedGame.igdbRating,
+                    comments: '',
+                    rating: personalRating,
+                    finished: 0,
+                });
+            } else {
+                onSaveToLibrary({
+                    id: detailedGame.id,
+                    title: detailedGame.name,
+                    seen: todayString,
+                    type: 'videogame',
+                    genre: genreNames,
+                    creator: companyNames,
+                    releaseYear: detailedGame.first_release_date ? detailedGame.first_release_date.toString() : 'Unknown',
+                    mediaImage: detailedGame.cover.url.replace('thumb', 'cover_big'),
+                    plot: detailedGame.summary,
+                    metascore: detailedGame.igdbRating,
+                    comments: '',
+                    rating: personalRating,
+                    finished: 1,
+                });
+            }
 
             // reset everything
             setQuery('');
@@ -90,7 +109,7 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
             setDetailedGame(null);
 
             Toast.show({
-                text1: `Game "${detailedGame.name}" saved to library`,
+                text1: `Game "${detailedGame.name}" saved to ${showWantToList ? 'want to list' : 'library'}`,
                 type: 'success',
             });
 

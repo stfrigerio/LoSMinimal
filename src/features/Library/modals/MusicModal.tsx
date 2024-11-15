@@ -17,10 +17,11 @@ import { LibraryData, TrackData } from '@/src/types/Library';
 interface MusicSearchModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSaveToLibrary: (album: LibraryData) => Promise<LibraryData>; // Now expects return value
+    onSaveToLibrary: (album: LibraryData) => Promise<LibraryData>;
+    showWantToList: boolean;
 }
 
-const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary }) => {
+const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary, showWantToList }) => {
     const [query, setQuery] = useState('');
     const [albums, setAlbums] = useState<Album[]>([]);
     const [personalRating, setPersonalRating] = useState(0);

@@ -3,10 +3,10 @@ import { View, Text, Image, Pressable, StyleSheet, ScrollView, BackHandler, Swit
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faStar, faTrash, faMusic } from '@fortawesome/free-solid-svg-icons';
 
-import TrackDetailModal from '../modals/TrackDetailModal';
+import TrackDetailModal from '../../../modals/TrackDetailModal';
 
-import { LibraryData, TrackData } from '../../../types/Library';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { LibraryData, TrackData } from '@/src/types/Library';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { databaseManagers } from '@/database/tables';
 
 interface DetailedViewProps {

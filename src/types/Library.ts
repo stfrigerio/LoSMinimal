@@ -35,6 +35,7 @@ export type LibraryQuery = {
     type?: string;
     genre?: string;
     finished?: number;
+    seen?: string;
     search?: string; 
     isMarkedForDownload?: number;
     limit?: number;

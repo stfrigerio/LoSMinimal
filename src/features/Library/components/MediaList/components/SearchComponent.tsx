@@ -1,7 +1,7 @@
 // SearchComponent.tsx
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 interface SearchComponentProps {
     searchQuery: string;

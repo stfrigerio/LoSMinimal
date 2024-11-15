@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Pressable, Switch } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faArrowLeft, faMagicWandSparkles, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { LibraryData } from '@/src/types/Library';
@@ -9,9 +9,11 @@ import { LibraryData } from '@/src/types/Library';
 interface SectionHeaderProps {
     section: string;
     onBack: () => void;
+    showWantToList: boolean;
+    setShowWantToList: (value: boolean) => void;
 }
 
-export const SectionHeader = ({ section, onBack }: SectionHeaderProps) => {
+export const SectionHeader = ({ section, onBack, showWantToList, setShowWantToList }: SectionHeaderProps) => {
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 
@@ -25,6 +27,23 @@ export const SectionHeader = ({ section, onBack }: SectionHeaderProps) => {
         return section;
     }
 
+    // Add this helper function
+    const getActionText = (mediaType: string): string => {
+        switch (mediaType) {
+            case 'movie':
+            case 'series':
+                return 'to watch';
+            case 'book':
+                return 'to read';
+            case 'videogame':
+                return 'to play';
+            case 'music':
+                return 'to listen';
+            default:
+                return 'gnam gnam';
+        }
+    };
+    
     return (
         <>
             <View style={styles.header}>
@@ -39,6 +58,19 @@ export const SectionHeader = ({ section, onBack }: SectionHeaderProps) => {
                     />
                 </Pressable>
                 <Text style={styles.title}>{getTitle()}</Text>
+                {section !== 'music' && (
+                    <View style={styles.switchContainer}>
+                        <Text style={styles.switchLabel}>
+                            {showWantToList ? `${getActionText(section)}` : 'library'}
+                        </Text>
+                        <Switch
+                            value={showWantToList}
+                            onValueChange={setShowWantToList}
+                            trackColor={{ false: themeColors.gray, true: themeColors.accentColor }}
+                            thumbColor={themeColors.accentColor}
+                        />
+                    </View>
+                )}
             </View>
         </>
     );
@@ -48,12 +80,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         paddingVertical: 10,
         backgroundColor: themeColors.cardColor,
-        marginHorizontal: 20,
-        marginBottom: 10,
-        borderRadius: 12,
+        marginHorizontal: 10,
+        borderRadius: 20,
         borderWidth: 1,
         borderColor: themeColors.borderColor,
     },
@@ -69,5 +100,15 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         fontWeight: 'bold',
         color: themeColors.textColorBold,
         textAlign: 'center',
+    },
+    switchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 10,
+    },
+    switchLabel: {
+        color: themeColors.textColor,
+        marginRight: 8,
+        fontSize: 12,
     },
 }); 

@@ -16,9 +16,15 @@ interface BookSearchModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSaveToLibrary: (book: LibraryData) => void;
+    showWantToList: boolean;
 }
 
-const BookSearchModal: React.FC<BookSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary }) => {
+const BookSearchModal: React.FC<BookSearchModalProps> = ({ 
+    isOpen, 
+    onClose, 
+    onSaveToLibrary, 
+    showWantToList 
+}) => {
     const [query, setQuery] = useState('');
     const [books, setBooks] = useState<SearchResult[]>([]);
     const [personalRating, setPersonalRating] = useState(0);
@@ -61,23 +67,42 @@ const BookSearchModal: React.FC<BookSearchModalProps> = ({ isOpen, onClose, onSa
 
     const handleSave = () => {
         if (detailedBook) {
-            const today = new Date();
-            const todayString = today.toISOString().slice(0, 10);
-            onSaveToLibrary({
-                id: detailedBook.ISBN_13,
-                title: detailedBook.title,
-                seen: todayString,
-                type: 'book',
-                genre: detailedBook.categories.join(', '),
-                creator: detailedBook.authors.join(', '),
-                releaseYear: detailedBook.publishedDate,
-                mediaImage: detailedBook.mediaImage,
-                plot: detailedBook.description,
-                pages: detailedBook.pageCount,
-                comments: '',
-                rating: personalRating,
-                finished: 1,
-            });
+            
+            if (showWantToList) {
+                onSaveToLibrary({
+                    id: detailedBook.ISBN_13,
+                    title: detailedBook.title,
+                    seen: '',
+                    type: 'book',
+                    genre: detailedBook.categories.join(', '),
+                    creator: detailedBook.authors.join(', '),
+                    releaseYear: detailedBook.publishedDate,
+                    mediaImage: detailedBook.mediaImage,
+                    plot: detailedBook.description,
+                    pages: detailedBook.pageCount,
+                    comments: '',
+                    rating: personalRating,
+                    finished: 0,
+                });
+            } else {
+                const today = new Date();
+                const todayString = today.toISOString().slice(0, 10);
+                onSaveToLibrary({
+                    id: detailedBook.ISBN_13,
+                    title: detailedBook.title,
+                    seen: todayString,
+                    type: 'book',
+                    genre: detailedBook.categories.join(', '),
+                    creator: detailedBook.authors.join(', '),
+                    releaseYear: detailedBook.publishedDate,
+                    mediaImage: detailedBook.mediaImage,
+                    plot: detailedBook.description,
+                    pages: detailedBook.pageCount,
+                    comments: '',
+                    rating: personalRating,
+                    finished: 1,
+                });
+            }
 
             // reset everything
             setQuery('');
@@ -89,7 +114,7 @@ const BookSearchModal: React.FC<BookSearchModalProps> = ({ isOpen, onClose, onSa
             setDetailedBook(null);
 
             Toast.show({
-                text1: `Book "${detailedBook.title}" saved to library`,
+                text1: `Book "${detailedBook.title}" saved to ${showWantToList ? 'want to list' : 'library'}`,
                 type: 'success',
             });
 

@@ -16,10 +16,11 @@ import { LibraryData } from '../../../types/Library';
 interface SeriesSearchModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSaveToLibrary: (series: LibraryData) => void; // Callback to save the series to the library
-}
+    onSaveToLibrary: (series: LibraryData) => void;
+    showWantToList: boolean;
+}       
 
-const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary }) => {
+const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary, showWantToList }) => {
     const [query, setQuery] = useState('');
     const [seriesList, setSeriesList] = useState<Series[]>([]);
     const [personalRating, setPersonalRating] = useState(0);
@@ -62,14 +63,23 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
 
     const handleSave = () => {
         if (detailedSeries) {
-            const today = new Date()
-            const todayString = today.toISOString().slice(0, 10);
-            onSaveToLibrary({
-                ...detailedSeries,
-                seen: todayString,
-                rating: personalRating,
-                finished: 1,
-            });
+            if (showWantToList) {
+                onSaveToLibrary({
+                    ...detailedSeries,
+                    seen: '',
+                    rating: personalRating,
+                    finished: 0,
+                });
+            } else {
+                const today = new Date()
+                const todayString = today.toISOString().slice(0, 10);
+                onSaveToLibrary({
+                    ...detailedSeries,
+                    seen: todayString,
+                    rating: personalRating,
+                    finished: 1,
+                });
+            }
 
             // reset everything
             setQuery('');
@@ -81,7 +91,7 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
             setDetailedSeries(null);
 
             Toast.show({
-                text1: `Series "${detailedSeries.title}" saved to library`,
+                text1: `Series "${detailedSeries.title}" saved to ${showWantToList ? 'want to list' : 'library'}`,
                 type: 'success',
             });
 

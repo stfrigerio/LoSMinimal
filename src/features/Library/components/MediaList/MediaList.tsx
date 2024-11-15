@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Pressable, StyleSheet, BackHandler } from 'react-native';
+import { View, Text, FlatList, StyleSheet, BackHandler } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
-import SearchComponent from '@/src/features/Library/components/SearchComponent';
+import SearchComponent from './components/SearchComponent';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useMediaList } from '@/src/features/Library/hooks/useMediaList';
 
 import { LibraryData } from '@/src/types/Library';
-import { SectionHeader } from './SectionHeader';
+import { SectionHeader } from './components/SectionHeader';
 
 interface MediaListProps {
     mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music';
@@ -19,7 +19,12 @@ interface MediaListProps {
         onToggleDownload?: (item: LibraryData) => Promise<void>;
         updateItem: (item: LibraryData) => Promise<void>;
     }>;
-    SearchModalComponent: React.ComponentType<{ isOpen: boolean; onClose: () => void; onSaveToLibrary: (item: LibraryData) => Promise<LibraryData> }>;
+    SearchModalComponent: React.ComponentType<{ 
+        isOpen: boolean; 
+        onClose: () => void; 
+        onSaveToLibrary: (item: LibraryData) => Promise<LibraryData>; 
+        showWantToList: boolean;
+    }>;
     modalVisible: boolean;
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
     onBackPress: () => void;
@@ -34,6 +39,8 @@ const MediaList: React.FC<MediaListProps> = ({
     setModalVisible,
     onBackPress
 }) => {
+    const [showWantToList, setShowWantToList] = useState(false);
+
     const {
         items,
         selectedItem,
@@ -47,7 +54,7 @@ const MediaList: React.FC<MediaListProps> = ({
         handleDelete,
         handleToggleDownload,
         updateItem,
-    } = useMediaList(mediaType);
+    } = useMediaList(mediaType, showWantToList);
 
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
@@ -82,7 +89,12 @@ const MediaList: React.FC<MediaListProps> = ({
                     />
                 ) : (
                     <View style={styles.listContainer}>
-                        <SectionHeader section={mediaType} onBack={onBackPress} />
+                        <SectionHeader 
+                            section={mediaType} 
+                            onBack={onBackPress} 
+                            showWantToList={showWantToList}
+                            setShowWantToList={setShowWantToList}
+                        />
                         <View style={styles.filteringView}>
                             <View style={styles.searchContainer}>
                                 <SearchComponent searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -115,6 +127,7 @@ const MediaList: React.FC<MediaListProps> = ({
                                 isOpen={modalVisible}
                                 onClose={() => setModalVisible(false)}
                                 onSaveToLibrary={onSaveToLibrary}
+                                showWantToList={showWantToList}
                             />
                         }
                     </View>

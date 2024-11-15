@@ -74,9 +74,14 @@ class LibraryManager extends BaseTableManager<LibraryData> {
 			queryParams.push(filter.isMarkedForDownload);
 		}
 
+		if (filter.seen !== undefined) {
+			conditions.push('seen = ?');
+			queryParams.push(filter.seen);
+		}
+
 		// Handle additional filters from Partial<LibraryData>
 		for (const [key, value] of Object.entries(filter)) {
-			if (!['type', 'genre', 'finished', 'search', 'sort', 'limit', 'offset', 'isMarkedForDownload'].includes(key) && value !== undefined) {
+			if (!['type', 'genre', 'finished', 'search', 'sort', 'limit', 'offset', 'isMarkedForDownload', 'seen'].includes(key) && value !== undefined) {
 				conditions.push(`${key} = ?`);
 				queryParams.push(value);
 			}
@@ -105,10 +110,15 @@ class LibraryManager extends BaseTableManager<LibraryData> {
 		}
 
 		// Pagination
-		if (filter.limit !== undefined && filter.offset !== undefined) {
-			query += ' LIMIT ? OFFSET ?';
-			queryParams.push(filter.limit, filter.offset);
-		}
+        if (filter.limit !== undefined) {
+            query += ' LIMIT ?';
+            queryParams.push(filter.limit);
+            
+            if (filter.offset !== undefined) {
+                query += ' OFFSET ?';
+                queryParams.push(filter.offset);
+            }
+        }
 
 		const result = await databaseManager.executeSqlAsync(query, queryParams);
 		return result as LibraryData[];

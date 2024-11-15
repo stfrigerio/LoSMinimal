@@ -25,11 +25,13 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, co
         >
             {({ pressed }) => (
                 <View style={styles.buttonContent}>
-                    <FontAwesomeIcon 
-                        icon={icon} 
-                        size={20}
-                        color={pressed ? themeColors.greenOpacity : color || themeColors.gray}
-                    />
+                    <View style={styles.iconContainer}>
+                        <FontAwesomeIcon 
+                            icon={icon} 
+                            size={20}
+                            color={pressed ? themeColors.greenOpacity : color || themeColors.gray}
+                        />
+                    </View>
                     <Text style={[
                         designs.text.text,
                         styles.buttonText,
@@ -59,10 +61,16 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     buttonContent: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        width: '100%',
+    },
+    iconContainer: {
+        marginLeft: 48, //! not an incredible solution
+        width: 40, 
+        alignItems: 'center',
     },
     buttonText: {
         fontSize: 16,
+        flex: 1,
         marginLeft: 12,
         fontWeight: '500',
     },

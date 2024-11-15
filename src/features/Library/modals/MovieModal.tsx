@@ -17,9 +17,15 @@ interface MovieSearchModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSaveToLibrary: (movie: LibraryData) => void;
+    showWantToList: boolean;
 }
 
-const MovieSearchModal: React.FC<MovieSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary }) => {
+const MovieSearchModal: React.FC<MovieSearchModalProps> = ({ 
+    isOpen, 
+    onClose, 
+    onSaveToLibrary, 
+    showWantToList 
+}) => {
     const [query, setQuery] = useState('');
     const [movies, setMovies] = useState<Movie[]>([]);
     const [personalRating, setPersonalRating] = useState(0);
@@ -62,34 +68,61 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({ isOpen, onClose, on
 
     const handleSave = () => {
         if (detailedMovie) {
-            const today = new Date()
-            const todayString = today.toISOString().slice(0, 10);
-    
-            const libraryData: LibraryData = {
-                id: parseInt(detailedMovie.imdbID.replace('tt', '')),
-                title: detailedMovie.Title,
-                seen: todayString,
-                type: 'movie',
-                genre: detailedMovie.Genre,
-                creator: detailedMovie.Director,
-                releaseYear: detailedMovie.Year,
-                rating: personalRating,
-                comments: '', // You might want to add a field for comments in your modal
-                mediaImage: detailedMovie.Poster,
-                boxOffice: detailedMovie.BoxOffice,
-                plot: detailedMovie.Plot,
-                cast: detailedMovie.Actors,
-                writer: detailedMovie.Writer,
-                metascore: detailedMovie.Metascore ? detailedMovie.Metascore : undefined,
-                ratingImdb: detailedMovie.imdbRating ? detailedMovie.imdbRating : undefined,
-                tomato: detailedMovie.tomato,
-                runtime: detailedMovie.Runtime,
-                awards: detailedMovie.Awards,
-                finished: 1
-            };
-    
-            onSaveToLibrary(libraryData);
-    
+            if (showWantToList) {
+                const libraryData: LibraryData = {
+                    id: parseInt(detailedMovie.imdbID.replace('tt', '')),
+                    title: detailedMovie.Title,
+                    seen: '',
+                    type: 'movie',
+                    genre: detailedMovie.Genre,
+                    creator: detailedMovie.Director,
+                    releaseYear: detailedMovie.Year,
+                    rating: personalRating,
+                    comments: '', // You might want to add a field for comments in your modal
+                    mediaImage: detailedMovie.Poster,
+                    boxOffice: detailedMovie.BoxOffice,
+                    plot: detailedMovie.Plot,
+                    cast: detailedMovie.Actors,
+                    writer: detailedMovie.Writer,
+                    metascore: detailedMovie.Metascore ? detailedMovie.Metascore : undefined,
+                    ratingImdb: detailedMovie.imdbRating ? detailedMovie.imdbRating : undefined,
+                    tomato: detailedMovie.tomato,
+                    runtime: detailedMovie.Runtime,
+                    awards: detailedMovie.Awards,
+                    finished: 0
+                };
+
+                onSaveToLibrary(libraryData);
+            } else {
+                const today = new Date()
+                const todayString = today.toISOString().slice(0, 10);
+        
+                const libraryData: LibraryData = {
+                    id: parseInt(detailedMovie.imdbID.replace('tt', '')),
+                    title: detailedMovie.Title,
+                    seen: todayString,
+                    type: 'movie',
+                    genre: detailedMovie.Genre,
+                    creator: detailedMovie.Director,
+                    releaseYear: detailedMovie.Year,
+                    rating: personalRating,
+                    comments: '', // You might want to add a field for comments in your modal
+                    mediaImage: detailedMovie.Poster,
+                    boxOffice: detailedMovie.BoxOffice,
+                    plot: detailedMovie.Plot,
+                    cast: detailedMovie.Actors,
+                    writer: detailedMovie.Writer,
+                    metascore: detailedMovie.Metascore ? detailedMovie.Metascore : undefined,
+                    ratingImdb: detailedMovie.imdbRating ? detailedMovie.imdbRating : undefined,
+                    tomato: detailedMovie.tomato,
+                    runtime: detailedMovie.Runtime,
+                    awards: detailedMovie.Awards,
+                    finished: 1
+                };
+
+                onSaveToLibrary(libraryData);
+            }
+
             // reset everything
             setQuery('');
             setMovies([]);
@@ -100,7 +133,7 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({ isOpen, onClose, on
             setDetailedMovie(null);
 
             Toast.show({
-                text1: `Movie "${detailedMovie.Title}" saved to library`,
+                text1: `Movie "${detailedMovie.Title}" saved to ${showWantToList ? 'want to list' : 'library'}`,
                 type: 'success',
             });
     

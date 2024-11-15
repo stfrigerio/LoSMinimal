@@ -48,7 +48,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const handleOpenMusic = withNavigationDelay(() => openMusic());
     const handleOpenLibrary = withNavigationDelay(() => openLibrary());
 
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' });
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' });
     const { week, year } = getISOWeekData(new Date());
     const weekString = `${year}-W${week.toString().padStart(2, '0')}`;
 

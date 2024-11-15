@@ -5,7 +5,10 @@ import { databaseManagers } from '@/database/tables';
 
 import { LibraryData, SortOptionType } from '@/src/types/Library';
 
-export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music') => {
+export const useMediaList = (
+    mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music', 
+    showWantToList: boolean
+) => {
     const [items, setItems] = useState<LibraryData[]>([]);
     const [sortedItems, setSortedItems] = useState<LibraryData[]>([]);
     const [selectedItem, setSelectedItem] = useState<LibraryData | null>(null);
@@ -17,7 +20,8 @@ export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame
             const fetchedItems = await databaseManagers.library.getLibrary({ 
                 type: mediaType,
                 sort: sort,
-                search: search
+                search: search,
+                finished: showWantToList ? 0 : 1,
             });
             setItems(fetchedItems);
         } catch (error) {
@@ -26,15 +30,21 @@ export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame
     };
 
     useEffect(() => {
-        fetchItems(sortOption, searchQuery);
-    }, [sortOption, searchQuery]);
-
-    useEffect(() => {
         const filteredAndSorted = items
-            .filter(item => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
+            .filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesList = showWantToList 
+                    ? item.seen === ''  // Want to list: hasn't been seen yet
+                    : item.seen !== ''; // Library list: has been seen (has a date)
+                return matchesSearch && matchesList;
+            })
             .sort(sortOptions[sortOption]);
         setSortedItems(filteredAndSorted);
-    }, [items, sortOption, searchQuery]);
+    }, [items, sortOption, searchQuery, showWantToList]);
+
+    useEffect(() => {
+        fetchItems(sortOption, searchQuery);
+    }, [sortOption, searchQuery, showWantToList]);
 
     const onSaveToLibrary = async (item: LibraryData): Promise<LibraryData> => {
         try {
