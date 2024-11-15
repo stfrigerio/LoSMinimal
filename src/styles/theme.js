@@ -25,6 +25,49 @@ export const darkTheme = {
 	gray: 'gray',
 };
 
+// export const darkTheme = {
+// 	backgroundColor: '#130126',
+// 	backgroundSecondary: '#16151d',
+// 	textColor: '#979798',
+// 	textColorBold: '#c79428',
+// 	textColorItalic: '#CBA95F',
+// 	opaqueTextColor: 'rgba(211, 198, 170, 0.5)',
+// 	borderColor: '#5a469f',
+// 	accentColor: '#5a469f',
+// 	accentColorShade: '#7b68bd',
+// 	hoverColor: '#ffffff',
+
+// 	shadowColor: 'rgba(0, 0, 0, 1)',
+
+// 	red: 'rgb(250, 37, 37)',
+// 	redOpacity: 'rgba(250, 37, 37, 0.8)',
+// 	yellow: 'rgb(204, 197, 20)',
+// 	yellowOpacity: 'rgba(204, 197, 20, 0.9)',
+// 	green: 'rgb(61, 247, 52)',
+// 	greenOpacity: 'rgba(61, 247, 52, 0.5)',
+// 	blue: 'rgb(0, 122, 255)',
+// 	blueOpacity: 'rgba(0, 122, 255, 0.5)',
+// 	gray: 'gray',
+// };
+
+export const colorRainbow = {
+	1: '#f8538f',
+	2: '#5e4699',
+	3: '#c45597',
+	4: '#3c853a',
+	5: '#aca14f',
+	6: '#289f90',
+	7: '#826ae0',
+	8: '#9d95ac',
+	9: '#3fabbe',
+	10: '#324288',
+	11: '#897d9a',
+	12: '#c45597',
+	13: '#897d9a',
+	14: '#ac1639',
+	15: '#e2ab15',
+};
+
 export const lightTheme = {
 	backgroundColor: '#f7f2e4',
 	backgroundSecondary: '#efebd4',

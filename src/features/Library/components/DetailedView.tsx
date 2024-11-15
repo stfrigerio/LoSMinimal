@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, Image, Pressable, StyleSheet, ScrollView, BackHandler, Switch, TextInput } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faStar, faTrash, faMusic, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faTrash, faMusic } from '@fortawesome/free-solid-svg-icons';
 
 import TrackDetailModal from '../modals/TrackDetailModal';
 

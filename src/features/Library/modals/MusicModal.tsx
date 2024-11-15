@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TextInput, Pressable, FlatList, StyleSheet, Image, Alert } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import Toast from 'react-native-toast-message';
+
+import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import AlertModal from '@/src/components/modals/AlertModal';
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 import { useSpotifyFetcher, Album } from '../api/musicFetcher';
 import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { databaseManagers } from '@/database/tables';
 
 import { LibraryData, TrackData } from '@/src/types/Library';
-import { databaseManagers } from '@/database/tables';
-import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface MusicSearchModalProps {
     isOpen: boolean;
@@ -17,7 +23,7 @@ interface MusicSearchModalProps {
 const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary }) => {
     const [query, setQuery] = useState('');
     const [albums, setAlbums] = useState<Album[]>([]);
-    const [personalRating, setPersonalRating] = useState('');
+    const [personalRating, setPersonalRating] = useState(0);
     const [showSearch, setShowSearch] = useState(true);
     const [showAlbumsList, setShowAlbumsList] = useState(false);
     const [showRatingInput, setShowRatingInput] = useState(false);
@@ -25,6 +31,7 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
     const [loadingTrack, setLoadingTrack] = useState<string | null>(null);
     const [progress, setProgress] = useState({ current: 0, total: 0 });
     const [tracks, setTracks] = useState<TrackData[]>([]);
+    const [error, setError] = useState<string | null>(null);
 
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
@@ -35,7 +42,7 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
         try {
             const fetchedAlbums = await fetchAlbums(query);
             if (fetchedAlbums.length === 0) {
-                // The user has already been alerted in fetchAlbums, so we just return
+                setError('No albums found. Please try a different search.');
                 return;
             }
             setAlbums(fetchedAlbums);
@@ -43,7 +50,7 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
             setShowAlbumsList(true);
         } catch (error) {
             console.error('Error searching albums:', error);
-            Alert.alert('Error', 'Failed to search albums. Please try again.');
+            setError('Failed to search albums. Please try again.');
         }
     };
 
@@ -115,7 +122,7 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
         if (detailedAlbum) {
             const libraryData: LibraryData = {
                 ...detailedAlbum,
-                rating: parseFloat(personalRating),
+                rating: personalRating,
                 comments: '',
             };
     
@@ -139,12 +146,17 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
             // Reset everything
             setQuery('');
             setAlbums([]);
-            setPersonalRating('');
+            setPersonalRating(0);
             setShowSearch(true);
             setShowAlbumsList(false);
             setShowRatingInput(false);
             setDetailedAlbum(null);
             setTracks([]);
+
+            Toast.show({
+                text1: `Album "${detailedAlbum.title}" saved to library`,
+                type: 'success',
+            });
     
             onClose();
         }
@@ -194,71 +206,90 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
     };
 
     return (
-        <Modal visible={isOpen} onRequestClose={onClose} transparent={true}>
-            <View style={designs.modal.modalContainer}>
-                <View style={designs.modal.modalView}>
-                    {showSearch && (
-                        <>
-                            <Text style={designs.text.title}>Search for an Album</Text>
-                            <TextInput
-                                style={designs.text.input}
-                                value={query}
-                                onChangeText={setQuery}
-                                onEndEditing={(e) => setQuery(e.nativeEvent.text.trim())}
-                                placeholder="Enter album title"
-                                placeholderTextColor={'gray'}
-                                onSubmitEditing={handleSearch}
-                            />  
-                            <PrimaryButton
-                                text="Search"
-                                onPress={handleSearch}
-                            />
-                            <PrimaryButton
-                                text="Add Custom Album"
-                                onPress={handleSaveCustomAlbumFromQuery}
-                            />
-                        </>
-                    )}
-                    {showAlbumsList && !loadingTrack && (
-                        <FlatList
-                            data={albums}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
-                                <Pressable style={styles.albumItem} onPress={() => handleSelectAlbum(item)}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Image source={{ uri: item.images[0]?.url }} style={styles.albumImage} />
-                                        <View style={{ flexDirection: 'column'}}>
-                                            <Text style={[designs.text.text, {fontWeight: 'bold'}]}>{item.name}</Text>
-                                            <Text style={designs.text.text}>{item.artists[0].name}</Text>
-                                            <Text style={designs.text.text}>({new Date(item.release_date).getFullYear()})</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            )}
+        <>
+            <UniversalModal
+                isVisible={isOpen}
+                onClose={onClose}
+            >
+                {showSearch && (
+                    <>
+                        <Text style={designs.modal.title}>Search for an Album</Text>
+                        <TextInput
+                            style={[designs.text.input, { marginBottom: 40, marginTop: 10 }]}
+                            value={query}
+                            onChangeText={setQuery}
+                            onEndEditing={(e) => setQuery(e.nativeEvent.text.trim())}
+                            placeholder="Enter album title"
+                            placeholderTextColor={'gray'}
+                            onSubmitEditing={handleSearch}
                         />
-                    )}
-                    {loadingTrack && renderLoadingIndicator()}
-                    {showRatingInput && detailedAlbum && !loadingTrack && (
-                        <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                            <Text style={designs.text.title}>Rate this album</Text>
-                            <TextInput
-                                style={designs.text.input}
-                                value={personalRating}
-                                onChangeText={setPersonalRating}
-                                placeholder="Your Rating"
-                                placeholderTextColor={'gray'}
-                                keyboardType="numeric"
-                                onSubmitEditing={handleSave}
-                            />
-                            <PrimaryButton
-                                text="Save to Library"
-                                onPress={handleSave}
-                            />
+                        <PrimaryButton
+                            text="Search"
+                            onPress={handleSearch}
+                        />
+                        <View style={{ height: 20 }}/>
+                        <PrimaryButton
+                            text="Add Custom Album"
+                            onPress={handleSaveCustomAlbumFromQuery}
+                        />
+                    </>
+                )}
+                {showAlbumsList && !loadingTrack && (
+                    <View>
+                        {albums.map((item) => (
+                            <Pressable 
+                                key={item.id}
+                                style={styles.albumItem} 
+                                onPress={() => handleSelectAlbum(item)}
+                            >
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image source={{ uri: item.images[0]?.url }} style={styles.albumImage} />
+                                    <View style={{ flexDirection: 'column'}}>
+                                        <Text style={[designs.text.text, {fontWeight: 'bold'}]}>{item.name}</Text>
+                                        <Text style={designs.text.text}>{item.artists[0].name}</Text>
+                                        <Text style={designs.text.text}>({new Date(item.release_date).getFullYear()})</Text>
+                                    </View>
+                                </View>
+                            </Pressable>
+                        ))}
+                    </View>
+                )}
+                {loadingTrack && renderLoadingIndicator()}
+                {showRatingInput && detailedAlbum && !loadingTrack && (
+                    <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                        <Text style={designs.modal.title}>Rate this album</Text>
+                        <View style={styles.ratingContainer}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <Pressable
+                                    key={star}
+                                    onPress={() => setPersonalRating(star)}
+                                    style={{ padding: 5 }}
+                                >
+                                    <FontAwesomeIcon 
+                                        icon={faStar} 
+                                        size={20} 
+                                        color={star <= personalRating ? themeColors.textColor : 'gray'} 
+                                    />
+                                </Pressable>
+                            ))}
                         </View>
-                    )}
-                </View>
-            </View>
-        </Modal>
+                        <PrimaryButton
+                            text="Save to Library"
+                            onPress={handleSave}
+                        />
+                    </View>
+                )}
+            </UniversalModal>
+            {error && 
+                <AlertModal
+                    isVisible={!!error}
+                    title="Error"
+                    message={error || ''}
+                    onConfirm={() => setError(null)}
+                    singleButton
+                />
+            }
+        </>
     );
 };
 
@@ -292,5 +323,13 @@ const getStyles = (theme: any) => StyleSheet.create({
         fontStyle: 'italic',
         textAlign: 'center',
         color: theme.textColorFaded || 'gray',
+    },
+    ratingContainer: {
+        flexDirection: 'row',
+        marginBottom: 20,
+        backgroundColor: theme.cardColor,
+        padding: 12,
+        borderRadius: 12,
+        justifyContent: 'center',
     },
 });

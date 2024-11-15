@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import { databaseManagers } from '@/database/tables';
 
 import { LibraryData } from '@/src/types/Library';
@@ -51,14 +50,12 @@ export async function fetchSeries(query: string): Promise<Series[]> {
     try {
         const searchResults = await apiGet({ s: query, type: "series" });
         if (!searchResults || !searchResults.Search || !searchResults.Search.length) {
-            Alert.alert("No results found.");
             return [];
         }
 
         return searchResults.Search;
     } catch (error) {
         console.error("Error fetching series:", error);
-        Alert.alert("Error fetching data");
         return [];
     }
 }
@@ -70,7 +67,6 @@ export function isImdbId(str: string): boolean {
 export async function getByImdbId(id: string): Promise<LibraryData | null> {
     const res = await apiGet({ i: id });
     if (!res || res.Type !== "series") {
-        Alert.alert("No results found.");
         return null;
     }
 
@@ -120,7 +116,6 @@ async function apiGet(params: Record<string, string | undefined>): Promise<OmdbS
         return data;
     } catch (error) {
         console.error("API Request Failed:", error);
-        Alert.alert("Failed to fetch data");
         return null;
     }
 }

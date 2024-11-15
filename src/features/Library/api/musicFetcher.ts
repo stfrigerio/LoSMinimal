@@ -1,5 +1,3 @@
-import { Alert } from 'react-native';
-
 import { useSpotifyAuth } from './spotifyAuth';
 
 import { LibraryData } from '../../../types/Library';
@@ -16,21 +14,6 @@ export interface Album {
     genres: string[];
 }
 
-interface AudioFeatures {
-    danceability: number;
-    energy: number;
-    key: number;
-    loudness: number;
-    mode: number;
-    speechiness: number;
-    acousticness: number;
-    instrumentalness: number;
-    liveness: number;
-    valence: number;
-    tempo: number;  // BPM
-    time_signature: number;
-}
-
 export const useSpotifyFetcher = () => {
     const { getAccessToken } = useSpotifyAuth();
 
@@ -44,14 +27,12 @@ export const useSpotifyFetcher = () => {
 
             const searchResults = await apiGet('search', { q: query, type: 'album' }, token);
             if (!searchResults || !searchResults.albums || !searchResults.albums.items.length) {
-                Alert.alert("No results found", "Try a different search term.");
                 return [];
             }
 
             return searchResults.albums.items;
         } catch (error) {
             console.error("Error fetching albums:", error);
-            Alert.alert("Error", "Failed to fetch albums. Please try again.");
             return [];
         }
     };
@@ -66,7 +47,6 @@ export const useSpotifyFetcher = () => {
     
             const albumRes = await apiGet(`albums/${id}`, {}, token);
             if (!albumRes) {
-                Alert.alert("No results found", "Album not found.");
                 return null;
             }
 
@@ -99,7 +79,6 @@ export const useSpotifyFetcher = () => {
             };
         } catch (error) {
             console.error("Error fetching album:", error);
-            Alert.alert("Error", "Failed to fetch album details. Please try again.");
             return null;
         }
     };

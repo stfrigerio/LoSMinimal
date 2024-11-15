@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import { databaseManagers } from '@/database/tables';
 
 import { MovieItem } from '@/src/types/Library';
@@ -46,7 +45,6 @@ export async function fetchMovies(query: string): Promise<Movie[]> {
     try {
         const searchResults = await apiGet({ s: query });
         if (!searchResults || !searchResults.Search || !searchResults.Search.length) {
-            Alert.alert("No results found.");
             return [];
         }
 
@@ -63,7 +61,6 @@ export async function fetchMovies(query: string): Promise<Movie[]> {
 
     } catch (error) {
         console.error("Error fetching movies:", error);
-        Alert.alert("Error fetching data");
         return [];
     }
 }
@@ -75,7 +72,6 @@ export function isImdbId(str: string): boolean {
 export async function getByImdbId(id: string): Promise<Movie | null> {
     const res = await apiGet({ i: id });
     if (!res) {
-        Alert.alert("No results found.");
         return null;
     }
     
@@ -113,7 +109,6 @@ async function apiGet(params: Record<string, string | undefined>): Promise<OmdbS
         return data;
     } catch (error) {
         console.error("API Request Failed:", error);
-        Alert.alert("Failed to fetch data");
         return null;
     }
 }

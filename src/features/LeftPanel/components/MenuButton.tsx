@@ -8,9 +8,10 @@ interface MenuButtonProps {
     icon: IconDefinition;
     label: string;
     onPress: () => void;
+    color?: string;
 }
 
-export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress }) => {
+export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, color }) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
 
@@ -27,7 +28,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress }) 
                     <FontAwesomeIcon 
                         icon={icon} 
                         size={20}
-                        color={pressed ? themeColors.greenOpacity : themeColors.gray}
+                        color={pressed ? themeColors.greenOpacity : color || themeColors.gray}
                     />
                     <Text style={[
                         designs.text.text,

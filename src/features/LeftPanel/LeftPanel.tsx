@@ -9,6 +9,7 @@ import { MenuButton } from './components/MenuButton';
 
 import { NotePeriod, useNavigationComponents } from './helpers/useNavigation';
 import { useTheme } from '@/src/contexts/ThemeContext';
+import { colorRainbow } from '@/src/styles/theme';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { getISOWeekData, getStartOfToday } from '@/src/utils/timezoneBullshit';
 
@@ -66,47 +67,56 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                             icon={faCalendarDay}
                             label={today}
                             onPress={handleOpenDailyNote}
+                            color={colorRainbow[1]}
                         />
                         <MenuButton
                             icon={faCalendarDay}
                             label={weekString}
                             onPress={() => handleOpenNote('week', weekString)}
+                            color={colorRainbow[2]}
                         />
                         <View style={styles.separator} />
                         <MenuButton
                             icon={faMoneyBill}
                             label="Money"
                             onPress={handleOpenMoney}
+                            color={colorRainbow[4]}
                         />
                         <MenuButton 
                             icon={faCheckCircle}
                             label="Tasks"
                             onPress={handleOpenTasks}
+                            color={colorRainbow[5]}
                         />
                         <MenuButton 
                             icon={faCommentDots}
                             label="Mood"
                             onPress={handleOpenMood}
+                            color={colorRainbow[6]}
                         />
                         <MenuButton 
                             icon={faJournalWhills}
                             label="Journal"
                             onPress={handleOpenJournal}
+                            color={colorRainbow[10]}
                         />
                         <MenuButton 
                             icon={faUsers}
                             label="People"
                             onPress={handleOpenPeople}
+                            color={colorRainbow[12]}
                         />
                         <MenuButton
                             icon={faMusic}
                             label="Library"
                             onPress={handleOpenLibrary}
+                            color={colorRainbow[14]}
                         />
                         <MenuButton 
                             icon={faDatabase}
                             label="Database"
                             onPress={handleOpenDatabase}
+                            color={colorRainbow[15]}
                         />
                     </View>
                     

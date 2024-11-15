@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, TextInput, Pressable, FlatList, StyleSheet, Image } from 'react-native';
 
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import AlertModal from '@/src/components/modals/AlertModal';
+import Toast from 'react-native-toast-message';
+
 import { fetchMovies, isImdbId, getByImdbId, Movie } from '../api/movieFetcher';
 import { useThemeStyles } from '../../../styles/useThemeStyles';
 
 import { LibraryData } from '../../../types/Library';
-import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 
 interface MovieSearchModalProps {
     isOpen: boolean;
@@ -16,29 +22,41 @@ interface MovieSearchModalProps {
 const MovieSearchModal: React.FC<MovieSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary }) => {
     const [query, setQuery] = useState('');
     const [movies, setMovies] = useState<Movie[]>([]);
-    const [personalRating, setPersonalRating] = useState('');
+    const [personalRating, setPersonalRating] = useState(0);
     const [showSearch, setShowSearch] = useState(true); // Show search initially
     const [showMoviesList, setShowMoviesList] = useState(false);
     const [showRatingInput, setShowRatingInput] = useState(false);
     const [detailedMovie, setDetailedMovie] = useState<Movie | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
 
-
     const handleSearch = async () => {
-        const fetchedMovies = await fetchMovies(query);
-        setMovies(fetchedMovies);
-        setShowSearch(false); 
-        setShowMoviesList(true);
+        try {
+            const fetchedMovies = await fetchMovies(query);
+            if (!fetchedMovies || fetchedMovies.length === 0) {
+                setError('No movies found. Please try a different search.');
+                return;
+            }
+            setMovies(fetchedMovies);
+            setShowSearch(false); 
+            setShowMoviesList(true);
+        } catch (err) {
+            setError('Failed to search for movies. Please try again.');
+        }
     };
 
     const handleSelectMovie = async (movie: Movie) => {
-        if (movie.imdbID && isImdbId(movie.imdbID)) {
-            const detailedData = await getByImdbId(movie.imdbID);
-            setDetailedMovie(detailedData);
-            setShowMoviesList(false); 
-            setShowRatingInput(true); 
+        try {
+            if (movie.imdbID && isImdbId(movie.imdbID)) {
+                const detailedData = await getByImdbId(movie.imdbID);
+                setDetailedMovie(detailedData);
+                setShowMoviesList(false); 
+                setShowRatingInput(true); 
+            }
+        } catch (err) {
+            setError('Failed to fetch movie details. Please try again.');
         }
     };
 
@@ -55,7 +73,7 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({ isOpen, onClose, on
                 genre: detailedMovie.Genre,
                 creator: detailedMovie.Director,
                 releaseYear: detailedMovie.Year,
-                rating: parseFloat(personalRating),
+                rating: personalRating,
                 comments: '', // You might want to add a field for comments in your modal
                 mediaImage: detailedMovie.Poster,
                 boxOffice: detailedMovie.BoxOffice,
@@ -69,84 +87,105 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({ isOpen, onClose, on
                 awards: detailedMovie.Awards,
                 finished: 1
             };
-
-            console.log('sending data from modal', JSON.stringify(libraryData, null, 2));
     
             onSaveToLibrary(libraryData);
     
             // reset everything
             setQuery('');
             setMovies([]);
-            setPersonalRating('');
+            setPersonalRating(0);
             setShowSearch(true);
             setShowMoviesList(false);
             setShowRatingInput(false);
             setDetailedMovie(null);
+
+            Toast.show({
+                text1: `Movie "${detailedMovie.Title}" saved to library`,
+                type: 'success',
+            });
     
             onClose();
         }
     };
 
     return (
-        <Modal visible={isOpen} onRequestClose={onClose} transparent={true}>
-            <View style={designs.modal.modalContainer}>
-                <View style={designs.modal.modalView}>
-                    {showSearch && (
-                        <>
-                            <Text style={designs.text.title}>Search for a Movie</Text>
-                            <TextInput
-                                style={designs.text.input}
-                                value={query}
-                                onChangeText={setQuery}
-                                onEndEditing={(e) => setQuery(e.nativeEvent.text.trim())}
-                                placeholder="Enter movie title"
-                                placeholderTextColor={'gray'}
-                                onSubmitEditing={handleSearch}
-                            />
-                            <PrimaryButton
-                                text="Search"
-                                onPress={handleSearch}
-                            />
-                        </>
-                    )}
-                    {showMoviesList && (
-                        <FlatList
-                            data={movies}
-                            keyExtractor={(item) => item.imdbID.toString()}
-                            renderItem={({ item }) => (
-                                <Pressable style={styles.movieItem} onPress={() => handleSelectMovie(item)}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Image source={{ uri: item.Poster }} style={styles.movieImage} />
-                                        <View style={{ flexDirection: 'column'}}>
-                                            <Text style={[designs.text.text, {fontWeight: 'bold'}]}>{item.Title}</Text>
-                                            <Text style={designs.text.text}>({new Date(item.Year).getFullYear()})</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            )}
+        <>
+            <UniversalModal
+                isVisible={isOpen}
+                onClose={onClose}
+            >
+                {showSearch && (
+                    <>
+                        <Text style={designs.modal.title}>Search for a Movie</Text>
+                        <TextInput
+                            style={[designs.text.input, { marginBottom: 40, marginTop: 10 }]}
+                            value={query}
+                            onChangeText={setQuery}
+                            onEndEditing={(e) => setQuery(e.nativeEvent.text.trim())}
+                            placeholder="Enter movie title"
+                            placeholderTextColor={'gray'}
+                            onSubmitEditing={handleSearch}
                         />
-                    )}
-                    {showRatingInput && detailedMovie && (
-                        <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                            <Text style={designs.text.title}>Rate this movie</Text>
-                            <TextInput
-                                style={designs.text.input}
-                                value={personalRating}
-                                onChangeText={setPersonalRating}
-                                placeholder="Your Rating"
-                                placeholderTextColor={'gray'}
-                                keyboardType="numeric"
-                                onSubmitEditing={handleSave}
-                            />
-                            <PrimaryButton
-                                text="Save to Library"
-                                onPress={handleSave}
-                            />
+                        <PrimaryButton
+                            text="Search"
+                            onPress={handleSearch}
+                        />
+                    </>
+                )}
+                {showMoviesList && (
+                    <View>
+                        {movies.map((item) => (
+                            <Pressable 
+                                key={item.imdbID.toString()}
+                                style={styles.movieItem} 
+                                onPress={() => handleSelectMovie(item)}
+                            >
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image source={{ uri: item.Poster }} style={styles.movieImage} />
+                                    <View style={{ flexDirection: 'column'}}>
+                                        <Text style={[designs.text.text, {fontWeight: 'bold'}]}>{item.Title}</Text>
+                                        <Text style={designs.text.text}>({new Date(item.Year).getFullYear()})</Text>
+                                    </View>
+                                </View>
+                            </Pressable>
+                        ))}
+                    </View>
+                )}
+                {showRatingInput && detailedMovie && (
+                    <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                        <Text style={designs.modal.title}>Rate this movie</Text>
+                        <View style={styles.ratingContainer}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <Pressable
+                                    key={star}
+                                    onPress={() => setPersonalRating(star)}
+                                    style={{ padding: 5 }}
+                                >
+                                    <FontAwesomeIcon 
+                                        icon={faStar} 
+                                        size={20} 
+                                        color={star <= personalRating ? themeColors.textColor : 'gray'} 
+                                    />
+                                </Pressable>
+                            ))}
                         </View>
-                    )}
-                </View>
-            </View>
-        </Modal>
+                        <PrimaryButton
+                            text="Save to Library"
+                            onPress={handleSave}
+                        />
+                    </View>
+                )}
+            </UniversalModal>
+            {error && 
+                <AlertModal
+                    isVisible={!!error}
+                    title="Error"
+                    message={error || ''}
+                    onConfirm={() => setError(null)}
+                    singleButton
+                />
+            }
+        </>
     );
 };
 
@@ -166,5 +205,13 @@ const getStyles = (theme: any) => StyleSheet.create({
         width: 50,
         height: 70,
         marginRight: 10,
-    }
+    },
+    ratingContainer: {
+        flexDirection: 'row',
+        marginBottom: 20,
+        backgroundColor: theme.cardColor,
+        padding: 12,
+        borderRadius: 12,
+        justifyContent: 'center',
+    },
 });

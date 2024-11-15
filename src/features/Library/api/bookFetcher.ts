@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import { databaseManagers } from '@/database/tables';
 
 // Interface for search results
@@ -65,7 +64,6 @@ initializeApiKey();
 // Main search function
 export async function searchBooks(query: string, author?: string): Promise<SearchResult[]> {
     if (!query) {
-        Alert.alert("Error", "No query entered.");
         return [];
     }
 
@@ -81,6 +79,10 @@ export async function searchBooks(query: string, author?: string): Promise<Searc
         const response = await fetch(finalURL.href);
         const data: APIResponse = await response.json();
 
+        if (!data.items || data.items.length === 0) {
+            return [];
+        }
+
         return data.items.map(item => ({
             id: item.id,
             title: item.volumeInfo.title,
@@ -90,7 +92,6 @@ export async function searchBooks(query: string, author?: string): Promise<Searc
         }));
     } catch (error) {
         console.error("API Request Failed:", error);
-        Alert.alert("Error", "Failed to fetch data");
         return [];
     }
 }
@@ -125,7 +126,6 @@ export async function getBookDetails(bookId: string): Promise<DetailedBook | nul
         return null;
     } catch (error) {
         console.error("API Request Failed:", error);
-        Alert.alert("Error", "Failed to fetch book details");
         return null;
     }
 }

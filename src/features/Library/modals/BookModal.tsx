@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, Modal, TextInput, Pressable, FlatList, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Image } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
+import Toast from 'react-native-toast-message';
+
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import AlertModal from '@/src/components/modals/AlertModal';
 
 import { searchBooks, getBookDetails, SearchResult, DetailedBook } from '../api/bookFetcher';
 import { useThemeStyles } from '../../../styles/useThemeStyles';
-
 import { LibraryData } from '../../../types/Library';
-import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface BookSearchModalProps {
     isOpen: boolean;
@@ -16,28 +21,41 @@ interface BookSearchModalProps {
 const BookSearchModal: React.FC<BookSearchModalProps> = ({ isOpen, onClose, onSaveToLibrary }) => {
     const [query, setQuery] = useState('');
     const [books, setBooks] = useState<SearchResult[]>([]);
-    const [personalRating, setPersonalRating] = useState('');
+    const [personalRating, setPersonalRating] = useState(0);
     const [showSearch, setShowSearch] = useState(true);
     const [showBooksList, setShowBooksList] = useState(false);
     const [showRatingInput, setShowRatingInput] = useState(false);
     const [detailedBook, setDetailedBook] = useState<DetailedBook | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
 
     const handleSearch = async () => {
-        const fetchedBooks = await searchBooks(query);
-        setBooks(fetchedBooks);
-        setShowSearch(false);
-        setShowBooksList(true);
+        try {
+            const fetchedBooks = await searchBooks(query);
+            if (!fetchedBooks || fetchedBooks.length === 0) {
+                setError('No books found. Please try a different search.');
+                return;
+            }
+            setBooks(fetchedBooks);
+            setShowSearch(false);
+            setShowBooksList(true);
+        } catch (err) {
+            setError('Failed to search for books. Please try again.');
+        }
     };
 
     const handleSelectBook = async (book: SearchResult) => {
-        const bookDetails = await getBookDetails(book.id);
-        if (bookDetails) {
-            setDetailedBook(bookDetails);
-            setShowBooksList(false);
-            setShowRatingInput(true);
+        try {
+            const bookDetails = await getBookDetails(book.id);
+            if (bookDetails) {
+                setDetailedBook(bookDetails);
+                setShowBooksList(false);
+                setShowRatingInput(true);
+            }
+        } catch (err) {
+            setError('Failed to fetch book details. Please try again.');
         }
     };
 
@@ -57,83 +75,106 @@ const BookSearchModal: React.FC<BookSearchModalProps> = ({ isOpen, onClose, onSa
                 plot: detailedBook.description,
                 pages: detailedBook.pageCount,
                 comments: '',
-                rating: parseFloat(personalRating),
+                rating: personalRating,
                 finished: 1,
             });
 
             // reset everything
             setQuery('');
             setBooks([]);
-            setPersonalRating('');
+            setPersonalRating(0);
             setShowSearch(true);
             setShowBooksList(false);
             setShowRatingInput(false);
             setDetailedBook(null);
+
+            Toast.show({
+                text1: `Book "${detailedBook.title}" saved to library`,
+                type: 'success',
+            });
 
             onClose();
         }
     };
 
     return (
-        <Modal visible={isOpen} onRequestClose={onClose} transparent={true}>
-            <View style={designs.modal.modalContainer}>
-                <View style={designs.modal.modalView}>
-                    {showSearch && (
-                        <>
-                            <Text style={designs.text.title}>Search for a Book</Text>
-                            <TextInput
-                                style={designs.text.input}
-                                value={query}
-                                onChangeText={setQuery}
-                                onEndEditing={(e) => setQuery(e.nativeEvent.text.trim())}
-                                placeholder="Enter book title"
-                                placeholderTextColor={'gray'}
-                                onSubmitEditing={handleSearch}
-                            />
-                            <PrimaryButton
-                                text="Search"
-                                onPress={handleSearch}
-                            />
-                        </>
-                    )}
-                    {showBooksList && (
-                        <FlatList
-                            data={books}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
-                                <Pressable style={styles.bookItem} onPress={() => handleSelectBook(item)}>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Image source={{ uri: item.mediaImage }} style={styles.bookImage} />
-                                        <View style={{ flexDirection: 'column'}}>
-                                            <Text style={[designs.text.text, {fontWeight: 'bold'}]}>{item.title}</Text>
-                                            <Text style={designs.text.text}>{item.authors} ({new Date(item.publishedDate).getFullYear()})</Text>
-                                        </View>
-                                    </View>
-                                </Pressable>
-                            )}
+        <>
+            <UniversalModal
+                isVisible={isOpen}
+                onClose={onClose}
+            >
+                {showSearch && (
+                    <>
+                        <Text style={designs.modal.title}>Search for a Book</Text>
+                        <TextInput
+                            style={[designs.text.input, { marginBottom: 40, marginTop: 10 }]}
+                            value={query}
+                            onChangeText={setQuery}
+                            onEndEditing={(e) => setQuery(e.nativeEvent.text.trim())}
+                            placeholder="Enter book title"
+                            placeholderTextColor={'gray'}
+                            onSubmitEditing={handleSearch}
                         />
-                    )}
-                    {showRatingInput && detailedBook && (
-                        <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
-                            <Text style={designs.text.title}>Rate this Book</Text>
-                            <TextInput
-                                style={designs.text.input}
-                                value={personalRating}
-                                onChangeText={setPersonalRating}
-                                placeholder="Your Rating"
-                                placeholderTextColor={'gray'}
-                                keyboardType="numeric"
-                                onSubmitEditing={handleSave}
-                            />
-                            <PrimaryButton
-                                text="Save to Library"
-                                onPress={handleSave}
-                            />
+                        <PrimaryButton
+                            text="Search"
+                            onPress={handleSearch}
+                        />
+                    </>
+                )}
+                {showBooksList && (
+                    <View>
+                        {books.map((item) => (
+                            <Pressable 
+                                key={item.id.toString()}
+                                style={styles.bookItem} 
+                                onPress={() => handleSelectBook(item)}
+                            >
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image source={{ uri: item.mediaImage }} style={styles.bookImage} />
+                                    <View style={{ flexDirection: 'column'}}>
+                                        <Text style={[designs.text.text, {fontWeight: 'bold'}]}>{item.title}</Text>
+                                        <Text style={designs.text.text}>{item.authors} ({new Date(item.publishedDate).getFullYear()})</Text>
+                                    </View>
+                                </View>
+                            </Pressable>
+                        ))}
+                    </View>
+                )}
+                {showRatingInput && detailedBook && (
+                    <View style={{ alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+                        <Text style={designs.modal.title}>Rate this Book</Text>
+                        <View style={styles.ratingContainer}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <Pressable
+                                    key={star}
+                                    onPress={() => setPersonalRating(star)}
+                                    style={{ padding: 5 }}
+                                >
+                                    <FontAwesomeIcon 
+                                        icon={faStar} 
+                                        size={20} 
+                                        color={star <= personalRating ? themeColors.textColor : 'gray'} 
+                                    />
+                                </Pressable>
+                            ))}
                         </View>
-                    )}
-                </View>
-            </View>
-        </Modal>
+                        <PrimaryButton
+                            text="Save to Library"
+                            onPress={handleSave}
+                        />
+                    </View>
+                )}
+            </UniversalModal>
+            {error && 
+                <AlertModal
+                    isVisible={!!error}
+                    title="Error"
+                    message={error || ''}
+                    onConfirm={() => setError(null)}
+                    singleButton
+                />
+            }
+        </>
     );
 };
 
@@ -153,5 +194,13 @@ const getStyles = (theme: any) => StyleSheet.create({
         width: 50,
         height: 70,
         marginRight: 10,
+    },
+    ratingContainer: {
+        flexDirection: 'row',
+        marginBottom: 20,
+        backgroundColor: theme.cardColor,
+        padding: 12,
+        borderRadius: 12,
+        justifyContent: 'center',
     },
 });

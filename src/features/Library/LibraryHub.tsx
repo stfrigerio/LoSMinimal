@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 
 import Navbar from '@/src/components/NavBar';
 import Card from './components/Card';
@@ -12,11 +12,12 @@ import MusicSearchModal from './modals/MusicModal';
 import SeriesSearchModal from './modals/SeriesModal';
 
 import { useThemeStyles } from '../../styles/useThemeStyles';
-import Pager from '@/src/features/Library/components/MobilePager';
 import MediaList from '@/src/features/Library/components/MediaList';
 
 const LibraryHub: React.FC = () => {
-	const [pageIndex, setPageIndex] = useState(0); // Use pageIndex as the source of truth
+    const [currentSection, setCurrentSection] = useState<number | null>(null);
+    const [isDashboard, setIsDashboard] = useState(true);
+
 	const [movieModalVisible, setMovieModalVisible] = useState(false);
 	const [seriesModalVisible, setSeriesModalVisible] = useState(false);
 	const [bookModalVisible, setBookModalVisible] = useState(false);
@@ -26,12 +27,10 @@ const LibraryHub: React.FC = () => {
 	const { themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
 
-	const pagerViewRef = useRef<any>(null);
-
-	const onPageSelected = (e: any) => {
-		const newIndex = e.nativeEvent.position;
-		setPageIndex(newIndex); // Update the page index based on swipe
-	};
+    const navigateToSection = (index: number) => {
+        setCurrentSection(index);
+        setIsDashboard(false);
+    };
 
 	const openMovieModal = () => setMovieModalVisible(true);
 	const openSeriesModal = () => setSeriesModalVisible(true);
@@ -53,45 +52,79 @@ const LibraryHub: React.FC = () => {
 		{ type: 'music', SearchModalComponent: MusicSearchModal, modalVisible: musicModalVisible, setModalVisible: setMusicModalVisible, openModal: openMusicModal },
 	];
 
-	const navItems = ['Movies', 'Series', 'Books', 'Videogames', 'Music'].map((title, index) => ({
-		label: title,
-		onPress: () => {
-			setPageIndex(index);
-			pagerViewRef.current?.setPage(index);
-		},
-	}));
+	const returnToDashboard = () => {
+        setIsDashboard(true);
+        setCurrentSection(null);
+    };
 
-	return (
-		<View style={styles.mainContainer}>
-			<View style={styles.container}>
-				<Pager 
-					style={styles.pagerView} 
-					initialPage={0} 
-					onPageSelected={onPageSelected} 
-					ref={pagerViewRef}
-				>
-					{mediaTypes.map((media, index) => (
-						<View key={index} style={styles.pageWrapper}>
-							<MediaList
-								mediaType={media.type}
-								CardComponent={Card}
-								DetailedViewComponent={DetailedView}
-								SearchModalComponent={media.SearchModalComponent}
-								modalVisible={media.modalVisible}
-								setModalVisible={media.setModalVisible}
-							/>
-						</View>
-					))}
-				</Pager>
-			</View>
-			<Navbar
-				items={navItems}
-				activeIndex={pageIndex}
-				screen={mediaTypes[pageIndex].type}
-				quickButtonFunction={mediaTypes[pageIndex].openModal}
-			/>
-		</View>
-	);
+	const renderCurrentSection = () => {
+        if (currentSection === null) return null;
+        
+        const media = mediaTypes[currentSection];
+        return (
+            <View style={styles.pageWrapper} key={currentSection}>
+                <MediaList
+                    key={`media-list-${currentSection}`}
+                    mediaType={media.type}
+                    CardComponent={Card}
+                    DetailedViewComponent={DetailedView}
+                    SearchModalComponent={media.SearchModalComponent}
+                    modalVisible={media.modalVisible}
+                    setModalVisible={media.setModalVisible}
+					onBackPress={returnToDashboard}
+                />
+            </View>
+        );
+    };
+
+    const navItems = ['Movies', 'Series', 'Books', 'Videogames', 'Music'].map((title, index) => ({
+        label: title,
+        onPress: () => navigateToSection(index)
+    }));
+
+    const Dashboard = () => (
+        <View style={styles.dashboardContainer}>
+            <View style={styles.gridContainer}>
+                {mediaTypes.slice(0, 4).map((media, index) => (
+                    <Pressable
+                        key={index}
+                        style={styles.gridCard}
+                        onPress={() => navigateToSection(index)}
+                    >
+                        <Text style={styles.gridCardText}>
+                            {navItems[index].label}
+                        </Text>
+                    </Pressable>
+                ))}
+            </View>
+            <Pressable
+                style={styles.musicCard}
+                onPress={() => navigateToSection(4)}
+            >
+                <Text style={styles.gridCardText}>Music</Text>
+            </Pressable>
+        </View>
+    );
+
+    return (
+        <View style={styles.mainContainer}>
+            <View style={styles.container}>
+                {isDashboard ? (
+                    <Dashboard />
+                ) : (
+                    renderCurrentSection()
+                )}
+            </View>
+            {!isDashboard && currentSection !== null && (
+                <Navbar
+                    items={navItems}
+                    activeIndex={currentSection + 1}
+                    screen={mediaTypes[currentSection].type}
+                    quickButtonFunction={mediaTypes[currentSection].openModal}
+                />
+            )}
+        </View>
+    );
 };
 
 export default LibraryHub;
@@ -102,30 +135,55 @@ const getStyles = (theme: any) => {
 			paddingTop: 37,
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
-			height: '100%'
 		},
 		container: {
 			flex: 1,
 			backgroundColor: theme.backgroundColor,
-			height: '100%',
-			marginBottom: 80
+			marginBottom: 80  // Space for navbar
 		},
-		button: {
-			margin: 10,
-			padding: 8,
-			backgroundColor: theme.backgroundColor,
-			borderRadius: 10,
-			alignSelf: 'flex-start' 
+		dashboardContainer: {
+			flex: 1,
+			padding: 16,
 		},
-		text: {
-			color: theme.textColor
+		gridContainer: {
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			gap: 16,
+			marginBottom: 16,
 		},
-        pagerView: {
-            flex: 1,
-        },
-        pageWrapper: {
-            flex: 1,
-            width: '100%',
-        },
+		gridCard: {
+			width: '45%',
+			height: 200,
+			backgroundColor: theme.cardBackground || theme.backgroundColor,
+			borderRadius: 12,
+			justifyContent: 'center',
+			alignItems: 'center',
+			elevation: 3,
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.25,
+			shadowRadius: 3.84,
+		},
+		musicCard: {
+			width: '100%',
+			height: 200,
+			backgroundColor: theme.cardBackground || theme.backgroundColor,
+			borderRadius: 12,
+			justifyContent: 'center',
+			alignItems: 'center',
+			elevation: 3,
+			shadowColor: '#000',
+			shadowOffset: { width: 0, height: 2 },
+			shadowOpacity: 0.25,
+			shadowRadius: 3.84,
+		},
+		gridCardText: {
+			color: theme.textColor,
+			fontSize: 18,
+			fontWeight: 'bold',
+		},
+		pageWrapper: {
+			flex: 1,
+		}
 	});
 }

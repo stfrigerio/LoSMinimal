@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import { databaseManagers } from '@/database/tables';
 
 export interface GameSearchResult {
@@ -68,13 +67,11 @@ async function getAuthToken() {
 // Main search function
 export async function searchGames(query: string): Promise<GameSearchResult[]> {
     if (!query) {
-        Alert.alert("Error", "No query entered.");
         return [];
     }
 
     const token = await getAuthToken();
     if (!token) {
-        Alert.alert("Error", "Failed to authenticate with IGDB.");
         return [];
     }
 
@@ -94,7 +91,6 @@ export async function searchGames(query: string): Promise<GameSearchResult[]> {
 
         if (!response.ok) {
             console.error("API Request Failed with status: ", response.status);
-            Alert.alert("Error", "Failed to fetch data");
             return [];
         }
 
@@ -112,7 +108,6 @@ export async function searchGames(query: string): Promise<GameSearchResult[]> {
         return data;
     } catch (error) {
         console.error("API Request Failed:", error);
-        Alert.alert("Error", "Failed to fetch data");
         return [];
     }
 }

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Alert } from 'react-native';
 
-import { sortOptions, PAGE_SIZE } from '@/src/features/Library/helpers/sortOptions';
+import { sortOptions } from '@/src/features/Library/helpers/sortOptions';
 import { databaseManagers } from '@/database/tables';
 
 import { LibraryData, SortOptionType } from '@/src/types/Library';
@@ -44,7 +43,6 @@ export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame
             return savedItem; // Return the saved item with UUID
         } catch (error) {
             console.error(`Error saving ${mediaType} to library:`, error);
-            Alert.alert("Error", `Failed to save the ${mediaType} to your library. Please try again.`);
             throw error; // Re-throw to handle in the modal
         }
     };
@@ -83,20 +81,9 @@ export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame
             // Then delete the library item
             await databaseManagers.library.removeByUuid(item.uuid);
             
-            if (mediaType === 'music') {
-                Alert.alert("Success", "Album and all associated tracks deleted successfully");
-            } else {
-                Alert.alert("Success", `${mediaType} deleted successfully`);
-            }
-            
             fetchItems();
         } catch (error) {
             console.error(`Error deleting ${mediaType}:`, error);
-            if (mediaType === 'music') {
-                Alert.alert("Error", "Failed to delete the album and its tracks");
-            } else {
-                Alert.alert("Error", `Failed to delete the ${mediaType}`);
-            }
         }
     };
 
@@ -119,7 +106,6 @@ export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame
             }
         } catch (error) {
             console.error(`Error toggling download for ${mediaType}:`, error);
-            Alert.alert("Error", `Failed to toggle download for the ${mediaType}`);
         }
     };
 
@@ -140,7 +126,6 @@ export const useMediaList = (mediaType: 'movie' | 'book' | 'series' | 'videogame
             }
         } catch (error) {
             console.error(`Error updating ${mediaType}:`, error);
-            Alert.alert("Error", `Failed to update the ${mediaType}. Please try again.`);
         }
     };
     

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, FlatList, Pressable, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, Pressable, StyleSheet, BackHandler } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import SearchComponent from '@/src/features/Library/components/SearchComponent';
@@ -7,6 +7,7 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useMediaList } from '@/src/features/Library/hooks/useMediaList';
 
 import { LibraryData } from '@/src/types/Library';
+import { SectionHeader } from './SectionHeader';
 
 interface MediaListProps {
     mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music';
@@ -21,9 +22,18 @@ interface MediaListProps {
     SearchModalComponent: React.ComponentType<{ isOpen: boolean; onClose: () => void; onSaveToLibrary: (item: LibraryData) => Promise<LibraryData> }>;
     modalVisible: boolean;
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    onBackPress: () => void;
 }
 
-const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, DetailedViewComponent, SearchModalComponent, modalVisible, setModalVisible }) => {
+const MediaList: React.FC<MediaListProps> = ({ 
+    mediaType, 
+    CardComponent, 
+    DetailedViewComponent, 
+    SearchModalComponent, 
+    modalVisible, 
+    setModalVisible,
+    onBackPress
+}) => {
     const {
         items,
         selectedItem,
@@ -50,6 +60,15 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
         );
     };
 
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            onBackPress();
+            return true;
+        });
+
+        return () => backHandler.remove();
+    }, [onBackPress]);
+
     return (
         <>
             <View style={styles.container}>
@@ -63,6 +82,7 @@ const MediaList: React.FC<MediaListProps> = ({ mediaType, CardComponent, Detaile
                     />
                 ) : (
                     <View style={styles.listContainer}>
+                        <SectionHeader section={mediaType} onBack={onBackPress} />
                         <View style={styles.filteringView}>
                             <View style={styles.searchContainer}>
                                 <SearchComponent searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -112,12 +132,6 @@ const getStyles = (theme: any) => {
             backgroundColor: theme.backgroundColor,
             padding: 10,
         },
-        buttonText: {
-            color: '#1E2225',
-            textAlign: 'center',
-            fontSize: 16,
-            fontWeight: 'bold'
-        },
         flatList: {
             flex: 1,
             width: '100%',
@@ -126,7 +140,7 @@ const getStyles = (theme: any) => {
             flexDirection: 'row',
             margin: 10,
             padding: 15,
-            marginBottom: -10
+            marginBottom: -30
         },
         listContainer: {
             flex: 1,
