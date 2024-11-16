@@ -9,7 +9,7 @@ export const Welcome: React.FC = () => {
     return (
         <View style={styles.welcomeSection}>
             <Text style={styles.welcomeText}>My Library</Text>
-            <Text style={styles.subtitleText}>🎥 📺 📚 📖 🎮 🎵 </Text>
+            <Text style={styles.subtitleText}>🎥 📺 📚 🎮 🎵 </Text>
         </View>
     );
 };
@@ -17,7 +17,6 @@ export const Welcome: React.FC = () => {
 const getStyles = (theme: any, design: any) => StyleSheet.create({
     welcomeSection: {
         padding: 16,
-        marginBottom: 16,
     },
     welcomeText: {
         ...design.text.title,

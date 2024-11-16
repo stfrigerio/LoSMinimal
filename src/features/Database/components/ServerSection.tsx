@@ -108,6 +108,7 @@ const ServerSection = () => {
                         alertConfig.onConfirm();
                         setAlertConfig(null);
                     }}
+                    singleButton={alertConfig.singleButton}
                     onCancel={() => setAlertConfig(null)}
                     customButtons={alertConfig.customButtons}
                 />

@@ -17,4 +17,6 @@ web-build/
 .env.*
 losso/
 python/database_files
+musicLibrary/
+imageLibrary/
 

@@ -11,6 +11,7 @@ interface AlertConfig {
     title: string;
     message: string;
     onConfirm: () => void;
+    singleButton?: boolean;
     customButtons?: Array<{ text: string; onPress: () => void }>;
 }
 
@@ -124,7 +125,8 @@ export const useServerSection = () => {
             if (result.success) {
                 showAlert({
                     title: 'Success',
-                    message: 'SQLite database exported successfully',
+                    message: result.message,
+                    singleButton: true,
                     onConfirm: () => {}
                 });
             } else {
@@ -135,7 +137,8 @@ export const useServerSection = () => {
             showAlert({
                 title: 'Error',
                 message: `Failed to export SQLite database: ${error}`,
-                onConfirm: () => {}
+                onConfirm: () => {},
+                singleButton: true
             });
         }
     };

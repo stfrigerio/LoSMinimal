@@ -20,7 +20,7 @@ interface DetailedViewProps {
 const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, onToggleDownload, updateItem }) => {
     const { themeColors, designs } = useThemeStyles();
     const [currentRating, setCurrentRating] = useState(item.rating);
-    const styles = getStyles(themeColors);
+    const styles = getStyles(themeColors, designs);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [editedTitle, setEditedTitle] = useState(item.title);
     const [selectedTrack, setSelectedTrack] = useState<TrackData | null>(null);
@@ -206,9 +206,18 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
                         {renderDetail('Runtime', item.runtime)}
                         {renderDetail('Cast', item.cast)}
                         <View style={styles.ratings}>
-                            <Text style={styles.details}>Rotten Tomato: {item.tomato}%</Text>
-                            <Text style={styles.details}>Imdb: {item.ratingImdb}</Text>
-                            <Text style={styles.details}>Metascore: {item.metascore}</Text>
+                            <View style={styles.ratingItem}>
+                                <Text style={styles.ratingLabel}>Rotten Tomatoes</Text>
+                                <Text style={styles.ratingValue}>{item.tomato}%</Text>
+                            </View>
+                            <View style={styles.ratingItem}>
+                                <Text style={styles.ratingLabel}>IMDB</Text>
+                                <Text style={styles.ratingValue}>{item.ratingImdb}</Text>
+                            </View>
+                            <View style={styles.ratingItem}>
+                                <Text style={styles.ratingLabel}>Metascore</Text>
+                                <Text style={styles.ratingValue}>{item.metascore}</Text>
+                            </View>
                         </View>
                     </>
                 );
@@ -236,6 +245,33 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
         }
     };
 
+    const handleMarkAsFinished = async () => {
+        const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        const updatedItem = { 
+            ...item, 
+            finished: 1, 
+            seen: today 
+        };
+        await databaseManagers.library.upsert(updatedItem);
+        updateItem(updatedItem);
+    };
+
+    const renderFinishButton = () => {
+        if (item.finished === 0) {
+            return (
+                <Pressable 
+                    onPress={handleMarkAsFinished} 
+                    style={styles.finishButton}
+                >
+                    <Text style={styles.finishButtonText}>
+                        Mark as Finished
+                    </Text>
+                </Pressable>
+            );
+        }
+        return null;
+    };
+
     return (
         <>
             <ScrollView style={styles.container}>
@@ -259,11 +295,13 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
                     {renderCommonDetails()}
                     <View style={styles.divider} />
                     {renderSpecificDetails()}
+                    {renderFinishButton()}
                     <Pressable onPress={handleDelete} style={styles.deleteButton}>
                         <FontAwesomeIcon icon={faTrash} size={20} color={themeColors.redOpacity} />
                         <Text style={styles.deleteButtonText}>{`Delete ${item.type}`}</Text>
                     </Pressable>
                 </View>
+                <View style={{ height: 80 }} />
             </ScrollView>
             {selectedTrack && (
                 <TrackDetailModal
@@ -276,7 +314,7 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: any, designs: any) => StyleSheet.create({
     titleInput: {
         borderBottomWidth: 1,
         borderBottomColor: theme.borderColor,
@@ -286,7 +324,34 @@ const getStyles = (theme: any) => StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 10,
-    },    tracksContainer: {
+        backgroundColor: theme.backgroundSecondary,
+        padding: 15,
+        borderRadius: 12,
+    },
+    ratingItem: {
+        flex: 1,
+        alignItems: 'center',
+        paddingHorizontal: 8,
+        height: 50, // Fixed height for consistent alignment
+        justifyContent: 'space-between', // Evenly space label and value
+    },
+    ratingLabel: {
+        color: theme.textColorItalic,
+        fontSize: 12,
+        textAlign: 'center', // Center text if it wraps
+    },
+    ratingValue: {
+        color: theme.textColorBold,
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    details: {
+        flex: 1,
+        padding: 20,
+        color: theme.textColor,
+        fontSize: 14,
+    },  
+    tracksContainer: {
         backgroundColor: theme.cardColor,
         borderRadius: 12,
         padding: 10,
@@ -335,18 +400,13 @@ const getStyles = (theme: any) => StyleSheet.create({
         flex: 1,
         backgroundColor: theme.backgroundColor,
     },
-    details: {
-        flex: 1,
-        padding: 20,
-        color: theme.textColor,
-        fontSize: 14,
-    },
     poster: {
         width: '100%',
-        height: 400,
-        resizeMode: 'cover',
+        height: 300,
+        resizeMode: 'contain',
     },
     title: {
+        ...designs.text.title,
         fontSize: 28,
         fontWeight: 'bold',
         color: theme.textColorBold,
@@ -355,9 +415,6 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     ratingContainer: {
         flexDirection: 'row',
-        marginBottom: 20,
-        backgroundColor: theme.cardColor,
-        padding: 12,
         borderRadius: 12,
         justifyContent: 'center',
     },
@@ -371,7 +428,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 12,
-        backgroundColor: theme.cardColor,
+        backgroundColor: theme.backgroundSecondary,
         padding: 15,
         borderRadius: 12,
     },
@@ -408,9 +465,25 @@ const getStyles = (theme: any) => StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 20,
-        backgroundColor: theme.cardColor,
+        backgroundColor: theme.backgroundSecondary,
         padding: 15,
         borderRadius: 12,
+    },
+    finishButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 15,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: theme.borderColor,
+        marginTop: 30,
+        backgroundColor: theme.backgroundColor,
+    },
+    finishButtonText: {
+        color: theme.textColorBold,
+        fontWeight: 'bold',
+        fontSize: 16,
     },
 });
 

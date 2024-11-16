@@ -1,8 +1,8 @@
 from datetime import datetime
-from app.services.data_processing.data_cleaning import clean_data
+from app.services.summaries.data_processing.data_cleaning import clean_data
 # from database.database_functions import fetch_pillars
-from app.services.ai_helpers.claude import generate_mood_recap, generate_monthly_mood_recap
-from app.services.ai_helpers.gpt import create_thoughts
+from app.services.summaries.ai_helpers.claude import generate_mood_recap, generate_monthly_mood_recap
+from app.services.summaries.ai_helpers.gpt import create_thoughts
 
 def get_week_number(date_str):
     date_obj = datetime.strptime(date_str, '%Y-%m-%d')

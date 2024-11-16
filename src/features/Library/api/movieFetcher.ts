@@ -6,8 +6,12 @@ const API_URL = "https://www.omdbapi.com/";
 let API_KEY = "";
 
 async function initializeApiKey() {
-    const setting = await databaseManagers.userSettings.getByKey('moviesApiKey');
-    API_KEY = setting?.value || "";
+    try {
+        const setting = await databaseManagers.userSettings.getByKey('moviesApiKey');
+        API_KEY = setting?.value || "";
+    } catch (error) {
+        // console.error("Error initializing API key:", error);
+    }
 }
 
 initializeApiKey();

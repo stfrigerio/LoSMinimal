@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faGear, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { colorRainbow } from '@/src/styles/theme';
@@ -35,22 +35,22 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNa
         if(type === 'music') {
             return colorRainbow[14];
         }
+        if(type === 'settings') {
+            return colorRainbow[13];
+        }
         return themeColors.textColor;
     }
 
     return (
         <>
-            <View style={[styles.separator, { marginTop: 16 }]} />
+            <View style={[styles.separator, { marginTop: 8 }]} />
             <Text style={styles.sectionTitle}>Categories</Text>
-            <View style={[styles.separator, { marginBottom: 24 }]} />
+            <View style={[styles.separator, { marginBottom: 16 }]} />
             <View style={styles.gridContainer}>
                 {mediaTypes.map((media, index) => (
                     <Pressable
                         key={index}
-                        style={[
-                            styles.gridCard,
-                            index === 4 && styles.fullWidthCard
-                        ]}
+                        style={styles.gridCard}
                         onPress={() => onNavigate(index)}
                     >
                         <FontAwesomeIcon 
@@ -63,6 +63,20 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNa
                         </Text>
                     </Pressable>
                 ))}
+                {/* Separate Settings Card */}
+                <Pressable
+                    style={styles.gridCard}
+                    onPress={() => onNavigate(5)} // 5 is settings index
+                >
+                    <FontAwesomeIcon 
+                        icon={faGear} 
+                        size={32} 
+                        color={getColor('settings')}
+                    />
+                    <Text style={styles.gridCardText}>
+                        Settings
+                    </Text>
+                </Pressable>
             </View>
         </>
     );
@@ -109,11 +123,11 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         shadowRadius: 3.84,
         gap: 12,
     },
-    fullWidthCard: {
-        width: screenWidth - (PADDING * 2),
-        height: 120,
-        marginTop: GAP - 12,
-    },
+    // fullWidthCard: {
+    //     width: screenWidth - (PADDING * 2),
+    //     height: 120,
+    //     marginTop: GAP - 12,
+    // },
     gridCardText: {
         color: theme.textColor,
         fontSize: 16,

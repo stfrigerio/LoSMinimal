@@ -133,7 +133,6 @@ export const InitializeDatabasesWrapper = () => {
                     databaseManagers.contact.initialize(),
                     databaseManagers.pillars.initialize(),
                     databaseManagers.objectives.initialize(),
-                    databaseManagers.deletionLog.initialize(),
                     databaseManagers.music.initialize()
                 ]);
 

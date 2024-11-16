@@ -6,7 +6,7 @@ import { TableData } from '@/src/features/Database/types/types';
 import { capitalizedTableNames, apiTableNames } from '@/src/utils/tableNames';
 
 export const useDatabaseData = () => {
-	const [tables, setTables] = useState<string[]>([...capitalizedTableNames, 'BooleanHabits', 'QuantifiableHabits', 'DeletionLog']);
+	const [tables, setTables] = useState<string[]>([...capitalizedTableNames, 'BooleanHabits', 'QuantifiableHabits']);
 	const [allData, setAllData] = useState<TableData>({});
 
 	const fetchAllData = async (): Promise<TableData> => {
@@ -28,7 +28,6 @@ export const useDatabaseData = () => {
 					}),
 					['BooleanHabits', await databaseManagers.booleanHabits.listOrderedByDate()],
 					['QuantifiableHabits', await databaseManagers.quantifiableHabits.listOrderedByDate()],
-					['DeletionLog', await databaseManagers.deletionLog.list()]
 				])
 			);
 			setAllData(data);

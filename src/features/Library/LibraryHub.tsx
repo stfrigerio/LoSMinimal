@@ -3,6 +3,8 @@ import { View, StyleSheet, Text, ScrollView, ActivityIndicator } from 'react-nat
 
 import Navbar from '@/src/components/NavBar';
 import DetailedView from './components/MediaList/components/DetailedView';
+import LibrarySettings from './components/LibrarySettings';
+
 import { Stats } from './components/Stats';
 import { RecentActivity } from './components/RecentActivity';
 import { MediaGrid } from './components/MediaGrid';
@@ -18,6 +20,7 @@ import { useLibraryHub } from './hooks/useLibraryHub';
 const LibraryHub: React.FC = () => {
     const [currentSection, setCurrentSection] = useState<number | null>(null);
     const [isDashboard, setIsDashboard] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
@@ -33,9 +36,20 @@ const LibraryHub: React.FC = () => {
         setCurrentSection(null);
     };
 
-    const navItems = ['Movies', 'Series', 'Books', 'Videogames', 'Music'].map((title, index) => ({
+    const navItems = ['Movies', 'Series', 'Books', 'Videogames', 'Music', 'Settings'].map((title, index) => ({
         label: title,
         onPress: () => navigateToSection(index)
+    }));
+
+    const handleOpenModal = () => {
+        setModalVisible(true);
+    };
+
+    const mediaTypesWithState = mediaTypes.map(type => ({
+        ...type,
+        modalVisible,
+        setModalVisible,
+        openModal: handleOpenModal
     }));
 
     const Dashboard = () => (
@@ -47,13 +61,13 @@ const LibraryHub: React.FC = () => {
             ) : (
                 <>
                     <Welcome />
-                    <Stats stats={stats} themeColors={themeColors} />
-                    <LibraryChart weeklyData={weeklyActivity} />
                     <MediaGrid 
                         mediaTypes={mediaTypes} 
                         navItems={navItems}
                         onNavigate={navigateToSection}
                     />
+                    <Stats stats={stats} />
+                    <LibraryChart weeklyData={weeklyActivity} />
                     <RecentActivity 
                         recentActivity={recentActivity} 
                     />
@@ -67,25 +81,27 @@ const LibraryHub: React.FC = () => {
             <View style={styles.container}>
                 {isDashboard ? (
                     <Dashboard />
+                ) : currentSection === 5 ? ( // Settings
+                    <LibrarySettings onBackPress={returnToDashboard} />
                 ) : (
-					<MediaList
-						key={`media-list-${currentSection}`}
-						mediaType={mediaTypes[currentSection!].type}
-						CardComponent={Card}
-						DetailedViewComponent={DetailedView}
-						SearchModalComponent={mediaTypes[currentSection!].SearchModalComponent}
-						modalVisible={mediaTypes[currentSection!].modalVisible}
-						setModalVisible={mediaTypes[currentSection!].setModalVisible}
-						onBackPress={returnToDashboard}
-					/>
+                    <MediaList
+                        key={`media-list-${currentSection}`}
+                        mediaType={mediaTypesWithState[currentSection!].type}
+                        CardComponent={Card}
+                        DetailedViewComponent={DetailedView}
+                        SearchModalComponent={mediaTypesWithState[currentSection!].SearchModalComponent}
+                        modalVisible={modalVisible}
+                        setModalVisible={setModalVisible}
+                        onBackPress={returnToDashboard}
+                    />
                 )}
             </View>
-            {!isDashboard && currentSection !== null && (
+            {!isDashboard && currentSection !== null && currentSection !== 5 && (
                 <Navbar
                     items={navItems}
                     activeIndex={currentSection + 1}
-                    screen={mediaTypes[currentSection].type}
-                    quickButtonFunction={mediaTypes[currentSection].openModal}
+                    screen={mediaTypesWithState[currentSection].type}
+                    quickButtonFunction={handleOpenModal}
                 />
             )}
         </View>

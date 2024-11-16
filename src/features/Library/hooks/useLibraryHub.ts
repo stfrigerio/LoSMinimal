@@ -4,8 +4,15 @@ import { LibraryData } from '@/src/types/Library';
 
 interface LibraryStats {
     totalItems: number;
-    inProgress: number;
     thisMonth: number;
+    thisYear: number;
+    topGenres: {
+        movie?: string;
+        series?: string;
+        book?: string;
+        videogame?: string;
+        music?: string;
+    }
 }
 
 interface WeeklyActivityData {
@@ -21,8 +28,9 @@ export const useLibraryHub = () => {
     const [error, setError] = useState<string | null>(null);
     const [stats, setStats] = useState<LibraryStats>({
         totalItems: 0,
-        inProgress: 0,
-        thisMonth: 0
+        thisMonth: 0,
+        thisYear: 0,
+        topGenres: {}
     });
     const [recentActivity, setRecentActivity] = useState<LibraryData[]>([]);
     const [mediaTypeCounts, setMediaTypeCounts] = useState<Record<string, number>>({
@@ -40,6 +48,33 @@ export const useLibraryHub = () => {
         videogames: Array(52).fill(0),
         music: Array(52).fill(0)
     });
+
+    const calculateTopGenres = (items: LibraryData[]) => {
+        // Group items by type and count genres
+        const genresByType = items.reduce((acc, item) => {
+            if (!acc[item.type]) {
+                acc[item.type] = {};
+            }
+            if (!acc[item.type][item.genre]) {
+                acc[item.type][item.genre] = 0;
+            }
+            acc[item.type][item.genre]++;
+            return acc;
+        }, {} as Record<string, Record<string, number>>);
+
+        // Find top genre for each type
+        const topGenres = Object.entries(genresByType).reduce((acc, [type, genres]) => {
+            // Sort genres by count and get the top one
+            const topGenre = Object.entries(genres)
+                .sort(([,a], [,b]) => b - a)[0]?.[0];
+            if (topGenre) {
+                acc[type] = topGenre;
+            }
+            return acc;
+        }, {} as Record<string, string>);
+
+        return topGenres;
+    };
 
     const fetchLibraryData = async () => {
         try {
@@ -59,11 +94,15 @@ export const useLibraryHub = () => {
             
             const stats: LibraryStats = {
                 totalItems: allItems.length,
-                inProgress: allItems.filter(item => item.leftAt && !item.finished).length,
                 thisMonth: allItems.filter(item => {
-                    const itemDate = new Date(item.updatedAt!);
+                    const itemDate = new Date(item.seen!);
                     return itemDate >= firstDayOfMonth;
-                }).length
+                }).length,
+                thisYear: allItems.filter(item => {
+                    const itemDate = new Date(item.seen!);
+                    return itemDate.getFullYear() === currentDate.getFullYear();
+                }).length,
+                topGenres: calculateTopGenres(allItems)
             };
 
             // Calculate media type counts
@@ -134,7 +173,7 @@ export const useLibraryHub = () => {
         const startOfYear = new Date(date.getFullYear(), 0, 1);
         const days = Math.floor((date.getTime() - startOfYear.getTime()) / (24 * 60 * 60 * 1000));
         const weekNumber = Math.floor(days / 7);
-        return Math.min(weekNumber, 51); // Ensure we don't exceed 51 (52 weeks - 1 for zero-based index)
+        return Math.min(weekNumber, 51);
     };
 
     const calculateWeeklyActivity = (items: LibraryData[]) => {
@@ -178,7 +217,6 @@ export const useLibraryHub = () => {
 
         return weeklyData;
     };
-
 
     return {
         isLoading,

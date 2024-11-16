@@ -126,13 +126,6 @@ export class BaseTableManager<T> {
         return await databaseManager.executeSqlAsync<T>(query);
     }
 
-    protected async logDeletion(tableName: string, recordUuid: string): Promise<void> {
-        await databaseManager.executeSqlAsync(
-            `INSERT INTO DeletionLog (tableName, recordUuid, deletedAt, synced) VALUES (?, ?, ?, ?);`,
-            [tableName, recordUuid, new Date().toISOString(), 0]
-        );
-    }
-
     async remove(id: any): Promise<void> {
         console.log(`Removing ${this.tableStructure.name} with id ${id}`);
 
@@ -157,13 +150,11 @@ export class BaseTableManager<T> {
                             `DELETE FROM BooleanHabits WHERE date = ?;`,
                             [date]
                         );
-                        await this.logDeletion(this.tableStructure.name, uuid);
 
                         await databaseManager.executeSqlAsync(
                             `DELETE FROM QuantifiableHabits WHERE date = ?;`,
                             [date]
                         );
-                        await this.logDeletion('QuantifiableHabits', `${date}`);
                     }
                 }
 
@@ -171,10 +162,7 @@ export class BaseTableManager<T> {
                     `DELETE FROM ${this.tableStructure.name} WHERE ${this.tableStructure.primaryKey} = ?;`,
                     [id]
                 );
-                await this.logDeletion(this.tableStructure.name, uuid);
             });
-
-            console.log(`Logged deletion for ${this.tableStructure.name} with uuid ${uuid}`);
         } else {
             console.warn(`No record found with id ${id} in ${this.tableStructure.name}`);
         }
@@ -186,9 +174,7 @@ export class BaseTableManager<T> {
                 `DELETE FROM ${this.tableStructure.name} WHERE uuid = ?;`,
                 [uuid]
             );
-            await this.logDeletion(this.tableStructure.name, uuid);
         });
-        console.log(`Logged deletion for ${this.tableStructure.name} with uuid ${uuid}`);
     }
 
     async createTable(): Promise<void> {

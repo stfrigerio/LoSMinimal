@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.services.summary_service import process_weekly_summary, process_monthly_summary
+from app.services.summaries.summary_service import process_weekly_summary, process_monthly_summary
 from logger import logger
 
 bp = Blueprint('summary', __name__)

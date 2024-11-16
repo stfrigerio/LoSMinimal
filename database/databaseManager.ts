@@ -87,7 +87,7 @@ class DatabaseManager {
             throw new Error('Database not initialized');
         }
 
-        const tables = [...capitalizedTableNames, "QuantifiableHabits", "BooleanHabits", "DeletionLog"];
+        const tables = [...capitalizedTableNames, "QuantifiableHabits", "BooleanHabits"];
         
         try {
             await this.db.withExclusiveTransactionAsync(async (txn) => {
@@ -133,7 +133,7 @@ class DatabaseManager {
         console.log('Database opened... Testing connection for all tables...');
 
         try {
-            for (const tableName of [...capitalizedTableNames, 'DeletionLog']) {
+            for (const tableName of [...capitalizedTableNames]) {
                 const result = await this.db.getFirstAsync<{ count: number }>(
                     `SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name=?;`,
                     [tableName]

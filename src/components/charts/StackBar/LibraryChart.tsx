@@ -137,6 +137,7 @@ export const LibraryChart: React.FC<LibraryChartProps> = ({
 
 const getStyles = (theme: any, design: any) => StyleSheet.create({
     container: {
+        marginTop: 16,
         paddingHorizontal: 24,
     },
 });

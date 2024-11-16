@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.services.ai_helpers.claude import generate_journal_entry
+from app.services.summaries.ai_helpers.claude import generate_journal_entry
 from logger import logger
 
 bp = Blueprint('journal', __name__)

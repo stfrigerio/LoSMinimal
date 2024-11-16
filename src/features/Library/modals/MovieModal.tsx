@@ -66,6 +66,8 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({
         }
     };
 
+    console.log('showWantToList', showWantToList);
+
     const handleSave = () => {
         if (detailedMovie) {
             if (showWantToList) {

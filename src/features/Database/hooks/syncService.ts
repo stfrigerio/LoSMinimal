@@ -1,8 +1,10 @@
 import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
-import { getFlaskServerURL } from '../helpers/databaseConfig';
 import axios from 'axios';
+
+import { readImageData } from '@/src/Images/ImageFileManager';
 import { capitalizedTableNames } from '@/src/constants/tableNames';
+import { getFlaskServerURL } from '../helpers/databaseConfig';
 
 const LOCAL_DB_PATH = `${FileSystem.documentDirectory}SQLite/LocalDB.db`;
 
@@ -12,15 +14,13 @@ export const uploadDatabase = async (
 ): Promise<{ success: boolean; message: string }> => {
     try {
         const flaskURL = await getFlaskServerURL();
-        console.log('Uploading to URL:', flaskURL); // Debug log
-
-        const formData = new FormData();
 
         if (format === 'sqlite') {
             // Handle SQLite file upload
+            const dbFormData = new FormData();
             const fileInfo = await FileSystem.getInfoAsync(LOCAL_DB_PATH);
             const fileContent = await FileSystem.readAsStringAsync(LOCAL_DB_PATH, { length: 16 });
-            
+
             if (!fileInfo.exists) {
                 throw new Error(`Database file not found at: ${LOCAL_DB_PATH}`);
             }
@@ -28,34 +28,99 @@ export const uploadDatabase = async (
                 throw new Error('This is not a valid SQLite database file');
             }
 
-            formData.append('file', {
+            dbFormData.append('file', {
                 uri: fileInfo.uri,
                 name: 'LocalDB.db',
                 type: 'application/x-sqlite3'
             } as any);
 
-            const response = await axios.post(`${flaskURL}/upload_${format}`, formData, {
+            // Upload database first
+            await axios.post(`${flaskURL}/upload_sqlite`, dbFormData, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
+            // Now handle images in chunks
+            const imageData = await readImageData();
+
+            let totalImages = 0;
+            let totalSaved = 0;
+            let totalDuplicates = 0;
+            const CHUNK_SIZE = 5; // Number of images per chunk
+
+            for (const [date, uris] of Object.entries(imageData)) {
+                if (uris.length === 0) continue;
+            
+                // Process images in chunks
+                for (let i = 0; i < uris.length; i += CHUNK_SIZE) {
+                    const chunkUris = uris.slice(i, i + CHUNK_SIZE);
+            
+                    const imageFormData = new FormData();
+                    imageFormData.append('date', date);
+            
+                    for (const uri of chunkUris) {
+                        try {
+                            const imageInfo = await FileSystem.getInfoAsync(uri);   
+                            if (imageInfo.exists) {
+                                imageFormData.append('images', {
+                                    uri: imageInfo.uri,
+                                    name: `image_${i}.jpeg`,
+                                    type: 'image/jpeg'
+                                } as unknown as Blob);
+                                totalImages++;
+                            }
+                        } catch (error: any) {
+                            console.warn(`Failed to process image ${uri}:`, error);
+                        }
+                    }
+            
+                    const formDataEntries: string[] = [];
+                    imageFormData.forEach((value, key) => {
+                        formDataEntries.push(key);
+                    });
+            
+                    // Only upload if we have images
+                    if (formDataEntries.includes('images')) {
+                        try {
+                            const response = await axios.post(`${flaskURL}/upload_images`, imageFormData, {
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'multipart/form-data',
+                                },
+                                timeout: 30000,
+                            });
+            
+                            totalSaved += response.data.saved_images.length;
+                            totalDuplicates += response.data.duplicates;
+                        } catch (error: any) {
+                            console.error('Chunk upload error:', error.response?.data || error.message);
+                            throw error;
+                        }
+                    }
+                }
+            }
+
+            const successMessage = totalImages > 0 
+                ? `Database uploaded successfully. Processed ${totalImages} images (${totalSaved} saved, ${totalDuplicates} duplicates skipped)`
+                : 'Database uploaded successfully';
+
             return { 
                 success: true, 
-                message: `${format.toUpperCase()} data uploaded successfully` 
+                message: successMessage
             };
         } else {
             if (!data) {
                 throw new Error('No JSON data provided');
             }
-            
+
+            const formData = new FormData();
             const tempPath = `${FileSystem.documentDirectory}temp_upload.json`;
             const formattedJson = JSON.stringify(JSON.parse(data), null, 2);
             await FileSystem.writeAsStringAsync(tempPath, formattedJson);
 
             const fileInfo = await FileSystem.getInfoAsync(tempPath);
-            console.log('Temp file info:', fileInfo);
 
             if (!fileInfo.exists) {
                 throw new Error('Failed to create temporary file');
@@ -74,9 +139,6 @@ export const uploadDatabase = async (
                         'Content-Type': 'multipart/form-data',
                     },
                 });
-
-                console.log('Response status:', response.status);
-                console.log('Response data:', response.data);
 
                 await FileSystem.deleteAsync(tempPath, { idempotent: true });
                 return { 
@@ -126,7 +188,7 @@ export const downloadDatabase = async (): Promise<{ success: boolean; message: s
         const tempDB = await SQLite.openDatabaseAsync(tempDBPath);
         
         // Check for required tables
-        for (const tableName of [...capitalizedTableNames, 'DeletionLog']) {
+        for (const tableName of [...capitalizedTableNames]) {
             const result = await tempDB.getFirstAsync<{ count: number }>(
                 `SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name=?;`,
                 [tableName]
