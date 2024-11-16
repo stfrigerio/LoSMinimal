@@ -34,25 +34,25 @@ const LinkTrackModal = ({
             <Text style={styles.modalTitle}>Link File to Track</Text>
             <Text style={styles.modalSubtitle}>File: {fileName}</Text>
             
-            <FlatList
-                data={availableTracks}
-                keyExtractor={(track) => track.uuid}
-                renderItem={({ item: track }) => (
-                    <Pressable
-                        style={styles.trackOption}
-                        onPress={() => onLinkTrack(track)}
-                    >
-                        <Text style={styles.trackOptionTitle}>{track.trackName}</Text>
-                        <Text style={styles.trackOptionDetails}>
-                            {track.artistName} • {Math.floor(track.durationMs / 1000 / 60)}:
-                            {String(Math.floor((track.durationMs / 1000) % 60)).padStart(2, '0')}
-                        </Text>
-                    </Pressable>
-                )}
-                ListEmptyComponent={
+            <View>
+                {availableTracks.length > 0 ? (
+                    availableTracks.map((track) => (
+                        <Pressable
+                            key={track.uuid}
+                            style={styles.trackOption}
+                            onPress={() => onLinkTrack(track)}
+                        >
+                            <Text style={styles.trackOptionTitle}>{track.trackName}</Text>
+                            <Text style={styles.trackOptionDetails}>
+                                {track.artistName} • {Math.floor(track.durationMs / 1000 / 60)}:
+                                {String(Math.floor((track.durationMs / 1000) % 60)).padStart(2, '0')}
+                            </Text>
+                        </Pressable>
+                    ))
+                ) : (
                     <Text style={styles.emptyText}>No available tracks to link</Text>
-                }
-            />
+                )}
+            </View>
             
             <Pressable
                 style={styles.closeButton}

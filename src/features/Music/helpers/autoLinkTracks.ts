@@ -50,7 +50,6 @@ const findBestMatch = (
     let bestScore = 0;
     
     const cleanTrackName = cleanString(trackName, options);
-    console.log('Cleaned track name:', cleanTrackName);
     
     for (const filename of filenames) {
         const cleanFilename = cleanString(filename, options);
@@ -60,7 +59,6 @@ const findBestMatch = (
         if (score > (options.similarityThreshold || 0.8) && score > bestScore) {
             bestScore = score;
             bestMatch = filename;
-            console.log('New best match found! Score:', score);
         }
     }
     

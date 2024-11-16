@@ -39,11 +39,11 @@ export const useSpotifyAuth = () => {
 
     const redirectUri = makeRedirectUri({
         scheme: 'los',
-        path: 'spotify-auth-callback'
+        path: 'spotify-auth-callback',
     });
 
     const expoGoRedirectUri = makeRedirectUri({
-        scheme: 'los'
+        scheme: 'los',
     });
 
     const loadTokenFromStorage = async () => {

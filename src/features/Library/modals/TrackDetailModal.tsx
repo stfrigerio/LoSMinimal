@@ -200,7 +200,6 @@ const TrackDetailModal: React.FC<TrackDetailModalProps> = ({ isVisible, onClose,
 
 const getStyles = (theme: any) => StyleSheet.create({
     container: {
-        width: '100%',
     },
     title: {
         fontSize: 24,

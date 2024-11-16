@@ -122,6 +122,7 @@ const MediaList: React.FC<MediaListProps> = ({
                             windowSize={5}
                             removeClippedSubviews={true}
                         />
+                        <View style={{ height: 60 }} />
                         {modalVisible && 
                             <SearchModalComponent
                                 isOpen={modalVisible}

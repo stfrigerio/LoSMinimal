@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 
-import AlertModal from '@/src/components/modals/AlertModal';
 import { databaseManagers } from '@/database/tables';
 import { autoLinkTracks } from '../helpers/autoLinkTracks';
 
-import { ExtendedTrackData, Album } from '../types';
+import { ExtendedTrackData, Album, TrackDetailsState } from '../types';
 import { TrackData } from '@/src/types/Library';
 
 export const useTrackManagement = (selectedAlbum: Album | null) => {
-    const [trackDetails, setTrackDetails] = useState<{ [key: string]: TrackData }>({});
+    const [trackDetails, setTrackDetails] = useState<TrackDetailsState>({
+        details: {},
+        orderedSongs: []
+    });
     const [selectedSongForLinking, setSelectedSongForLinking] = useState<string | null>(null);
     const [availableTracks, setAvailableTracks] = useState<ExtendedTrackData[]>([]);
     const [alertModal, setAlertModal] = useState<{
@@ -23,35 +25,54 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
         onConfirm: () => {},
     });
 
-
     useEffect(() => {
         if (selectedAlbum) {
             loadTrackDetails();
+            loadAvailableTracks();
         }
     }, [selectedAlbum]);
 
     const loadTrackDetails = async () => {
-        if (!selectedAlbum) return;
+        if (!selectedAlbum?.uuid) return;
         
-        const details: { [key: string]: TrackData } = {};
-        for (const song of selectedAlbum.songs) {
-            try {
-                let tracks = await databaseManagers.music.getMusicTracks({ fileName: song });
-                
-                if (!tracks || tracks.length === 0) {
-                    const trackName = song.split('.').slice(0, -1).join('.');
-                    tracks = await databaseManagers.music.getMusicTracks({ trackName });
+        try {
+            // Start with the actual files from the folder
+            const filesInFolder = selectedAlbum.songs;
+    
+            // Get DB tracks for additional data
+            const dbTracks = await databaseManagers.music.getMusicTracks({ 
+                libraryUuid: selectedAlbum.uuid 
+            });
+    
+            // Create details mapping from filename to trackData
+            const details: { [key: string]: TrackData } = {};
+            dbTracks.forEach(track => {
+                if (track.fileName) {
+                    details[track.fileName] = track;
                 }
-
-                if (tracks && tracks.length > 0) {
-                    const trackName = song.split('.').slice(0, -1).join('.');
-                    details[trackName] = tracks[0];
-                }
-            } catch (error) {
-                console.error('Error loading track details:', error);
-            }
+            });
+    
+            // Separate linked and unlinked files
+            const linkedFiles = filesInFolder.filter(filename => details[filename]);
+            const unlinkedFiles = filesInFolder.filter(filename => !details[filename]);
+    
+            // Sort linked files by track number
+            const sortedLinkedFiles = linkedFiles.sort((a, b) => {
+                const trackA = details[a];
+                const trackB = details[b];
+                return (trackA?.trackNumber || 0) - (trackB?.trackNumber || 0);
+            });
+    
+            // Combine sorted linked files with unlinked files at the bottom
+            const orderedSongs = [...sortedLinkedFiles, ...unlinkedFiles];
+    
+            setTrackDetails({
+                details,
+                orderedSongs
+            });
+        } catch (error) {
+            console.error('Error loading track details:', error);
         }
-        setTrackDetails(details);
     };
 
     const loadAvailableTracks = async () => {
@@ -59,7 +80,7 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
         
         try {
             const tracks = await databaseManagers.music.getMusicTracks({ 
-                libraryUuid: selectedAlbum.uuid
+                libraryUuid: selectedAlbum.uuid 
             });
             
             const albumDetails = await databaseManagers.library.getLibrary({
@@ -100,6 +121,7 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
                     onConfirm: () => {
                         setAlertModal(prev => ({ ...prev, isVisible: false }));
                         loadTrackDetails();
+                        loadAvailableTracks();
                     }
                 });
             } else {
@@ -121,6 +143,43 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
         }
     };
 
+    const handleUnlinkAll = async () => {
+        if (!selectedAlbum?.uuid) return;
+
+        try {
+            const tracks = await databaseManagers.music.getMusicTracks({ 
+                libraryUuid: selectedAlbum.uuid 
+            });
+
+            // Update all tracks to remove their fileName
+            for (const track of tracks) {
+                await databaseManagers.music.upsert({
+                    ...track,
+                    fileName: null
+                });
+            }
+
+            setAlertModal({
+                isVisible: true,
+                title: 'Unlink Complete',
+                message: `Successfully unlinked ${tracks.length} tracks.`,
+                onConfirm: () => {
+                    setAlertModal(prev => ({ ...prev, isVisible: false }));
+                    loadTrackDetails();
+                    loadAvailableTracks();
+                }
+            });
+        } catch (error) {
+            console.error('Error unlinking tracks:', error);
+            setAlertModal({
+                isVisible: true,
+                title: 'Error',
+                message: 'Failed to unlink tracks',
+                onConfirm: () => setAlertModal(prev => ({ ...prev, isVisible: false }))
+            });
+        }
+    };
+
     return {
         trackDetails,
         selectedSongForLinking,
@@ -129,6 +188,7 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
         loadAvailableTracks,
         loadTrackDetails,
         handleAutoLink,
-        alertModal
+        alertModal,
+        handleUnlinkAll
     };
-}; 
+};

@@ -8,7 +8,7 @@ interface CustomButton {
     onPress: () => void;
 }
 
-interface AlertModalProps {
+export interface AlertModalProps {
     isVisible: boolean;
     title: string;
     message: string;
@@ -16,6 +16,15 @@ interface AlertModalProps {
     onCancel?: () => void;
     singleButton?: boolean;
     customButtons?: CustomButton[];
+}
+
+export interface AlertConfig {
+    title: string;
+    message: string;
+    onConfirm: () => void;
+    onCancel?: () => void;
+    singleButton?: boolean;
+    customButtons?: Array<{ text: string; onPress: () => void }>;
 }
 
 const AlertModal: React.FC<AlertModalProps> = ({

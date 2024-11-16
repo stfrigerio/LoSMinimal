@@ -38,6 +38,7 @@ const Music = () => {
         loadAvailableTracks,
         handleAutoLink,
         loadTrackDetails,
+        handleUnlinkAll,
         alertModal
     } = useTrackManagement(selectedAlbum);
 
@@ -87,6 +88,7 @@ const Music = () => {
                             album={selectedAlbum}
                             onBack={() => setSelectedAlbum(null)}
                             onAutoLink={handleAutoLink}
+                            onUnlinkAll={handleUnlinkAll}
                         />
                         <SongList 
                             album={selectedAlbum}

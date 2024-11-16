@@ -1,19 +1,13 @@
 import { useState, useEffect } from 'react';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
+
 import { databaseManagers } from '@/database/tables';
 import { uploadDatabase, downloadDatabase } from './syncService';
+import { AlertConfig } from '@/src/components/modals/AlertModal';
 
 type BackupFormat = 'json' | 'sqlite';
 type BackupAction = 'export' | 'import' | 'share';
-
-interface AlertConfig {
-    title: string;
-    message: string;
-    onConfirm: () => void;
-    singleButton?: boolean;
-    customButtons?: Array<{ text: string; onPress: () => void }>;
-}
 
 export const useServerSection = () => {
     const [serverURL, setServerURL] = useState('');

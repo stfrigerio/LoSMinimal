@@ -19,6 +19,6 @@ def create_app():
     app.register_blueprint(summary_routes.bp)
     app.register_blueprint(journal_routes.bp)
     app.register_blueprint(database_routes.bp)
-    app.register_blueprint(music_routes.music_bp)
+    app.register_blueprint(music_routes.music_bp, url_prefix='/music')
 
     return app

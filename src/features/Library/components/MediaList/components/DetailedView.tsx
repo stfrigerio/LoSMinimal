@@ -128,7 +128,7 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
             <View style={styles.downloadToggleContainer}>
                 <Text style={styles.detailLabel}>Mark for Download</Text>
                 <Switch
-                    trackColor={{ false: themeColors.borderColor, true: themeColors.accentColor }}
+                    trackColor={{ false: themeColors.backgroundColor, true: themeColors.accentColor }}
                     thumbColor={item.isMarkedForDownload === 1 ? themeColors.textColorBold : themeColors.textColor}
                     onValueChange={handleToggleDownload}
                     value={item.isMarkedForDownload === 1}

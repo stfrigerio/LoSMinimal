@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faArrowLeft, faMagicWandSparkles, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faMagicWandSparkles, faInfoCircle, faUnlink } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { Album } from '../types';
@@ -13,9 +13,10 @@ interface MusicHeaderProps {
     album: Album;
     onBack: () => void;
     onAutoLink: () => void;
+    onUnlinkAll: () => void;
 }
 
-export const MusicHeader = ({ album, onBack, onAutoLink }: MusicHeaderProps) => {
+export const MusicHeader = ({ album, onBack, onAutoLink, onUnlinkAll }: MusicHeaderProps) => {
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
     const [selectedItem, setSelectedItem] = useState<LibraryData | null>(null);
@@ -67,6 +68,18 @@ export const MusicHeader = ({ album, onBack, onAutoLink }: MusicHeaderProps) => 
                     {({ pressed }) => (
                         <FontAwesomeIcon 
                             icon={faInfoCircle} 
+                            size={18} 
+                            color={pressed ? themeColors.accentColor : themeColors.textColorItalic} 
+                        />
+                    )}
+                </Pressable>
+                <Pressable 
+                    style={styles.iconButton}
+                    onPress={onUnlinkAll}
+                >
+                    {({ pressed }) => (
+                        <FontAwesomeIcon 
+                            icon={faUnlink} 
                             size={18} 
                             color={pressed ? themeColors.accentColor : themeColors.textColorItalic} 
                         />

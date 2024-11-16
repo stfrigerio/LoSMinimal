@@ -5,12 +5,11 @@ import { faPlay, faStar, faLink } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
-import { Album } from '../types';
-import { TrackData } from '@/src/types/Library';
+import { Album, TrackDetailsState } from '../types';
 
 interface SongListProps {
     album: Album;
-    trackDetails: { [key: string]: TrackData };
+    trackDetails: TrackDetailsState;
     onPlaySound: (albumName: string, songName: string, songList: string[]) => void;
     onLinkTrack: (song: string) => void;
 }
@@ -38,22 +37,29 @@ export const SongList = ({
     );
 
     const renderSongItem = ({ item, index }: { item: string; index: number }) => {
-        const trackName = item.split('.').slice(0, -1).join('.');
-        const trackData = trackDetails[trackName];
-        
+        const isMp3 = item.toLowerCase().endsWith('.mp3');
+        const trackName = isMp3 ? item.slice(0, -4) : item; // Remove .mp3 if present
+        const trackData = trackDetails.details[item]; // Use filename as key
+
         return (
             <Pressable 
                 style={({ pressed }) => [
                     styles.songItem,
                     pressed && styles.songItemPressed
                 ]} 
-                onPress={() => onPlaySound(album.name, item, album.songs)}
+                onPress={() => onPlaySound(album.name, item, trackDetails.orderedSongs)}
             >
                 <View style={styles.songMainInfo}>
                     <View style={styles.songIconContainer}>
-                        <Text style={styles.trackNumber}>
-                            {(index + 1).toString().padStart(2, '0')}
-                        </Text>
+                        {trackData ? (
+                            <Text style={styles.trackNumber}>
+                                {trackData.trackNumber.toString().padStart(2, '0')}
+                            </Text>
+                        ) : (
+                            <Text style={styles.trackNumber}>
+                                --
+                            </Text>
+                        )}
                     </View>
                     <View style={styles.songDetails}>
                         <Text style={styles.songTitle}>
@@ -96,7 +102,7 @@ export const SongList = ({
 
     return (
         <FlatList
-            data={album.songs}
+            data={trackDetails.orderedSongs} 
             renderItem={renderSongItem}
             keyExtractor={(item) => item}
             contentContainerStyle={styles.songList}

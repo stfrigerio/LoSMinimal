@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, ScrollView, Pressable, BackHandler } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import Collapsible from '@/src/components/Collapsible';
+import AlertModal, { AlertConfig } from '@/src/components/modals/AlertModal';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { syncMarkedAlbums, fetchAPIKeys, saveAPIKey, clearMusicFolder } from '../helpers/LibrarySettingsHelper';
@@ -21,6 +23,7 @@ const LibrarySettings = ({ onBackPress }: { onBackPress: () => void }) => {
     const [igdbClientSecret, setIgdbClientSecret] = useState('');
 
     const [isSyncing, setIsSyncing] = useState(false);
+    const [alertConfig, setAlertConfig] = useState<AlertConfig | null>(null);
 
     useEffect(() => {
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -31,6 +34,43 @@ const LibrarySettings = ({ onBackPress }: { onBackPress: () => void }) => {
         return () => backHandler.remove();
     }, [onBackPress]);
 
+    // Add this function to handle sync
+    const handleSync = async () => {
+        try {
+            const result = await syncMarkedAlbums(setIsSyncing, setAlertConfig);
+            if (result?.success) {
+                Toast.show({
+                    type: 'success',
+                    text1: 'Sync Complete',
+                    text2: result.message
+                });
+            }
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Sync Error',
+                text2: 'Failed to sync albums'
+            });
+        }
+    };
+
+    // Add this function to handle music folder clearing
+    const handleClearMusicFolder = async () => {
+        try {
+            await clearMusicFolder();
+            Toast.show({
+                type: 'success',
+                text1: 'Success',
+                text2: 'Music folder cleared successfully'
+            });
+        } catch (error) {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Failed to clear music folder'
+            });
+        }
+    };
 
     useEffect(() => {
         const loadAPIKeys = async () => {
@@ -96,46 +136,66 @@ const LibrarySettings = ({ onBackPress }: { onBackPress: () => void }) => {
     };
 
     return (
-        <ScrollView style={styles.container}>
-            <Text style={styles.pageTitle}>Library Settings</Text>
-            {renderSection('Books', 'books', 
-                renderAPIKeyInput('Books API Key', booksApiKey, setBooksApiKey, () => saveAPIKey('booksApiKey', booksApiKey))
+        <>
+            <ScrollView style={styles.container}>
+                <Text style={styles.pageTitle}>Library Settings</Text>
+                {renderSection('Books', 'books', 
+                    renderAPIKeyInput('Books API Key', booksApiKey, setBooksApiKey, () => saveAPIKey('booksApiKey', booksApiKey))
+                )}
+                {renderSection('Movies & Series', 'movies', 
+                    renderAPIKeyInput('Movies API Key', moviesApiKey, setMoviesApiKey, () => saveAPIKey('moviesApiKey', moviesApiKey))
+                )}
+                {renderSection('Music', 'music', 
+                    <>
+                        {renderAPIKeyInput('Spotify Client ID', spotifyClientId, setSpotifyClientId, () => saveAPIKey('spotifyClientId', spotifyClientId))}
+                        {renderAPIKeyInput('Spotify Client Secret', spotifyClientSecret, setSpotifyClientSecret, () => saveAPIKey('spotifyClientSecret', spotifyClientSecret))}
+                        <Text style={styles.subtitle}>Sync Albums</Text>
+                        <Pressable
+                            style={[styles.syncButton, isSyncing && styles.syncingButton]}
+                            onPress={handleSync}
+                            disabled={isSyncing}
+                        >
+                            <Text style={styles.syncButtonText}>
+                                {isSyncing ? 'Syncing...' : 'Sync Marked Albums'}
+                            </Text>
+                        </Pressable>
+                        <Pressable
+                            style={styles.syncButton}
+                            onPress={handleClearMusicFolder}
+                        >
+                            {({ pressed }) => (
+                                <Text style={[styles.syncButtonText, pressed && { opacity: 0.5, transform: [{ scale: 0.98 }] }]}>
+                                    Clear Music Folder
+                                </Text>
+                            )}
+                        </Pressable>
+                    </>
+                )}
+                {renderSection('Video Games', 'games', 
+                    <>
+                        {renderAPIKeyInput('IGDB Client ID', igdbClientId, setIgdbClientId, () => saveAPIKey('igdbClientId', igdbClientId))}
+                        {renderAPIKeyInput('IGDB Client Secret', igdbClientSecret, setIgdbClientSecret, () => saveAPIKey('igdbClientSecret', igdbClientSecret))}
+                    </>
+                )}
+                <View style={{ height: 100 }} />
+            </ScrollView>
+            {alertConfig && (
+                <AlertModal
+                    isVisible={!!alertConfig}
+                    title={alertConfig.title}
+                    message={alertConfig.message}
+                    onConfirm={() => {
+                        alertConfig.onConfirm?.();
+                        setAlertConfig(null);
+                    }}
+                    onCancel={() => {
+                        alertConfig.onCancel?.();
+                        setAlertConfig(null);
+                    }}
+                    singleButton={alertConfig.singleButton}
+                />
             )}
-            {renderSection('Movies & Series', 'movies', 
-                renderAPIKeyInput('Movies API Key', moviesApiKey, setMoviesApiKey, () => saveAPIKey('moviesApiKey', moviesApiKey))
-            )}
-            {renderSection('Music', 'music', 
-                <>
-                    {renderAPIKeyInput('Spotify Client ID', spotifyClientId, setSpotifyClientId, () => saveAPIKey('spotifyClientId', spotifyClientId))}
-                    {renderAPIKeyInput('Spotify Client Secret', spotifyClientSecret, setSpotifyClientSecret, () => saveAPIKey('spotifyClientSecret', spotifyClientSecret))}
-                    <Text style={styles.subtitle}>Sync Albums</Text>
-                    <Pressable
-                        style={[styles.syncButton, isSyncing && styles.syncingButton]}
-                        onPress={() => syncMarkedAlbums(setIsSyncing)}
-                        disabled={isSyncing}
-                    >
-                        <Text style={styles.syncButtonText}>
-                            {isSyncing ? 'Syncing...' : 'Sync Marked Albums'}
-                        </Text>
-                    </Pressable>
-                    <Pressable
-                        style={styles.syncButton}
-                        onPress={() => clearMusicFolder()}
-                    >
-                        <Text style={styles.syncButtonText}>
-                            Clear Music Folder
-                        </Text>
-                    </Pressable>
-                </>
-            )}
-            {renderSection('Video Games', 'games', 
-                <>
-                    {renderAPIKeyInput('IGDB Client ID', igdbClientId, setIgdbClientId, () => saveAPIKey('igdbClientId', igdbClientId))}
-                    {renderAPIKeyInput('IGDB Client Secret', igdbClientSecret, setIgdbClientSecret, () => saveAPIKey('igdbClientSecret', igdbClientSecret))}
-                </>
-            )}
-            <View style={{ height: 100 }} />
-        </ScrollView>
+        </>
     );
 };
 

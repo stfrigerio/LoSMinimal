@@ -1,21 +1,22 @@
-import { Alert } from 'react-native';
 import * as FileSystem from 'expo-file-system';
+import { useState } from 'react';
 
 import { databaseManagers } from '@/database/tables';
 import { getFlaskServerURL } from '@/src/features/Database/helpers/databaseConfig';
+import { AlertConfig } from '@/src/components/modals/AlertModal';
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 2000; // 2 seconds
 const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const syncMarkedAlbums = async (setIsSyncing: (isSyncing: boolean) => void) => {
+export const musicFolderPath = `${FileSystem.documentDirectory}Music`;
+
+export const syncMarkedAlbums = async (
+    setIsSyncing: (isSyncing: boolean) => void,
+    setAlertConfig: (config: AlertConfig | null) => void
+) => {
     setIsSyncing(true);
-    const concurrencyLimit = 5; // Limit the number of concurrent album syncs
-    type SyncPromiseWrapper = {
-        promise: Promise<void>;
-        album: string;
-    };
-    const activeSyncs: SyncPromiseWrapper[] = [];
+    let syncErrors: string[] = [];
 
     try {
         const markedAlbums = await databaseManagers.library.getLibrary({ 
@@ -32,35 +33,49 @@ export const syncMarkedAlbums = async (setIsSyncing: (isSyncing: boolean) => voi
         // Remove unmarked albums
         for (let album of allMusicAlbums) {
             if (!markedAlbums.some(markedAlbum => markedAlbum.title === album.title)) {
-                await removeAlbum(album.title);
+                try {
+                    await removeAlbum(album.title);
+                    //todo ideally i should show some kind of message with the album removed
+                } catch (error) {
+                    syncErrors.push(`Failed to remove ${album.title}`);
+                }
             }
         }
 
+        // Sync marked albums
         for (let album of markedAlbums) {
-            if (activeSyncs.length >= concurrencyLimit) {
-                await Promise.race(activeSyncs.map(p => p.promise)); // Wait for one to finish
-            }
-
-            const syncPromise = syncAlbum(album, SERVER_URL).catch(error => {
+            try {
+                await syncAlbum(album, SERVER_URL);
+            } catch (error) {
+                syncErrors.push(`Failed to sync ${album.title}`);
                 console.error(`Failed to sync album ${album.title}:`, error);
-                Alert.alert('Sync Error', `Failed to sync album: ${album.title}`);
-            });
-
-            const promiseWrapper = { promise: syncPromise, album: album.title };
-            activeSyncs.push(promiseWrapper);
-            syncPromise.finally(() => {
-                // Remove from active syncs when done
-                const index = activeSyncs.findIndex(p => p.album === album.title);
-                if (index !== -1) activeSyncs.splice(index, 1);
-            });
+            }
         }
 
-        await Promise.all(activeSyncs.map(p => p.promise)); // Ensure all syncs complete
+        if (syncErrors.length > 0) {
+            setAlertConfig({
+                title: 'Sync Completed with Errors',
+                message: `Some albums failed to sync:\n${syncErrors.join('\n')}`,
+                onConfirm: () => {},
+                singleButton: true
+            });
+            return { success: false, message: 'Sync completed with errors' };
+        }
 
-        Alert.alert('Sync Complete', 'All marked albums have been synced successfully.');
+        return { 
+            success: true, 
+            message: 'All marked albums have been synced successfully' 
+        };
+
     } catch (error) {
         console.error('Failed to sync albums:', error);
-        Alert.alert('Sync Error', 'Failed to sync some albums. Please check the logs for details.');
+        setAlertConfig({
+            title: 'Sync Error',
+            message: 'Failed to sync albums. Please check the logs for details.',
+            onConfirm: () => {},
+            singleButton: true
+        });
+        return { success: false, message: 'Sync failed' };
     } finally {
         setIsSyncing(false);
     }
@@ -86,7 +101,7 @@ const syncAlbum = async (album: any, SERVER_URL: string) => {
         throw new Error('Invalid response format from server');
     }
 
-    const albumPath = `${FileSystem.documentDirectory}Music/${album.title}`;
+    const albumPath = `${musicFolderPath}/${album.title}`;
     await FileSystem.makeDirectoryAsync(albumPath, { intermediates: true });
 
     for (let file of files) {
@@ -105,15 +120,12 @@ const syncAlbum = async (album: any, SERVER_URL: string) => {
             }
         }
     }
-
-    console.log(`Successfully synced album: ${album.title}`);
 };
 
 const removeAlbum = async (albumTitle: string) => {
     try {
-        const albumPath = `${FileSystem.documentDirectory}Music/${albumTitle}`;
+        const albumPath = `${musicFolderPath}/${albumTitle}`;
         await FileSystem.deleteAsync(albumPath, { idempotent: true });
-        console.log(`Successfully removed album: ${albumTitle}`);
     } catch (error) {
         console.error(`Failed to remove album ${albumTitle}:`, error);
         throw error; // Propagate the error to handle it in the calling function
@@ -125,14 +137,14 @@ const downloadFile = async (albumTitle: string, fileName: string, albumPath: str
     const fileUrl = `${SERVER_URL}/music/file/${encodeURIComponent(albumTitle)}/${encodeURIComponent(fileName)}`;
     const fileUri = `${albumPath}/${fileName}`;
 
-    // Check if file exists and has content
-    const fileInfo = await FileSystem.getInfoAsync(fileUri);
-    if (fileInfo.exists && fileInfo.size > 0) {
-        console.log(`File already exists and is not empty: ${fileName}`);
-        return;
-    }
-    
     try {
+        // Check if file exists and has content
+        const fileInfo = await FileSystem.getInfoAsync(fileUri);
+        if (fileInfo.exists && fileInfo.size > 0) {
+            console.log(`File already exists and is not empty: ${fileName}`);
+            return;
+        }
+        
         // Use Expo FileSystem's downloadAsync with proper headers
         const downloadResult = await FileSystem.downloadAsync(
             fileUrl,
@@ -140,23 +152,30 @@ const downloadFile = async (albumTitle: string, fileName: string, albumPath: str
             {
                 headers: {
                     'Accept': 'audio/mpeg,audio/*;q=0.9,*/*;q=0.8',
-                }
+                },
+                cache: false // Disable caching to ensure fresh download
             }
         );
 
-        // Verify the download
+        // More thorough download verification
         if (downloadResult.status !== 200) {
             throw new Error(`Download failed with status: ${downloadResult.status}`);
         }
 
         const downloadedFile = await FileSystem.getInfoAsync(fileUri);
-        if (!downloadedFile.exists || downloadedFile.size === 0) {
-            throw new Error(`File download failed or file is empty: ${fileName}`);
+        if (!downloadedFile.exists) {
+            throw new Error(`File does not exist after download: ${fileName}`);
+        }
+        
+        if (downloadedFile.size === 0) {
+            throw new Error(`Downloaded file is empty: ${fileName}`);
         }
 
-        console.log(`Successfully downloaded: ${fileName}`);
+        if (downloadedFile.size < 1024) { // Less than 1KB
+            throw new Error(`Downloaded file suspiciously small (${downloadedFile.size} bytes): ${fileName}`);
+        }
     } catch (error) {
-        console.error(`Error in downloadFile:`, error);
+        console.error(`Error downloading ${fileName}:`, error);
         // Delete the potentially partially downloaded file
         try {
             await FileSystem.deleteAsync(fileUri, { idempotent: true });
@@ -169,23 +188,22 @@ const downloadFile = async (albumTitle: string, fileName: string, albumPath: str
 
 export const clearMusicFolder = async () => {
     try {
-        const musicFolderPath = `${FileSystem.documentDirectory}Music`;
+        // Check if directory exists
+        const dirInfo = await FileSystem.getInfoAsync(musicFolderPath);
+
         const musicFolderContents = await FileSystem.readDirectoryAsync(musicFolderPath);
 
         for (const item of musicFolderContents) {
             const itemPath = `${musicFolderPath}/${item}`;
             const itemInfo = await FileSystem.getInfoAsync(itemPath);
-
-            if (itemInfo.isDirectory) {
-                await FileSystem.deleteAsync(itemPath, { idempotent: true });
-            } else {
-                await FileSystem.deleteAsync(itemPath);
-            }
+            console.log(`Item ${item}:`, itemInfo);
+            await FileSystem.deleteAsync(itemPath, { idempotent: true });
         }
 
-    } catch (error) {
+        return { success: true };
+    } catch (error: any) {
         console.error('Failed to clear Music folder:', error);
-        throw new Error('Failed to clear Music folder');
+        throw new Error(`Failed to clear Music folder: ${error.message}`);
     }
 };
 
