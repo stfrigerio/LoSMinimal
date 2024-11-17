@@ -1,6 +1,7 @@
 import { Drawer } from 'expo-router/drawer';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
@@ -87,16 +88,21 @@ function App() {
 
 export default function Layout() {
     return (
-        <ThemeProvider>
-            <DrawerStateProvider>
-                <NavbarDrawerProvider>
-                    <ChecklistProvider>
-                        <MusicPlayerProvider>
-                            <App />
-                        </MusicPlayerProvider>
-                    </ChecklistProvider>
-                </NavbarDrawerProvider>
-            </DrawerStateProvider>
-        </ThemeProvider>
+        <SafeAreaProvider>
+            <ThemeProvider>
+                <DrawerStateProvider>
+                    <NavbarDrawerProvider>
+                        <ChecklistProvider>
+                            <MusicPlayerProvider>
+                                <SafeAreaView style={{ flex: 1 }}>
+                                    <App />
+                                </SafeAreaView>
+                            </MusicPlayerProvider>
+                        </ChecklistProvider>
+                    </NavbarDrawerProvider>
+                </DrawerStateProvider>
+            </ThemeProvider>
+        </SafeAreaProvider>
     );
 }
+

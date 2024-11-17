@@ -10,7 +10,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "server": "cd python && . ./losso/bin/activate && python3 main_server.py"
+    "server": "cd python && . ./losso/bin/activate && python3 main_server.py",
+    "devtools": "react-devtools"
   },
   "private": true,
   "dependencies": {
@@ -44,7 +45,9 @@
     "moment": "^2.30.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-native": "0.76.2",
     "react-native-calendars": "^1.1307.0",
+    "react-native-gesture-handler": "~2.20.2",
     "react-native-reanimated": "~3.16.1",
     "react-native-reanimated-carousel": "^3.5.1",
     "react-native-toast-message": "^2.2.1",
@@ -53,14 +56,17 @@
     "string-similarity": "^4.0.4",
     "typescript": "^5.3.3",
     "uuid": "^11.0.3",
-    "react-native": "0.76.2",
-    "react-native-gesture-handler": "~2.20.2"
+    "expo-system-ui": "~4.0.3",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.1.0",
+    "react-native-svg": "15.8.0"
   },
   "devDependencies": {
     "@types/color": "^4.2.0",
     "@types/d3": "^7.4.3",
     "@types/lodash": "^4.17.13",
     "@types/react": "^18.3.12",
-    "@types/string-similarity": "^4.0.2"
+    "@types/string-similarity": "^4.0.2",
+    "react-devtools": "^6.0.1"
   }
 }
