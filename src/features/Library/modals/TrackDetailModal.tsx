@@ -143,7 +143,7 @@ const TrackDetailModal: React.FC<TrackDetailModalProps> = ({ isVisible, onClose,
     );
 
     const modalContent = (
-        <View style={styles.container}>
+        <>
             <Text style={styles.title}>{track.trackName}</Text>
             {renderRating(currentRating)}
             <View style={styles.section}>
@@ -156,7 +156,7 @@ const TrackDetailModal: React.FC<TrackDetailModalProps> = ({ isVisible, onClose,
                 </View>
             )}
 
-            <View style={styles.mainContent}>
+            <View style={styles.mainContent} pointerEvents="box-none">
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Track Info</Text>
                     {renderDetail('Track Number', track.trackNumber)}
@@ -185,7 +185,7 @@ const TrackDetailModal: React.FC<TrackDetailModalProps> = ({ isVisible, onClose,
                     </View>
                 </View>
             </View>
-        </View>
+        </>
     );
 
     return (
@@ -199,8 +199,6 @@ const TrackDetailModal: React.FC<TrackDetailModalProps> = ({ isVisible, onClose,
 };
 
 const getStyles = (theme: any) => StyleSheet.create({
-    container: {
-    },
     title: {
         fontSize: 24,
         fontWeight: 'bold',

@@ -324,8 +324,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
             )}
 
 			<PrimaryButton
-				// onPress={addNewItem}
-				onPress={() => console.log('addNewItem')}
+				onPress={addNewItem}
 				text={task ? 'Update' : 'Add Task'}
 			/>
 		</>

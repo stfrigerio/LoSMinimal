@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 
 import { databaseManagers } from '@/database/tables';
 import { useChecklist } from '@/src/contexts/checklistContext';
-//todo re add this
-// import { scheduleTaskNotification, cancelTaskNotification, rescheduleTaskNotification } from '../hooks/tasksNotification';
+import { scheduleTaskNotification, cancelTaskNotification, rescheduleTaskNotification } from '../helpers/tasksNotification';
 
 import { TaskData } from '@/src/types/Task';
 import { PillarData } from '@/src/types/Pillar';
@@ -87,9 +86,9 @@ export const useTasksData = (): UseTaskDataType => {
         try {
             const updated = await databaseManagers.tasks.upsert(updatedTask);
             if (updated.due) {
-                // await rescheduleTaskNotification(updated);
+                await rescheduleTaskNotification(updated);
             } else {
-                // await cancelTaskNotification(updated.uuid!);
+                await cancelTaskNotification(updated.uuid!);
             }
             await fetchTasks();
             return updated;
@@ -101,7 +100,7 @@ export const useTasksData = (): UseTaskDataType => {
 
     const deleteTask = useCallback(async (uuid: string) => {
         try {
-            // await cancelTaskNotification(uuid);
+            await cancelTaskNotification(uuid);
             await databaseManagers.tasks.removeByUuid(uuid);
             await fetchTasks();
         } catch (err) {
@@ -148,14 +147,14 @@ export const useTasksData = (): UseTaskDataType => {
 
             if (updatedTask.completed) {
                 // Task is being marked as completed
-                // await cancelTaskNotification(taskUuid);
+                await cancelTaskNotification(taskUuid);
                 console.log(`Notification cancelled for completed task ${taskUuid}`);
             } else if (!updatedTask.completed && updatedTask.due) {
                 // Task is being marked as incomplete and has a due date
                 const dueDate = new Date(updatedTask.due);
                 if (dueDate > new Date()) {
                     // Due date is in the future
-                    // await scheduleTaskNotification(updatedTask);
+                    await scheduleTaskNotification(updatedTask);
                     console.log(`Notification rescheduled for incomplete task ${taskUuid}`);
                 }
             }

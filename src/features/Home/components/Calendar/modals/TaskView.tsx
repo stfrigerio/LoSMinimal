@@ -52,7 +52,7 @@ const TaskView: React.FC<TaskViewProps> = ({
                 </View>
                 <View style={styles.separator} />
                 <View style={styles.textContainer}>
-                    <Text style={[item.completed ? styles.completedText : designs.text.text, { fontSize: 12 }]} numberOfLines={1} ellipsizeMode="tail">
+                    <Text style={[item.completed ? styles.completedText : designs.text.text, { fontSize: 12, textAlign: 'left' }]} numberOfLines={2} ellipsizeMode="tail">
                         {item.text}
                     </Text>
                 </View>

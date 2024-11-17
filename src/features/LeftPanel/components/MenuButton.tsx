@@ -29,7 +29,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, co
                         <FontAwesomeIcon 
                             icon={icon} 
                             size={20}
-                            color={pressed ? themeColors.greenOpacity : color || themeColors.gray}
+                            color={pressed ? themeColors.textColor : color || themeColors.gray}
                         />
                     </View>
                     <Text style={[
@@ -56,7 +56,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     buttonPressed: {
         backgroundColor: `${themeColors.backgroundColor}EE`,
-        transform: [{ scale: 0.98 }],
+        transform: [{ scale: 0.88 }],
     },
     buttonContent: {
         flexDirection: 'row',

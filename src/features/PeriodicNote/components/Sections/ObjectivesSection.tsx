@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform, Pressable } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faCircle, faRotateRight, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faCircle, faRotateRight, faTrash, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
 
 import AlertModal from '@/src/components/modals/AlertModal';
 import { AddObjectivesModal } from '@/src/features/PeriodicNote/modals/ObjectivesModal';
@@ -10,8 +10,7 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useObjectives } from '@/src/features/PeriodicNote/hooks/useObjectives';
 
 import { ExtendedObjectiveData } from '../../types/ObjectivesSection';
-import { ObjectiveData } from '@/src/types/Objective';
-
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface ObjectivesSectionProps {       
     currentDate: string;
@@ -26,9 +25,11 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
         toggleObjectiveCompletion, 
         pillars, 
         deleteObjective, 
-        refreshObjectives 
-        //@ts-ignore //!
+        refreshObjectives,
+        updateObjective,
+        postponeObjective
     } = useObjectives(currentDate);
+
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 
@@ -38,9 +39,16 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
 
     const closeModal = () => setIsModalVisible(false);
 
-    const handleAddObjective = (newObjective: ObjectiveData) => {
-        addObjective(newObjective);
+    const handleAddObjective = async (newObjective: Omit<ExtendedObjectiveData, "uuid">) => {
+        await addObjective(newObjective);
         closeModal();
+    };
+    
+    const handleUpdateObjective = async (updatedObjective: ExtendedObjectiveData) => {
+        await updateObjective(updatedObjective);
+        setIsModalVisible(false);
+        setSelectedObjective(null);
+        refreshObjectives();
     };
 
     const confirmDelete = () => {
@@ -62,13 +70,6 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
     const handleEditObjective = (objective: ExtendedObjectiveData) => {
         setSelectedObjective(objective);
         setIsModalVisible(true);
-    };
-
-    const handleUpdateObjective = (updatedObjective: ObjectiveData) => {
-        addObjective(updatedObjective);
-        setIsModalVisible(false);
-        setSelectedObjective(null);
-        refreshObjectives();
     };
 
     const getTitle = () => {
@@ -97,39 +98,59 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
                     >
                         <View key={objective.uuid} style={styles.objectiveItem}>
                             <Text style={styles.pillarEmoji}>{objective.pillarEmoji}</Text>
+
                             <Text style={[
                                 styles.objectiveText,
-                                objective.completed && styles.completedObjectiveText
+                                objective.completed === 1 && styles.completedObjectiveText,
+                                objective.completed === 2 && styles.failedObjectiveText
                             ]}>
                                 {objective.objective}
                             </Text>
-                            <Pressable 
-                                onPress={() => toggleObjectiveCompletion(objective.uuid!)} 
-                                style={styles.completionToggle}
-                            >
-                                <FontAwesomeIcon 
-                                    icon={objective.completed ? faCheckCircle : faCircle} 
-                                    color={objective.completed ? themeColors.accentColor : themeColors.gray} 
-                                    size={20} 
-                                /> 
-                            </Pressable>
+
                             <View style={styles.actions}>
+                                <Pressable 
+                                    onPress={() => toggleObjectiveCompletion(objective.uuid!)} 
+                                    style={styles.completionToggle}
+                                >
+                                    <FontAwesomeIcon 
+                                        icon={
+                                            objective.completed === 0 ? faCircle :
+                                            objective.completed === 1 ? faCheckCircle :
+                                            faXmarkCircle
+                                        } 
+                                        color={
+                                            objective.completed === 0 ? themeColors.gray :
+                                            objective.completed === 1 ? themeColors.accentColor :
+                                            themeColors.redOpacity
+                                        } 
+                                        size={20} 
+                                    /> 
+                                </Pressable>
+                                <Pressable 
+                                    onPress={() => postponeObjective(objective.uuid!)} 
+                                    style={styles.actionButton}
+                                >
+                                    {({ pressed }) => (
+                                        <FontAwesomeIcon icon={faRotateRight} color={pressed ? themeColors.accentColor : themeColors.gray} size={20} />
+                                    )}
+                                </Pressable>
                                 <Pressable 
                                     onPress={() => handleDelete(objective)} 
                                     style={styles.actionButton}
                                 >
-                                    <FontAwesomeIcon icon={faTrash} color={'gray'} size={20} />
+                                    {({ pressed }) => (
+                                        <FontAwesomeIcon icon={faTrash} color={pressed ? themeColors.accentColor : themeColors.gray} size={20} />
+                                    )}
                                 </Pressable>
                             </View>
                         </View>
                     </Pressable>
                 ))}
-                <Pressable
+                <View style={{ height: 20 }} />
+                <PrimaryButton
                     onPress={() => setIsModalVisible(true)}
-                    style={styles.addButton}
-                >
-                    <Text style={styles.addButtonText}>Add Objective</Text>
-                </Pressable>
+                    text="Add Objective"
+                />  
             </View>
             {deleteModalVisible && (
                 <AlertModal
@@ -159,10 +180,7 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
 
 const getStyles = (themeColors: any) => StyleSheet.create({
     container: {
-        paddingLeft: 10,
-        paddingRight: 20,
-        paddingTop: 20,
-        marginRight: 15
+        // paddingTop: 20,
     },
     title: {
         fontSize: 18,
@@ -181,7 +199,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     pillarEmoji: {
         fontSize: 18,
-        marginRight: 12,
+        marginRight: 16,
     },
     objectiveText: {
         flex: 1,
@@ -190,6 +208,10 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     completedObjectiveText: {
         color: themeColors.greenOpacity,
+    },
+    failedObjectiveText: {
+        color: themeColors.redOpacity,
+        textDecorationLine: 'line-through',
     },
     completionToggle: {
         width: '10%',
@@ -201,12 +223,12 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     completionStatus: {
         fontSize: 18,
-        marginLeft: 8,
     },
     actions: {
+        marginLeft: 8,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        gap: 15
+        // gap: 0
     },
     actionButton: {
         flexDirection: 'row',
@@ -218,16 +240,5 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     fakeIcon: {
         width: 20,
         height: 20,
-    },
-    addButton: {
-        padding: 15,
-        borderWidth: 1,
-        borderColor: themeColors.borderColor,
-        borderRadius: 10,
-        alignSelf: 'center',
-        marginTop: 10,
-    },
-    addButtonText: {
-        color: themeColors.textColor,
-    },
+    }
 });

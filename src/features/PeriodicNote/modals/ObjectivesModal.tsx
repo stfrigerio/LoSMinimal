@@ -9,13 +9,12 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 import { PillarData } from '@/src/types/Pillar';
 import { ExtendedObjectiveData } from '@/src/features/PeriodicNote/types/ObjectivesSection';
-import { ObjectiveData } from '@/src/types/Objective';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface AddObjectivesModalProps {
     isVisible: boolean;
     onClose: () => void;
-    onAdd: (newObjective: ObjectiveData) => void;
+    onAdd: (newObjective: Omit<ExtendedObjectiveData, "uuid"> | ExtendedObjectiveData) => Promise<void>;
     objective?: ExtendedObjectiveData;
     pillars: PillarData[];
     currentDate: string;
@@ -25,7 +24,7 @@ export const AddObjectivesModal: React.FC<AddObjectivesModalProps> = ({ isVisibl
     const [objectiveText, setObjectiveText] = useState('');
     const [noteText, setNoteText] = useState('');
     const [selectedPillarUuid, setSelectedPillarUuid] = useState<string | null>(null);
-    const [isCompleted, setIsCompleted] = useState(false);
+    const [completionStatus, setCompletionStatus] = useState<0 | 1 | 2>(0);
     const [showAlert, setShowAlert] = useState(false);
 
     const { theme, themeColors, designs } = useThemeStyles();
@@ -35,39 +34,55 @@ export const AddObjectivesModal: React.FC<AddObjectivesModalProps> = ({ isVisibl
         if (isVisible) {
             setObjectiveText(objective?.objective || '');
             setSelectedPillarUuid(objective?.pillarUuid! || null);
-            setIsCompleted(objective?.completed || false);
+            setCompletionStatus(objective?.completed || 0);
             setNoteText(objective?.note || '');
         }
     }, [isVisible, objective]);
 
-    const handleSubmit = () => {
-        if (objectiveText && currentDate) {
-            const selectedPillar = selectedPillarUuid ? pillars.find(pillar => pillar.uuid === selectedPillarUuid) : null;
-            const now = new Date().toISOString();
+    const handleSubmit = async () => {
+        if (!objectiveText || !currentDate) {
+            setShowAlert(true);
+            return;
+        }
 
-            const objectiveData: ObjectiveData = {
-                uuid: objective?.uuid,
+        const selectedPillar = selectedPillarUuid ? pillars.find(pillar => pillar.uuid === selectedPillarUuid) : null;
+        const now = new Date().toISOString();
+
+        if (objective) {
+            // Updating existing objective - include UUID
+            const objectiveData: ExtendedObjectiveData = {
+                ...objective,
                 objective: objectiveText,
-                pillarUuid: selectedPillar ? selectedPillarUuid! : undefined,
-                completed: isCompleted,
-                period: currentDate,
+                pillarUuid: selectedPillarUuid || undefined,
+                pillarEmoji: selectedPillar?.emoji || '',
+                completed: completionStatus, // Updated from isCompleted
                 note: noteText,
-                createdAt: objective?.createdAt || now,
                 updatedAt: now
             };
-
-            onAdd(objectiveData);
-            resetForm();
-            onClose();
+            await onAdd(objectiveData);
         } else {
-            setShowAlert(true);
+            // Adding new objective - omit UUID
+            const objectiveData: Omit<ExtendedObjectiveData, "uuid"> = {
+                objective: objectiveText,
+                pillarUuid: selectedPillarUuid || undefined,
+                pillarEmoji: selectedPillar?.emoji || '',
+                completed: completionStatus,
+                period: currentDate,
+                note: noteText,
+                createdAt: now,
+                updatedAt: now
+            };
+            await onAdd(objectiveData);
         }
+
+        resetForm();
+        onClose();
     };
 
     const resetForm = () => {
         setObjectiveText('');
         setSelectedPillarUuid(null);
-        setIsCompleted(false);
+        setCompletionStatus(0);
         setNoteText('');
     };
 

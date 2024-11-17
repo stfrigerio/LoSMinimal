@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal as RNModal, Pressable, Text, ScrollView, DimensionValue } from 'react-native';
+import { Modal as RNModal, Pressable, Text, ScrollView, DimensionValue, View } from 'react-native';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { modalStyles } from '@/src/styles/modal';
@@ -72,12 +72,12 @@ export const UniversalModal: React.FC<UniversalModalProps> = ({
                 onPress={handleBackdropPress}
                 testID={`${testID}-backdrop`}
             >
-                <Pressable 
+                <View 
                     style={[
                         styles.modalView,
                         { maxHeight, maxWidth }
                     ]}
-                    onPress={(e) => e.stopPropagation()}
+                    onStartShouldSetResponder={() => true} //^ Prevent touch propagation
                     testID={`${testID}-content`}
                 >
                     <CloseButton />
@@ -89,7 +89,7 @@ export const UniversalModal: React.FC<UniversalModalProps> = ({
                     >
                         {children}
                     </ScrollView>
-                </Pressable>
+                </View>
             </Pressable>
         </RNModal>
     );

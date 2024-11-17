@@ -78,7 +78,7 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 			borderWidth: 1,
 			padding: 30,
 			alignItems: 'center',
-			shadowColor: '#000',
+			shadowColor: theme.shadowColor,
 			shadowOffset: {
 				width: 0,
 				height: 2,

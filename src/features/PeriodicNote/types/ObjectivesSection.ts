@@ -8,8 +8,10 @@ export interface ExtendedObjectiveData extends ObjectiveData {
 export type UseObjectivesReturn = {
     objectives: ExtendedObjectiveData[];
     pillars: PillarData[];
-    addObjective: (newObjective: Omit<ExtendedObjectiveData, 'uuid'>) => Promise<void>;
+    addObjective: (newObjective: Omit<ExtendedObjectiveData, 'uuid'>) => Promise<ExtendedObjectiveData>;
+    updateObjective: (updatedObjective: ExtendedObjectiveData) => Promise<ExtendedObjectiveData>;
     toggleObjectiveCompletion: (uuid: string) => Promise<void>;
     deleteObjective: (uuid: string) => Promise<void>;
     refreshObjectives: () => Promise<void>;
+    postponeObjective: (uuid: string) => Promise<void>;
 };

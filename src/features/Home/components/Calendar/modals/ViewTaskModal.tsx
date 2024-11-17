@@ -12,8 +12,7 @@ import TaskView from './TaskView';
 
 import { handlePostponeTask } from '@/src/features/Tasks/helpers/postponeTask';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-//todo re add this
-// import { useHomepage } from '@/src/components/Home/hooks/useHomepage';
+import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 
 import { TaskData } from '@/src/types/Task';
 import { ExtendedTaskData } from '@/src/types/Task';
@@ -51,7 +50,7 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 	const [selectedTask, setSelectedTask] = useState<ExtendedTaskData | null>(null);
 
 	const { addTask, updateTask, deleteTask } = useTasksData();
-	// const { openNote } = useHomepage();
+	const { openNote } = useNavigationComponents();
 
 	const loadDayItems = useCallback(async (date: Date) => {
 		const formattedDate = format(date, 'yyyy-MM-dd');
@@ -122,15 +121,15 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 		}
 	};
 
-	// const handleGoToDay = () => {
-	//     openNote('day', format(currentDate, 'yyyy-MM-dd'));
-	//     setShowModal(false);
-	// };
+	const handleGoToDay = () => {
+		openNote('day', format(currentDate, 'yyyy-MM-dd'));
+		setShowModal(false);
+	};
 
-	// const handleGoToWeek = () => {
-	//     openNote('week', currentDate.toISOString());
-	//     setShowModal(false);
-	// };
+	const handleGoToWeek = () => {
+		openNote('week', currentDate.toISOString());
+		setShowModal(false);
+	};
 
 	return (
 		<>
@@ -185,11 +184,10 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 					<View style={styles.divider}></View>
 
 				<View style={styles.footerNavigation}>
-					{/* todo re add this */}
-					{/* <Pressable onPress={handleGoToDay} style={styles.footerButton}>
+					<Pressable onPress={handleGoToDay} style={styles.footerButton}>
 						<FontAwesomeIcon icon={faCalendarDay} color={themeColors.gray} size={20} />
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Day</Text>
-					</Pressable> */}
+					</Pressable>
 					<Pressable onPress={() => setShowTaskModal(true)} style={styles.footerButton}>
 						{({ pressed }) => (
 							<>
@@ -198,11 +196,10 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 							</>
 						)}
 					</Pressable>
-					{/* todo re add this */}
-					{/* <Pressable onPress={handleGoToWeek} style={styles.footerButton}>
+					<Pressable onPress={handleGoToWeek} style={styles.footerButton}>
 						<FontAwesomeIcon icon={faCalendarWeek} color={themeColors.gray} size={20} />
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Week</Text>
-					</Pressable> */}
+					</Pressable>
 				</View>
 			</UniversalModal>
 			{deleteModalVisible && (

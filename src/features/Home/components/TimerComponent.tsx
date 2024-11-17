@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, StyleSheet, Pressable, Animated } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 
@@ -20,7 +20,6 @@ export interface SelectionData {
 	newDescriptionName?: string;
 }
 
-
 const TimerComponent: React.FC = () => {
 	const [selectionData, setSelectionData] = useState<SelectionData>({
 		isTagModalOpen: false,
@@ -28,8 +27,9 @@ const TimerComponent: React.FC = () => {
 	});
 
 	const { timerRunning, initialSeconds, startTimer, stopTimer, getCurrentTimerSecondsRef, tag, description, fetchActiveTimer, checkAndClearStuckNotification } = useTimer();
-	
-	const { theme, themeColors, designs } = useThemeStyles();
+	const scaleAnim = useRef(new Animated.Value(1)).current;
+
+	const { themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
 
 	const handleTagDescriptionSelection = () => {
@@ -57,13 +57,45 @@ const TimerComponent: React.FC = () => {
 		checkAndClearStuckNotification()
 	};
 
+    const handlePressIn = () => {
+        Animated.sequence([
+            Animated.spring(scaleAnim, {
+                toValue: 0.8,
+                useNativeDriver: true,
+                speed: 50,
+                bounciness: 12,
+            }),
+            Animated.spring(scaleAnim, {
+                toValue: 1,
+                useNativeDriver: true,
+                speed: 50,
+                bounciness: 32,
+            })
+        ]).start();
+
+        // Open modal after a short delay (adjust the 150ms to your preference)
+        setTimeout(() => {
+            setSelectionData(prev => ({ ...prev, isTagModalOpen: true }));
+        }, 200);
+    };
+
 	return (
 		<View style={styles.container}>
-			{!timerRunning && (
-				<Pressable style={styles.floatingButton} onPress={() => setSelectionData(prev => ({ ...prev, isTagModalOpen: true }))}>
-					<FontAwesomeIcon icon={faPlay} size={16} color={themeColors.backgroundColor} style={{ marginLeft: 3}}/>
-				</Pressable>
-			)}
+            {!timerRunning && (
+                <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+                    <Pressable 
+                        style={styles.floatingButton} 
+                        onPress={handlePressIn}
+                    >
+                        <FontAwesomeIcon 
+                            icon={faPlay} 
+                            size={16} 
+                            color={themeColors.backgroundColor} 
+                            style={{ marginLeft: 3}}
+                        />
+                    </Pressable>
+                </Animated.View>
+            )}
 			{timerRunning && (
 				<View style={styles.timerContent}>
 					<Pressable style={styles.stopButton} onPress={handleStopTimer}>

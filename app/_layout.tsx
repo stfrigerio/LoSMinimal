@@ -1,4 +1,5 @@
 import { Drawer } from 'expo-router/drawer';
+import type { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -19,22 +20,22 @@ function DrawerNavigator() {
 	const { isRightDrawerSwipeEnabled } = useDrawerState();
 	
 	return (
-		<Drawer
-			drawerContent={props => <RightPanel {...props} />}
-			screenOptions={{
-				drawerType: 'front',
-				swipeEnabled: isRightDrawerSwipeEnabled,
-				swipeEdgeWidth: 50,
-				drawerStyle: {
-					width: 300,
-					backgroundColor: 'transparent',
-				},
-				headerShown: false,
-				drawerPosition: 'right'
-			}}
-		>
-            <Drawer.Screen name="(drawer)" />
-		</Drawer>
+        <Drawer
+            screenOptions={{
+                drawerType: 'front',
+                swipeEnabled: isRightDrawerSwipeEnabled,
+                swipeEdgeWidth: 50,
+                drawerStyle: {
+                    width: 300,
+                    backgroundColor: 'transparent',
+                },
+                headerShown: false,
+                drawerPosition: 'right'
+            }}
+            drawerContent={(props: DrawerContentComponentProps) => (
+                <RightPanel {...props} />
+            )}
+        />
 	);
 }
 
@@ -84,7 +85,7 @@ function App() {
     );
 }
 
-export default function RootLayout() {
+export default function Layout() {
     return (
         <ThemeProvider>
             <DrawerStateProvider>
