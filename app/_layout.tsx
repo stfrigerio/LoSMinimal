@@ -94,7 +94,7 @@ export default function Layout() {
                     <NavbarDrawerProvider>
                         <ChecklistProvider>
                             <MusicPlayerProvider>
-                                <SafeAreaView style={{ flex: 1 }}>
+                                <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
                                     <App />
                                 </SafeAreaView>
                             </MusicPlayerProvider>
