@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "LoS-dev",
-    "slug": "LoS-dev",
+    "slug": "los-dev",
     "scheme": "los-dev",
     "platforms": [
       "ios",
@@ -44,6 +44,8 @@
         "ACCESS_NETWORK_STATE",
         "ACCESS_WIFI_STATE",
         "CAMERA",
+        "VIBRATE",
+        "RECEIVE_BOOT_COMPLETED",
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
@@ -64,7 +66,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "37574983-c17e-4c45-90b2-683fa20f3d3b"
+        "projectId": "1d5962c7-ab8d-499a-b6dc-de735473d83f"
       }
     },
     "plugins": [
@@ -75,11 +77,23 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "extraMavenRepos": [
+              "../../node_modules/@notifee/react-native/android/libs"
+            ]
+          },
+          "ios": {}
+        }
+      ],
       "expo-router",
       "expo-sqlite",
       "expo-notifications",
       "expo-secure-store"
     ],
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "owner": "stfrigerio"
   }
 }

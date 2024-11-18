@@ -11,7 +11,7 @@
 	"include": [
 		"**/*.ts",
 		"**/*.tsx"
-	],
+, "src/notifications/NotifeeTest.tssx"	],
 	"exclude": [
 		"node_modules",
 		"ios",

@@ -14,6 +14,7 @@ import { DrawerStateManager } from '@/src/contexts/DrawerState';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 import DayNotesStatus from './components/DayNotesStatus';
 import MusicPlayerControls from '../Music/components/MusicPlayerControls';
+import NotifeeTest from '@/src/notifications/NotifeeTest';
 
 const Homepage = () => {
     const { theme, themeColors } = useThemeStyles();
@@ -95,6 +96,7 @@ const Homepage = () => {
                             <MusicPlayerControls screen='home'/>
                         </View>
                     </View>
+                    <NotifeeTest />
                 </View>
             </ImageBackground>
             <View style={styles.footerActions}>
