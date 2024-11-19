@@ -42,6 +42,10 @@ const DailyNote = () => {
 	const { themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
 
+	useEffect(() => {
+        setLastSubmissionTime(Date.now());
+    }, [dateParam]);
+
     const handleNavigatePeriod = (direction: 'previous' | 'next' | 'current') => {
         let newDate;
         if (direction === 'current') {

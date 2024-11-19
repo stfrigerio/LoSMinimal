@@ -89,6 +89,12 @@ export default function DrawerLayout() {
 					drawerLabel: "Library"
 				}} 
 			/>
+			<Drawer.Screen 
+				name="time" 
+				options={{
+					drawerLabel: "Time"
+				}} 
+			/>
         </Drawer>
 	);
 }

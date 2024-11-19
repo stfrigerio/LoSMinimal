@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers, faMusic } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers, faMusic, faClock } from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './components/MenuButton';
 
@@ -24,11 +24,11 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
         openMoods, 
         openDatabase, 
         openNote, 
-        openMusic,
         openLibrary,
         openMoney,
         openJournal,
-        openPeople
+        openPeople,
+        openTime
     } = useNavigationComponents();
 
     const withNavigationDelay = <T extends (...args: any[]) => void>(action: T) => {
@@ -45,12 +45,18 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const handleOpenMoney = withNavigationDelay(() => openMoney());
     const handleOpenJournal = withNavigationDelay(() => openJournal());
     const handleOpenPeople = withNavigationDelay(() => openPeople());
-    const handleOpenMusic = withNavigationDelay(() => openMusic());
     const handleOpenLibrary = withNavigationDelay(() => openLibrary());
+    const handleOpenTime = withNavigationDelay(() => openTime());
 
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' });
     const { week, year } = getISOWeekData(new Date());
     const weekString = `${year}-W${week.toString().padStart(2, '0')}`;
+
+    const GridRow: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+        <View style={styles.gridRow}>
+            {children}
+        </View>
+    );    
 
     return (
         <View style={styles.container}>
@@ -63,61 +69,80 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                 <View style={styles.content}>
                     {/* Menu buttons section */}
                     <View style={styles.menuSection}>
-                        <MenuButton 
-                            icon={faCalendarDay}
-                            label={today}
-                            onPress={handleOpenDailyNote}
-                            color={colorRainbow[1]}
-                        />
-                        <MenuButton
-                            icon={faCalendarDay}
-                            label={weekString}
-                            onPress={() => handleOpenNote('week', weekString)}
-                            color={colorRainbow[2]}
-                        />
+                        <GridRow>
+                            <MenuButton 
+                                icon={faCalendarDay}
+                                label={today}
+                                onPress={handleOpenDailyNote}
+                                color={colorRainbow[1]}
+                            />
+                            <MenuButton
+                                icon={faCalendarDay}
+                                label={weekString}
+                                onPress={() => handleOpenNote('week', weekString)}
+                                color={colorRainbow[2]}
+                            />
+                        </GridRow>
                         <View style={styles.separator} />
-                        <MenuButton
-                            icon={faMoneyBill}
-                            label="Money"
-                            onPress={handleOpenMoney}
-                            color={colorRainbow[4]}
-                        />
-                        <MenuButton 
-                            icon={faCheckCircle}
-                            label="Tasks"
-                            onPress={handleOpenTasks}
-                            color={colorRainbow[5]}
-                        />
-                        <MenuButton 
-                            icon={faCommentDots}
+                        <GridRow>
+                            <MenuButton
+                                icon={faMoneyBill}
+                                label="Money"
+                                onPress={handleOpenMoney}
+                                color={colorRainbow[4]}
+                            />
+                            <MenuButton 
+                                icon={faCheckCircle}
+                                label="Tasks"
+                                onPress={handleOpenTasks}
+                                color={colorRainbow[5]}
+                            />
+                        </GridRow>
+                        <View style={styles.separator} />
+                        <GridRow>
+                            <MenuButton 
+                                icon={faClock}
+                            label="Time"
+                            onPress={handleOpenTime}
+                                color={colorRainbow[11]}
+                            />
+                            <MenuButton 
+                                icon={faCommentDots}
                             label="Mood"
                             onPress={handleOpenMood}
-                            color={colorRainbow[6]}
-                        />
-                        <MenuButton 
-                            icon={faJournalWhills}
-                            label="Journal"
-                            onPress={handleOpenJournal}
-                            color={colorRainbow[10]}
-                        />
-                        <MenuButton 
-                            icon={faUsers}
-                            label="People"
-                            onPress={handleOpenPeople}
-                            color={colorRainbow[12]}
-                        />
-                        <MenuButton
-                            icon={faMusic}
-                            label="Library"
-                            onPress={handleOpenLibrary}
-                            color={colorRainbow[14]}
-                        />
-                        <MenuButton 
-                            icon={faDatabase}
-                            label="Database"
-                            onPress={handleOpenDatabase}
-                            color={colorRainbow[15]}
-                        />
+                                color={colorRainbow[6]}
+                            />
+                        </GridRow>
+                        <View style={styles.separator} />
+                        <GridRow>
+                            <MenuButton 
+                                icon={faJournalWhills}
+                                label="Journal"
+                                onPress={handleOpenJournal}
+                                color={colorRainbow[10]}
+                            />
+                            <MenuButton 
+                                icon={faUsers}
+                                label="People"
+                                onPress={handleOpenPeople}
+                                color={colorRainbow[12]}
+                            />
+                        </GridRow>
+                        <View style={styles.separator} />
+                        <GridRow>
+                            <MenuButton
+                                icon={faMusic}
+                                label="Library"
+                                onPress={handleOpenLibrary}
+                                color={colorRainbow[14]}
+                            />
+                            <MenuButton 
+                                icon={faDatabase}
+                                label="Database"
+                                onPress={handleOpenDatabase}
+                                color={colorRainbow[15]}
+                            />
+                        </GridRow>
                     </View>
                     
                     {/* Footer section */}
@@ -185,6 +210,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     themeTogglePressed: {
         backgroundColor: `${themeColors.backgroundColor}EE`,
         transform: [{ scale: 0.9 }],
+    },
+    gridRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 2,
     },
 });
 

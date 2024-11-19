@@ -7,7 +7,7 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>$(DEVELOPMENT_LANGUAGE)</string>
     <key>CFBundleDisplayName</key>
-    <string>LoS-dev</string>
+    <string>LoS</string>
     <key>CFBundleExecutable</key>
     <string>$(EXECUTABLE_NAME)</string>
     <key>CFBundleIdentifier</key>
@@ -27,8 +27,8 @@
       <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-          <string>los-dev</string>
-          <string>com.stfrigerio.LoS.dev</string>
+          <string>los</string>
+          <string>com.stfrigerio.LoS</string>
         </array>
       </dict>
     </array>

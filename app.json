@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "LoS-dev",
-    "slug": "los-dev",
-    "scheme": "los-dev",
+    "name": "LoS",
+    "slug": "LoS",
+    "scheme": "los",
     "platforms": [
       "ios",
       "android",
@@ -28,7 +28,7 @@
           "audio"
         ]
       },
-      "bundleIdentifier": "com.stfrigerio.LoS.dev"
+      "bundleIdentifier": "com.stfrigerio.LoS"
     },
     "android": {
       "useNextNotificationsApi": true,
@@ -38,14 +38,12 @@
         "foregroundImage": "./assets/images/Los-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.stfrigerio.LoS.dev",
+      "package": "com.stfrigerio.LoS",
       "permissions": [
         "INTERNET",
         "ACCESS_NETWORK_STATE",
         "ACCESS_WIFI_STATE",
         "CAMERA",
-        "VIBRATE",
-        "RECEIVE_BOOT_COMPLETED",
         "android.permission.FOREGROUND_SERVICE",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
@@ -66,7 +64,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "1d5962c7-ab8d-499a-b6dc-de735473d83f"
+        "projectId": "37574983-c17e-4c45-90b2-683fa20f3d3b"
       }
     },
     "plugins": [
@@ -77,23 +75,11 @@
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ],
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "extraMavenRepos": [
-              "../../node_modules/@notifee/react-native/android/libs"
-            ]
-          },
-          "ios": {}
-        }
-      ],
       "expo-router",
       "expo-sqlite",
       "expo-notifications",
       "expo-secure-store"
     ],
-    "newArchEnabled": true,
-    "owner": "stfrigerio"
+    "newArchEnabled": true
   }
 }

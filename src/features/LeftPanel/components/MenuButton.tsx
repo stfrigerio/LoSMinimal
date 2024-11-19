@@ -50,9 +50,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         padding: 12,
         borderRadius: 12,
         backgroundColor: `${themeColors.backgroundColor}CC`,
-        marginVertical: 6,
+        marginVertical: 8, 
+        marginHorizontal: 4,
         borderWidth: 1,
         borderColor: themeColors.borderColor,
+        flex: 1, 
     },
     buttonPressed: {
         backgroundColor: `${themeColors.backgroundColor}EE`,
@@ -64,14 +66,12 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         width: '100%',
     },
     iconContainer: {
-        marginLeft: 48, //! not an incredible solution
         width: 40, 
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 16,
+        fontSize: 10,
         flex: 1,
-        marginLeft: 12,
         fontWeight: '500',
     },
 });

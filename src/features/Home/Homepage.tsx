@@ -96,7 +96,7 @@ const Homepage = () => {
                             <MusicPlayerControls screen='home'/>
                         </View>
                     </View>
-                    <NotifeeTest />
+                    {/* <NotifeeTest /> */}
                 </View>
             </ImageBackground>
             <View style={styles.footerActions}>

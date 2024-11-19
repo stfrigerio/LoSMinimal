@@ -35,6 +35,8 @@
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="los-dev"/>
         <data android:scheme="com.stfrigerio.LoS.dev"/>
+        <data android:scheme="los"/>
+        <data android:scheme="com.stfrigerio.LoS"/>
       </intent-filter>
     </activity>
   </application>
