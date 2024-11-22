@@ -1,6 +1,6 @@
 from datetime import datetime
 from app.services.summaries.data_processing.data_cleaning import clean_data
-# from database.database_functions import fetch_pillars
+from app.services.route_services.fetch_pillars import fetch_pillars
 from app.services.summaries.ai_helpers.claude import generate_mood_recap, generate_monthly_mood_recap
 from app.services.summaries.ai_helpers.gpt import create_thoughts
 
@@ -33,15 +33,15 @@ def process_weekly_summary(data):
         "claude_summary": mood_summary
     }
     
-    # pillars = fetch_pillars()
-    # gpt_response = create_thoughts(data_to_give_gpt, pillars)
+    pillars = fetch_pillars()
+    gpt_response = create_thoughts(data_to_give_gpt, pillars)
     
     return {
         "id": None,
         "date": week_date,
         "type": "Mood Summary",
         "claude_summary": mood_summary,
-        # "gpt_summary": gpt_response
+        "gpt_summary": gpt_response
     }
 
 def process_monthly_summary(data):
@@ -60,7 +60,7 @@ def process_monthly_summary(data):
     claude_response = generate_monthly_mood_recap(data_to_send)
     mood_summary = claude_response.content[0].text
     
-    # pillars = fetch_pillars()
+    pillars = fetch_pillars()
     
     data_to_give_gpt = {
         "successes": [note["success"] for note in note_data],
@@ -68,12 +68,12 @@ def process_monthly_summary(data):
         "claude_summary": mood_summary
     }
     
-    # gpt_response = create_thoughts(data_to_give_gpt, pillars)
+    gpt_response = create_thoughts(data_to_give_gpt, pillars)
     
     return {
         "id": None,
         "date": data["currentDate"],
         "type": "Mood Summary",
         "claude_summary": mood_summary,
-        # "gpt_summary": gpt_response
+        "gpt_summary": gpt_response
     } 

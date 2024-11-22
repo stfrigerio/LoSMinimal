@@ -130,7 +130,7 @@ export const useGPTSection = (startDate: Date, endDate: Date, currentDate: strin
                         gptSummary.next_week_goals.forEach((goalData: any) => {
                             addObjective({
                                 objective: goalData.goal + ' 🤖',
-                                completed: false,
+                                completed: goalData.completed,
                                 pillarUuid: goalData.pillar_uuid,
                                 pillarEmoji: goalData.pillar_emoji,
                                 period: nextPeriodDate,

@@ -4,10 +4,11 @@ import LeftPanel from '../../src/features/LeftPanel/LeftPanel';
 import { useDrawerState } from '../../src/contexts/DrawerState';
 
 export default function DrawerLayout() {
-	const { isLeftDrawerSwipeEnabled } = useDrawerState();
+    const { isLeftDrawerSwipeEnabled } = useDrawerState();
 
 	return (
 		<Drawer
+			initialRouteName='home'
 			drawerContent={props => <LeftPanel {...props} />}
 			screenOptions={{
 				drawerType: 'front',

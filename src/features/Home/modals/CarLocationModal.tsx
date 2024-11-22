@@ -58,11 +58,11 @@ const CarLocationModal: React.FC<CarLocationModalProps> = ({ isOpen, onClose }) 
     };
 
     const openInMaps = () => {
-        if (location) {
+        if (locationData?.coords) {
             const url = Platform.select({
-                ios: `maps:0,0?q=${location}`,
-                android: `geo:0,0?q=${location}`,
-                web: `https://www.google.com/maps/search/?api=1&query=${location}`
+                ios: `maps:0,0?q=${locationData.coords}`,
+                android: `geo:0,0?q=${locationData.coords}`,
+                web: `https://www.google.com/maps/search/?api=1&query=${locationData.coords}`
             });
             if (url) {
                 Linking.openURL(url);

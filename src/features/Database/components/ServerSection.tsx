@@ -4,14 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faFileExport, faFileImport, faShareAlt } from '@fortawesome/free-solid-svg-icons';
 
 import AlertModal from '@/src/components/modals/AlertModal';
-import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useServerSection } from '../hooks/useServerSection';
 
 const ServerSection = () => {
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
-    const { setKeyboardVisible } = useNavbarDrawer();
 
     const {
         serverURL,
@@ -22,20 +20,6 @@ const ServerSection = () => {
         saveServerURL,
         showFormatSelector
     } = useServerSection();
-
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
-            setKeyboardVisible(true);
-        });
-        const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
-            setKeyboardVisible(false);
-        });
-
-        return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
-        };
-    }, [setKeyboardVisible]);
 
     const handleServerURLChange = (text: string) => {
         setServerURL(text);

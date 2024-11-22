@@ -4,6 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { useNavigationState } from '@react-navigation/native';
 
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import { DrawerStateProvider, useDrawerState } from '../src/contexts/DrawerState';
@@ -16,6 +17,8 @@ import Toast, { BaseToast } from 'react-native-toast-message';
 import RightPanel from '../src/features/RightPanel/RightPanel';
 import { InitializeDatabasesWrapper } from '@/database/databaseInitializer';
 import { AppInitializer } from '../src/AppInitializer';
+import { BackHandler } from 'react-native';
+import { useEffect } from 'react';
 
 function DrawerNavigator() {
 	const { isRightDrawerSwipeEnabled } = useDrawerState();
@@ -45,6 +48,22 @@ function App() {
     const isDarkMode = theme === 'dark';
     const pathname = usePathname();
     const isHomepage = pathname === '/' || pathname === '/features/Home/Homepage';
+    const navState = useNavigationState(state => state);
+
+    useEffect(() => {
+        const onBackPress = () => {
+            if (isHomepage) {
+                // Exit the app if on the root screen
+                BackHandler.exitApp();
+                return true;
+            }
+            return false; // Allow default back navigation otherwise
+        };
+
+        const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+        return () => subscription.remove();
+    }, [navState]);
 
 	const toastConfig = {
         success: (internalState: any) => (

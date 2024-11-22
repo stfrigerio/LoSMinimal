@@ -141,8 +141,8 @@ class DatabaseManager {
                 if (result?.count === 0) {
                     throw new Error(`Table ${tableName} does not exist`);
                 }
-                console.log(`Connection successful, ${tableName} table exists`);
             }
+            console.log('Database connection successful');
             return this.db;
         } catch (error) {
             console.error('Error checking database tables:', error);

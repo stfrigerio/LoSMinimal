@@ -81,7 +81,6 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
                     onChangeText={(value) => handleInputChange('morningComment', value)}
                     placeholder="Share your morning thoughts..."
                     placeholderTextColor={themeColors.gray}
-                    multiline
                     numberOfLines={1}
                 />
             </View>

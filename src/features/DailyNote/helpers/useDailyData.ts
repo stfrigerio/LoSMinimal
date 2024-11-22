@@ -4,13 +4,13 @@ import { formatInTimeZone, toDate } from 'date-fns-tz';
 import { databaseManagers } from '@/database/tables';
 
 import { DailyNoteData, NoteData } from '@/src/types/DailyNote';
-import { UseDailyDataReturnType } from '@/src/features/DailyNote/_types/DailyData';
+import { UseDailyDataReturnType } from '@/src/features/DailyNote/types/DailyData';
 import { BooleanHabitsData } from '@/src/types/BooleanHabits';
 import { QuantifiableHabitsData } from '@/src/types/QuantifiableHabits';
 
 export const useDailyData = (
 	currentDate: Date,
-	lastSubmissionTime: number
+	lastSubmissionTime?: number
 ): UseDailyDataReturnType => {
 	const [dailyData, setDailyData] = useState<DailyNoteData | null>(null);
 

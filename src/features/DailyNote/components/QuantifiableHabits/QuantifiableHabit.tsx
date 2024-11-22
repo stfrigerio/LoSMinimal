@@ -21,6 +21,7 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
+            marginRight: 8
         },
         nameContainer: {
             flexDirection: 'row',
@@ -30,9 +31,8 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
             flexShrink: 1,
         },
         emoji: {
-            fontSize: 20,
+            fontSize: 16,
             marginRight: 8,
-            marginBottom: 6,
         },
         habitName: {
             color: theme.textColor,
@@ -83,7 +83,7 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
                     color: themeColors.accentColor,
                     radius: 20 
                 }}>
-                <Text style={styles.buttonText}>+</Text>
+                <Text style={[styles.buttonText]}>+</Text>
             </Pressable>
         </View> 
     );

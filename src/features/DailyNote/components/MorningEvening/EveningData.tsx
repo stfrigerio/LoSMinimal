@@ -87,7 +87,6 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
                     onChangeText={(value) => handleInputChange('success', value)}
                     placeholder="Share your successes..."
                     placeholderTextColor={themeColors.gray}
-                    multiline
                     numberOfLines={1}
                 />
             </View>
@@ -100,7 +99,6 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
                     onChangeText={(value) => handleInputChange('beBetter', value)}
                     placeholder="Areas for improvement..."
                     placeholderTextColor={themeColors.gray}
-                    multiline
                     numberOfLines={1}
                 />
             </View>
