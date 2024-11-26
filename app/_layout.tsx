@@ -96,9 +96,14 @@ function App() {
                 backgroundColor="transparent"
             />
             <GestureHandlerRootView style={{ flex: 1 }}>
+                {/* Move AppInitializer and InitializeDatabasesWrapper outside of the DrawerNavigator */}
                 <AppInitializer />
                 <InitializeDatabasesWrapper />
-                <DrawerNavigator />
+                <DrawerStateProvider>
+                    <NavbarDrawerProvider>
+                        <DrawerNavigator />
+                    </NavbarDrawerProvider>
+                </DrawerStateProvider>
                 <Toast config={toastConfig} />
             </GestureHandlerRootView>
         </>
@@ -109,17 +114,13 @@ export default function Layout() {
     return (
         <SafeAreaProvider>
             <ThemeProvider>
-                <DrawerStateProvider>
-                    <NavbarDrawerProvider>
-                        <ChecklistProvider>
-                            <MusicPlayerProvider>
-                                <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
-                                    <App />
-                                </SafeAreaView>
-                            </MusicPlayerProvider>
-                        </ChecklistProvider>
-                    </NavbarDrawerProvider>
-                </DrawerStateProvider>
+                <ChecklistProvider>
+                    <MusicPlayerProvider>
+                        <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
+                            <App />
+                        </SafeAreaView>
+                    </MusicPlayerProvider>
+                </ChecklistProvider>
             </ThemeProvider>
         </SafeAreaProvider>
     );

@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'LoS-dev'
+rootProject.name = 'LoS'
 
 dependencyResolutionManagement {
   versionCatalogs {
