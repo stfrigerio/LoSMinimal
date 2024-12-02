@@ -5,6 +5,7 @@ import { autoLinkTracks } from '../helpers/autoLinkTracks';
 
 import { ExtendedTrackData, Album, TrackDetailsState } from '../types';
 import { TrackData } from '@/src/types/Library';
+import { useMusicPlayer } from '@/src/contexts/MusicPlayerContext';
 
 export const useTrackManagement = (selectedAlbum: Album | null) => {
     const [trackDetails, setTrackDetails] = useState<TrackDetailsState>({
@@ -25,12 +26,20 @@ export const useTrackManagement = (selectedAlbum: Album | null) => {
         onConfirm: () => {},
     });
 
+    const { currentTrackData } = useMusicPlayer();
+
     useEffect(() => {
         if (selectedAlbum) {
             loadTrackDetails();
             loadAvailableTracks();
         }
     }, [selectedAlbum]);
+
+    useEffect(() => {
+        if (currentTrackData) {
+            loadTrackDetails();
+        }
+    }, [currentTrackData]);
 
     const loadTrackDetails = async () => {
         if (!selectedAlbum?.uuid) return;

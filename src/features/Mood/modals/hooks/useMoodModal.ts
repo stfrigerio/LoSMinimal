@@ -1,5 +1,4 @@
 import { databaseManagers } from '@/database/tables';
-
 import { MoodNoteData } from '@/src/types/Mood';
 
 export const useMoodNoteModal = (closeMoodModal: () => void) => {

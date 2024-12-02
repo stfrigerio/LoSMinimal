@@ -10,7 +10,6 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useMoodNoteModal } from '@/src/features/Mood/modals/hooks/useMoodModal'
 
 import { MoodNoteData } from '@/src/types/Mood';
-import { PersonData } from '@/src/types/People';
 import { SelectionData } from '@/src/features/Home/components/TimerComponent';
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';

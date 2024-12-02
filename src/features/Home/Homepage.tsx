@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, ImageBackground, Dimensions, Animated, Pressable } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDay, faCog } from '@fortawesome/free-solid-svg-icons';
 
 import CustomCalendar from './components/Calendar/Calendar';
 import TimerComponent from './components/TimerComponent';
@@ -14,6 +14,8 @@ import { DrawerStateManager } from '@/src/contexts/DrawerState';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 import DayNotesStatus from './components/DayNotesStatus';
 import MusicPlayerControls from '../Music/components/MusicPlayerControls';
+import { getStartOfToday } from '@/src/utils/timezoneBullshit';
+import { useMusicPlayer } from '@/src/contexts/MusicPlayerContext';
 
 const Homepage = () => {
     const { theme, themeColors } = useThemeStyles();
@@ -24,7 +26,8 @@ const Homepage = () => {
     const settingsRotateAnim = useRef(new Animated.Value(0)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
-    const { openSettings } = useNavigationComponents();
+    const { openSettings, openDailyNote } = useNavigationComponents();
+    const { isPlaying } = useMusicPlayer();
 
     useEffect(() => {
         if (DrawerStateManager) {
@@ -91,8 +94,13 @@ const Homepage = () => {
                                 }} 
                             />                    
                         </Animated.View>
-                        <View style={styles.playerControlsContainer}>
+                        <View style={{ flexDirection: isPlaying ? 'column' : 'row', alignItems: 'center' }}>
                             <MusicPlayerControls screen='home'/>
+                            <Pressable onPress={() => openDailyNote(getStartOfToday().toString())} style={{ padding: 20, borderRadius: 8 }}>
+                                {({ pressed }) => (
+                                    <FontAwesomeIcon icon={faCalendarDay} size={pressed ? 18 : 22} color={pressed ? themeColors.accentColor : themeColors.textColor} />
+                                )}
+                            </Pressable>
                         </View>
                     </View>
                 </View>
@@ -148,9 +156,6 @@ const getStyles = (theme: any) => StyleSheet.create({
     content: {
         alignItems: 'center',
         padding: 20,
-    },
-    playerControlsContainer: {
-        marginTop: 20,
     },
     quickButtonContainer: {
         flexDirection: 'row',

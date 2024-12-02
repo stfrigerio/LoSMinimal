@@ -25,6 +25,76 @@ export const getStartOfToday = (timeZone?: string): Date => {
 };
 
 /**
+ * Calculate start and end dates for a period string.
+ * Handles formats: YYYY-WW (week), YYYY-MM (month), YYYY-QN (quarter), YYYY (year)
+ * @param periodString - Period string (e.g., "2024-W44", "2024-10", "2024-Q4", "2024")
+ * @param timeZone - Optional timezone
+ * @returns Object with startDate and endDate as Date objects
+ */
+export const getDateRangeForPeriod = (periodString: string, timeZone?: string): { startDate: Date; endDate: Date } => {
+    const tz = timeZone || getLocalTimeZone();
+    
+    // Weekly format: "2024-W44"
+    const weekMatch = periodString.match(/^(\d{4})-W(\d{1,2})$/);
+    if (weekMatch) {
+        const [, year, week] = weekMatch;
+        const firstDayOfYear = new Date(Date.UTC(parseInt(year), 0, 1));
+        const dayOffset = (parseInt(week) - 1) * 7 - (firstDayOfYear.getUTCDay() || 7) + 1;
+        
+        const startDate = new Date(Date.UTC(parseInt(year), 0, dayOffset));
+        const endDate = new Date(startDate);
+        endDate.setUTCDate(startDate.getUTCDate() + 6);
+        
+        return {
+            startDate: toZoned(startDate, tz),
+            endDate: toZoned(endDate, tz)
+        };
+    }
+
+    // Monthly format: "2024-10"
+    const monthMatch = periodString.match(/^(\d{4})-(\d{2})$/);
+    if (monthMatch) {
+        const [, year, month] = monthMatch;
+        const startDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, 1));
+        const endDate = new Date(Date.UTC(parseInt(year), parseInt(month), 0));
+        
+        return {
+            startDate: toZoned(startDate, tz),
+            endDate: toZoned(endDate, tz)
+        };
+    }
+
+    // Quarterly format: "2024-Q4"
+    const quarterMatch = periodString.match(/^(\d{4})-Q(\d)$/);
+    if (quarterMatch) {
+        const [, year, quarter] = quarterMatch;
+        const startMonth = (parseInt(quarter) - 1) * 3;
+        const startDate = new Date(Date.UTC(parseInt(year), startMonth, 1));
+        const endDate = new Date(Date.UTC(parseInt(year), startMonth + 3, 0));
+        
+        return {
+            startDate: toZoned(startDate, tz),
+            endDate: toZoned(endDate, tz)
+        };
+    }
+
+    // Yearly format: "2024"
+    const yearMatch = periodString.match(/^(\d{4})$/);
+    if (yearMatch) {
+        const [, year] = yearMatch;
+        const startDate = new Date(Date.UTC(parseInt(year), 0, 1));
+        const endDate = new Date(Date.UTC(parseInt(year), 11, 31));
+        
+        return {
+            startDate: toZoned(startDate, tz),
+            endDate: toZoned(endDate, tz)
+        };
+    }
+
+    throw new Error(`Invalid period format: ${periodString}`);
+};
+
+/**
  * Convert a UTC date to a date in the specified timezone.
  * @param date - The Date object to convert.
  * @param timeZone - The timezone identifier.

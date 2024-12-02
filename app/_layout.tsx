@@ -21,9 +21,9 @@ import { BackHandler } from 'react-native';
 import { useEffect } from 'react';
 
 function DrawerNavigator() {
-	const { isRightDrawerSwipeEnabled } = useDrawerState();
-	
-	return (
+    const { isRightDrawerSwipeEnabled } = useDrawerState();
+    
+    return (
         <Drawer
             screenOptions={{
                 drawerType: 'front',
@@ -39,8 +39,15 @@ function DrawerNavigator() {
             drawerContent={(props: DrawerContentComponentProps) => (
                 <RightPanel {...props} />
             )}
-        />
-	);
+        >
+            <Drawer.Screen 
+                name="(drawer)" 
+                options={{
+                    headerShown: false
+                }}
+            />
+        </Drawer>
+    );
 }
 
 function App() {
@@ -96,7 +103,6 @@ function App() {
                 backgroundColor="transparent"
             />
             <GestureHandlerRootView style={{ flex: 1 }}>
-                {/* Move AppInitializer and InitializeDatabasesWrapper outside of the DrawerNavigator */}
                 <AppInitializer />
                 <InitializeDatabasesWrapper />
                 <DrawerStateProvider>

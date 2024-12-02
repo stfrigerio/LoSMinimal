@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import Toast from 'react-native-toast-message';
+
 import { databaseManagers } from '@/database/tables';
 import { MoneyData } from '@/src/types/Money';
 
@@ -14,6 +16,9 @@ export const useTransactionModal = (closeTransactionModal: () => void, initialTr
         try {
             await databaseManagers.money.upsert(transaction);
             closeTransactionModal();
+            Toast.show({
+                text1: '💰 Transaction saved',
+            });
         } catch (error: any) {
             console.error('Error saving transaction:', error);
             throw error;

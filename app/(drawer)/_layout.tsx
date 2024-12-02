@@ -8,7 +8,6 @@ export default function DrawerLayout() {
 
 	return (
 		<Drawer
-			initialRouteName='home'
 			drawerContent={props => <LeftPanel {...props} />}
 			screenOptions={{
 				drawerType: 'front',
@@ -22,12 +21,12 @@ export default function DrawerLayout() {
 				drawerPosition: 'left',
 			}}
 		>
-            <Drawer.Screen 
-                name="home" 
-                options={{
-                    drawerLabel: "Home"
-                }} 
-            />
+			<Drawer.Screen 
+				name="index" 
+				options={{
+					drawerLabel: "Home"
+				}} 
+			/>
             <Drawer.Screen 
                 name="daily-note" 
                 options={{

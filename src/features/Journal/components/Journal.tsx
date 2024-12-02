@@ -12,6 +12,7 @@ import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import { useJournal } from '../hooks/useJournal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import MobileMarkdown from '@/src/components/Markdown/Markdown';
 
 const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = ({ date, uuid, onClose }) => {
     const { journalEntry, loadJournalEntry, saveJournalEntry, deleteJournalEntry, place, setPlace } = useJournal(date, uuid);
@@ -133,11 +134,13 @@ const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = 
                 />
             ) : (
                 <ScrollView style={{ marginHorizontal: 10 }}>
-                    <Text style={[styles.journalText]}>
+                    <MobileMarkdown style={markdownStyles}>
                         {localJournalEntry}
-                    </Text>
+                    </MobileMarkdown>
                 </ScrollView>
             )}
+
+            {/* Icon Container */}
             {!isKeyboardVisible && (
                 <View style={styles.iconContainer}>
                     <Pressable onPress={handleDelete}>
@@ -162,6 +165,8 @@ const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = 
                     </Pressable>
                 </View>
             )}
+
+            {/* Navbar */}
             <Navbar
                 items={[]}
                 activeIndex={-1}
@@ -169,6 +174,8 @@ const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = 
                 screen="journal"
 
             />
+
+            {/* Place Modal */}
             {placeModalVisible &&   
                 <UniversalModal isVisible={placeModalVisible} onClose={() => setPlaceModalVisible(false)}>
                     <TextInput

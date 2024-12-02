@@ -188,6 +188,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     menuSection: {
         flex: 1, 
+        justifyContent: 'center',
     },
     separator: {
         height: 1,

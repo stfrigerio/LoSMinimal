@@ -47,13 +47,14 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, co
 
 const getStyles = (themeColors: any) => StyleSheet.create({
     button: {
-        padding: 12,
+        padding: 10,
+        paddingVertical: 28,
         borderRadius: 12,
-        backgroundColor: `${themeColors.backgroundColor}CC`,
+        backgroundColor: `${themeColors.borderColor}E6`,
         marginVertical: 8, 
         marginHorizontal: 4,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: themeColors.backgroundColor,
         flex: 1, 
     },
     buttonPressed: {
@@ -70,8 +71,8 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 10,
+        fontSize: 12,
         flex: 1,
-        fontWeight: '500',
+        fontWeight: '600',
     },
 });

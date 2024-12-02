@@ -5,12 +5,14 @@ import { faCheckCircle, faCircle, faRotateRight, faTrash, faXmarkCircle } from '
 
 import AlertModal from '@/src/components/modals/AlertModal';
 import { AddObjectivesModal } from '@/src/features/PeriodicNote/modals/ObjectivesModal';
+import ImageSlideShow from '../ImageSlideShow';
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useObjectives } from '@/src/features/PeriodicNote/hooks/useObjectives';
+import { getDateRangeForPeriod, formatDate } from '@/src/utils/timezoneBullshit';
 
 import { ExtendedObjectiveData } from '../../types/ObjectivesSection';
-import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface ObjectivesSectionProps {       
     currentDate: string;
@@ -29,6 +31,8 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
         updateObjective,
         postponeObjective
     } = useObjectives(currentDate);
+
+    const { startDate, endDate } = getDateRangeForPeriod(currentDate);
 
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
@@ -152,6 +156,7 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
                     text="Add Objective"
                 />  
             </View>
+            <ImageSlideShow startDate={startDate.toString()} endDate={endDate.toString()} />
             {deleteModalVisible && (
                 <AlertModal
                     isVisible={deleteModalVisible}

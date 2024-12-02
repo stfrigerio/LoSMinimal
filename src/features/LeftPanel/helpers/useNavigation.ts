@@ -92,7 +92,6 @@ export const useNavigationComponents = () => {
         router.push('/tasks');
     }, []);
 
-
 	const openMoods = useCallback(() => {
 		router.push('/mood');
 	}, []);

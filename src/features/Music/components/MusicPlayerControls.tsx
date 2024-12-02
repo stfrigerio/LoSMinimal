@@ -79,12 +79,9 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
         if (screen === 'music') return null;
         
         return (
-            <Pressable onPress={openMusic} style={styles.emptyStateButton}>
+            <Pressable onPress={openMusic} style={[styles.emptyStateButton]}>
                 {({pressed}) => (
-                    <View style={styles.iconContainer}>
-                        <FontAwesomeIcon icon={faPlay} color={pressed ? themeColors.accentColor : themeColors.textColor} size={18} />
-                        <FontAwesomeIcon icon={faMusic} color={pressed ? themeColors.accentColor : themeColors.textColor} size={18} />
-                    </View>
+                    <FontAwesomeIcon icon={faMusic} color={pressed ? themeColors.accentColor : themeColors.textColor} size={22} />
                 )}
             </Pressable>
         );
@@ -194,13 +191,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     emptyStateButton: {
         backgroundColor: 'transparent',
         borderRadius: 8,
-        padding: 10,
-    },
-    iconContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 18,
+        padding: 20,
     },
 });
 

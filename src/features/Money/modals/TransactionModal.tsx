@@ -60,7 +60,6 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
             const newSelectedTag = updatedData.selectedTag;
             if (newSelectedTag) {
                 setSelectedTag(newSelectedTag);
-                console.log('newSelectedTag', newSelectedTag);
                 setTransaction(prevTransaction => ({ 
                     ...prevTransaction, 
                     tag: newSelectedTag.text
