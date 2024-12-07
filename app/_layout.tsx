@@ -1,78 +1,27 @@
 import { Drawer } from 'expo-router/drawer';
-import type { DrawerContentComponentProps } from '@react-navigation/drawer';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigationState } from '@react-navigation/native';
+import Toast, { BaseToast } from 'react-native-toast-message';
 
 import { ThemeProvider } from '../src/contexts/ThemeContext';
-import { DrawerStateProvider, useDrawerState } from '../src/contexts/DrawerState';
+import { DrawerStateProvider } from '../src/contexts/DrawerState';
 import { NavbarDrawerProvider } from '../src/contexts/NavbarContext';
 import { ChecklistProvider } from '../src/contexts/checklistContext';
 import { MusicPlayerProvider } from '../src/contexts/MusicPlayerContext';
-
-import { useThemeStyles } from '../src/styles/useThemeStyles';
-import Toast, { BaseToast } from 'react-native-toast-message';
-import RightPanel from '../src/features/RightPanel/RightPanel';
 import { InitializeDatabasesWrapper } from '@/database/databaseInitializer';
 import { AppInitializer } from '../src/AppInitializer';
-import { BackHandler } from 'react-native';
-import { useEffect } from 'react';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
-function DrawerNavigator() {
-    const { isRightDrawerSwipeEnabled } = useDrawerState();
-    
-    return (
-        <Drawer
-            screenOptions={{
-                drawerType: 'front',
-                swipeEnabled: isRightDrawerSwipeEnabled,
-                swipeEdgeWidth: 50,
-                drawerStyle: {
-                    width: 300,
-                    backgroundColor: 'transparent',
-                },
-                headerShown: false,
-                drawerPosition: 'right'
-            }}
-            drawerContent={(props: DrawerContentComponentProps) => (
-                <RightPanel {...props} />
-            )}
-        >
-            <Drawer.Screen 
-                name="(drawer)" 
-                options={{
-                    headerShown: false
-                }}
-            />
-        </Drawer>
-    );
-}
-
-function App() {
+// Create a separate component for the theme-dependent content
+function AppContent() {
     const { themeColors, theme } = useThemeStyles();
     const isDarkMode = theme === 'dark';
     const pathname = usePathname();
     const isHomepage = pathname === '/' || pathname === '/features/Home/Homepage';
-    const navState = useNavigationState(state => state);
 
-    useEffect(() => {
-        const onBackPress = () => {
-            if (isHomepage) {
-                // Exit the app if on the root screen
-                BackHandler.exitApp();
-                return true;
-            }
-            return false; // Allow default back navigation otherwise
-        };
-
-        const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-        return () => subscription.remove();
-    }, [navState]);
-
-	const toastConfig = {
+    const toastConfig = {
         success: (internalState: any) => (
             themeColors && (
                 <BaseToast
@@ -94,41 +43,59 @@ function App() {
             )
         )
     };
-    
+
     return (
         <>
             <StatusBar 
-                key={`status-bar-${isHomepage}-${isDarkMode}`}
                 style={isHomepage ? 'light' : (isDarkMode ? 'light' : 'dark')}
                 backgroundColor="transparent"
             />
-            <GestureHandlerRootView style={{ flex: 1 }}>
-                <AppInitializer />
-                <InitializeDatabasesWrapper />
-                <DrawerStateProvider>
-                    <NavbarDrawerProvider>
-                        <DrawerNavigator />
-                    </NavbarDrawerProvider>
-                </DrawerStateProvider>
-                <Toast config={toastConfig} />
-            </GestureHandlerRootView>
+
+            <ChecklistProvider>
+                <MusicPlayerProvider>
+                    <DrawerStateProvider>
+                        <NavbarDrawerProvider>
+                            <AppInitializer />
+                            <InitializeDatabasesWrapper />
+                            <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
+                                <Drawer
+                                    screenOptions={{
+                                        drawerType: 'front',
+                                        swipeEnabled: false,
+                                        drawerStyle: {
+                                            width: 300,
+                                            backgroundColor: 'transparent',
+                                        },
+                                        headerShown: false,
+                                    }}
+                                >
+                                    <Drawer.Screen 
+                                        name="(drawer)" 
+                                        options={{
+                                            headerShown: false
+                                        }}
+                                    />
+                                </Drawer>
+                            </SafeAreaView>
+                        </NavbarDrawerProvider>
+                    </DrawerStateProvider>
+                    <Toast config={toastConfig} />
+                </MusicPlayerProvider>
+            </ChecklistProvider>
         </>
     );
 }
 
-export default function Layout() {
+function RootLayout() {
     return (
         <SafeAreaProvider>
-            <ThemeProvider>
-                <ChecklistProvider>
-                    <MusicPlayerProvider>
-                        <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
-                            <App />
-                        </SafeAreaView>
-                    </MusicPlayerProvider>
-                </ChecklistProvider>
-            </ThemeProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <ThemeProvider>
+                    <AppContent />
+                </ThemeProvider>
+            </GestureHandlerRootView>
         </SafeAreaProvider>
     );
 }
 
+export default RootLayout;

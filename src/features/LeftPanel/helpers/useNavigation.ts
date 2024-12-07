@@ -105,7 +105,7 @@ export const useNavigationComponents = () => {
 	}, []);
 
 	const openHomepage = useCallback(() => {
-		router.replace('/home');
+		router.replace('/index');
 	}, []);
 
 	const openMusic = useCallback(() => {

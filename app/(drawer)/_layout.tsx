@@ -1,100 +1,31 @@
 import { Drawer } from 'expo-router/drawer';
-
-import LeftPanel from '../../src/features/LeftPanel/LeftPanel';
 import { useDrawerState } from '../../src/contexts/DrawerState';
+import LeftPanel from '../../src/features/LeftPanel/LeftPanel';
 
 export default function DrawerLayout() {
     const { isLeftDrawerSwipeEnabled } = useDrawerState();
 
-	return (
-		<Drawer
-			drawerContent={props => <LeftPanel {...props} />}
-			screenOptions={{
-				drawerType: 'front',
-				swipeEnabled: isLeftDrawerSwipeEnabled,
-				swipeEdgeWidth: 50,
-				drawerStyle: {
-					width: 300,
-					backgroundColor: 'transparent',
-				},
-				headerShown: false,
-				drawerPosition: 'left',
-			}}
-		>
-			<Drawer.Screen 
-				name="index" 
-				options={{
-					drawerLabel: "Home"
-				}} 
-			/>
+    return (
+        <Drawer
+            drawerContent={props => <LeftPanel {...props} />}
+            screenOptions={{
+                drawerType: 'front',
+                swipeEnabled: isLeftDrawerSwipeEnabled,
+                swipeEdgeWidth: 50,
+                drawerStyle: {
+                    width: 300,
+                    backgroundColor: 'transparent',
+                },
+                headerShown: false,
+                drawerPosition: 'left',
+            }}
+        >
             <Drawer.Screen 
-                name="daily-note" 
+                name="(screens)" 
                 options={{
-                    drawerLabel: "Daily Note",
+                    headerShown: false
                 }}
-				initialParams={{ date: undefined }}
             />
-            <Drawer.Screen 
-                name="tasks" 
-                options={{
-                    drawerLabel: "Tasks"
-                }} 
-            />
-			<Drawer.Screen 
-				name="mood" 
-				options={{
-					drawerLabel: "Mood"
-				}} 
-			/>
-			<Drawer.Screen 
-				name="user-settings" 
-				options={{
-					drawerLabel: "Settings"
-				}} 
-			/>
-			<Drawer.Screen 
-				name="database" 
-				options={{
-					drawerLabel: "Database"
-				}} 
-			/>
-			<Drawer.Screen 
-				name="periodic-note" 
-				options={{
-					drawerLabel: "Periodic Note"
-				}} 
-				initialParams={{ startDate: undefined, endDate: undefined }}
-			/>
-			<Drawer.Screen 
-				name="money" 
-				options={{
-					drawerLabel: "Money"
-				}} 
-			/>
-			<Drawer.Screen 
-				name="journal" 
-				options={{
-					drawerLabel: "Journal"
-				}} 
-			/>
-			<Drawer.Screen 
-				name="people" 
-				options={{
-					drawerLabel: "People"
-				}} 
-			/>
-			<Drawer.Screen 
-				name="library" 
-				options={{
-					drawerLabel: "Library"
-				}} 
-			/>
-			<Drawer.Screen 
-				name="time" 
-				options={{
-					drawerLabel: "Time"
-				}} 
-			/>
         </Drawer>
-	);
+    );
 }
