@@ -41,7 +41,7 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
 
     const handleRatingChange = useCallback((rating: number) => {
         if (updateTrackRating) {
-            Promise.resolve(updateTrackRating(rating)).catch(console.error);
+            updateTrackRating(rating).catch(console.error);
         }
     }, [updateTrackRating]);
 

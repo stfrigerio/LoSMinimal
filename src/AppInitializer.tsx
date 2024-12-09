@@ -45,14 +45,6 @@ export function AppInitializer() {
                 scheduleMoodReminder19();
             }
         });
-
-        // Initialize audio
-        Audio.setAudioModeAsync({
-            staysActiveInBackground: true,
-            interruptionModeAndroid: 1,
-            shouldDuckAndroid: true,
-            playThroughEarpieceAndroid: false,
-        });
     }, []);
 
     const runCheckAndAddRepeatingTasks = useCallback(async () => {

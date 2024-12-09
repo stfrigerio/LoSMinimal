@@ -8,7 +8,7 @@ import React, {
 	useRef,
 	useMemo,
 } from 'react';
-import { Audio, AVPlaybackStatus } from 'expo-av';
+import { Audio, AVPlaybackStatus, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 
 import { databaseManagers } from '@/database/tables';
@@ -53,6 +53,33 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
     const playNextSongRef = useRef<() => Promise<void>>();
     const isLoadingRef = useRef<boolean>(false);
 
+    useEffect(() => {
+        const initAudio = async () => {
+            try {
+                await Audio.setAudioModeAsync({
+                    playsInSilentModeIOS: true,
+                    staysActiveInBackground: true,
+                    interruptionModeIOS: InterruptionModeIOS.DoNotMix,
+                    interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
+                    shouldDuckAndroid: true,
+                    playThroughEarpieceAndroid: false,
+                });
+            } catch (error) {
+                console.error('Failed to initialize audio:', error);
+            }
+        };
+
+        initAudio();
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            if (sound) {
+                sound.unloadAsync().catch(console.error);
+            }
+        };
+    }, [sound]);
+
     // Update refs when state changes
     useEffect(() => {
         songsRef.current = songs;
@@ -81,6 +108,11 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     const loadSound = useCallback(async (albumName: string, songName: string): Promise<void> => {
         try {
+            if (sound) {
+                await sound.unloadAsync();
+                setSound(null);
+            }
+
             const songUri = `${FileSystem.documentDirectory}Music/${albumName}/${songName}`;
             const fileInfo = await FileSystem.getInfoAsync(songUri);
             
@@ -92,7 +124,15 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
 
             const { sound: newSound } = await Audio.Sound.createAsync(
                 { uri: songUri },
-                { shouldPlay: true }
+                { 
+                    shouldPlay: true,
+                    progressUpdateIntervalMillis: 100, // More frequent updates
+                    positionMillis: 0,
+                    volume: 1.0,
+                    rate: 1.0,
+                    shouldCorrectPitch: true,
+                },
+                onPlaybackStatusUpdate
             );
 
             if (sound) {
@@ -203,31 +243,25 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
         }
     }, [loadSound, stopSound, fetchTrackData]);
 
-    useEffect(() => {
-        if (!sound) return;
-
-        const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
-            if (!status.isLoaded) {
-                if (status.error) {
-                    console.error('Playback error:', status.error);
-                    playNextSongRef.current?.();
-                }
-                return;
+    const onPlaybackStatusUpdate = useCallback((status: AVPlaybackStatus) => {
+        if (!status.isLoaded) {
+            if (status.error) {
+                console.error('Playback error:', status.error);
+                playNextSongRef.current?.();
             }
+            return;
+        }
 
-            setDuration(status.durationMillis || 0);
-            setPosition(status.positionMillis || 0);
-            
-            if (status.didJustFinish && !status.isLooping) {
-                incrementPlayCount().then(() => {
-                    playNextSongRef.current?.();
-                });
-            }
-        };
-
-        sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-        return () => sound.setOnPlaybackStatusUpdate(null);
-    }, [sound])
+        setDuration(status.durationMillis || 0);
+        setPosition(status.positionMillis || 0);
+        setIsPlaying(status.isPlaying);
+        
+        if (status.didJustFinish && !status.isLooping) {
+            incrementPlayCount().then(() => {
+                playNextSongRef.current?.();
+            });
+        }
+    }, [incrementPlayCount]);
 
     const playSoundHandler = useCallback(async (
         newAlbumName: string,
@@ -247,22 +281,34 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
     }, [loadSound, fetchTrackData]);
 
     const pauseSound = useCallback(async () => {
-        if (sound) {
-            await sound.pauseAsync();
-            setIsPlaying(false);
+        try {
+            if (sound) {
+                await sound.pauseAsync();
+                setIsPlaying(false);
+            }
+        } catch (error) {
+            console.error('Error pausing sound:', error);
         }
     }, [sound]);
 
     const resumeSound = useCallback(async () => {
-        if (sound) {
-            await sound.playAsync();
-            setIsPlaying(true);
+        try {
+            if (sound) {
+                await sound.playAsync();
+                setIsPlaying(true);
+            }
+        } catch (error) {
+            console.error('Error resuming sound:', error);
         }
     }, [sound]);
 
     const seekTo = useCallback(async (value: number) => {
-        if (sound) {
-            await sound.setPositionAsync(value);
+        try {
+            if (sound) {
+                await sound.setPositionAsync(value);
+            }
+        } catch (error) {
+            console.error('Error seeking sound:', error);
         }
     }, [sound]);
 

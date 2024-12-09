@@ -33,9 +33,9 @@ export const useMediaList = (
         const filteredAndSorted = items
             .filter(item => {
                 const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
-                const matchesList = showWantToList 
-                    ? item.seen === ''  // Want to list: hasn't been seen yet
-                    : item.seen !== ''; // Library list: has been seen (has a date)
+                const matchesList = showWantToList
+                    ? item.finished === 0  // Want to list: not finished
+                    : item.finished === 1; // Library list: finished
                 return matchesSearch && matchesList;
             })
             .sort(sortOptions[sortOption]);

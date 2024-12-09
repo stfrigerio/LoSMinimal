@@ -50,9 +50,8 @@ function AppContent() {
                 style={isHomepage ? 'light' : (isDarkMode ? 'light' : 'dark')}
                 backgroundColor="transparent"
             />
-
-            <ChecklistProvider>
-                <MusicPlayerProvider>
+            <MusicPlayerProvider>
+                <ChecklistProvider>
                     <DrawerStateProvider>
                         <NavbarDrawerProvider>
                             <AppInitializer />
@@ -80,8 +79,8 @@ function AppContent() {
                         </NavbarDrawerProvider>
                     </DrawerStateProvider>
                     <Toast config={toastConfig} />
-                </MusicPlayerProvider>
-            </ChecklistProvider>
+                </ChecklistProvider>
+            </MusicPlayerProvider>
         </>
     );
 }
