@@ -123,13 +123,6 @@ class LibraryManager extends BaseTableManager<LibraryData> {
 		const result = await databaseManager.executeSqlAsync(query, queryParams);
 		return result as LibraryData[];
 	}
-
-	async updateFinshedStatus() {
-		// update all items to fineshed = 1
-
-		const query = `UPDATE ${this.tableStructure.name} SET finished = 1`;
-		await databaseManager.executeSqlAsync(query);
-	}
 }
 
 export const libraryManager = new LibraryManager();

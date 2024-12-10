@@ -125,8 +125,6 @@ const TasksHub: React.FC = () => {
             <MobileNavbar
                 items={navItems}
                 activeIndex={screens.findIndex(screen => screen.toLowerCase().replace(' ', '') === activeScreen)}
-                title={activeScreen.charAt(0).toUpperCase() + activeScreen.slice(1)}
-                onBackPress={openHomepage}
                 quickButtonFunction={activeScreen === 'checklist' ? undefined : openAddModal}
                 screen="tasks"
             />

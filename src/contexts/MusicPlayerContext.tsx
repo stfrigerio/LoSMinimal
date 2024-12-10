@@ -126,11 +126,13 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
                 { uri: songUri },
                 { 
                     shouldPlay: true,
-                    progressUpdateIntervalMillis: 100, // More frequent updates
+                    progressUpdateIntervalMillis: 1000, // Reduced frequency of updates
                     positionMillis: 0,
                     volume: 1.0,
                     rate: 1.0,
                     shouldCorrectPitch: true,
+                    // Add these options for better background playback
+                    androidImplementation: 'MediaPlayer',
                 },
                 onPlaybackStatusUpdate
             );

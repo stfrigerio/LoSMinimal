@@ -16,7 +16,6 @@ import DayNotesStatus from './components/DayNotesStatus';
 import MusicPlayerControls from '../Music/components/MusicPlayerControls';
 import { getStartOfToday } from '@/src/utils/timezoneBullshit';
 import { useMusicPlayer } from '@/src/contexts/MusicPlayerContext';
-import { libraryManager } from '@/database/tables/libraryTable';
 
 const Homepage = () => {
     const { theme, themeColors } = useThemeStyles();
@@ -72,10 +71,6 @@ const Homepage = () => {
         outputRange: ['0deg', '-240deg']
     });
 
-    const handleUpdateFinshedStatus = async () => {
-        await libraryManager.updateFinshedStatus();
-    }
-
     return (
         <View style={styles.container}>
             <ImageBackground 
@@ -105,9 +100,6 @@ const Homepage = () => {
                                 {({ pressed }) => (
                                     <FontAwesomeIcon icon={faCalendarDay} size={pressed ? 18 : 22} color={pressed ? themeColors.accentColor : themeColors.textColor} />
                                 )}
-                            </Pressable>
-                            <Pressable onPress={handleUpdateFinshedStatus} style={{ padding: 20, borderRadius: 8 }}>
-                                <FontAwesomeIcon icon={faCheck} size={22} color={themeColors.textColor} />
                             </Pressable>
                         </View>
                     </View>
