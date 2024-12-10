@@ -9,18 +9,18 @@ import ChecklistScreen from './components/Checklist';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation'
 import { useTasksData } from './hooks/useTasksData';
-// import CanvasScreen from './components/TaskCanvas';
 
 import { TaskData } from '@/src/types/Task';
+import ProjectsScreen from './components/Projects/Projects';
 
 const TasksHub: React.FC = () => {
     const { themeColors } = useThemeStyles();
     const { openHomepage } = useNavigationComponents();
     const styles = React.useMemo(() => getStyles(themeColors), [themeColors]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [activeScreen, setActiveScreen] = useState<'tasklist' | 'checklist' | 'canvas'>('tasklist');
+    const [activeScreen, setActiveScreen] = useState<'tasklist' | 'checklist' | 'projects'>('tasklist');
     const [refreshTrigger, setRefreshTrigger] = useState(0);
-    const [screens, setScreens] = useState(['Task List', 'Checklist', 'Canvas']);
+    const [screens, setScreens] = useState(['Task List', 'Checklist', 'Projects']);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
     const { 
@@ -80,16 +80,12 @@ const TasksHub: React.FC = () => {
                         refreshTasks={refreshTasks}
                     />
                 );
-            // case 'canvas':
-            //     return Platform.OS !== 'web' ? (
-            //         <CanvasScreen 
-            //             refreshTrigger={refreshTrigger}
-            //             addTask={addTask}
-            //             updateTask={updateTask}
-            //             deleteTask={deleteTask}
-            //             refreshTasks={refreshTasks}
-            //         />
-            //     ) : null;
+            case 'projects':
+                return (
+                    <ProjectsScreen 
+                        pillars={pillars}
+                    />
+                );
             default:
                 return null;
         }
@@ -98,7 +94,7 @@ const TasksHub: React.FC = () => {
     const navItems = useMemo(() => 
         screens.map((screen) => ({
             label: screen,
-            onPress: () => setActiveScreen(screen.toLowerCase().replace(' ', '') as 'tasklist' | 'checklist' | 'canvas'),
+            onPress: () => setActiveScreen(screen.toLowerCase().replace(' ', '') as 'tasklist' | 'checklist' | 'projects'),
         })),
         [screens]
     );
@@ -125,7 +121,7 @@ const TasksHub: React.FC = () => {
             <MobileNavbar
                 items={navItems}
                 activeIndex={screens.findIndex(screen => screen.toLowerCase().replace(' ', '') === activeScreen)}
-                quickButtonFunction={activeScreen === 'checklist' ? undefined : openAddModal}
+                quickButtonFunction={activeScreen === 'checklist' || activeScreen === 'projects' ? undefined : openAddModal}
                 screen="tasks"
             />
         </View>

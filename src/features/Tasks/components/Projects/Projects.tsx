@@ -1,15 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import Markdown from '@/src/components/Markdown/Markdown';
+import { View, Text, StyleSheet, Pressable, ScrollView, BackHandler } from 'react-native';
 
+import { loadProjectFiles, createProject, deleteProject, updateProject } from './helpers';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import { Project } from './types/types';
+import ProjectView from './components/ProjectView';
 
-interface Project {
-    id: string;
-    title: string;
-    description: string;
-    markdown: string;
-}
 
 interface ProjectsScreenProps {
     pillars: any[];
@@ -23,12 +20,9 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [projects, setProjects] = useState<Project[]>([]);
 
-    // This is where you'd load your markdown files
     useEffect(() => {
         const loadProjects = async () => {
             try {
-                // You'll need to implement this function to read .md files
-                // from your project's assets or a specific directory
                 const projectFiles = await loadProjectFiles();
                 setProjects(projectFiles);
             } catch (error) {
@@ -38,6 +32,53 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
 
         loadProjects();
     }, []);
+
+    // Add back handler
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            if (selectedProject) {
+                setSelectedProject(null);
+                return true; // Prevent default behavior
+            }
+            return false; // Let default behavior happen
+        });
+
+        return () => backHandler.remove();
+    }, [selectedProject]);
+
+
+    const handleAddProject = async () => {
+
+        
+        try {
+            const createdProject = await createProject();
+            setProjects(prevProjects => [...prevProjects, createdProject]);
+        } catch (error) {
+            console.error('Error creating project:', error);
+        }
+    };
+
+    const handleDeleteProject = async (projectId: string) => {
+        try {
+            await deleteProject(projectId);
+            setProjects(prevProjects => prevProjects.filter(p => p.id !== projectId));
+        } catch (error) {
+            console.error('Error deleting project:', error);
+        }
+    };
+
+
+    const handleUpdateProject = async (project: Project) => {
+        try {
+            await updateProject(project);
+            // Update local state
+            setProjects(prevProjects => 
+                prevProjects.map(p => p.id === project.id ? project : p)
+            );
+        } catch (error) {
+            console.error('Error updating project:', error);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -49,21 +90,22 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
                         onPress={() => setSelectedProject(project)}
                     >
                         <Text style={styles.projectTitle}>{project.title}</Text>
-                        <Text style={styles.projectDescription}>{project.description}</Text>
-                        <View style={styles.markdownPreview}>
-                            <Markdown>{project.markdown.slice(0, 200) + '...'}</Markdown>
-                        </View>
+                        <Text style={styles.projectCompletion}>Completion: 0%</Text>
                     </Pressable>
                 ))}
+                <PrimaryButton
+                    text="Add Project"
+                    onPress={handleAddProject}
+                />
             </ScrollView>
 
             {selectedProject && (
-                <View style={styles.projectDetail}>
-                    <Text style={styles.projectTitle}>{selectedProject.title}</Text>
-                    <ScrollView>
-                        <Markdown>{selectedProject.markdown}</Markdown>
-                    </ScrollView>
-                </View>
+                <ProjectView
+                    project={selectedProject}
+                    onClose={() => setSelectedProject(null)}
+                    onDelete={handleDeleteProject}
+                    onUpdate={handleUpdateProject}
+                />
             )}
         </View>
     );
@@ -81,11 +123,6 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         borderRadius: 8,
         padding: 16,
         marginBottom: 12,
-        shadowColor: themeColors.shadowColor,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
     },
     projectTitle: {
         fontSize: 18,
@@ -93,25 +130,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         color: themeColors.textColor,
         marginBottom: 8,
     },
-    projectDescription: {
+    projectCompletion: {
         fontSize: 14,
-        color: themeColors.secondaryTextColor,
-        marginBottom: 12,
-    },
-    markdownPreview: {
-        borderTopWidth: 1,
-        borderTopColor: themeColors.borderColor,
-        paddingTop: 12,
-    },
-    projectDetail: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: themeColors.backgroundColor,
-        padding: 16,
+        color: themeColors.textColor,
     },
 });
+
 
 export default ProjectsScreen;

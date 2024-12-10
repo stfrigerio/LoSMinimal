@@ -1,18 +1,21 @@
-import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
-
-interface ProjectMetadata {
-    id: string;
-    title: string;
-    description: string;
-}
+import { Project } from '../types/types';
 
 export async function loadProjectFiles() {
     try {
-        // This path would point to your projects directory
-        const projectsDir = FileSystem.documentDirectory + 'projects/';
+        const projectsDir = `${FileSystem.documentDirectory}projects/`;
+        const dirInfo = await FileSystem.getInfoAsync(projectsDir);
+
+        if (!dirInfo.exists) {
+            try {
+                await FileSystem.makeDirectoryAsync(projectsDir, { intermediates: true });
+            } catch (error) {
+                console.error('Failed to create directory:', error);
+            }
+        }
+
         const files = await FileSystem.readDirectoryAsync(projectsDir);
-        
+
         const projects = await Promise.all(
             files
                 .filter(file => file.endsWith('.md'))
@@ -21,14 +24,14 @@ export async function loadProjectFiles() {
                         projectsDir + file
                     );
                     
-                    // Parse the markdown front matter for metadata
-                    const metadata = parseProjectMetadata(content);
+                    // Parse the markdown content to extract metadata
+                    const { metadata } = parseMarkdown(content);
                     
                     return {
                         id: file.replace('.md', ''),
-                        title: metadata.title,
-                        description: metadata.description,
-                        markdown: content,
+                        title: metadata.title || 'Untitled Project',
+                        description: metadata.description || 'No description provided',
+                        markdown: content, // Store the full markdown content
                     };
                 })
         );
@@ -40,24 +43,25 @@ export async function loadProjectFiles() {
     }
 }
 
-function parseProjectMetadata(content: string): ProjectMetadata {
-    // This is a simple example - you might want to use a proper front matter parser
+function parseMarkdown(content: string) {
     const lines = content.split('\n');
-    const metadata: any = {};
+    const metadata: Record<string, string> = {};
+    let markdownContent = '';
     
-    let i = 0;
     if (lines[0] === '---') {
-        i++;
+        let i = 1;
         while (i < lines.length && lines[i] !== '---') {
             const [key, value] = lines[i].split(':').map(s => s.trim());
-            metadata[key] = value;
+            if (key) metadata[key] = value;
             i++;
         }
+        markdownContent = lines.slice(i + 1).join('\n');
+    } else {
+        markdownContent = content;
     }
 
     return {
-        id: metadata.id || 'unknown',
-        title: metadata.title || 'Untitled Project',
-        description: metadata.description || 'No description provided',
+        metadata,
+        content: markdownContent,
     };
 }
