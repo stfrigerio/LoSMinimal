@@ -9,6 +9,7 @@ export async function createProject() {
 title: New Project
 description: This is a new project
 status: active
+started: ${new Date().toISOString()}
 ---
 
 # New Project

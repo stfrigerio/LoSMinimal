@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet, Pressable, TextInput } from 'react-native';
+import { View, StyleSheet, Pressable, TextInput, BackHandler, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Markdown from '@/src/components/Markdown/Markdown';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
@@ -19,6 +19,33 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
     const [isEditing, setIsEditing] = useState(false);
     const [content, setContent] = useState(project.markdown);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showDiscardModal, setShowDiscardModal] = useState(false);
+
+    useEffect(() => {
+        if (Platform.OS === 'android') {
+            const backHandler = BackHandler.addEventListener(
+                'hardwareBackPress',
+                () => {
+                    if (isEditing) {
+                        setShowDiscardModal(true);
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            return () => backHandler.remove();
+        }
+    }, [isEditing]);
+
+    // Add new function to handle back action
+    const handleBackPress = () => {
+        if (isEditing) {
+            setShowDiscardModal(true);
+            return;
+        }
+        onClose();
+    };
 
     const handleSave = async () => {
         if (onUpdate) {
@@ -40,6 +67,18 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
         if (onDelete) {
             await onDelete(project.id);
             onClose();
+        }
+    };
+
+    const handleMarkdownChange = async (newContent: string) => {
+        setContent(newContent);
+        // Auto-save when checklist is toggled
+        if (onUpdate) {
+            const updatedProject = {
+                ...project,
+                markdown: newContent,
+            };
+            await onUpdate(updatedProject);
         }
     };
 
@@ -80,16 +119,35 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
                     autoCorrect={false}
                 />
             ) : (
-                <Markdown>{content}</Markdown>
+                <Markdown 
+                    onChange={handleMarkdownChange}
+                >
+                    {content}
+                </Markdown>
             )}
 
-            <AlertModal
-                isVisible={showDeleteModal}
-                title="Delete Project"
-                message="Are you sure you want to delete this project?"
-                onConfirm={handleDelete}
-                onCancel={() => setShowDeleteModal(false)}
-            />
+            {showDeleteModal && (
+                <AlertModal
+                    isVisible={showDeleteModal}
+                    title="Delete Project"
+                    message="Are you sure you want to delete this project?"
+                    onConfirm={handleDelete}
+                    onCancel={() => setShowDeleteModal(false)}
+                />
+            )}
+            {showDiscardModal && (
+                <AlertModal
+                    isVisible={showDiscardModal}
+                    title="Discard Changes"
+                    message="You have unsaved changes. Are you sure you want to discard them?"
+                    onConfirm={() => {
+                        setShowDiscardModal(false);
+                        setIsEditing(false);
+                        onClose();
+                    }}
+                    onCancel={() => setShowDiscardModal(false)}
+                />
+            )}
         </View>
     );
 };

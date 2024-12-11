@@ -102,27 +102,28 @@ export const markdownStyles = (theme) => {
 		},
 		heading1: {
 			fontSize: 24,
+			color: theme.accentColor,
 			fontWeight: '700',
+			marginVertical: 20,
+			alignSelf: 'center',
 		},
 		heading2: {
 			fontSize: 20,
 			fontWeight: '600',
+			color: theme.accentColor,
+			marginVertical: 10,
+		},
+		heading3: {
+			fontSize: 16,
+			fontWeight: '500',
+			color: theme.accentColor,
 		},
 		body: {
 			fontSize: 16,
 			fontFamily: 'serif',
 			color: theme.textColor,
 		},
-		blockquote: isDesktop ? {
-			backgroundColor: theme.backgroundSecondary,
-			borderLeftWidth: 4,
-			borderLeftColor: theme.hoverColor,
-			paddingLeft: 10,
-			marginLeft: 10,
-			marginBottom: 10,
-			marginTop: 10,
-			opacity: 0.8,
-		} : {
+		blockquote: {
 			backgroundColor: theme.backgroundSecondary,
 			borderColor: theme.hoverColor,
 			paddingLeft: 10,

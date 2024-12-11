@@ -10,6 +10,7 @@ from logger import logger
 
 bp = Blueprint('database', __name__)
 
+# from phone to desktop
 @bp.route('/upload_sqlite', methods=['POST'])
 def upload_sqlite():
     try:

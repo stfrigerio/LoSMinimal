@@ -1,11 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, BackHandler } from 'react-native';
 
-import { loadProjectFiles, createProject, deleteProject, updateProject } from './helpers';
+import { projectsHelpers } from './helpers';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import { Project } from './types/types';
 import ProjectView from './components/ProjectView';
+import { ProgressBar } from './components/ProgressBar';
+import { calculateProjectCompletion } from './helpers/calculateCompletion';
 
 
 interface ProjectsScreenProps {
@@ -23,7 +25,7 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
     useEffect(() => {
         const loadProjects = async () => {
             try {
-                const projectFiles = await loadProjectFiles();
+                const projectFiles = await projectsHelpers.load();
                 setProjects(projectFiles);
             } catch (error) {
                 console.error('Error loading project files:', error);
@@ -48,10 +50,8 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
 
 
     const handleAddProject = async () => {
-
-        
         try {
-            const createdProject = await createProject();
+            const createdProject = await projectsHelpers.create();
             setProjects(prevProjects => [...prevProjects, createdProject]);
         } catch (error) {
             console.error('Error creating project:', error);
@@ -60,17 +60,16 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
 
     const handleDeleteProject = async (projectId: string) => {
         try {
-            await deleteProject(projectId);
+            await projectsHelpers.delete(projectId);
             setProjects(prevProjects => prevProjects.filter(p => p.id !== projectId));
         } catch (error) {
             console.error('Error deleting project:', error);
         }
     };
 
-
     const handleUpdateProject = async (project: Project) => {
         try {
-            await updateProject(project);
+            await projectsHelpers.update(project);
             // Update local state
             setProjects(prevProjects => 
                 prevProjects.map(p => p.id === project.id ? project : p)
@@ -80,23 +79,51 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
         }
     };
 
+    const getProgressColor = (completion: number) => {
+        if (completion >= 75) return themeColors.greenOpacity;
+        if (completion >= 25) return themeColors.yellowOpacity;
+        return themeColors.redOpacity;
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView style={styles.projectsList}>
-                {projects.map((project) => (
-                    <Pressable
-                        key={project.id}
-                        style={styles.projectCard}
-                        onPress={() => setSelectedProject(project)}
-                    >
-                        <Text style={styles.projectTitle}>{project.title}</Text>
-                        <Text style={styles.projectCompletion}>Completion: 0%</Text>
-                    </Pressable>
-                ))}
-                <PrimaryButton
-                    text="Add Project"
-                    onPress={handleAddProject}
-                />
+                <View style={styles.projectsListHeader}>
+                    <Text style={styles.projectsListHeaderText}>Projects</Text>
+                </View>
+                {projects.map((project) => {
+                    const completion = projectsHelpers.calculateCompletion(project.markdown);
+                    return (
+                        <Pressable
+                            key={project.id}
+                            style={styles.projectCard}
+                            onPress={() => setSelectedProject(project)}
+                        >
+                            <Text style={styles.projectTitle} numberOfLines={1}>
+                                {project.title}
+                            </Text>
+                            <View style={styles.progressContainer}>
+                                <View style={styles.progressBarWrapper}>
+                                    <ProgressBar
+                                        progress={completion}
+                                        height={6}
+                                        backgroundColor={themeColors.backgroundSecondary}
+                                        fillColor={getProgressColor(completion)}
+                                    />
+                                </View>
+                                <Text style={styles.projectCompletion}>
+                                    {completion}%
+                                </Text>
+                            </View>
+                        </Pressable>
+                    );
+                })}
+                <View style={styles.addProjectButton}>
+                    <PrimaryButton
+                        text="Add Project"
+                        onPress={handleAddProject}
+                    />
+                </View>
             </ScrollView>
 
             {selectedProject && (
@@ -118,21 +145,46 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     projectsList: {
         flex: 1,
     },
+    projectsListHeader: {
+        padding: 16,
+    },
+    projectsListHeaderText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: themeColors.accentColor,
+    },
     projectCard: {
-        backgroundColor: themeColors.cardBackground,
+        backgroundColor: themeColors.backgroundSecondary,
         borderRadius: 8,
         padding: 16,
         marginBottom: 12,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     projectTitle: {
         fontSize: 18,
         fontWeight: 'bold',
         color: themeColors.textColor,
-        marginBottom: 8,
+        width: '40%', // Fixed width for title
+    },
+    progressContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+        width: '55%', // Fixed width for progress section
+    },
+    progressBarWrapper: {
+        flex: 1, // This will take up remaining space
     },
     projectCompletion: {
-        fontSize: 14,
-        color: themeColors.textColor,
+        fontSize: 10,
+        color: themeColors.textColorItalic,
+        minWidth: 35,
+    },
+    addProjectButton: {
+        marginTop: 16,
     },
 });
 
