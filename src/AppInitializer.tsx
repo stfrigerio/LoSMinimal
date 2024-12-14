@@ -1,5 +1,4 @@
 import { useEffect, useCallback } from 'react';
-import { Audio } from 'expo-av';
 import { useChecklist } from '@/src/contexts/checklistContext';
 
 import {

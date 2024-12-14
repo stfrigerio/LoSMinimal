@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Image, Button, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
 import { getImageUrisForDate } from '@/src/Images/ImageFileManager';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import Slider from '@react-native-community/slider';
 
 interface ImageSlideShowProps {
     startDate: string; // 'YYYY-MM-DD' format
@@ -45,29 +44,31 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
     // Auto-scroll logic
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
-
+    
         if (isPlaying && imageUris.length > 1) {
             intervalId = setInterval(() => {
                 setCurrentIndex(prev => (prev + 1) % imageUris.length);
-            }, intervalMs);
+            }, scrollInterval);  // Changed from intervalMs to scrollInterval
         }
-
+    
         return () => {
             if (intervalId) {
                 clearInterval(intervalId);
             }
         };
-    }, [imageUris.length, intervalMs, isPlaying]);
+    }, [imageUris.length, scrollInterval, isPlaying]);
 
     const togglePlayPause = () => {
         setIsPlaying(prev => !prev);
     };
 
     const nextImage = useCallback(() => {
+        setIsPlaying(false);  // Stop auto-play
         setCurrentIndex(prev => (prev + 1) % imageUris.length);
     }, [imageUris.length]);
-
+    
     const prevImage = useCallback(() => {
+        setIsPlaying(false);  // Stop auto-play
         setCurrentIndex(prev => (prev - 1 + imageUris.length) % imageUris.length);
     }, [imageUris.length]);
 

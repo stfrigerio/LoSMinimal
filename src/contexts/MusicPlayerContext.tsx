@@ -72,14 +72,6 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
         initAudio();
     }, []);
 
-    useEffect(() => {
-        return () => {
-            if (sound) {
-                sound.unloadAsync().catch(console.error);
-            }
-        };
-    }, [sound]);
-
     // Update refs when state changes
     useEffect(() => {
         songsRef.current = songs;
@@ -108,11 +100,6 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
 
     const loadSound = useCallback(async (albumName: string, songName: string): Promise<void> => {
         try {
-            if (sound) {
-                await sound.unloadAsync();
-                setSound(null);
-            }
-
             const songUri = `${FileSystem.documentDirectory}Music/${albumName}/${songName}`;
             const fileInfo = await FileSystem.getInfoAsync(songUri);
             
@@ -126,13 +113,11 @@ export const MusicPlayerProvider: React.FC<{ children: ReactNode }> = ({ childre
                 { uri: songUri },
                 { 
                     shouldPlay: true,
-                    progressUpdateIntervalMillis: 1000, // Reduced frequency of updates
+                    progressUpdateIntervalMillis: 100, // More frequent updates
                     positionMillis: 0,
                     volume: 1.0,
                     rate: 1.0,
                     shouldCorrectPitch: true,
-                    // Add these options for better background playback
-                    androidImplementation: 'MediaPlayer',
                 },
                 onPlaybackStatusUpdate
             );

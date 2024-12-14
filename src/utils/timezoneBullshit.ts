@@ -38,10 +38,19 @@ export const getDateRangeForPeriod = (periodString: string, timeZone?: string): 
     const weekMatch = periodString.match(/^(\d{4})-W(\d{1,2})$/);
     if (weekMatch) {
         const [, year, week] = weekMatch;
-        const firstDayOfYear = new Date(Date.UTC(parseInt(year), 0, 1));
-        const dayOffset = (parseInt(week) - 1) * 7 - (firstDayOfYear.getUTCDay() || 7) + 1;
+        // Create date for January 4th (this ensures we're in week 1)
+        const jan4th = new Date(Date.UTC(parseInt(year), 0, 4));
+        // Get the day of week for Jan 4th (1-7, where 1 is Monday, 7 is Sunday)
+        const jan4thDay = jan4th.getUTCDay() || 7;
+        // Find Monday of week 1 (going backwards from Jan 4th to Monday)
+        const week1Start = new Date(jan4th);
+        week1Start.setUTCDate(4 - jan4thDay + 1);  // +1 to adjust to Monday
         
-        const startDate = new Date(Date.UTC(parseInt(year), 0, dayOffset));
+        // Calculate start of target week
+        const startDate = new Date(week1Start);
+        startDate.setUTCDate(week1Start.getUTCDate() + (parseInt(week) - 1) * 7);
+        
+        // End date is 6 days after start date
         const endDate = new Date(startDate);
         endDate.setUTCDate(startDate.getUTCDate() + 6);
         
@@ -50,7 +59,7 @@ export const getDateRangeForPeriod = (periodString: string, timeZone?: string): 
             endDate: toZoned(endDate, tz)
         };
     }
-
+    
     // Monthly format: "2024-10"
     const monthMatch = periodString.match(/^(\d{4})-(\d{2})$/);
     if (monthMatch) {
