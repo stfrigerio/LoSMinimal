@@ -12,7 +12,6 @@ music_bp = Blueprint('music', __name__)
 # Initialize MusicSync
 music_sync = MusicSync(MUSIC_LIBRARY_PATH)
 
-
 @music_bp.route('/albums', methods=['GET'])
 def get_album_list():
     """
