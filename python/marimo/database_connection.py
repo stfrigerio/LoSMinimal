@@ -59,7 +59,6 @@ class DatabaseManager:
             return SimpleNamespace(**tables_data)
         return SimpleNamespace()
 
-    
     def get_table_schema(self, table_name: str) -> None:
         """Display schema for a specific table"""
         query = f"PRAGMA table_info({table_name})"
