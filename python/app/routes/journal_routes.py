@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from app.services.summaries.ai_helpers.claude import generate_journal_entry
+from app.services.summaries.ai_helpers import Claude
 from logger import logger
 
 bp = Blueprint('journal', __name__)
@@ -18,7 +18,7 @@ def generate_journal():
         if not journal_entries:
             return jsonify({"error": "No journal entries found in the specified date range"}), 400
 
-        generated_entry = generate_journal_entry(journal_entries)
+        generated_entry = Claude.generate_journal_entry(journal_entries)
         logger.info(f'generated_entry: {generated_entry}')
 
         return jsonify({"message": "Journal entry generated successfully", "generated_entry": generated_entry}), 200

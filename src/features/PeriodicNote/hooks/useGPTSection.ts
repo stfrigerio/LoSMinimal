@@ -6,7 +6,11 @@ import { usePeriodicData } from './usePeriodicData';
 import { useTextSection } from './useTextSection';
 import { useObjectives } from './useObjectives';
 import { getFlaskServerURL } from '@/src/features/Database/helpers/databaseConfig';
-import { getISOWeekData, parseDate } from '@/src/utils/timezoneBullshit';
+
+import { fetchQuarterlySummariesForYear } from './useGPT/fetchSummaries';
+import { parseAISummary } from './useGPT/parse';
+import { fetchWeeklySummariesForMonth, fetchMonthlySummariesForQuarter } from './useGPT/fetchSummaries';
+import { getNextWeekDate, getNextMonthDate, getNextQuarterDate } from './useGPT/getDates';
 
 interface ParsedContent {
     reflection: {
@@ -27,7 +31,16 @@ export const useGPTSection = (startDate: Date, endDate: Date, currentDate: strin
     const { current } = usePeriodicData(startDate, endDate);
     const { dailyNoteData, timeData, moneyData, moodData, journalData } = current;
 
-    const periodType = currentDate.includes('-W') ? 'week' : 'month';
+    let periodType = 'month'; // default value
+    
+    if (currentDate.includes('-W')) {
+        periodType = 'week';
+    } else if (currentDate.includes('Q')) {
+        periodType = 'quarter';
+    } else if (currentDate.match(/^\d{4}$/)) {
+        periodType = 'year';
+    }
+
     const { handleInputChange: handleTextInputChange, refetchData: fetchTextData } = useTextSection({ periodType, startDate, endDate });
     const { addObjective } = useObjectives(currentDate);
 
@@ -56,45 +69,47 @@ export const useGPTSection = (startDate: Date, endDate: Date, currentDate: strin
         }
     };
 
-    const parseAISummary = (content: string): ParsedContent => {
-        const reflectionMatch = content.match(/<reflection>([\s\S]*?)<\/reflection>/);
-        const questionsMatch = content.match(/<questions_to_ponder>([\s\S]*?)<\/questions_to_ponder>/);
-
-        const reflection = reflectionMatch ? reflectionMatch[1].trim() : '';
-        const questions = questionsMatch ? questionsMatch[1].trim() : '';
-
-        const [nice, notSoNice] = reflection.split('Not so nice:').map(part => part.replace('Nice:', '').trim());
-
-        const questionsList = questions.split('\n')
-            .filter(q => q.trim())
-            .map(q => q.replace(/^\d+\.\s*/, '').trim());
-
-        return {
-            reflection: { nice, notSoNice },
-            questionsToPonder: questionsList
-        };
-    };
-
     const generateSummary = async () => {
         setIsLoading(true);
         try {
-            const data: any = {
-                dailyNoteData,
-                timeData,
-                moneyData,
-                moodData,
-                journalData,
-                currentDate
-            };
+            let data: any = {};
+            let endpoint = '';
 
-            if (periodType === 'month') {
-                // Fetch all weekly AI summaries for the current month
+            if (periodType === 'week') {
+                data = {
+                    dailyNoteData,
+                    moodData,
+                    currentDate
+                };
+                endpoint = 'weekly_summary';
+            } else if (periodType === 'month') {
+                data = {
+                    dailyNoteData,
+                    moodData,
+                    currentDate
+                };
                 const weeklySummaries = await fetchWeeklySummariesForMonth(currentDate);
                 data.weeklyAISummaries = weeklySummaries;
+                endpoint = 'monthly_summary';
+            } else if (periodType === 'quarter') {
+                data = {
+                    moodData,
+                    currentDate
+                };
+                const monthlySummaries = await fetchMonthlySummariesForQuarter(currentDate, currentDate.split('-')[0]);
+                data.monthlyAISummaries = monthlySummaries;
+                endpoint = 'quarterly_summary';
+            } else if (periodType === 'year') {
+                data = {
+                    moodData,
+                    currentDate
+                };
+                const quarterlySummaries = await fetchQuarterlySummariesForYear(currentDate);
+                data.quarterlyAISummaries = quarterlySummaries;
+                endpoint = 'yearly_summary';
             }
     
             const flaskURL = await getFlaskServerURL();
-            const endpoint = periodType === 'week' ? 'weekly_summary' : 'monthly_summary';
             const response = await axios.post(`${flaskURL}/${endpoint}`, data);
     
             if (response.data && response.data.mood_summary) {
@@ -144,6 +159,7 @@ export const useGPTSection = (startDate: Date, endDate: Date, currentDate: strin
                 await fetchAiSummary();
                 await fetchTextData();
                 console.log('Summary generated and saved successfully');
+
             } else {
                 throw new Error("Failed to generate summary: Unexpected response format");
             }
@@ -158,45 +174,6 @@ export const useGPTSection = (startDate: Date, endDate: Date, currentDate: strin
         } finally {
             setIsLoading(false);
         }
-    };
-
-    const fetchWeeklySummariesForMonth = async (monthDate: string) => {
-        const [year, month] = monthDate.split('-');
-        const weeklySummaries = [];
-        
-        for (let week = 1; week <= 5; week++) {
-            const weekDate = `${year}-W${week.toString().padStart(2, '0')}`;
-            // Get the ISO week data and check if it belongs to the target month
-            const date = parseDate(weekDate);
-            const weekData = getISOWeekData(date);
-            
-            // Convert the date to get the actual month (1-12)
-            const weekMonth = new Date(weekData.year, 0, 1 + (weekData.week - 1) * 7).getMonth() + 1;
-            
-            if (weekMonth === parseInt(month)) {
-                const summary = await databaseManagers.gpt.getByDate(weekDate);
-                if (summary && summary.length > 0) {
-                    weeklySummaries.push(summary[0]);
-                }
-            }
-        }
-        
-        return weeklySummaries;
-    };
-
-    const getNextWeekDate = (currentDate: string) => {
-        const [year, week] = currentDate.split('-W');
-        const nextWeek = parseInt(week) + 1;
-        return `${year}-W${nextWeek.toString().padStart(2, '0')}`;
-    };
-
-    const getNextMonthDate = (currentDate: string) => {
-        const [year, month] = currentDate.split('-');
-        const nextMonth = parseInt(month) + 1;
-        if (nextMonth > 12) {
-            return `${parseInt(year) + 1}-01`;
-        }
-        return `${year}-${nextMonth.toString().padStart(2, '0')}`;
     };
 
     return {

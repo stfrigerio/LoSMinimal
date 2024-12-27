@@ -82,7 +82,6 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                 />
             );
         case 'gpt':
-            if (dateState.periodType === 'quarter' || dateState.periodType === 'year') return null;
             return (
                 <>
                     <GPTSection
@@ -90,10 +89,14 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
                         endDate={dateState.endDate}
                         currentDate={dateState.formattedDate}
                     />
-                    <TextLists
-                        startDate={dateState.startDate}
-                        endDate={dateState.endDate}
-                    />
+                    {dateState.periodType !== 'quarter' && dateState.periodType !== 'year' && (
+                        <>
+                            <TextLists
+                                startDate={dateState.startDate}
+                                endDate={dateState.endDate}
+                            />
+                        </>
+                    )}
                     <TextInputs
                         periodType={dateState.periodType}
                         startDate={dateState.startDate.toString()}

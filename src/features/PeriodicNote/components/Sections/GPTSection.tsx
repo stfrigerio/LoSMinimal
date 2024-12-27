@@ -73,12 +73,6 @@ const GPTSection: React.FC<GPTSectionProps> = ({ startDate, endDate, currentDate
             <Text style={styles.subheading}>Not so nice:</Text>
             <Text style={styles.text}>{aiSummary.reflection.notSoNice}</Text>
             
-            <Text style={styles.heading}>Questions to Ponder:</Text>
-            {aiSummary.questionsToPonder.map((question, index) => (
-                <Text key={index} style={styles.listItem}>
-                    {`${index + 1}. ${question}`}
-                </Text>
-            ))}
             {isErrorAlertVisible && (
                 <AlertModal
                     isVisible={isErrorAlertVisible}
