@@ -19,8 +19,8 @@ interface QuickButtonProps {
 import { useTasksData } from '@/src/features/Tasks/hooks/useTasksData';
 
 const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { themeColors, theme } = useThemeStyles();
+	const styles = getStyles(themeColors, theme);
 	const [buttonsVisible, setButtonsVisible] = useState(false);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
@@ -223,7 +223,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 	);
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
 	container: {
 		alignItems: 'flex-end',
 		zIndex: 2
@@ -251,7 +251,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		alignItems: 'center',  
 	},
 	buttonText: {
-		color: themeColors.borderColor,
+		color: theme === 'light' ? themeColors.backgroundColor : themeColors.borderColor,
 		fontSize: 16,
 	},
 	buttonContainer: {

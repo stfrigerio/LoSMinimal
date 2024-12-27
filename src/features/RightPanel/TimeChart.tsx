@@ -136,7 +136,7 @@ function TimeSunburstChart() {
                     <FontAwesomeIcon
                         icon={faChartPie}
                         size={24}
-                        color={!showHoursSunburst ? themeColors.hoverColor : 'gray'}
+                        color={!showHoursSunburst ? themeColors.accentColor : 'gray'}
                     />
                 </Pressable>
                 <Pressable
@@ -146,7 +146,7 @@ function TimeSunburstChart() {
                     <FontAwesomeIcon
                         icon={faClock}
                         size={24}
-                        color={showHoursSunburst ? themeColors.hoverColor : 'gray'}
+                        color={showHoursSunburst ? themeColors.accentColor : 'gray'}
                     />
                 </Pressable>
             </View>
@@ -164,11 +164,11 @@ function TimeSunburstChart() {
             )}
 
             <View style={styles.controlsContainer}>
-                <Text style={designs.text.text}>
+                <Text style={theme === 'dark' ? designs.text.text : { color: 'white' }}>
                     {showHoursSunburst ? is12HourView ? `12-Hour View` : '24-Hour View' : (isWeekly ? 'Weekly Data' : 'Daily Data')}
                 </Text>
                 {showHoursSunburst && is12HourView ? <Text style={styles.ampmText}>({currentHalfDay.toLowerCase()})</Text> : null}
-                <Text style={designs.text.text}>{totalHours.toFixed(2)} hrs</Text>
+                <Text style={theme === 'dark' ? designs.text.text : { color: 'white' }}>{totalHours.toFixed(2)} hrs</Text>
                 {showHoursSunburst ? (
                     <View style={{ marginTop: 10 }}>
                         <Switch

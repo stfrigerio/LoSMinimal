@@ -73,7 +73,7 @@ export const useTimer = () => {
 			duration: formattedDuration,
 		};
 			
-		// console.log('about to update timer with: ', updatedTimer);
+		console.log('about to update timer with: ', updatedTimer);
 		await databaseManagers.time.upsert(updatedTimer)
 	
 		setTimerRunning(false);

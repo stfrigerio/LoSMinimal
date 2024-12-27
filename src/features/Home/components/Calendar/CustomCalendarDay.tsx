@@ -20,11 +20,17 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
     const styles = getStyles(themeColors);
 
     const isCurrentMonth = date.month === currentMonth;
+    // For current month dates:
+    //   - In dark mode: use normal text color
+    //   - In light mode: use border color (for contrast)
+    // For other month dates:
+    //   - In dark mode: use faded text color
+    //   - In light mode: use gray (for less emphasis)
     const textColor = isCurrentMonth ? 
         theme === 'dark' ? 
-            themeColors.textColor : themeColors.borderColor 
+            themeColors.textColor : '#d3c6aa' 
         : theme === 'dark' ? 
-            themeColors.opaqueTextColor : themeColors.gray;
+            themeColors.opaqueTextColor : 'rgba(211, 198, 170, 0.5)';
 
     return (
         <Pressable 

@@ -3,6 +3,7 @@ import { Pressable, Text, View, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useTheme } from '@/src/contexts/ThemeContext';
 
 interface MenuButtonProps {
     icon: IconDefinition;
@@ -13,7 +14,8 @@ interface MenuButtonProps {
 
 export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, color }) => {
     const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useTheme();
+    const styles = getStyles(themeColors, theme);
 
     return (
         <Pressable 
@@ -35,7 +37,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, co
                     <Text style={[
                         designs.text.text,
                         styles.buttonText,
-                        { color: pressed ? themeColors.textColor : themeColors.textColor }
+                        { color: theme === 'dark' ? themeColors.textColor : themeColors.textColor }
                     ]}>
                         {label}
                     </Text>
@@ -45,16 +47,16 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, co
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
     button: {
         padding: 10,
         paddingVertical: 28,
         borderRadius: 12,
-        backgroundColor: `${themeColors.borderColor}E6`,
+        backgroundColor: theme === 'light' ? `${themeColors.backgroundColor}CC` : `${themeColors.borderColor}E6`,
         marginVertical: 8, 
         marginHorizontal: 4,
         borderWidth: 1,
-        borderColor: themeColors.backgroundColor,
+        borderColor: theme === 'light' ? themeColors.borderColor : themeColors.backgroundColor,
         flex: 1, 
     },
     buttonPressed: {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, ImageBackground, Dimensions, Animated, Pressable } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCalendarDay, faCheck, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDay, faCheck, faCog, faMusic } from '@fortawesome/free-solid-svg-icons';
 
 import CustomCalendar from './components/Calendar/Calendar';
 import TimerComponent from './components/TimerComponent';
@@ -26,7 +26,7 @@ const Homepage = () => {
     const settingsRotateAnim = useRef(new Animated.Value(0)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
-    const { openSettings, openDailyNote } = useNavigationComponents();
+    const { openSettings, openDailyNote, openMusic } = useNavigationComponents();
     const { isPlaying } = useMusicPlayer();
 
     useEffect(() => {
@@ -94,11 +94,15 @@ const Homepage = () => {
                                 }} 
                             />                    
                         </Animated.View>
-                        <View style={{ flexDirection: isPlaying ? 'column' : 'row', alignItems: 'center' }}>
-                            <MusicPlayerControls screen='home'/>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Pressable onPress={() => openMusic()} style={{ padding: 20, borderRadius: 8 }}>
+                                {({ pressed }) => (
+                                    <FontAwesomeIcon icon={faMusic} size={pressed ? 18 : 22} color={pressed ? themeColors.accentColor : '#d3c6aa'} />
+                                )}
+                            </Pressable>
                             <Pressable onPress={() => openDailyNote(getStartOfToday().toString())} style={{ padding: 20, borderRadius: 8 }}>
                                 {({ pressed }) => (
-                                    <FontAwesomeIcon icon={faCalendarDay} size={pressed ? 18 : 22} color={pressed ? themeColors.accentColor : themeColors.textColor} />
+                                    <FontAwesomeIcon icon={faCalendarDay} size={pressed ? 18 : 22} color={pressed ? themeColors.accentColor : '#d3c6aa'} />
                                 )}
                             </Pressable>
                         </View>

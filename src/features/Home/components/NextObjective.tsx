@@ -199,7 +199,7 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
                                 { 
                                     fontWeight: isExpanded ? 'bold' : 'normal', 
                                     fontSize: isExpanded ? 14 : 8,
-                                    color: isExpanded ? themeColors.textColorBold : themeColors.textColor, 
+                                    color: isExpanded ? themeColors.textColorBold : '#d3c6aa', 
                                     alignSelf: 'center',
                                     marginTop: isExpanded ? 0 : 5,
                                 }

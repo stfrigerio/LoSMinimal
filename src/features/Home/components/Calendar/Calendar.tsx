@@ -16,7 +16,8 @@ const CustomCalendar = () => {
 	const { theme, themeColors } = useThemeStyles();
 	const styles = getStyles(theme);
 	
-    const isDarkMode = theme === 'dark';
+    // const isDarkMode = theme === 'dark';
+	const isDarkMode = true;
 
     const calendarTheme = {
         backgroundColor: 'transparent',

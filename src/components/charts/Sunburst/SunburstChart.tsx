@@ -20,7 +20,7 @@ interface SunburstChartProps {
 }
 
 const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) => {
-	const { themeColors, designs } = useThemeStyles();
+	const { themeColors, theme, designs } = useThemeStyles();
 	const styles = getStyles(themeColors);
 	const { colors: tagColors, loading, error } = useColors();
 
@@ -97,7 +97,7 @@ const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) =>
 								key={index}
 								d={arcGenerator(node) as string}
 								fill={getColor(node)}
-								stroke={themeColors.backgroundColor}
+								stroke={theme === 'dark' ? themeColors.backgroundColor : 'transparent'}
 								strokeWidth="2"
 							/>
 						);
@@ -114,7 +114,7 @@ const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) =>
 								x={labelProps.x}
 								y={labelProps.y}
 								fontSize={10}
-								fill={themeColors.textColor}
+								fill={theme === 'dark' ? themeColors.textColor : 'white'}
 								textAnchor="middle"
 							>
 								{node.data.name}

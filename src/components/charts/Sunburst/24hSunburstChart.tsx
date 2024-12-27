@@ -30,7 +30,7 @@ interface SunburstChartProps {
 }
 
 const HoursSunburst: React.FC<SunburstChartProps> = ({ data, width, height }) => {
-    const { themeColors } = useThemeStyles();
+    const { themeColors, theme } = useThemeStyles();
     const { colors: tagColors, loading, error } = useColors();
 
     const windowDimensions = Dimensions.get('window');
@@ -124,7 +124,7 @@ const HoursSunburst: React.FC<SunburstChartProps> = ({ data, width, height }) =>
                                 <Path
                                     d={arcGenerator(arc) as string}
                                     fill={getColor(arc.data)}
-                                    stroke={themeColors.backgroundColor}
+                                    stroke={theme === 'dark' ? themeColors.backgroundColor : 'transparent'}
                                     strokeWidth="2"
                                 />
                                 {arc.data.tags.length > 0 && arc.data.tags.map((tag, tagIndex) => {
@@ -138,7 +138,7 @@ const HoursSunburst: React.FC<SunburstChartProps> = ({ data, width, height }) =>
                                                 data: tag
                                             } as d3.PieArcDatum<TagData>) as string}
                                             fill={getColor(tag)}
-                                            stroke={themeColors.backgroundColor}
+                                            stroke={theme === 'dark' ? themeColors.backgroundColor : 'transparent'}
                                             strokeWidth="2"
                                         />
                                     );
@@ -170,7 +170,7 @@ const HoursSunburst: React.FC<SunburstChartProps> = ({ data, width, height }) =>
                                 x={0}
                                 y={0}
                                 fontSize={6}
-                                fill={'gray'}
+                                fill={theme === 'dark' ? themeColors.gray : 'white'}
                                 textAnchor="middle"
                                 alignmentBaseline="middle"
                                 transform={`rotate(${angle}) translate(0, -${labelRadius})`}

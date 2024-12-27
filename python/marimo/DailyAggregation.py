@@ -39,12 +39,18 @@ def _(dp):
 
 
 @app.cell
+def _(mo, tables):
+    mo.ui.dataframe(tables.Library)
+    return
+
+
+@app.cell
 def _(mo):
     # Step 1: Create a date range picker
     date_range_picker = mo.ui.date_range(
         start="2024-01-01",  # Earliest date
         stop="2024-12-31",   # Latest date
-        value=("2024-10-01", "2024-12-10"),  # Initial range
+        value=("2024-01-01", "2024-12-10"),  # Initial range
         label="Select Date Range"  # Label for the picker
     )
 

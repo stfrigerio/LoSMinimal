@@ -8,7 +8,7 @@ import EditTimeEntryModal from './modals/EditModal';
 
 import { useThemeStyles } from '../../styles/useThemeStyles';
 import { useTimeData } from './hooks/useTimeData';
-
+import { Timeline } from './components/Timeline/Timeline';
 import { TimeData } from '../../types/Time';
 
 const TimeHub: React.FC = () => {
@@ -52,7 +52,7 @@ const TimeHub: React.FC = () => {
 
 	const navItems = [
 		{ label: 'List', onPress: () => setActiveView('List') },
-		{ label: 'Graph', onPress: () => setActiveView('Graph') }
+		{ label: 'Timeline', onPress: () => setActiveView('Timeline') }
 	];
 
 	return (
@@ -67,8 +67,8 @@ const TimeHub: React.FC = () => {
 					showFilter={showFilter}
 				/>
 			)}
-			{activeView === 'Graph' && (
-				<TimeGraphs entries={entries} />
+			{activeView === 'Timeline' && (
+				<Timeline />
 			)}
 			<Navbar
 				items={navItems} 

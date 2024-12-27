@@ -1,0 +1,44 @@
+{
+  "events": [
+    {
+      "date": "1994-02-16",
+      "title": "Born in Biella in the northern snowy region of Italy",
+      "description": "i really liked it"
+    },
+    {
+      "date": "2000",
+      "title": "Moved to Follonica",
+      "description": "I had to abandon all my frens (1) and move to the seaside"
+    },
+    {
+      "date": "2002",
+      "title": "Moved to Livorno",
+      "description": "Godriddance i hated Follonica"
+    },
+    {
+      "date": "2003",
+      "title": "Met Giuse",
+      "description": "I met Giuseppe and we became friends"
+    },
+    {
+      "date": "2006",
+      "title": "Started middle school and met Marzo",
+      "description": "I met Marzo and we became friends"
+    },
+    {
+      "date": "2008",
+      "title": "Founded Rainway",
+      "description": "The first serious band with Giuse, Marzo and Matteo"
+    },
+    {
+      "date": "2009",
+      "title": "Started high school",
+      "description": "Liceo scientifico Federigo Enriques. mixed emotions"
+    },
+    {
+      "date": "2013",
+      "title": "Started university",
+      "description": "University of Pisa. mixed emotions"
+    }
+  ]
+} 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
-import Svg, { G, Circle, Text, Line, Path } from 'react-native-svg';
+import { View, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import Svg, { G, Circle, Text, Line, Path, Rect } from 'react-native-svg';
 import * as d3 from 'd3';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
@@ -21,6 +21,8 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 		x: d3.ScaleTime<number, number>;
 		y: d3.ScaleLinear<number, number>;
 	} | null>(null);
+
+	const [selectedMood, setSelectedMood] = useState<ProcessedMoodData | null>(null);
 
 	const margin = { top: 20, right: 20, bottom: 30, left: 20 };
 	const chartWidth = width - margin.left - margin.right;
@@ -50,7 +52,8 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 		return d3.line<ProcessedMoodData>()
 			.x(d => chartDimensions?.x(d.date) ?? 0)
 			.y(d => chartDimensions?.y(d.rating) ?? 0)
-			.defined(d => d.date != null && d.rating != null);
+			.defined(d => d.date != null && d.rating != null)
+			.curve(d3.curveMonotoneX); // Add smooth curve interpolation
 	}, [chartDimensions]);
 
 	const colorScale = useMemo(() => {
@@ -62,12 +65,31 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 
 	if (!chartDimensions) return null;
 
+	const handleSelectMood = (mood: ProcessedMoodData) => {
+		console.log('Pressed');
+		setSelectedMood(mood);
+	};
+
 	return (
 		<View style={[{ width, height }]}>
-			<Svg width={width} height={height}>
+			<Svg 
+				width={width} 
+				height={height}
+			>				
 				<G transform={`translate(${margin.left},${margin.top})`}>    
+
+					{/* Background Touchable Area */}
+					<Rect
+						x={0}
+						y={0}
+						width={chartWidth}
+						height={chartHeight}
+						fill="transparent"
+						onPress={() => setSelectedMood(null)}
+					/>
+
 					{/* Horizontal grid lines */}
-					{chartDimensions.y.ticks(10).map((tick, i) => (
+					{chartDimensions.y.ticks(5).map((tick, i) => (
 						<Line
 							key={`gridY-${i}`}
 							x1={0}
@@ -75,7 +97,8 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 							x2={chartWidth}
 							y2={chartDimensions.y(tick)}
 							stroke={themeColors.textColor}
-							strokeOpacity={0.1}
+							strokeOpacity={0.08}
+							strokeDasharray="4,4"
 						/>
 					))}
 				
@@ -85,18 +108,8 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 						fill="none"
 						stroke={themeColors.textColor}
 						strokeWidth={1}
+						strokeOpacity={0.7}
 					/>
-				
-					{/* Data points */}
-					{processedData.map((mood, index) => (
-						<Circle
-							key={index}
-							cx={chartDimensions.x(mood.date)}
-							cy={chartDimensions.y(mood.rating)}
-							r={4}
-							fill={colorScale(mood.rating)}
-						/>
-					))}
 				
 					{/* Y-axis */}
 					<Line
@@ -105,6 +118,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 						x2={0}
 						y2={chartHeight}
 						stroke={themeColors.borderColor}
+						strokeOpacity={0.3}
 					/>
 					{chartDimensions.y.ticks(10).map((tick, i) => (
 						<G key={i} transform={`translate(0,${chartDimensions.y(tick)})`}>
@@ -122,14 +136,15 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 				
 					{/* X-axis (dates) */}
 					<G transform={`translate(0,${chartHeight})`}>
-						{chartDimensions.x.ticks(10).map((tick, i) => (
+						{chartDimensions.x.ticks(6).map((tick, i) => (
 							<G key={i} transform={`translate(${chartDimensions.x(tick)},0)`}>
 								<Text
-									y={9}
+									y={12}
 									dy=".71em"
 									textAnchor="middle"
 									fill={themeColors.textColor}
-									fontSize={8}
+									fontSize={10}
+									opacity={0.7}
 									transform="rotate(45)"
 								>
 									{tick.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' })}
@@ -137,6 +152,95 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 							</G>
 						))}
 					</G>
+
+					{/* Interactive Circles */}
+					<G>
+						{processedData.map((mood, index) => (
+							<G key={index}>
+								{/* Shadow Circle */}
+								<Circle
+									cx={chartDimensions.x(mood.date)}
+									cy={chartDimensions.y(mood.rating)}
+									r={6}
+									fill={colorScale(mood.rating)}
+									opacity={0.3}
+								/>
+
+								{/* Main Circle */}
+								<Circle
+									cx={chartDimensions.x(mood.date)}
+									cy={chartDimensions.y(mood.rating)}
+									r={4}
+									fill={colorScale(mood.rating)}
+									stroke="white"
+									strokeWidth={1}
+								/>
+
+								{/* Invisible Larger Circle for Touch */}
+								<Circle
+									cx={chartDimensions.x(mood.date)}
+									cy={chartDimensions.y(mood.rating)}
+									r={10} // Adjusted radius
+									fill="transparent"
+									onPress={() => handleSelectMood(mood)}
+								/>
+							</G>
+						))}
+					</G>
+
+					{/* Tooltip */}
+					{selectedMood && (
+						<G>
+							<Rect
+								x={chartDimensions.x(selectedMood.date) - 80}
+								y={chartDimensions.y(selectedMood.rating) - 70}
+								width={160}
+								height={70}
+								rx={5}
+								fill={themeColors.backgroundSecondary}
+								stroke={themeColors.borderColor}
+								strokeWidth={1} // Added for better visibility
+							/>
+							<Text
+								x={chartDimensions.x(selectedMood.date)}
+								y={chartDimensions.y(selectedMood.rating) - 55}
+								fontSize={12}
+								fill={themeColors.textColor}
+								textAnchor="middle"
+							>
+								{selectedMood.date.toLocaleDateString()}
+							</Text>
+							<Text
+								x={chartDimensions.x(selectedMood.date)}
+								y={chartDimensions.y(selectedMood.rating) - 45}
+								fontSize={12}
+								fill={themeColors.textColor}
+								textAnchor="middle"
+							>
+								{`Rating: ${selectedMood.rating}`}
+							</Text>
+							<Text
+								x={chartDimensions.x(selectedMood.date)}
+								y={chartDimensions.y(selectedMood.rating) - 30}
+								fontSize={12}
+								fill={themeColors.textColor}
+								textAnchor="middle"
+							>
+								{`Tag: ${selectedMood.tag}`}
+							</Text>
+							{selectedMood.comment && (
+								<Text
+								x={chartDimensions.x(selectedMood.date)}
+								y={chartDimensions.y(selectedMood.rating) - 15}
+								fontSize={12}
+								fill={themeColors.textColor}
+								textAnchor="middle"
+								>
+								{`Note: ${selectedMood.comment.substring(0, 20)}${selectedMood.comment.length > 20 ? '...' : ''}`}
+								</Text>
+							)}
+						</G>
+					)}
 				</G>
 			</Svg>
 		</View>
