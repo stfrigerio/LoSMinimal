@@ -13,12 +13,13 @@ def clean_data(data):
     if data.get('dailyNoteData'):
         for note in data['dailyNoteData']:
             date = note.get("date")
-            if date:
+            #^ temporarily removed since having the charts is enough imho
+            # if date:
                 # Process quantifiable habits
-                cleaned["quantifiableHabits"][date] = note["quantifiableHabits"]
+                # cleaned["quantifiableHabits"][date] = note["quantifiableHabits"]
 
                 # Process boolean habits
-                cleaned["booleanHabits"][date] = note["booleanHabits"]
+                # cleaned["booleanHabits"][date] = note["booleanHabits"]
 
             cleaned["dailyNoteData"].append({
                 "date": date,

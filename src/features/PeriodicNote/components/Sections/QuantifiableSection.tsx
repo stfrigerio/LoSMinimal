@@ -97,6 +97,17 @@ const QuantifiableSection: React.FC<QuantifiableSectionProps> = ({
         }
     })();
 
+    const validateViewType = (viewType: string) => {
+        // Prevent daily view for longer periods
+        if (periodType === 'year' && viewType === 'daily') {
+            return 'weekly';
+        }
+        if (periodType === 'quarter' && viewType === 'daily') {
+            return 'weekly';
+        }
+        return viewType;
+    };
+
     return (
         <View style={styles.container}>
             <QuantifiableHabitsChart 
@@ -104,7 +115,7 @@ const QuantifiableSection: React.FC<QuantifiableSectionProps> = ({
                 data={quantifiableHabitsData} 
                 onOpenNote={openNote}
                 onOpenPeriodNote={openPeriodNote}
-                defaultViewType={defaultViewType}
+                defaultViewType={validateViewType(defaultViewType)}
                 periodType={periodType}
                 width={chartWidth}
                 height={chartHeight}

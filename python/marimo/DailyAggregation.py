@@ -10,13 +10,46 @@ def _():
     from database_connection import DatabaseManager
     from data_processing import DataProcessing
     import pandas as pd
+    import os
+    import sys
 
+    print("Current working directory:", os.getcwd())
+    return DataProcessing, DatabaseManager, mo, os, pd, sys
+
+
+@app.cell
+def _(sys):
+    print("Current sys.path:")
+    for path in sys.path:
+        print(path)
+    return (path,)
+
+
+@app.cell
+def _(os, sys):
+    project_root = os.path.abspath(os.path.join(os.getcwd(), "../"))
+    sys.path.insert(0, project_root)
+
+    print("Updated sys.path:")
+    for path1 in sys.path:
+        print(path1)
+    return path1, project_root
+
+
+@app.cell
+def _():
+    from app.services.summaries.ai_helpers import GPT, Claude
+    return Claude, GPT
+
+
+@app.cell
+def _(DataProcessing, DatabaseManager):
     db = DatabaseManager()
     dp = DataProcessing()
     db.connect()
     tables = db.get_tables()
     print(list(vars(tables).keys()))
-    return DataProcessing, DatabaseManager, db, dp, mo, pd, tables
+    return db, dp, tables
 
 
 @app.cell
@@ -36,12 +69,6 @@ def _(dp):
         added_time,
         daily_df,
     )
-
-
-@app.cell
-def _(mo, tables):
-    mo.ui.dataframe(tables.Library)
-    return
 
 
 @app.cell
@@ -76,6 +103,26 @@ def _(daily_df, date_range_picker, pd):
     # Display the filtered DataFrame
     filtered_days
     return filter_dataframe_by_date, filtered_days
+
+
+@app.cell
+def _(filtered_days):
+    filtered_days
+    return
+
+
+@app.cell
+def _(Claude, filtered_days):
+    claude = Claude()
+
+    summary = claude.generate_weekly_summary(filtered_days)
+    return claude, summary
+
+
+@app.cell
+def _(summary):
+    summary.content[0].text
+    return
 
 
 if __name__ == "__main__":

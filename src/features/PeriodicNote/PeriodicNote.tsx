@@ -4,7 +4,7 @@ import { ScrollView, View, StyleSheet, Platform } from 'react-native';
 import Color from 'color';
 
 // Components
-import TimeBox from '@/src/components/TimeBox';
+import TimeBox from '@/src/components/TimeBox/TimeBox';
 import DateNavigation from '@/src/features/PeriodicNote/components/DateNavigation';
 import DateHeader from '@/src/features/DailyNote/components/DateHeader';
 import { SectionRenderer } from './components/SectionRenderer';

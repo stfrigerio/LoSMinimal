@@ -54,7 +54,7 @@ export const useNavigationComponents = () => {
 	
 		const startDate = formatDate(start, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timeZone);
 		const endDate = formatDate(end, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timeZone);
-	
+
 		// Add periodicNote to RootStackParamList if not already there
 		router.push({
 			pathname: "periodic-note",

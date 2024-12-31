@@ -13,7 +13,7 @@ import {
 	DateHeader,
 } from './components'
 
-import TimeBox from '@/src/components/TimeBox';
+import TimeBox from '@/src/components/TimeBox/TimeBox';
 import DateNavigation from '@/src/components/DateNavigation';
 import ImagePickerComponent from './components/ImagePickerComponent';
 

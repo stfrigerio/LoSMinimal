@@ -1,6 +1,6 @@
 //TimeBox.tsx
 import React, { useMemo } from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
 
 import { useNavigationComponents, NotePeriod } from '@/src/features/LeftPanel/helpers/useNavigation';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
@@ -12,6 +12,8 @@ import {
 	isSamePeriod,
     getISOWeekData,
 } from '@/src/utils/timezoneBullshit';
+
+import { SubPeriods } from '@/src/components/TimeBox/components/SubPeriods';
 
 interface TimeBoxProps {
 	startDate: string;
@@ -54,9 +56,14 @@ const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
     const isCurrentWeek = useMemo(() => isSamePeriod(noteStartDate, today, 'week', timeZone), [noteStartDate, today, timeZone]);
     const isCurrentDay = useMemo(() => isSamePeriod(noteStartDate, today, 'day', timeZone), [noteStartDate, today, timeZone]);
 
-    const handleOpenNote = (period: NotePeriod) => {
-        openNote(period, startDate);
-    };
+    const handleOpenNote = (period: NotePeriod, specificDate?: string) => {
+        try {
+            console.log('handleOpenNote', period, specificDate || startDate);
+            openNote(period, specificDate || startDate);
+        } catch (error) {
+            console.error('Error in handleOpenNote', error);
+        }
+    };    
 
     const renderPeriod = (period: NotePeriod, display: string, isCurrentPeriod: boolean, isCurrentView: boolean) => {
         return (
@@ -81,32 +88,41 @@ const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
     const isYearly = currentViewType === 'year';
 
     return (
-        <View style={styles.container}>
-            {!isDaily && !isWeekly && renderPeriod('year', displayYear, isCurrentYear, currentViewType === 'year')}
-            {!isDaily && !isYearly && (
-                <>
-                    {!isDaily && !isWeekly && <Text style={styles.arrow}> » </Text>}
-                    {renderPeriod('quarter', displayQuarter, isCurrentQuarter, currentViewType === 'quarter')}
-                </>
-            )}
-            {!isYearly && (
-                <>
-                    {!isDaily && <Text style={styles.arrow}> » </Text>}
-                    {renderPeriod('month', displayMonthName, isCurrentMonth, currentViewType === 'month')}
-                </>
-            )}
-            {(isWeekly || isDaily) && (
-                <>
-                    <Text style={styles.arrow}> » </Text>
-                    {renderPeriod('week', displayWeek, isCurrentWeek, currentViewType === 'week')}
-                </>
-            )}
-            {isDaily && (
-                <>
-                    <Text style={styles.arrow}> » </Text>
-                    {renderPeriod('day', displayDay, isCurrentDay, currentViewType === 'daily')}
-                </>
-            )}
+        <View style={{alignItems: 'center'}}>
+            <View style={styles.container}>
+                {!isDaily && !isWeekly && renderPeriod('year', displayYear, isCurrentYear, currentViewType === 'year')}
+                {!isDaily && !isYearly && (
+                    <>
+                        {!isDaily && !isWeekly && <Text style={styles.arrow}> » </Text>}
+                        {renderPeriod('quarter', displayQuarter, isCurrentQuarter, currentViewType === 'quarter')}
+                    </>
+                )}
+                {!isYearly && (
+                    <>
+                        {!isDaily && <Text style={styles.arrow}> » </Text>}
+                        {renderPeriod('month', displayMonthName, isCurrentMonth, currentViewType === 'month')}
+                    </>
+                )}
+                {(isWeekly || isDaily) && (
+                    <>
+                        <Text style={styles.arrow}> » </Text>
+                        {renderPeriod('week', displayWeek, isCurrentWeek, currentViewType === 'week')}
+                    </>
+                )}
+                {isDaily && (
+                    <>
+                        <Text style={styles.arrow}> » </Text>
+                        {renderPeriod('day', displayDay, isCurrentDay, currentViewType === 'daily')}
+                    </>
+                )}
+            </View>
+            <SubPeriods
+                currentViewType={currentViewType}
+                date={startDate}
+                timeZone={timeZone}
+                displayYear={displayYear}
+                handleOpenNote={handleOpenNote}
+            />
         </View>
     );
 };
@@ -143,6 +159,29 @@ const getStyles = (theme: any) => StyleSheet.create({
         color: theme.gray,
         opacity: 0.7,
         marginHorizontal: 2,
+    },
+
+    subPeriodsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        // borderWidth: 1,
+        // borderColor: 'red',
+        flexWrap: 'wrap',
+        marginTop: 8,
+        gap: 8,
+    },
+    subPeriodsScroll: {
+        maxHeight: 50,
+    },
+    subPeriodButton: {
+        padding: 6,
+        borderRadius: 4,
+
+        backgroundColor: theme.backgroundSecondary,
+    },
+    subPeriodText: {
+        fontSize: 14,
+        color: theme.accentColor,
     },
 });
 

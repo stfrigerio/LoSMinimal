@@ -17,9 +17,8 @@ def process_weekly_summary(data):
     
     note_data = cleaned_data["dailyNoteData"]
     mood_data = cleaned_data["moodData"]
-    
-    most_recent_date = max(mood_entry['date'].split('T')[0] for mood_entry in mood_data)
-    week_date = get_week_number(most_recent_date)
+
+    week_date = data["currentDate"]
     
     data_to_send = {
         "note_data": note_data,
@@ -70,14 +69,14 @@ def process_monthly_summary(data):
         "claude_summary": mood_summary
     }
     
-    gpt_response = GPT.create_thoughts(data_to_give_gpt, pillars)
+    # gpt_response = GPT.create_thoughts(data_to_give_gpt, pillars)
     
     return {
         "id": None,
         "date": data["currentDate"],
         "type": "Mood Summary",
         "claude_summary": mood_summary,
-        "gpt_summary": gpt_response
+        # "gpt_summary": gpt_response
     } 
 
 def process_quarterly_summary(data):

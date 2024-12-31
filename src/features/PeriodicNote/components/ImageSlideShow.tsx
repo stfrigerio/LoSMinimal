@@ -73,7 +73,7 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
     }, [imageUris.length]);
 
     if (imageUris.length === 0) {
-        return <Text style={{ color: themeColors.textColor }}>No images available for this date range.</Text>;
+        return <Text style={{ color: themeColors.textColor, marginBottom: 80}}>No images available for this date range.</Text>;
     }
 
     const INTERVAL_OPTIONS = [
@@ -137,7 +137,8 @@ const getStyles = (theme: any) => {
             height: 300, 
             alignSelf: 'center', 
             marginVertical: 20, 
-            borderRadius: 20
+            borderRadius: 20,
+            resizeMode: 'contain'
         },
         button: {
             marginTop: 10,

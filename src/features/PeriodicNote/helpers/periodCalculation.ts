@@ -31,7 +31,7 @@ export const calculatePeriodTypeAndFormatDate = (startDate: string | Date, endDa
         // Format the current date based on the period type
         switch (periodType) {
             case 'week':
-                formattedDate = format(start, 'yyyy-') + 'W' + format(start, 'II');
+                formattedDate = format(end, 'yyyy-') + 'W' + format(start, 'II');
                 break;
             case 'month':
                 formattedDate = format(start, 'yyyy-MM');
