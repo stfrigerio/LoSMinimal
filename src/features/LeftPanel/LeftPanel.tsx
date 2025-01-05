@@ -16,7 +16,7 @@ import { getISOWeekData, getStartOfToday } from '@/src/utils/timezoneBullshit';
 const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { theme, toggleTheme } = useTheme();
     const { themeColors, designs } = useThemeStyles();
-    const styles = useMemo(() => getStyles(themeColors), [themeColors]);
+    const styles = useMemo(() => getStyles(themeColors, theme), [themeColors, theme]);
 
     const { 
         openTasks, 
@@ -169,7 +169,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
     container: {
         flex: 1,
         height: Dimensions.get('window').height,
@@ -192,7 +192,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: themeColors.borderColor,
+        backgroundColor: theme === 'dark' ? themeColors.borderColor : themeColors.gray,
         marginVertical: 10,
     },
     header: {

@@ -94,7 +94,7 @@ const DrawerIcon: React.FC<DrawerIconProps> = () => {
 const getStyles = (themeColors: any) => StyleSheet.create({
     iconWrapper: {
         width: 60,
-        height: 60,
+        height: 54,
         justifyContent: 'flex-start',
         alignItems: 'center',
         zIndex: 1200,

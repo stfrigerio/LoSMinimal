@@ -2,6 +2,7 @@ import { TrackData } from '../../types/Library';
 
 export interface Album {
     name: string;
+    id?: string;
     songs: string[];
     uuid?: string;
 }

@@ -19,7 +19,7 @@ interface TagModalProps {
 
 const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTable }) => {
 	const { theme, themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const styles = getStyles(theme, themeColors);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
 	const {
@@ -94,13 +94,13 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
 	tagItem: {
 		alignItems: 'center',
 		padding: 15,
 		marginVertical: 2,
 		borderBottomWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: themeColors.borderColor,
 		borderRadius: 5,
 	},
 	lastItem: {

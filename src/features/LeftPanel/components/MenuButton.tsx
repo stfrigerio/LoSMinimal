@@ -31,7 +31,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, co
                         <FontAwesomeIcon 
                             icon={icon} 
                             size={20}
-                            color={pressed ? themeColors.textColor : color || themeColors.gray}
+                            color={pressed ? themeColors.accentColor : color || themeColors.gray}
                         />
                     </View>
                     <Text style={[
@@ -50,13 +50,13 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, co
 const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
     button: {
         padding: 10,
-        paddingVertical: 28,
+        paddingVertical: 20,
         borderRadius: 12,
         backgroundColor: theme === 'light' ? `${themeColors.backgroundColor}CC` : `${themeColors.borderColor}E6`,
-        marginVertical: 8, 
+        marginVertical: 16, 
         marginHorizontal: 4,
         borderWidth: 1,
-        borderColor: theme === 'light' ? themeColors.borderColor : themeColors.backgroundColor,
+        borderColor: theme === 'light' ? 'transparent' : themeColors.backgroundColor,
         flex: 1, 
     },
     buttonPressed: {
@@ -75,6 +75,6 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
     buttonText: {
         fontSize: 12,
         flex: 1,
-        fontWeight: '600',
+        fontWeight: '700',
     },
 });

@@ -3,11 +3,11 @@ import { View, Text, Image, Pressable, StyleSheet, ScrollView, BackHandler, Swit
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faStar, faTrash, faMusic } from '@fortawesome/free-solid-svg-icons';
 
-import TrackDetailModal from '../../../modals/TrackDetailModal';
-
-import { LibraryData, TrackData } from '@/src/types/Library';
+import { LibraryData } from '@/src/types/Library';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { DetailedMusicView } from './DetailedMusic';
 import { databaseManagers } from '@/database/tables';
+import { Album } from '@/src/features/Music/types';
 
 interface DetailedViewProps {
     item: LibraryData;
@@ -15,26 +15,19 @@ interface DetailedViewProps {
     onDelete: (item: LibraryData) => void;
     onToggleDownload?: (item: LibraryData) => Promise<void>;
     updateItem: (item: LibraryData) => Promise<void>;
+    album?: Album;
 }
 
-const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, onToggleDownload, updateItem }) => {
+const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, onToggleDownload, updateItem, album }) => {
     const { themeColors, designs } = useThemeStyles();
     const [currentRating, setCurrentRating] = useState(item.rating);
     const styles = getStyles(themeColors, designs);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [editedTitle, setEditedTitle] = useState(item.title);
-    const [selectedTrack, setSelectedTrack] = useState<TrackData | null>(null);
-    const [isTrackModalVisible, setIsTrackModalVisible] = useState(false);
 
     const handleDelete = async () => {
         onDelete(item);
         onClose();
-    };
-
-    const handleToggleDownload = () => {
-        if (onToggleDownload) {
-            onToggleDownload(item);
-        }
     };
 
     const handleBackPress = useCallback(() => {
@@ -108,7 +101,7 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
                     <FontAwesomeIcon 
                         icon={faStar} 
                         size={20} 
-                        color={star <= rating ? themeColors.textColor : 'gray'} 
+                        color={star <= rating ? 'gold' : 'gray'} 
                     />
                 </Pressable>
             ))}
@@ -122,21 +115,6 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
         </View>
     );
 
-    const renderDownloadToggle = () => {
-        if (item.type !== 'music' || !onToggleDownload) return null;
-        return (
-            <View style={styles.downloadToggleContainer}>
-                <Text style={styles.detailLabel}>Mark for Download</Text>
-                <Switch
-                    trackColor={{ false: themeColors.backgroundColor, true: themeColors.accentColor }}
-                    thumbColor={item.isMarkedForDownload === 1 ? themeColors.textColorBold : themeColors.textColor}
-                    onValueChange={handleToggleDownload}
-                    value={item.isMarkedForDownload === 1}
-                />
-            </View>
-        );
-    };
-
     const renderCommonDetails = () => (
         <>
             {renderDetail(`Date ${getActionText(item.type)}`, formatDate(item.seen))}
@@ -144,67 +122,25 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
             {renderDetail('Genre', item.genre)}
             {renderDetail(item.type === 'book' ? 'Publish Year' : 'Release Year', 
                 typeof item.releaseYear === 'string' ? new Date(item.releaseYear).getFullYear() : item.releaseYear)}
-            {renderDetail(item.type === 'book' ? 'Description' : 'Plot', cleanText(item.plot!))}
         </>
     );
-
-    const handleTrackPress = async (trackName: string) => {
-        try {
-            // Fetch track details from the database
-            const tracks = await databaseManagers.music.getMusicTracks({ 
-                libraryUuid: item.uuid,
-                trackName 
-            });
-            
-            if (tracks && tracks.length > 0) {
-                setSelectedTrack(tracks[0]);
-                setIsTrackModalVisible(true);
-            }
-        } catch (error) {
-            console.error('Error fetching track details:', error);
-        }
-    };
     
-    const renderTrackList = (trackNames: string) => {
-        const tracks = trackNames.split(' | ');
-        return (
-            <View style={styles.tracksContainer}>
-                {tracks.map((track, index) => (
-                    <Pressable 
-                        key={index} 
-                        style={({ pressed }) => [
-                            styles.trackItemContainer,
-                            pressed && styles.trackItemPressed
-                        ]}
-                        onPress={() => handleTrackPress(track)}
-                    >
-                        <View style={styles.trackIconContainer}>
-                            <FontAwesomeIcon 
-                                icon={faMusic} 
-                                size={16} 
-                                color={themeColors.textColorItalic} 
-                            />
-                            <Text style={styles.trackNumber}>{(index + 1).toString().padStart(2, '0')}</Text>
-                        </View>
-                        <Text style={styles.trackName}>
-                            {track}
-                        </Text>
-                    </Pressable>
-                ))}
-            </View>
-        );
-    };
-
     const renderSpecificDetails = () => {
         switch (item.type) {
             case 'book':
-                return renderDetail('Pages', item.pages);
+                return (
+                    <>
+                        {renderDetail('Pages', item.pages)}
+                        {renderDetail('Description', cleanText(item.plot!))}
+                    </>
+                );
             case 'movie':
                 return (
                     <>
                         {renderDetail('Box Office', item.boxOffice)}
                         {renderDetail('Runtime', item.runtime)}
                         {renderDetail('Cast', item.cast)}
+                        {renderDetail('Plot', cleanText(item.plot!))}
                         <View style={styles.ratings}>
                             <View style={styles.ratingItem}>
                                 <Text style={styles.ratingLabel}>Rotten Tomatoes</Text>
@@ -227,19 +163,14 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
                         {renderDetail('Total Seasons', item.seasons)}
                         {renderDetail('Runtime', item.runtime)}
                         {renderDetail('Cast', item.cast)}
+                        {renderDetail('Plot', cleanText(item.plot!))}
                         <View style={styles.ratings}>
                             <Text style={styles.details}>Imdb: {item.ratingImdb}</Text>
                         </View>
                     </>
                 );
             case 'music':
-                return (
-                    <>
-                        <Text style={styles.sectionTitle}>Tracks:</Text>
-                        {item.cast && renderTrackList(item.cast)}
-                        {renderDownloadToggle()}
-                    </>
-                );
+                return <DetailedMusicView item={item} album={album!} updateItem={updateItem} />;
             default:
                 return null;
         }
@@ -303,13 +234,6 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
                 </View>
                 <View style={{ height: 80 }} />
             </ScrollView>
-            {selectedTrack && (
-                <TrackDetailModal
-                    isVisible={isTrackModalVisible}
-                    onClose={() => setIsTrackModalVisible(false)}
-                    track={selectedTrack}
-                />
-            )}
         </>
     );
 };
@@ -351,43 +275,6 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
         color: theme.textColor,
         fontSize: 14,
     },  
-    tracksContainer: {
-        backgroundColor: theme.cardColor,
-        borderRadius: 12,
-        padding: 10,
-        marginTop: 10,
-    },
-    trackItemContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 12,
-        marginBottom: 4,
-        backgroundColor: theme.backgroundColor,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: theme.borderColor,
-    },
-    trackItemPressed: {
-        backgroundColor: theme.accentColor,
-        transform: [{ scale: 0.98 }],
-    },
-    trackIconContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: 60,
-    },
-    trackNumber: {
-        fontSize: 14,
-        color: theme.textColorItalic,
-        marginLeft: 8,
-        fontFamily: 'monospace',
-    },
-    trackName: {
-        fontSize: 16,
-        color: theme.textColor,
-        flex: 1,
-        marginLeft: 8,
-    },
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -459,15 +346,6 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
         fontWeight: 'bold',
         marginLeft: 10,
         fontSize: 16,
-    },
-    downloadToggleContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 20,
-        backgroundColor: theme.backgroundSecondary,
-        padding: 15,
-        borderRadius: 12,
     },
     finishButton: {
         flexDirection: 'row',

@@ -8,16 +8,19 @@ import { useMediaList } from '@/src/features/Library/hooks/useMediaList';
 
 import { LibraryData } from '@/src/types/Library';
 import { SectionHeader } from './components/SectionHeader';
+import { useAlbumManagement } from '@/src/features/Music/hooks/useAlbumManagement';
+import { Album } from '@/src/features/Music/types';
 
 interface MediaListProps {
     mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music';
-    CardComponent: React.ComponentType<{ item: LibraryData; onPress: (item: LibraryData) => void }>;
+    CardComponent: React.ComponentType<{ item: LibraryData; onPress: (item: LibraryData) => void; onToggleDownload?: (item: LibraryData) => Promise<void> }>;
     DetailedViewComponent: React.ComponentType<{
         item: LibraryData;
         onClose: () => void;
         onDelete: (item: LibraryData) => void;
         onToggleDownload?: (item: LibraryData) => Promise<void>;
         updateItem: (item: LibraryData) => Promise<void>;
+        album?: Album;
     }>;
     SearchModalComponent: React.ComponentType<{ 
         isOpen: boolean; 
@@ -41,6 +44,9 @@ const MediaList: React.FC<MediaListProps> = ({
 }) => {
     const [showWantToList, setShowWantToList] = useState(false);
 
+    const { themeColors } = useThemeStyles();
+    const styles = getStyles(themeColors);
+
     const {
         items,
         selectedItem,
@@ -56,13 +62,33 @@ const MediaList: React.FC<MediaListProps> = ({
         updateItem,
     } = useMediaList(mediaType, showWantToList);
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { 
+        albums, 
+        selectedAlbum, 
+        setSelectedAlbum 
+    } = useAlbumManagement();
+
+    const handleItemSelectWithAlbum = (item: LibraryData) => {
+        if (mediaType === 'music') {
+            const matchingAlbum = albums.find(album => {
+                return album.name === item.title;
+            });
+            setSelectedAlbum(matchingAlbum || null);
+        }
+        handleItemSelect(item);
+    };
+
+    const handleCloseDetailWithAlbum = () => {
+        if (mediaType === 'music') {
+            setSelectedAlbum(null);
+        }
+        handleCloseDetail();
+    };
 
     const renderItem = ({ item }: { item: LibraryData }) => {
         return (
             <View style={styles.cardWrapper}>
-                <CardComponent item={item} onPress={handleItemSelect} />
+                <CardComponent item={item} onPress={handleItemSelectWithAlbum} onToggleDownload={mediaType === 'music' ? handleToggleDownload : undefined} />
             </View>
         );
     };
@@ -76,16 +102,19 @@ const MediaList: React.FC<MediaListProps> = ({
         return () => backHandler.remove();
     }, [onBackPress]);
 
+    // console.log('selectedItem', selectedItem);
+
     return (
         <>
             <View style={styles.container}>
                 {selectedItem ? (
                     <DetailedViewComponent 
                         item={selectedItem} 
-                        onClose={handleCloseDetail} 
+                        onClose={handleCloseDetailWithAlbum} 
                         onDelete={handleDelete} 
                         onToggleDownload={mediaType === 'music' ? handleToggleDownload : undefined}
                         updateItem={updateItem}
+                        album={selectedAlbum || undefined}
                     />
                 ) : (
                     <View style={styles.listContainer}>

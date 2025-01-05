@@ -29,7 +29,7 @@ const TimerComponent: React.FC = () => {
 	const { timerRunning, initialSeconds, startTimer, stopTimer, getCurrentTimerSecondsRef, tag, description, fetchActiveTimer, checkAndClearStuckNotification } = useTimer();
 	const scaleAnim = useRef(new Animated.Value(1)).current;
 
-	const { themeColors } = useThemeStyles();
+	const { theme, themeColors } = useThemeStyles();
 	const styles = getStyles(themeColors);
 
 	const handleTagDescriptionSelection = () => {
@@ -90,7 +90,7 @@ const TimerComponent: React.FC = () => {
                         <FontAwesomeIcon 
                             icon={faPlay} 
                             size={16} 
-                            color={themeColors.backgroundColor} 
+                            color={theme === 'dark' ? themeColors.backgroundColor : '#333333'} 
                             style={{ marginLeft: 3}}
                         />
                     </Pressable>
@@ -99,7 +99,7 @@ const TimerComponent: React.FC = () => {
 			{timerRunning && (
 				<View style={styles.timerContent}>
 					<Pressable style={styles.stopButton} onPress={handleStopTimer}>
-						<FontAwesomeIcon icon={faPause} size={24} color={themeColors.textColor} />
+						<FontAwesomeIcon icon={faPause} size={24} color={theme === 'dark' ? themeColors.textColor : '#d3c6aa'} />
 					</Pressable>
 				</View>
 			)}

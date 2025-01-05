@@ -64,7 +64,7 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({ isOpen, selectedTag
                                 testID={`description-item-${index}`}
                             >
                                 <View style={styles.descriptionContent}>
-                                    <Text style={designs.text.text}>{item.emoji}</Text>
+                                    <Text style={[designs.text.text, { marginRight: 10 }]}>{item.emoji}</Text>
                                     <Text style={designs.text.text}>{item.text}</Text>
                                 </View>
                             </Pressable>

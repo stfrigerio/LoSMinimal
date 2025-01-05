@@ -14,6 +14,7 @@ export interface ModalStyles {
 
 export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 	const theme = themeName === 'light' ? lightTheme : darkTheme;
+
 	return StyleSheet.create({
 		modalContainer: {
 			flex: 1,
@@ -41,7 +42,7 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 		title: {
 			fontSize: 24,
 			fontWeight: 'bold',
-			color: theme.textColor,
+			color: `${theme.textColorBold}DD`,
 			textAlign: 'center',
 			marginBottom: 20,
 			textShadowColor: theme.shadowColor,
@@ -59,7 +60,7 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 		closeButtonText: {
 			fontSize: 20,
 			fontWeight: 'bold',
-			color: theme.textColor,
+			color: theme.gray,
 			lineHeight: 20,
 		},
 		scrollView: {

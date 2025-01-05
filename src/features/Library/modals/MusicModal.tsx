@@ -37,7 +37,7 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
 
-    const { fetchAlbums, getAlbumById, getTrackDetails, apiGet, getAccessToken } = useSpotifyFetcher();
+    const { fetchAlbums, getAlbumById, getTrackDetails, apiGet, getAccessToken, clearStoredTokens } = useSpotifyFetcher();
 
     const handleSearch = async () => {
         try {
@@ -79,7 +79,7 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
                         setProgress(prev => ({ ...prev, current: i + 1 }));
                         
                         const trackDetails = await getTrackDetails(track.id);
-                        if (trackDetails && trackDetails.audioFeatures) {
+                        if (trackDetails) {
                             const trackData: TrackData = {
                                 uuid: track.id,
                                 libraryUuid: '', // Will be set after album save
@@ -87,19 +87,6 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
                                 trackNumber: track.track_number,
                                 durationMs: track.duration_ms,
                                 popularity: trackDetails.popularity,
-                                previewUrl: trackDetails.previewUrl,
-                                // Audio Features
-                                tempo: trackDetails.audioFeatures.tempo,
-                                key: trackDetails.audioFeatures.key,
-                                mode: Number(trackDetails.audioFeatures.mode) === 1 ? "Major" : "Minor", 
-                                timeSignature: `${trackDetails.audioFeatures.timeSignature}`,
-                                danceability: Math.round(trackDetails.audioFeatures.danceability),
-                                energy: Math.round(trackDetails.audioFeatures.energy),
-                                speechiness: Math.round(trackDetails.audioFeatures.speechiness),
-                                acousticness: Math.round(trackDetails.audioFeatures.acousticness),
-                                instrumentalness: Math.round(trackDetails.audioFeatures.instrumentalness),
-                                liveness: Math.round(trackDetails.audioFeatures.liveness),
-                                valence: Math.round(trackDetails.audioFeatures.valence),
                                 playCount: 0,
                                 rating: 0,
                                 createdAt: new Date().toISOString(),

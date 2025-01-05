@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, Pressable, Dimensions, Platform, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, Pressable, Switch, StyleSheet } from 'react-native';
 
 import { getStarRating } from '@/src/features/Library/helpers/getStarRating';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
@@ -9,11 +9,13 @@ import { LibraryData } from '@/src/types/Library';
 interface CardProps {
     item: LibraryData;
     onPress: (item: LibraryData) => void;
+    onToggleDownload?: (item: LibraryData) => Promise<void>; // Update return type to Promise<void>
 }
 
-const Card: React.FC<CardProps> = ({ item, onPress }) => {
+const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
+    const [isDownloading, setIsDownloading] = useState(item.isMarkedForDownload === 1);
 
     const formatDate = (dateString: string): string => {
         const options: Intl.DateTimeFormatOptions = { 
@@ -29,6 +31,20 @@ const Card: React.FC<CardProps> = ({ item, onPress }) => {
             return `https:${url}`;
         }
         return url;
+    };
+
+        
+    // Update local state when item prop changes
+    useEffect(() => {
+        setIsDownloading(item.isMarkedForDownload === 1);
+    }, [item.isMarkedForDownload]);
+
+    // Handle the toggle with local state
+    const handleToggleDownload = async () => {
+        if (onToggleDownload) {
+            setIsDownloading(!isDownloading); // Update local state immediately
+            await onToggleDownload(item); // Then update database
+        }
     };
 
     const getActionText = (mediaType: string): string => {
@@ -70,7 +86,19 @@ const Card: React.FC<CardProps> = ({ item, onPress }) => {
                     <Text style={styles.seenText}>
                         {`${getActionText(item.type)}: ${formatDate(item.seen)}`}
                     </Text>
-                    <Text style={styles.rating}>{getStarRating(item.rating)}</Text>
+                    <View style={styles.ratingSwitchContainer}>
+                        <Text style={styles.rating}>{getStarRating(item.rating)}</Text>
+                        {item.type === 'music' && onToggleDownload && (
+                            <View style={styles.downloadToggleContainer}>
+                                <Switch
+                                    trackColor={{ false: themeColors.backgroundColor, true: themeColors.accentColor }}
+                                    thumbColor={isDownloading ? themeColors.textColorBold : themeColors.textColor}
+                                    onValueChange={handleToggleDownload}
+                                    value={isDownloading}
+                                />
+                            </View>
+                        )}
+                    </View>
                 </View>
             </View>
         </Pressable>
@@ -140,6 +168,16 @@ const getStyles = (theme: any) => {
             color: theme.gray,
             fontSize: 10,
             marginTop: 5
+        },
+        ratingSwitchContainer: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: 5
+        },
+        downloadToggleContainer: {
+            marginTop: 12,
+            alignSelf: 'flex-start'
         }
     });
 };

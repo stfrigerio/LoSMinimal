@@ -17,7 +17,7 @@ export interface QuantifiableHabitsProps {
 
 const QuantifiableHabits: React.FC<QuantifiableHabitsProps> = ({ data, date, quantifiableHabitsName }) => {
     const { habits, emojis, handleIncrement, handleDecrement } = useQuantifiableHabits(data, date);
-    const { themeColors } = useThemeStyles();
+    const { theme, themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 
     //^ My personal shit
@@ -47,9 +47,9 @@ const QuantifiableHabits: React.FC<QuantifiableHabitsProps> = ({ data, date, qua
                 const color = getColorForValue(
                     key as keyof typeof habitThresholds,
                     habitData.value,
-                    'rgba(250, 37, 37, 0.8)',
-                    'rgba(204, 197, 20, 0.9)',
-                    'rgba(61, 247, 52, 0.5)',
+                    theme === 'dark' ? 'rgba(250, 37, 37, 0.8)' : 'rgba(220, 37, 37, 0.8)',
+                    theme === 'dark' ? 'rgba(204, 197, 20, 0.9)' : 'rgba(184, 167, 20, 0.9)',
+                    theme === 'dark' ? 'rgba(61, 247, 52, 0.5)' : 'rgba(61, 157, 52, 0.5)',
                     themeColors.textColor
                 );
 

@@ -15,7 +15,7 @@ const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <BlurView 
-                    intensity={theme === 'dark' ? 100 : 20} 
+                    intensity={theme === 'dark' ? 100 : 30} 
                     tint={theme === 'dark' ? 'dark' : 'light'} 
                     style={[StyleSheet.absoluteFill, { zIndex: 1 }]} 
                 />

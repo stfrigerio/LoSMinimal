@@ -15,7 +15,7 @@ export interface Album {
 }
 
 export const useSpotifyFetcher = () => {
-    const { getAccessToken } = useSpotifyAuth();
+    const { getAccessToken, clearStoredTokens } = useSpotifyAuth();
 
     const fetchAlbums = async (query: string): Promise<Album[]> => {
         try {
@@ -93,6 +93,15 @@ export const useSpotifyFetcher = () => {
                 }
             });
             if (!response.ok) {
+                // Add more detailed error logging
+                const errorBody = await response.text();
+                console.error("Spotify API Error:", {
+                    status: response.status,
+                    statusText: response.statusText,
+                    endpoint: endpoint,
+                    errorBody: errorBody,
+                    headers: Object.fromEntries(response.headers.entries())
+                });
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
@@ -117,25 +126,6 @@ export const useSpotifyFetcher = () => {
                 return null;
             }
 
-            // Fetch audio features (includes BPM, key, etc.)
-            const audioFeatures = await apiGet(`audio-features/${trackId}`, {}, token);
-
-            // Map musical key numbers to actual keys
-            const keyMap: { [key: number]: string } = {
-                0: "C",
-                1: "C♯/D♭",
-                2: "D",
-                3: "D♯/E♭",
-                4: "E",
-                5: "F",
-                6: "F♯/G♭",
-                7: "G",
-                8: "G♯/A♭",
-                9: "A",
-                10: "A♯/B♭",
-                11: "B"
-            };
-
             // Return comprehensive track data
             return {
                 // Basic track info
@@ -143,23 +133,7 @@ export const useSpotifyFetcher = () => {
                 name: trackRes.name,
                 duration_ms: trackRes.duration_ms,
                 popularity: trackRes.popularity,
-                previewUrl: trackRes.preview_url,
                 trackNumber: trackRes.track_number,
-                
-                // Audio features
-                audioFeatures: audioFeatures ? {
-                    tempo: Math.round(audioFeatures.tempo), // BPM
-                    key: keyMap[audioFeatures.key],
-                    mode: audioFeatures.mode === 1 ? "Major" : "Minor",
-                    timeSignature: `${audioFeatures.time_signature}/4`,
-                    danceability: Math.round(audioFeatures.danceability * 100),
-                    energy: Math.round(audioFeatures.energy * 100),
-                    speechiness: Math.round(audioFeatures.speechiness * 100),
-                    acousticness: Math.round(audioFeatures.acousticness * 100),
-                    instrumentalness: Math.round(audioFeatures.instrumentalness * 100),
-                    liveness: Math.round(audioFeatures.liveness * 100),
-                    valence: Math.round(audioFeatures.valence * 100), // Musical positiveness
-                } : null,
             };
         } catch (error) {
             console.error("Error fetching track:", error);
@@ -172,6 +146,7 @@ export const useSpotifyFetcher = () => {
         getAlbumById,
         getTrackDetails,
         apiGet,
-        getAccessToken
+        getAccessToken,
+        clearStoredTokens
     };
 };

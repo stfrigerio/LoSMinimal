@@ -172,7 +172,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
                     <FontAwesomeIcon 
                         icon={isExpanded ? faMinus : faPlus} 
                         size={24} 
-                        color={themeColors.backgroundColor} 
+                        color={theme === 'dark' ? themeColors.backgroundColor : '#333333'} 
                     />
                 </Pressable>
             </Animated.View>
@@ -251,7 +251,7 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
 		alignItems: 'center',  
 	},
 	buttonText: {
-		color: theme === 'light' ? themeColors.backgroundColor : themeColors.borderColor,
+		color: theme === 'dark' ? themeColors.backgroundColor : '#333333',
 		fontSize: 16,
 	},
 	buttonContainer: {

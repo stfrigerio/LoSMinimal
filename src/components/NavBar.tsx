@@ -111,7 +111,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
 const getStyles = (theme: any) => {
     return StyleSheet.create({
         navbarContent: {
-            height: 70,
+            height: 60,
             borderTopWidth: 1,
             borderTopColor: theme.textColor,
             backgroundColor: theme.backgroundColor,
@@ -145,7 +145,7 @@ const getStyles = (theme: any) => {
         quickButtonContainer: {
             position: 'absolute',
             width: 60,
-            height: 60,
+            height: 50,
             justifyContent: 'center',
             right: 15,
             bottom: 0, 
@@ -162,4 +162,3 @@ const getStyles = (theme: any) => {
 };
 
 export default MobileNavbar;
- 

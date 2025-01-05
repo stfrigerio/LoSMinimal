@@ -157,11 +157,19 @@ export const useSpotifyAuth = () => {
         }
     };
 
+    const clearStoredTokens = async () => {
+        await SecureStore.deleteItemAsync(SPOTIFY_TOKEN_KEY);
+        await SecureStore.deleteItemAsync(SPOTIFY_REFRESH_TOKEN_KEY);
+        await SecureStore.deleteItemAsync(SPOTIFY_EXPIRATION_KEY);
+        setToken(null);
+    };
+
     return {
         getAccessToken,
         request,
         response,
         promptAsync: clientId ? wrappedPromptAsync : () => Promise.reject('Spotify Client ID not set'),
         exchangeCodeForToken,
+        clearStoredTokens,
     };
 };
