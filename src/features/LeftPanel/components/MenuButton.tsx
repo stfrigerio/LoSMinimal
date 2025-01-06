@@ -61,7 +61,7 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
     },
     buttonPressed: {
         backgroundColor: `${themeColors.backgroundColor}EE`,
-        transform: [{ scale: 0.88 }],
+        transform: [{ scale: 0.95 }],
     },
     buttonContent: {
         flexDirection: 'row',

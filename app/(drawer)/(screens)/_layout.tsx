@@ -1,45 +1,50 @@
-import { Drawer } from 'expo-router/drawer';
-import { useDrawerState } from '../../../src/contexts/DrawerState';
-import RightPanel from '../../../src/features/RightPanel/RightPanel';
+import { Stack } from 'expo-router/stack';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 export default function ScreensLayout() {
-    const { isRightDrawerSwipeEnabled } = useDrawerState();
+    const { themeColors } = useThemeStyles();
 
     return (
-        <Drawer
-            drawerContent={props => <RightPanel {...props} />}
+        <Stack
             screenOptions={{
-                drawerType: 'front',
-                swipeEnabled: isRightDrawerSwipeEnabled,
-                swipeEdgeWidth: 50,
-                drawerStyle: {
-                    width: 300,
-                    backgroundColor: 'transparent',
-                },
+                // Smooth fade + slide animation
+                animation: 'fade_from_bottom',
+                animationDuration: 3000,
+                
+                // // Nice presentation style
+                // presentation: 'card',
+                
+                // // Enable gestures
+                // gestureEnabled: true,
+                // fullScreenGestureEnabled: true,
+                // gestureDirection: 'horizontal',
+                
+                // // Match gesture with animation
+                // animationMatchesGesture: true,
+                // fullScreenGestureShadowEnabled: true,
+                
+                // Style options
                 headerShown: false,
-                drawerPosition: 'right'
+                contentStyle: {
+                    backgroundColor: themeColors.backgroundColor,
+                },
+                
+                // Smooth transition when replacing screens
+                animationTypeForReplace: 'push',
             }}
         >
-            <Drawer.Screen name="index" options={{ drawerLabel: "Home" }} />
-            <Drawer.Screen 
-                name="daily-note" 
-                options={{ drawerLabel: "Daily Note" }}
-                initialParams={{ date: undefined }}
-            />
-            <Drawer.Screen name="tasks" options={{ drawerLabel: "Tasks" }} />
-            <Drawer.Screen name="mood" options={{ drawerLabel: "Mood" }} />
-            <Drawer.Screen name="user-settings" options={{ drawerLabel: "Settings" }} />
-            <Drawer.Screen name="database" options={{ drawerLabel: "Database" }} />
-            <Drawer.Screen 
-                name="periodic-note" 
-                options={{ drawerLabel: "Periodic Note" }}
-                initialParams={{ startDate: undefined, endDate: undefined }}
-            />
-            <Drawer.Screen name="money" options={{ drawerLabel: "Money" }} />
-            <Drawer.Screen name="journal" options={{ drawerLabel: "Journal" }} />
-            <Drawer.Screen name="people" options={{ drawerLabel: "People" }} />
-            <Drawer.Screen name="library" options={{ drawerLabel: "Library" }} />
-            <Drawer.Screen name="time" options={{ drawerLabel: "Time" }} />
-        </Drawer>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="daily-note" />
+            <Stack.Screen name="tasks" />
+            <Stack.Screen name="mood" />
+            <Stack.Screen name="user-settings" />
+            <Stack.Screen name="database" />
+            <Stack.Screen name="periodic-note" />
+            <Stack.Screen name="money" />
+            <Stack.Screen name="journal" />
+            <Stack.Screen name="people" />
+            <Stack.Screen name="library" />
+            <Stack.Screen name="time" />
+        </Stack>
     );
 }

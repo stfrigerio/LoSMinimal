@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Pressable, StyleSheet, Dimensions, Animated } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faGear, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
@@ -18,6 +18,29 @@ interface MediaGridProps {
 export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNavigate }) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors, designs);
+    const animatedScales = React.useRef(
+        // Add +1 to account for the Settings card
+        [...mediaTypes, 'settings'].map(() => new Animated.Value(1))
+    ).current;
+
+    const handlePressIn = (index: number) => {
+        Animated.spring(animatedScales[index], {
+            toValue: 0.65,
+            useNativeDriver: true,
+            speed: 18,
+            bounciness: 4,
+        }).start();
+    };
+
+    const handlePressOut = (index: number) => {
+        Animated.spring(animatedScales[index], {
+            toValue: 1,
+            useNativeDriver: true,
+            speed: 18,
+            bounciness: 4,
+        }).start();
+    };
+
 
     const getColor = (type: string) => {
         if(type === 'movie') {
@@ -50,32 +73,48 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNa
                 {mediaTypes.map((media, index) => (
                     <Pressable
                         key={index}
-                        style={styles.gridCard}
+                        onPressIn={() => handlePressIn(index)}
+                        onPressOut={() => handlePressOut(index)}
                         onPress={() => onNavigate(index)}
                     >
-                        <FontAwesomeIcon 
-                            icon={media.icon} 
-                            size={32} 
-                            color={getColor(media.type)}
-                        />
-                        <Text style={styles.gridCardText}>
-                            {navItems[index].label}
-                        </Text>
+                        <Animated.View style={[
+                            styles.gridCard,
+                            {
+                                transform: [{ scale: animatedScales[index] }]
+                            }
+                        ]}>
+                            <FontAwesomeIcon 
+                                icon={media.icon} 
+                                size={32} 
+                                color={getColor(media.type)}
+                            />
+                            <Text style={styles.gridCardText}>
+                                {navItems[index].label}
+                            </Text>
+                        </Animated.View>
                     </Pressable>
                 ))}
                 {/* Separate Settings Card */}
                 <Pressable
-                    style={styles.gridCard}
-                    onPress={() => onNavigate(5)} // 5 is settings index
+                    onPressIn={() => handlePressIn(mediaTypes.length)}
+                    onPressOut={() => handlePressOut(mediaTypes.length)}
+                    onPress={() => onNavigate(5)}
                 >
-                    <FontAwesomeIcon 
-                        icon={faGear} 
-                        size={32} 
-                        color={getColor('settings')}
-                    />
-                    <Text style={styles.gridCardText}>
-                        Settings
-                    </Text>
+                    <Animated.View style={[
+                        styles.gridCard,
+                        {
+                            transform: [{ scale: animatedScales[mediaTypes.length] }]
+                        }
+                    ]}>
+                        <FontAwesomeIcon 
+                            icon={faGear} 
+                            size={32} 
+                            color={getColor('settings')}
+                        />
+                        <Text style={styles.gridCardText}>
+                            Settings
+                        </Text>
+                    </Animated.View>
                 </Pressable>
             </View>
         </>
@@ -123,11 +162,6 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         shadowRadius: 3.84,
         gap: 12,
     },
-    // fullWidthCard: {
-    //     width: screenWidth - (PADDING * 2),
-    //     height: 120,
-    //     marginTop: GAP - 12,
-    // },
     gridCardText: {
         color: theme.textColor,
         fontSize: 16,
