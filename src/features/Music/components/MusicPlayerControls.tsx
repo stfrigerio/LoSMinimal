@@ -145,6 +145,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         backgroundColor: 'transparent',
         borderRadius: 15,
         alignItems: 'center',
+
     },
     nowPlaying: {
         fontSize: 16,
@@ -167,6 +168,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         color: themeColors.textColor,
     },
     controlButtons: {
+        zIndex: 1000,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -179,6 +181,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 10,
+        zIndex: 1000,
     },
     ratingContainer: {
         flexDirection: 'row',

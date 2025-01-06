@@ -79,12 +79,8 @@ export const autoLinkTracks = async (
         const tracks = await databaseManagers.music.getMusicTracks({ 
             libraryUuid: albumUuid 
         });
-
-        console.log('tracks', tracks);
         
         const unlinkedTracks = tracks.filter(track => !track.fileName);
-
-        console.log('unlinkedTracks', unlinkedTracks);
         
         const errors: string[] = [];
         let linkedCount = 0;

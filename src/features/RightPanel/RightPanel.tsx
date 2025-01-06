@@ -6,6 +6,7 @@ import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import TimeChart from './TimeChart'
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import MusicPlayerControls from '../Music/components/MusicPlayerControls';
 
 const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { theme, themeColors, designs } = useThemeStyles();
@@ -24,6 +25,7 @@ const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
                         <TimeChart />
                     </View>
                 </View>
+                <MusicPlayerControls />
             </ScrollView>
         </View>
     );

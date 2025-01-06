@@ -82,9 +82,7 @@ export const DetailedMusicView = ({ item, album, updateItem }: DetailedMusicView
     }, [item]);
     
     const handlePlaySound = (songName: string) => {
-        // const albumPath = `${musicFolderPath}/${item.title}`;
-        // playSound(albumPath, songName, trackDetails.orderedSongs);
-        console.log('playSound', songName);
+        playSound(album.name, songName, trackDetails.orderedSongs);
     };
 
     return (
