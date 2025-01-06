@@ -30,19 +30,6 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
         onClose();
     };
 
-    const handleBackPress = useCallback(() => {
-        onClose();
-        return true; // Prevent default back behavior
-    }, [onClose]);
-
-    useEffect(() => {
-        // Add back button handler
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-
-        // Cleanup function
-        return () => backHandler.remove();
-    }, [handleBackPress]);
-
     const formatDate = (dateString: string): string => {
         const options: Intl.DateTimeFormatOptions = { 
             year: 'numeric', 

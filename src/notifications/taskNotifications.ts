@@ -37,7 +37,7 @@ export async function checkTasksDueToday() {
 // integrity check for notifications and tasks
 export async function syncNotificationsWithTasks(tasks: TaskData[]) {
     const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
-    console.log(`Found ${scheduledNotifications.length} scheduled notifications`);
+    // console.log(`Found ${scheduledNotifications.length} scheduled notifications`);
 
     const notificationMap = new Map<string, Notifications.NotificationRequest>();
 
@@ -53,7 +53,7 @@ export async function syncNotificationsWithTasks(tasks: TaskData[]) {
         } 
     }
 
-    console.log(`After deduplication, ${notificationMap.size} tasks notifications remain`);
+    // console.log(`After deduplication, ${notificationMap.size} tasks notifications remain`);
 
     for (const task of tasks) {
         if (!task.uuid || !task.due) {
@@ -85,19 +85,19 @@ export async function syncNotificationsWithTasks(tasks: TaskData[]) {
             if (notificationDate && !isNaN(notificationDate.getTime())) {
                 
                 if (Math.abs(notificationDate.getTime() - correctNotificationDate.getTime()) > 60000) { // 1 minute tolerance
-                    console.log(`Notification time mismatch. Expected: ${correctNotificationDate}, Actual: ${notificationDate}`);
-                    console.log(`Cancelling and rescheduling notification for task ${task.uuid}`);
+                    // console.log(`Notification time mismatch. Expected: ${correctNotificationDate}, Actual: ${notificationDate}`);
+                    // console.log(`Cancelling and rescheduling notification for task ${task.uuid}`);
                     await Notifications.cancelScheduledNotificationAsync(existingNotification.identifier);
                     await scheduleTaskNotification(task);
                 }
             } else {
-                console.log(`Invalid notification date for task ${task.text}. Rescheduling.`);
-                console.log(`Existing notification details:`, JSON.stringify(existingNotification, null, 2));
+                // console.log(`Invalid notification date for task ${task.text}. Rescheduling.`);
+                // console.log(`Existing notification details:`, JSON.stringify(existingNotification, null, 2));
                 await Notifications.cancelScheduledNotificationAsync(existingNotification.identifier);
                 await scheduleTaskNotification(task);
             }
         } else {
-            console.log(`No existing notification found for task ${task.text}. Scheduling new notification.`);
+            // console.log(`No existing notification found for task ${task.text}. Scheduling new notification.`);
             await scheduleTaskNotification(task);
         }
 
@@ -131,7 +131,7 @@ export async function cancelTaskNotification(taskUuid: string) {
             await Notifications.cancelScheduledNotificationAsync(notificationToCancel.identifier);
             // console.log(`Notification for task ${taskUuid} cancelled successfully.`);
         } else {
-            console.log(`No notification found for task ${taskUuid}.`);
+            // console.log(`No notification found for task ${taskUuid}.`);
         }
 
         // Double-check if the notification was actually cancelled

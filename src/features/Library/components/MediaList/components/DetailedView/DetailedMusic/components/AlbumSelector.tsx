@@ -3,7 +3,7 @@ import { UniversalModal } from "@/src/components/modals/UniversalModal";
 import { Album, useSpotifyFetcher } from "@/src/features/Library/api/musicFetcher";
 
 import { useThemeStyles } from "@/src/styles/useThemeStyles";
-import { FetchedTracksModal } from ".";
+import FetchedTracksModal from "./FetchedTracksModal";
 import { LibraryData } from "@/src/types/Library";
 import { AlbumSelectionProps } from "../helpers/refetchTracks";
 

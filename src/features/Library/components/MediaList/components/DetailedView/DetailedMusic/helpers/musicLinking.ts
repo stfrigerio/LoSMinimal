@@ -12,7 +12,13 @@ export const onPressUnlinkAll = async (handleUnlinkAll: () => Promise<void>, ref
     refresh();
 };
 
-export const handleLinkTrack = async (track: ExtendedTrackData, selectedSongForLinking: string | null, setSelectedSongForLinking: (song: string | null) => void, loadTrackDetails: () => void) => {
+export const handleLinkTrack = async (
+    track: ExtendedTrackData, 
+    selectedSongForLinking: string | null, 
+    setSelectedSongForLinking: (song: string | null) => void, 
+    loadTrackDetails: () => void,
+    refresh: () => void
+) => {
     if (!selectedSongForLinking) return;
 
     // remove artistName from track
@@ -27,6 +33,7 @@ export const handleLinkTrack = async (track: ExtendedTrackData, selectedSongForL
         await databaseManagers.music.upsert(dataToSave);
         setSelectedSongForLinking(null);
         loadTrackDetails();
+        refresh();
     } catch (error) {
         console.error('Error linking track:', error);
     }

@@ -110,7 +110,7 @@ export const useNavigationComponents = () => {
 
 	const openMusic = useCallback(() => {
 		router.push('/music');
-	}, [])
+	}, []);
 
 	const openTime = useCallback(() => {
 		router.push('/time');

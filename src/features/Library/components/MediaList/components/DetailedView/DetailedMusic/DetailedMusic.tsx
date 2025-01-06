@@ -120,7 +120,7 @@ export const DetailedMusicView = ({ item, album, updateItem }: DetailedMusicView
                 onClose={() => setSelectedSongForLinking(null)}
                 fileName={selectedSongForLinking || ''}
                 availableTracks={availableTracks}
-                onLinkTrack={(track) => handleLinkTrack(track, selectedSongForLinking, setSelectedSongForLinking, loadTrackDetails)}
+                onLinkTrack={(track) => handleLinkTrack(track, selectedSongForLinking, setSelectedSongForLinking, loadTrackDetails, refresh)}
             />
             {alertModal.isVisible && (
                 <AlertModal 

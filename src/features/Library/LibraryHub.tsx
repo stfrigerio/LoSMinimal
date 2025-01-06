@@ -16,10 +16,26 @@ import { LibraryChart } from '@/src/components/charts/StackBar/LibraryChart';
 import { mediaTypes } from './constants/mediaTypes';
 import { useThemeStyles } from '../../styles/useThemeStyles';
 import { useLibraryHub } from './hooks/useLibraryHub';
+import { useLocalSearchParams } from 'expo-router';
 
-const LibraryHub: React.FC = () => {
-    const [currentSection, setCurrentSection] = useState<number | null>(null);
-    const [isDashboard, setIsDashboard] = useState(true);
+interface LibraryHubProps {
+    section?: number;
+    isDashboard?: boolean;
+}
+
+const LibraryHub: React.FC<LibraryHubProps> = ({ section: initialSection, isDashboard: initialDashboard }) => {
+    const { section: urlSection, isDashboard: urlDashboardParam } = useLocalSearchParams();
+    
+    const [currentSection, setCurrentSection] = useState<number | null>(() => 
+        initialSection ?? (urlSection ? Number(urlSection) : null)
+    );
+    
+    const [isDashboard, setIsDashboard] = useState(() => {
+        if (initialDashboard !== undefined) return initialDashboard;
+        if (urlDashboardParam === 'false') return false;
+        if (urlSection) return false;
+        return true;
+    });
     const [modalVisible, setModalVisible] = useState(false);
 
     const { themeColors } = useThemeStyles();

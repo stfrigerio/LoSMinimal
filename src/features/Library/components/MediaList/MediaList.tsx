@@ -10,6 +10,7 @@ import { LibraryData } from '@/src/types/Library';
 import { SectionHeader } from './components/SectionHeader';
 import { useAlbumManagement } from '@/src/features/Music/hooks/useAlbumManagement';
 import { Album } from '@/src/features/Music/types';
+import { usePathname } from 'expo-router';
 
 interface MediaListProps {
     mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music';
@@ -46,6 +47,7 @@ const MediaList: React.FC<MediaListProps> = ({
 
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
+    const pathname = usePathname()
 
     const {
         items,
@@ -95,14 +97,15 @@ const MediaList: React.FC<MediaListProps> = ({
 
     useEffect(() => {
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            onBackPress();
-            return true;
+            if (pathname === '/library') {
+                onBackPress();
+                return true;
+            }
+            return false;
         });
 
         return () => backHandler.remove();
     }, [onBackPress]);
-
-    // console.log('selectedItem', selectedItem);
 
     return (
         <>

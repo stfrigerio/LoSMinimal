@@ -1,5 +1,5 @@
-import Music from "@/src/features/Music/Music";
+import LibraryHub from '@/src/features/Library/LibraryHub';
 
-export default function MusicPage() {
-    return <Music />;
+export default function Music() {
+    return <LibraryHub key="music" section={4} isDashboard={false} />;
 }
