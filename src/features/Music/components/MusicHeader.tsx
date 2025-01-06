@@ -5,7 +5,7 @@ import { faArrowLeft, faMagicWandSparkles, faInfoCircle, faUnlink } from '@forta
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { Album } from '../types';
-import DetailedView from '@/src/features/Library/components/MediaList/components/DetailedView';
+import DetailedView from '@/src/features/Library/components/MediaList/components/DetailedView/DetailedView';
 import { databaseManagers } from '@/database/tables';
 import { LibraryData } from '@/src/types/Library';
 

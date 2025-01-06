@@ -75,8 +75,6 @@ export const autoLinkTracks = async (
     errors?: string[];
 }> => {
     try {
-        console.log('albumUuid', albumUuid);
-        console.log('albumSongs', albumSongs);
         // Get all tracks for this album
         const tracks = await databaseManagers.music.getMusicTracks({ 
             libraryUuid: albumUuid 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Text, ScrollView, ActivityIndicator } from 'react-native';
 
 import Navbar from '@/src/components/NavBar';
-import DetailedView from './components/MediaList/components/DetailedView';
+import DetailedView from './components/MediaList/components/DetailedView/DetailedView';
 import LibrarySettings from './components/LibrarySettings';
 
 import { Stats } from './components/Stats';

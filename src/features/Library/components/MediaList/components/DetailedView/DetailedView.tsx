@@ -5,7 +5,7 @@ import { faStar, faTrash, faMusic } from '@fortawesome/free-solid-svg-icons';
 
 import { LibraryData } from '@/src/types/Library';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { DetailedMusicView } from './DetailedMusic';
+import { DetailedMusicView } from './DetailedMusic/DetailedMusic';
 import { databaseManagers } from '@/database/tables';
 import { Album } from '@/src/features/Music/types';
 

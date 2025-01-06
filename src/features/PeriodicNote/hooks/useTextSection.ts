@@ -23,7 +23,7 @@ export const useTextSection = ({ periodType, startDate, endDate }: useTextSectio
     const generatePeriodString = useCallback(() => {
         if (!startDate) return '';
 
-        const date = startDate instanceof Date ? startDate : new Date(startDate);
+        const date = startDate instanceof Date ? endDate : new Date(endDate);
 
         switch (periodType) {
             case 'day':
