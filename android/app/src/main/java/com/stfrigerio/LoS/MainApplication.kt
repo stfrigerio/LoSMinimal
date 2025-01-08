@@ -1,4 +1,4 @@
-package com.stfrigerio.LoS.dev
+package com.stfrigerio.LoS
 
 import android.app.Application
 import android.content.res.Configuration

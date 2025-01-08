@@ -1,4 +1,4 @@
-package com.stfrigerio.LoS.dev
+package com.stfrigerio.LoS
 
 import android.os.Build
 import android.os.Bundle
