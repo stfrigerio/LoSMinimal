@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, ImageBackground, Dimensions, Animated, Pressable } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCalendarDay, faCheck, faCog, faMusic } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDay, faCog, faMusic } from '@fortawesome/free-solid-svg-icons';
 
 import CustomCalendar from './components/Calendar/Calendar';
 import TimerComponent from './components/TimerComponent';

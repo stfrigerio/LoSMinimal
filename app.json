@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "LoS",
-    "slug": "LoS",
-    "scheme": "los",
+    "name": "LoS-dev",
+    "slug": "los-dev",
+    "scheme": "los-dev",
     "platforms": [
       "ios",
       "android",
@@ -28,7 +28,7 @@
           "audio"
         ]
       },
-      "bundleIdentifier": "com.stfrigerio.LoS"
+      "bundleIdentifier": "com.stfrigerio.LoS.dev"
     },
     "android": {
       "useNextNotificationsApi": true,
@@ -38,7 +38,7 @@
         "foregroundImage": "./assets/images/Los-icon.png",
         "backgroundColor": "#000000"
       },
-      "package": "com.stfrigerio.LoS",
+      "package": "com.stfrigerio.LoS.dev",
       "permissions": [
         "INTERNET",
         "ACCESS_NETWORK_STATE",
@@ -64,7 +64,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "37574983-c17e-4c45-90b2-683fa20f3d3b"
+        "projectId": "1d5962c7-ab8d-499a-b6dc-de735473d83f"
       }
     },
     "plugins": [

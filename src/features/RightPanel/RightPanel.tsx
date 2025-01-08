@@ -25,7 +25,9 @@ const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
                         <TimeChart />
                     </View>
                 </View>
-                <MusicPlayerControls />
+                <View style={{ zIndex: 1000 }}>
+                    <MusicPlayerControls />
+                </View>
             </ScrollView>
         </View>
     );
