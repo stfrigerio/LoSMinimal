@@ -90,7 +90,11 @@ const MediaList: React.FC<MediaListProps> = ({
     const renderItem = ({ item }: { item: LibraryData }) => {
         return (
             <View style={styles.cardWrapper}>
-                <CardComponent item={item} onPress={handleItemSelectWithAlbum} onToggleDownload={mediaType === 'music' ? handleToggleDownload : undefined} />
+                <CardComponent 
+                    item={item} 
+                    onPress={handleItemSelectWithAlbum} 
+                    onToggleDownload={mediaType === 'music' || mediaType === 'book' ? handleToggleDownload : undefined} 
+                />
             </View>
         );
     };

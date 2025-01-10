@@ -3,6 +3,7 @@ import { View, Text, Image, Pressable, Switch, StyleSheet } from 'react-native';
 
 import { getStarRating } from '@/src/features/Library/helpers/getStarRating';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { getActionText, ensureHttpsUrl } from '@/src/features/Library/components/MediaList/components/DetailedView/helpers';
 
 import { LibraryData } from '@/src/types/Library';
 
@@ -26,14 +27,6 @@ const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
-    const ensureHttpsUrl = (url: string) => {
-        if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
-            return `https:${url}`;
-        }
-        return url;
-    };
-
-        
     // Update local state when item prop changes
     useEffect(() => {
         setIsDownloading(item.isMarkedForDownload === 1);
@@ -44,20 +37,6 @@ const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
         if (onToggleDownload) {
             setIsDownloading(!isDownloading); // Update local state immediately
             await onToggleDownload(item); // Then update database
-        }
-    };
-
-    const getActionText = (mediaType: string): string => {
-        switch (mediaType) {
-            case 'book':
-                return 'Read';
-            case 'movie':
-            case 'series':
-                return 'Seen';
-            case 'videogame':
-                return 'Played';
-            default:
-                return 'Consumed';
         }
     };
 
@@ -88,7 +67,7 @@ const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
                     </Text>
                     <View style={styles.ratingSwitchContainer}>
                         <Text style={styles.rating}>{getStarRating(item.rating)}</Text>
-                        {item.type === 'music' && onToggleDownload && (
+                        {item.type === 'music' || item.type === 'book' && onToggleDownload && (
                             <View style={styles.downloadToggleContainer}>
                                 <Switch
                                     trackColor={{ false: themeColors.backgroundColor, true: themeColors.accentColor }}

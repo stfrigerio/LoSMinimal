@@ -40,6 +40,7 @@ export default function ScreensLayout() {
             <Drawer.Screen name="people" options={{ drawerLabel: "People" }} />
             <Drawer.Screen name="library" options={{ drawerLabel: "Library" }} />
             <Drawer.Screen name="time" options={{ drawerLabel: "Time" }} />
+            <Drawer.Screen name="markdown-viewer" options={{ drawerLabel: "Markdown Viewer" }} />
         </Drawer>
     );
 }

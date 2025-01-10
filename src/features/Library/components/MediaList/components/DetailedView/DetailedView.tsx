@@ -57,7 +57,7 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
                     <View style={styles.divider} />
                     {RenderCommonDetails(item)}
                     <View style={styles.divider} />
-                    {RenderSpecificDetails(item, album, updateItem)}
+                    <RenderSpecificDetails item={item} album={album} updateItem={updateItem} />
                     {RenderFinishButton(item, () => handleMarkAsFinished(item, updateItem))}
                     <DeleteButton onDelete={onDelete} onClose={onClose} item={item} />
                 </View>

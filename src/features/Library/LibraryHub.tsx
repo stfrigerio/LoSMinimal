@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, ScrollView, ActivityIndicator } from 'react-nat
 
 import Navbar from '@/src/components/NavBar';
 import DetailedView from './components/MediaList/components/DetailedView/DetailedView';
-import LibrarySettings from './components/LibrarySettings';
+import LibrarySettings from './components/LibrarySettings/LibrarySettings';
 
 import { Stats } from './components/Stats';
 import { RecentActivity } from './components/RecentActivity';

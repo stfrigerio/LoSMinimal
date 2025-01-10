@@ -1,0 +1,5 @@
+# da mettere nella cartella android/app/src/main/res/xml/
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <files-path name="books" path="Books/"/>
+</paths>

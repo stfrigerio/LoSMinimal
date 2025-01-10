@@ -1,11 +1,14 @@
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 
-import { formatDate, getActionText, cleanText } from '../helpers';
+import { formatDate, getActionText, cleanText, openEpubFile } from '../helpers';
+import { hasMarkdownFile, hasEpubFile } from '@/src/features/Library/helpers/BooksHelper';
 import { DetailedMusicView } from '../DetailedMusic/DetailedMusic';
 import { LibraryData } from '@/src/types/Library';
 import { Album } from '@/src/features/Music/types';
+import { openMarkdownViewer } from '../helpers';
+import { useNavigation } from 'expo-router';
 
 export const RenderDetail = (label: string, value: string | number | undefined) => {
     const { themeColors, designs } = useThemeStyles();
@@ -20,7 +23,6 @@ export const RenderDetail = (label: string, value: string | number | undefined) 
 };
 
 export const RenderCommonDetails = (item: any) => {
-
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors, designs);
 
@@ -35,13 +37,35 @@ export const RenderCommonDetails = (item: any) => {
     );
 }
 
-export const RenderSpecificDetails = (
-    item: any, 
-    album: Album | undefined, 
-    updateItem: (item: LibraryData) => Promise<void>
-) => {
+interface RenderSpecificDetailsProps {
+    item: any;
+    album: Album | undefined;
+    updateItem: (item: LibraryData) => Promise<void>;
+}
+
+export const RenderSpecificDetails: React.FC<RenderSpecificDetailsProps> = ({ 
+    item, 
+    album, 
+    updateItem 
+}) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors, designs);
+    const navigation = useNavigation();
+    const [hasMarkdown, setHasMarkdown] = useState(false);
+    const [hasEpub, setHasEpub] = useState(false);
+
+    useEffect(() => {
+        const checkFiles = async () => {
+            const [mdExists, epubExists] = await Promise.all([
+                hasMarkdownFile(item.title),
+                hasEpubFile(item.title)
+            ]);
+            setHasMarkdown(mdExists);
+            setHasEpub(epubExists);
+        };
+        
+        checkFiles();
+    }, [item.title]);
 
     switch (item.type) {
         case 'book':
@@ -49,6 +73,22 @@ export const RenderSpecificDetails = (
                 <>
                     {RenderDetail('Pages', item.pages)}
                     {RenderDetail('Description', cleanText(item.plot!))}
+                    {hasEpub && (
+                        <Pressable 
+                            style={styles.openButton}
+                            onPress={() => openEpubFile(item)}
+                        >
+                            <Text style={styles.openButtonText}>Open Book</Text>
+                        </Pressable>
+                    )}
+                    {hasMarkdown && (
+                        <Pressable 
+                            style={[styles.openButton, styles.openButton]}
+                            onPress={() => openMarkdownViewer(item, navigation)}
+                        >
+                            <Text style={styles.openButtonText}>View Notes</Text>
+                        </Pressable>
+                    )}
                 </>
             );
         case 'movie':
@@ -144,5 +184,19 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         fontSize: 16,
         color: themeColors.textColor,
         textAlign: 'right',
+    },
+    openButton: {
+        borderWidth: 1,
+        borderColor: themeColors.borderColor,
+        backgroundColor: themeColors.backgroundColor,
+        padding: 15,
+        borderRadius: 12,
+        marginTop: 12,
+        alignItems: 'center',
+    },
+    openButtonText: {
+        color: themeColors.textColorBold,
+        fontSize: 16,
+        fontWeight: '600',
     },
 });
