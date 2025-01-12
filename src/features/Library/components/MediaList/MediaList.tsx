@@ -10,7 +10,7 @@ import { LibraryData } from '@/src/types/Library';
 import { SectionHeader } from './components/SectionHeader';
 import { useAlbumManagement } from '@/src/features/Music/hooks/useAlbumManagement';
 import { Album } from '@/src/features/Music/types';
-import { usePathname } from 'expo-router';
+import { router, usePathname, useSegments } from 'expo-router';
 
 interface MediaListProps {
     mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music';
@@ -31,7 +31,6 @@ interface MediaListProps {
     }>;
     modalVisible: boolean;
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    onBackPress: () => void;
 }
 
 const MediaList: React.FC<MediaListProps> = ({ 
@@ -41,13 +40,19 @@ const MediaList: React.FC<MediaListProps> = ({
     SearchModalComponent, 
     modalVisible, 
     setModalVisible,
-    onBackPress
 }) => {
     const [showWantToList, setShowWantToList] = useState(false);
 
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
-    const pathname = usePathname()
+
+    const pathname = usePathname();
+    const segments = useSegments();
+
+    useEffect(() => {
+        console.log('pathname:', pathname);
+        console.log('segments:', segments);
+    }, [pathname, segments]);
 
     const {
         items,
@@ -57,7 +62,6 @@ const MediaList: React.FC<MediaListProps> = ({
         setSearchQuery,
         setSortOption,
         onSaveToLibrary,
-        handleItemSelect,
         handleCloseDetail,
         handleDelete,
         handleToggleDownload,
@@ -71,13 +75,22 @@ const MediaList: React.FC<MediaListProps> = ({
     } = useAlbumManagement();
 
     const handleItemSelectWithAlbum = (item: LibraryData) => {
+        const typeMap = {
+            movie: 'movies',
+            series: 'series',
+            book: 'books',
+            videogame: 'videogames',
+            music: 'music'
+        };
+        
         if (mediaType === 'music') {
             const matchingAlbum = albums.find(album => {
                 return album.name === item.title;
             });
             setSelectedAlbum(matchingAlbum || null);
         }
-        handleItemSelect(item);
+
+        router.push(`/library/${typeMap[mediaType]}/${item.title}`);
     };
 
     const handleCloseDetailWithAlbum = () => {
@@ -101,15 +114,12 @@ const MediaList: React.FC<MediaListProps> = ({
 
     useEffect(() => {
         const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            if (pathname === '/library') {
-                onBackPress();
-                return true;
-            }
-            return false;
+            router.navigate('/library');
+            return true;
         });
 
         return () => backHandler.remove();
-    }, [onBackPress]);
+    }, []);
 
     return (
         <>
@@ -127,7 +137,7 @@ const MediaList: React.FC<MediaListProps> = ({
                     <View style={styles.listContainer}>
                         <SectionHeader 
                             section={mediaType} 
-                            onBack={onBackPress} 
+                            onBack={() => router.navigate('/library')} 
                             showWantToList={showWantToList}
                             setShowWantToList={setShowWantToList}
                         />
@@ -181,6 +191,7 @@ const getStyles = (theme: any) => {
             height: '100%',
             backgroundColor: theme.backgroundColor,
             padding: 10,
+            paddingTop: 50
         },
         flatList: {
             flex: 1,

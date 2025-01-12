@@ -38,15 +38,6 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
         }
     }, [isEditing]);
 
-    // Add new function to handle back action
-    const handleBackPress = () => {
-        if (isEditing) {
-            setShowDiscardModal(true);
-            return;
-        }
-        onClose();
-    };
-
     const handleSave = async () => {
         if (onUpdate) {
             // Parse the markdown to extract title and other metadata

@@ -16,40 +16,25 @@ import { LibraryChart } from '@/src/components/charts/StackBar/LibraryChart';
 import { mediaTypes } from './constants/mediaTypes';
 import { useThemeStyles } from '../../styles/useThemeStyles';
 import { useLibraryHub } from './hooks/useLibraryHub';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
-interface LibraryHubProps {
-    section?: number;
-    isDashboard?: boolean;
-}
 
-const LibraryHub: React.FC<LibraryHubProps> = ({ section: initialSection, isDashboard: initialDashboard }) => {
-    const { section: urlSection, isDashboard: urlDashboardParam } = useLocalSearchParams();
-    
-    const [currentSection, setCurrentSection] = useState<number | null>(() => 
-        initialSection ?? (urlSection ? Number(urlSection) : null)
-    );
-    
-    const [isDashboard, setIsDashboard] = useState(() => {
-        if (initialDashboard !== undefined) return initialDashboard;
-        if (urlDashboardParam === 'false') return false;
-        if (urlSection) return false;
-        return true;
-    });
-    const [modalVisible, setModalVisible] = useState(false);
+const LibraryHub: React.FC = () => {
+    const [isDashboard, setIsDashboard] = useState(true);
+    const [currentSection, setCurrentSection] = useState<number | null>(0);
 
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
     const { isLoading, error, stats, recentActivity, weeklyActivity } = useLibraryHub();
 
     const navigateToSection = (index: number) => {
+        const typeMap = ['movie', 'series', 'book', 'videogame', 'music'];
         setCurrentSection(index);
         setIsDashboard(false);
-    };
-
-    const returnToDashboard = () => {
-        setIsDashboard(true);
-        setCurrentSection(null);
+        console.log('MediaGrid - Navigating to:', typeMap[index]);
+        if (index < 5) { // Don't navigate for settings
+            router.push(`/library/${typeMap[index]}`);
+        }
     };
 
     const navItems = ['Movies', 'Series', 'Books', 'Videogames', 'Music', 'Settings'].map((title, index) => ({
@@ -57,16 +42,6 @@ const LibraryHub: React.FC<LibraryHubProps> = ({ section: initialSection, isDash
         onPress: () => navigateToSection(index)
     }));
 
-    const handleOpenModal = () => {
-        setModalVisible(true);
-    };
-
-    const mediaTypesWithState = mediaTypes.map(type => ({
-        ...type,
-        modalVisible,
-        setModalVisible,
-        openModal: handleOpenModal
-    }));
 
     const Dashboard = () => (
         <ScrollView style={styles.dashboardContainer}>
@@ -97,29 +72,10 @@ const LibraryHub: React.FC<LibraryHubProps> = ({ section: initialSection, isDash
             <View style={styles.container}>
                 {isDashboard ? (
                     <Dashboard />
-                ) : currentSection === 5 ? ( // Settings
-                    <LibrarySettings onBackPress={returnToDashboard} />
-                ) : (
-                    <MediaList
-                        key={`media-list-${currentSection}`}
-                        mediaType={mediaTypesWithState[currentSection!].type}
-                        CardComponent={Card}
-                        DetailedViewComponent={DetailedView}
-                        SearchModalComponent={mediaTypesWithState[currentSection!].SearchModalComponent}
-                        modalVisible={modalVisible}
-                        setModalVisible={setModalVisible}
-                        onBackPress={returnToDashboard}
-                    />
+                ) : ( // Settings
+                    <LibrarySettings onBackPress={() => setIsDashboard(true)}/>
                 )}
             </View>
-            {!isDashboard && currentSection !== null && currentSection !== 5 && (
-                <Navbar
-                    items={navItems}
-                    activeIndex={currentSection + 1}
-                    screen={mediaTypesWithState[currentSection].type}
-                    quickButtonFunction={handleOpenModal}
-                />
-            )}
         </View>
     );
 };

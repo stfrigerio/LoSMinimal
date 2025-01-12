@@ -65,7 +65,7 @@ export const RenderSpecificDetails: React.FC<RenderSpecificDetailsProps> = ({
         };
         
         checkFiles();
-    }, [item.title]);
+    }, [item.title, item.type]);
 
     switch (item.type) {
         case 'book':
@@ -75,7 +75,10 @@ export const RenderSpecificDetails: React.FC<RenderSpecificDetailsProps> = ({
                     {RenderDetail('Description', cleanText(item.plot!))}
                     {hasEpub && (
                         <Pressable 
-                            style={styles.openButton}
+                            style={({ pressed }) => [
+                                styles.openButton,
+                                pressed && styles.openButtonPressed
+                            ]}
                             onPress={() => openEpubFile(item)}
                         >
                             <Text style={styles.openButtonText}>Open Book</Text>
@@ -83,8 +86,11 @@ export const RenderSpecificDetails: React.FC<RenderSpecificDetailsProps> = ({
                     )}
                     {hasMarkdown && (
                         <Pressable 
-                            style={[styles.openButton, styles.openButton]}
-                            onPress={() => openMarkdownViewer(item, navigation)}
+                            style={({ pressed }) => [
+                                styles.openButton,
+                                pressed && styles.openButtonPressed
+                            ]}
+                            onPress={() => openMarkdownViewer(item)}
                         >
                             <Text style={styles.openButtonText}>View Notes</Text>
                         </Pressable>
@@ -193,6 +199,10 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         borderRadius: 12,
         marginTop: 12,
         alignItems: 'center',
+    },
+    openButtonPressed: {
+        opacity: 0.7,
+        transform: [{ scale: 0.98 }]
     },
     openButtonText: {
         color: themeColors.textColorBold,

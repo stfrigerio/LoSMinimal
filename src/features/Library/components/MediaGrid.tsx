@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet, Dimensions, Animated } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faGear, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { router } from 'expo-router';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { colorRainbow } from '@/src/styles/theme';
@@ -64,6 +65,12 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNa
         return themeColors.textColor;
     }
 
+
+    const handleNavigate = (index: number) => {
+        const typeMap = ['movies', 'series', 'books', 'videogames', 'music'];
+        router.push(`/library/${typeMap[index]}`);
+    };
+
     return (
         <>
             <View style={[styles.separator, { marginTop: 8 }]} />
@@ -75,7 +82,7 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNa
                         key={index}
                         onPressIn={() => handlePressIn(index)}
                         onPressOut={() => handlePressOut(index)}
-                        onPress={() => onNavigate(index)}
+                        onPress={() => handleNavigate(index)}
                     >
                         <Animated.View style={[
                             styles.gridCard,

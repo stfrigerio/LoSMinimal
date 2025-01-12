@@ -71,6 +71,7 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.backgroundColor,
+        paddingTop: 40
     },
     details: {
         flex: 1,

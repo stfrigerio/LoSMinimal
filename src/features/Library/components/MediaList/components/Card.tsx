@@ -41,7 +41,13 @@ const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
     };
 
     return (
-        <Pressable style={styles.card} onPress={() => onPress(item)}>
+        <Pressable 
+            style={({ pressed }) => [
+                styles.card,
+                pressed && styles.cardPressed
+            ]} 
+            onPress={() => onPress(item)}
+        >
             <View style={styles.flexContainer}>
                 {item.mediaImage && (
                     <Image source={{ uri: ensureHttpsUrl(item.mediaImage) }} style={styles.poster} />
@@ -99,6 +105,10 @@ const getStyles = (theme: any) => {
             elevation: 12,
             borderWidth: 1,
             borderColor: theme.backgroundColor
+        },
+        cardPressed: {
+            opacity: 0.7,
+            transform: [{ scale: 0.98 }]
         },
         flexContainer: {
             flexDirection: 'row',

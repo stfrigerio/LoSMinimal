@@ -85,7 +85,7 @@ export const markdownStyles = (theme) => {
 		heading2: {
 			fontSize: 20,
 			fontWeight: '600',
-			color: theme.accentColor,
+			color: theme.textColorBold,
 			marginVertical: 10,
 		},
 		heading3: {
@@ -99,13 +99,13 @@ export const markdownStyles = (theme) => {
 			color: theme.textColor,
 		},
 		blockquote: {
-			backgroundColor: theme.backgroundSecondary,
-			borderColor: theme.hoverColor,
+			backgroundColor: theme.backgroundColor,
+			borderColor: theme.accentColor,
 			paddingLeft: 10,
-			marginLeft: 10,
-			marginBottom: 10,
+			marginVertical: 10,
 			opacity: 0.8,
 			borderRadius: 10,
+			fontSize: 14,
 		},
 		hr: {
 			marginVertical: 10,

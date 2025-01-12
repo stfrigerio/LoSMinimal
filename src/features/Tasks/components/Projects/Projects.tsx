@@ -7,8 +7,6 @@ import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import { Project } from './types/types';
 import ProjectView from './components/ProjectView';
 import { ProgressBar } from './components/ProgressBar';
-import { calculateProjectCompletion } from './helpers/calculateCompletion';
-
 
 interface ProjectsScreenProps {
     pillars: any[];
