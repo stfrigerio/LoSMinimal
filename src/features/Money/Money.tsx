@@ -11,6 +11,8 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useTransactionData } from './hooks/useTransactionData';
 
 import { MoneyData } from '@/src/types/Money';
+import { FilterOptions } from '@/src/components/FilterAndSort';
+import { SortOption } from '@/src/components/FilterAndSort';
 
 const MoneyHub: React.FC = () => {
     const { theme, themeColors, designs } = useThemeStyles();
@@ -18,6 +20,23 @@ const MoneyHub: React.FC = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [activeView, setActiveView] = useState('List');
     const [showFilter, setShowFilter] = useState(false);
+
+    // Maintain filter and sort states
+    const [filters, setFilters] = useState<FilterOptions>({
+        dateRange: { start: null, end: null },
+        tags: [],
+        searchTerm: '',
+    });
+
+    const [sortOption, setSortOption] = useState<SortOption>('recent');
+
+    const handleFilterChange = (newFilters: FilterOptions) => {
+        setFilters(newFilters);
+    };
+
+    const handleSortChange = (newSortOption: SortOption) => {
+        setSortOption(newSortOption);
+    };
 
     const { 
         transactions, 
@@ -66,6 +85,10 @@ const MoneyHub: React.FC = () => {
                     deleteTransaction={deleteTransaction}
                     refreshTransactions={refreshTransactions}
                     showFilter={showFilter}
+                    filters={filters}
+                    sortOption={sortOption}
+                    onFilterChange={handleFilterChange}
+                    onSortChange={handleSortChange}
                 />
             )}
             {activeView === 'Graph' && (

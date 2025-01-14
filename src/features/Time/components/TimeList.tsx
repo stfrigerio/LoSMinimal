@@ -16,6 +16,10 @@ interface TimeListProps {
 	showFilter: boolean;
 	isLoading: boolean;
 	error: string;
+	filters: FilterOptions;
+	sortOption: SortOption;
+	onFilterChange: (newFilters: FilterOptions) => void;
+	onSortChange: (newSortOption: SortOption) => void;
 }
 
 const TimeList: React.FC<TimeListProps> = ({
@@ -23,6 +27,10 @@ const TimeList: React.FC<TimeListProps> = ({
 	deleteTimeEntry,
 	editTimeEntry,
 	showFilter,
+	filters,
+	sortOption,
+	onFilterChange,
+	onSortChange,
 	isLoading,
 	error,
 }) => {
@@ -34,15 +42,6 @@ const TimeList: React.FC<TimeListProps> = ({
 	const styles = React.useMemo(() => getStyles(themeColors, designs, showFilter, selectionState.isSelectionMode), [themeColors, designs, showFilter, selectionState.isSelectionMode]);
 	const { colors: tagColors, loading: colorsLoading, error: colorsError } = useColors();
     const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
-
-	// Maintain filter and sort states
-	const [filters, setFilters] = useState<FilterOptions>({
-		dateRange: { start: null, end: null },
-		tags: [],
-		searchTerm: '',
-	});
-
-	const [sortOption, setSortOption] = useState<SortOption>('recent');
 
 	// Compute sorted entries
 	const sortedEntries = useMemo(() => {
@@ -148,16 +147,9 @@ const TimeList: React.FC<TimeListProps> = ({
 			isSelectionMode={selectionState.isSelectionMode}
 			isSelected={selectionState.selectedUuids.has(item.uuid!)}
 			toggleSelect={toggleSelect}
+			isFilterActive={showFilter}
 		/>
-	), [selectionState, editTimeEntry, deleteTimeEntry, entryColors, , toggleSelect]);
-
-	const handleFilterChange = (newFilters: FilterOptions) => {
-		setFilters(newFilters);
-	};
-
-	const handleSortChange = (newSortOption: SortOption) => {
-		setSortOption(newSortOption);
-	};
+	), [selectionState, editTimeEntry, deleteTimeEntry, entryColors, showFilter, toggleSelect]);
 
 	return (
         <View style={styles.container}>
@@ -181,15 +173,16 @@ const TimeList: React.FC<TimeListProps> = ({
 				maxToRenderPerBatch={5}
 				windowSize={5}
 				removeClippedSubviews={true}
+				
 			/>
             {!selectionState.isSelectionMode && (
-                <FilterAndSort
-                    onFilterChange={handleFilterChange}
-                    onSortChange={handleSortChange}
-                    tags={tags}
-                    searchPlaceholder="Search by description"
-                    isActive={showFilter}
-                />
+				<FilterAndSort
+					onFilterChange={onFilterChange}
+					onSortChange={onSortChange}
+					tags={tags}
+					searchPlaceholder="Search by description"
+					isActive={showFilter}
+				/>
             )}
 			{isBatchModalOpen && (
                 <BatchTimeEntryModal

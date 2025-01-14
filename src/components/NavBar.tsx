@@ -137,7 +137,7 @@ const getStyles = (theme: any) => {
             right: 100,
             width: 60,
             height: 60,
-            bottom: 1,
+            bottom: -4,
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 1002,

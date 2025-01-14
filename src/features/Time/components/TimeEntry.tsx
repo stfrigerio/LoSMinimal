@@ -17,6 +17,7 @@ interface TimeEntryProps {
 	isSelectionMode: boolean;
 	isSelected: boolean;
 	toggleSelect: (uuid: string) => void;
+	isFilterActive: boolean;
 }
 
 const TimeEntry: React.FC<TimeEntryProps> = React.memo(({
@@ -27,6 +28,7 @@ const TimeEntry: React.FC<TimeEntryProps> = React.memo(({
 	isSelectionMode,
 	isSelected,
 	toggleSelect,
+	isFilterActive,
 }) => {
 	const { themeColors, designs } = useThemeStyles();
 	const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
@@ -74,6 +76,7 @@ const TimeEntry: React.FC<TimeEntryProps> = React.memo(({
                     styles.container,
                     isSelected && styles.selectedContainer
                 ]}
+				pointerEvents={isFilterActive ? 'none' : 'auto'}
             >
 				{isSelectionMode && (
                     <FontAwesomeIcon

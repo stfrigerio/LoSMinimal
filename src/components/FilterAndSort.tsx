@@ -39,8 +39,8 @@ const FilterAndSort: React.FC<FilterAndSortProps> = ({ onFilterChange, onSortCha
             ...prev,
             dateRange: { ...prev.dateRange, [type]: date || null },
             }));
-            onFilterChange({ ...filters, dateRange: { ...filters.dateRange, [type]: date || null } });
-        };
+        onFilterChange({ ...filters, dateRange: { ...filters.dateRange, [type]: date || null } });
+    };
         
     const showDatePicker = (type: 'start' | 'end') => {
         TimePicker.showPicker(
@@ -97,10 +97,17 @@ const FilterAndSort: React.FC<FilterAndSortProps> = ({ onFilterChange, onSortCha
         ],
     };
 
+    if (!isActive) return null;  // Don't render if not active
+
     return (
-        <>
-            <Animated.View style={containerStyle} pointerEvents={isActive ? 'auto' : 'none'}>
-                <View style={styles.content}>
+        <View style={StyleSheet.absoluteFill}>
+            <Pressable 
+                style={[StyleSheet.absoluteFill]}
+            />
+            <Animated.View 
+                style={[containerStyle]} 
+            >
+                <Pressable style={styles.content}>
 
                     <Text style={styles.sectionTitle}>Date Range</Text>         
                     <View style={styles.dateContainer}>
@@ -142,10 +149,9 @@ const FilterAndSort: React.FC<FilterAndSortProps> = ({ onFilterChange, onSortCha
                     />
 
                     {TimePicker.picker}
-
-                </View>
+                </Pressable>
             </Animated.View>
-        </>
+        </View>
     );
 };
 
@@ -155,7 +161,7 @@ const getStyles = (themeColors: any, isActive: boolean) => StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        overflow: 'hidden',
+        zIndex: 10,
     },
     content: {
         padding: 16,
@@ -172,7 +178,7 @@ const getStyles = (themeColors: any, isActive: boolean) => StyleSheet.create({
         color: themeColors.textColor,
     },
     dateContainer: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 16,

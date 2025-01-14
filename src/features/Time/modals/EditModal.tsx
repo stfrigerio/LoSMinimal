@@ -13,6 +13,7 @@ import { useThemeStyles } from '../../../styles/useThemeStyles';
 import { TagData } from '../../../types/TagsAndDescriptions';
 import { SelectionData } from '../../Home/components/TimerComponent';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
 interface EditTimeEntryModalProps {
     isVisible: boolean;
@@ -30,17 +31,11 @@ const EditTimeEntryModal: React.FC<EditTimeEntryModalProps> = ({
     const { themeColors, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
 
-    console.log('timeEntry', timeEntry);
-
     const [isTagModalOpen, setIsTagModalOpen] = useState(false);
     const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
     const [selectedTag, setSelectedTag] = useState<TagData | undefined>(undefined);
     const [selectedDescription, setSelectedDescription] = useState<TagData | undefined>(undefined);
     const { showPicker, picker } = createTimePicker();
-
-    // if (!timeEntry.startTime || !timeEntry.endTime) {
-    //     return null;
-    // }
 
     const [editedEntry, setEditedEntry] = useState<TimeData>({ ...timeEntry });
 
@@ -165,74 +160,64 @@ const EditTimeEntryModal: React.FC<EditTimeEntryModalProps> = ({
 
     return (
         <>
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={isVisible}
-                onRequestClose={onClose}
+            <UniversalModal
+                isVisible={isVisible}
+                onClose={handleClose}
+                testID="edit-time-entry-modal"
             >
-                <View style={styles.centeredView}>
-                    <View style={[designs.modal.modalView]}>
-                        <Pressable style={styles.closeButton} onPress={handleClose}>
-                            <FontAwesomeIcon icon={faTimes} size={24} color={'gray'} />
+                <Text style={designs.text.title}>Edit Time Entry</Text>
+                <TagDescriptionSelector
+                    tag={editedEntry.tag}
+                    description={editedEntry.description}
+                    onPress={() => setIsTagModalOpen(true)}
+                />
+                <View style={[styles.inputContainer, { marginBottom: 10 }]}>
+                    <Text style={styles.label}>Start Time:</Text>
+                    <View style={styles.dateTimeContainer}>
+                        <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(true, true)}>
+                            <Text style={styles.dateTimeText}>{new Date(editedEntry.startTime!).toLocaleDateString()}</Text>
                         </Pressable>
-                        <Text style={designs.text.title}>Edit Time Entry</Text>
-
-                        <TagDescriptionSelector
-                            tag={editedEntry.tag}
-                            description={editedEntry.description}
-                            onPress={() => setIsTagModalOpen(true)}
-                        />
-
-                        <View style={[styles.inputContainer, { marginBottom: 10 }]}>
-                            <Text style={styles.label}>Start Time:</Text>
-                            <View style={styles.dateTimeContainer}>
-                                <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(true, true)}>
-                                    <Text style={styles.dateTimeText}>{new Date(editedEntry.startTime!).toLocaleDateString()}</Text>
-                                </Pressable>
-                                <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(true, false)}>
-                                    <Text style={styles.dateTimeText}>{new Date(editedEntry.startTime!).toLocaleTimeString()}</Text>
-                                </Pressable>
-                            </View>
-                        </View>
-
-                        <View style={[styles.inputContainer, { marginBottom: 10 }]}>
-                            <Text style={styles.label}>End Time:</Text>
-                            <View style={styles.dateTimeContainer}>
-                                <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(false, true)}>
-                                    <Text style={styles.dateTimeText}>{new Date(editedEntry.endTime!).toLocaleDateString()}</Text>
-                                </Pressable>
-                                <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(false, false)}>
-                                    <Text style={styles.dateTimeText}>{new Date(editedEntry.endTime!).toLocaleTimeString()}</Text>
-                                </Pressable>
-                            </View>
-                        </View>
-
-                        <View style={[styles.durationContainer]}>
-                            <Text style={styles.label}>Duration:</Text>
-                            <Text style={styles.durationText}>{editedEntry.duration}</Text>
-                        </View>
-
-                        <PrimaryButton  
-                            text="Save"
-                            onPress={handleSave}
-                        />
+                        <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(true, false)}>
+                            <Text style={styles.dateTimeText}>{new Date(editedEntry.startTime!).toLocaleTimeString()}</Text>
+                        </Pressable>
                     </View>
                 </View>
-            </Modal>
 
-            <TagModal
+                <View style={[styles.inputContainer, { marginBottom: 10 }]}>
+                    <Text style={styles.label}>End Time:</Text>
+                    <View style={styles.dateTimeContainer}>
+                        <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(false, true)}>
+                            <Text style={styles.dateTimeText}>{new Date(editedEntry.endTime!).toLocaleDateString()}</Text>
+                        </Pressable>
+                        <Pressable style={styles.dateTimeButton} onPress={() => showDateTimePicker(false, false)}>
+                            <Text style={styles.dateTimeText}>{new Date(editedEntry.endTime!).toLocaleTimeString()}</Text>
+                        </Pressable>
+                    </View>
+                </View>
+
+                <View style={[styles.durationContainer]}>
+                    <Text style={styles.label}>Duration:</Text>
+                    <Text style={styles.durationText}>{editedEntry.duration}</Text>
+                </View>
+
+                <PrimaryButton  
+                    text="Save"
+                    onPress={handleSave}
+                />
+            </UniversalModal>
+            {isTagModalOpen && <TagModal
                 isOpen={isTagModalOpen}
                 setSelectionData={updateTagInSelectionData()}
                 sourceTable="TimeTable"
-            />
-
-            <DescriptionModal
-                isOpen={isDescriptionModalOpen}
-                selectedTag={selectedTag!}
-                setSelectionData={updateDescriptionInSelectionData()}
-                sourceTable="TimeTable"
-            />
+            />}
+            {isDescriptionModalOpen && (
+                <DescriptionModal
+                    isOpen={isDescriptionModalOpen}
+                    selectedTag={selectedTag!}
+                    setSelectionData={updateDescriptionInSelectionData()}
+                    sourceTable="TimeTable"
+                />
+            )}
             {picker}
         </>
     );

@@ -17,13 +17,21 @@ interface MoneyListProps {
     deleteTransaction: (id: string) => void;
     refreshTransactions: () => void;
     showFilter: boolean;
+    filters: FilterOptions;
+    sortOption: SortOption;
+    onFilterChange: (newFilters: FilterOptions) => void;
+    onSortChange: (newSortOption: SortOption) => void;
 }
 
 const MoneyList: React.FC<MoneyListProps> = ({
     transactions,
     deleteTransaction,
     refreshTransactions,
-    showFilter
+    showFilter,
+    filters,
+    sortOption,
+    onFilterChange,
+    onSortChange
 }) => {
     const { themeColors, designs } = useThemeStyles();
     const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -31,15 +39,6 @@ const MoneyList: React.FC<MoneyListProps> = ({
     const { colors: tagColors, loading: colorsLoading, error: colorsError } = useColors();
     const [selectedUuids, setSelectedUuids] = useState<Set<string>>(new Set());
     const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
-
-    // Maintain filter and sort states
-    const [filters, setFilters] = useState<FilterOptions>({
-        dateRange: { start: null, end: null },
-        tags: [],
-        searchTerm: '',
-    });
-
-    const [sortOption, setSortOption] = useState<SortOption>('recent');
 
     // Compute valid transactions
     const validTransactions = useMemo(() => {
@@ -144,14 +143,6 @@ const MoneyList: React.FC<MoneyListProps> = ({
         />
     );
 
-    const handleFilterChange = (newFilters: FilterOptions) => {
-        setFilters(newFilters);
-    };
-
-    const handleSortChange = (newSortOption: SortOption) => {
-        setSortOption(newSortOption);
-    };
-
     return (
         <View style={styles.container}>
             {isSelectionMode && (
@@ -177,8 +168,8 @@ const MoneyList: React.FC<MoneyListProps> = ({
             />
             {!isSelectionMode && (
                 <FilterAndSort
-                    onFilterChange={handleFilterChange}
-                    onSortChange={handleSortChange}
+                    onFilterChange={onFilterChange}
+                    onSortChange={onSortChange}
                     tags={tags}
                     searchPlaceholder="Search by description"
                     isActive={showFilter}

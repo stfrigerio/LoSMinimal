@@ -10,6 +10,8 @@ import { useThemeStyles } from '../../styles/useThemeStyles';
 import { useTimeData } from './hooks/useTimeData';
 import { Timeline } from './components/Timeline/Timeline';
 import { TimeData } from '../../types/Time';
+import { SortOption } from '@/src/components/FilterAndSort';
+import { FilterOptions } from '@/src/components/FilterAndSort';
 
 const TimeHub: React.FC = () => {
 	const { theme, themeColors, designs } = useThemeStyles();
@@ -17,6 +19,20 @@ const TimeHub: React.FC = () => {
 	const [showFilter, setShowFilter] = useState(false);
 	const [activeView, setActiveView] = useState('List');
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+	const [filters, setFilters] = useState<FilterOptions>({
+        dateRange: { start: null, end: null },
+        tags: [],
+        searchTerm: '',
+    });
+    const [sortOption, setSortOption] = useState<SortOption>('recent');
+
+    const handleFilterChange = (newFilters: FilterOptions) => {
+        setFilters(newFilters);
+    };
+
+    const handleSortChange = (newSortOption: SortOption) => {
+        setSortOption(newSortOption);
+    };
 
 	const closeAddModal = () => setIsAddModalOpen(false);
 	const openAddModal = () => setIsAddModalOpen(true);
@@ -57,16 +73,20 @@ const TimeHub: React.FC = () => {
 
 	return (
 		<View style={styles.container}>
-			{activeView === 'List' && (
-				<TimeList 
-					entries={entries}
-					isLoading={isLoading}
-					error={error || ''}
-					deleteTimeEntry={deleteTimeEntry}
+            {activeView === 'List' && (
+                <TimeList 
+                    entries={entries}
+                    isLoading={isLoading}
+                    error={error || ''}
+                    deleteTimeEntry={deleteTimeEntry}
                     editTimeEntry={handleEditTimeEntry} 
-					showFilter={showFilter}
-				/>
-			)}
+                    showFilter={showFilter}
+                    filters={filters}
+                    sortOption={sortOption}
+                    onFilterChange={handleFilterChange}
+                    onSortChange={handleSortChange}
+                />
+            )}
 			{activeView === 'Timeline' && (
 				<Timeline />
 			)}
