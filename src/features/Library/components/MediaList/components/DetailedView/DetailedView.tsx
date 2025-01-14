@@ -23,15 +23,6 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [editedTitle, setEditedTitle] = useState(item.title);
 
-    // on back press, close this view
-    useEffect(() => {
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            onClose();
-            return true;
-        });
-        return () => backHandler.remove();
-    }, [onClose]);
-
     return (
         <>
             <ScrollView style={styles.container}>

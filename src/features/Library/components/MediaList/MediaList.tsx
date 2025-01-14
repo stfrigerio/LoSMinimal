@@ -112,15 +112,6 @@ const MediaList: React.FC<MediaListProps> = ({
         );
     };
 
-    useEffect(() => {
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            router.navigate('/library');
-            return true;
-        });
-
-        return () => backHandler.remove();
-    }, []);
-
     return (
         <>
             <View style={styles.container}>

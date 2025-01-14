@@ -8,7 +8,6 @@ import { DetailedMusicView } from '../DetailedMusic/DetailedMusic';
 import { LibraryData } from '@/src/types/Library';
 import { Album } from '@/src/features/Music/types';
 import { openMarkdownViewer } from '../helpers';
-import { useNavigation } from 'expo-router';
 
 export const RenderDetail = (label: string, value: string | number | undefined) => {
     const { themeColors, designs } = useThemeStyles();
@@ -50,7 +49,6 @@ export const RenderSpecificDetails: React.FC<RenderSpecificDetailsProps> = ({
 }) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors, designs);
-    const navigation = useNavigation();
     const [hasMarkdown, setHasMarkdown] = useState(false);
     const [hasEpub, setHasEpub] = useState(false);
 

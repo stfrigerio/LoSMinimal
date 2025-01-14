@@ -17,26 +17,8 @@ export const MarkdownViewerScreen: React.FC = () => {
     const [showDiscardModal, setShowDiscardModal] = useState(false);
 
     const onClose = () => {
-        router.navigate(`/library/book/${title}`);
+        router.back();
     };
-
-    useEffect(() => {
-        if (Platform.OS === 'android') {
-            const backHandler = BackHandler.addEventListener(
-                'hardwareBackPress',
-                () => {
-                    if (isEditing) {
-                        setShowDiscardModal(true);
-                        return true;
-                    }
-                    onClose();
-                    return true;
-                }
-            );
-
-            return () => backHandler.remove();
-        }
-    }, [isEditing]);
 
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);

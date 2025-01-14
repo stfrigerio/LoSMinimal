@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, ScrollView, ActivityIndicator } from 'react-native';
 
-import Navbar from '@/src/components/NavBar';
-import DetailedView from './components/MediaList/components/DetailedView/DetailedView';
 import LibrarySettings from './components/LibrarySettings/LibrarySettings';
-
 import { Stats } from './components/Stats';
 import { RecentActivity } from './components/RecentActivity';
 import { MediaGrid } from './components/MediaGrid';
 import { Welcome } from './components/Welcome';
-import MediaList from './components/MediaList/MediaList';
-import Card from './components/MediaList/components/Card';
+
 import { LibraryChart } from '@/src/components/charts/StackBar/LibraryChart';
 
 import { mediaTypes } from './constants/mediaTypes';
 import { useThemeStyles } from '../../styles/useThemeStyles';
 import { useLibraryHub } from './hooks/useLibraryHub';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 
 
 const LibraryHub: React.FC = () => {
@@ -31,7 +27,6 @@ const LibraryHub: React.FC = () => {
         const typeMap = ['movie', 'series', 'book', 'videogame', 'music'];
         setCurrentSection(index);
         setIsDashboard(false);
-        console.log('MediaGrid - Navigating to:', typeMap[index]);
         if (index < 5) { // Don't navigate for settings
             router.push(`/library/${typeMap[index]}`);
         }
@@ -41,7 +36,6 @@ const LibraryHub: React.FC = () => {
         label: title,
         onPress: () => navigateToSection(index)
     }));
-
 
     const Dashboard = () => (
         <ScrollView style={styles.dashboardContainer}>

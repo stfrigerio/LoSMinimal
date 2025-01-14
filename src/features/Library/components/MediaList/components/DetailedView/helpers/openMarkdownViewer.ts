@@ -30,11 +30,11 @@ export const openMarkdownViewer = async (
             const filePath = `${bookPath}/${mdFile}`;
             const content = await FileSystem.readAsStringAsync(filePath);
             
-            router.navigate({
-                pathname: '/markdown-viewer',
-                params: { 
+            router.push({
+                pathname: '/library/books/[title]/markdown-viewer',
+                params: {
                     title: item.title,
-                    content: content
+                    content,
                 }
             });
         }

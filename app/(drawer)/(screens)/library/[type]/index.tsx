@@ -1,12 +1,10 @@
 import { router, useLocalSearchParams } from 'expo-router';
-
+import { useState } from 'react';
 import MediaList from '@/src/features/Library/components/MediaList/MediaList';
 import Navbar from '@/src/components/NavBar';
 import Card from '@/src/features/Library/components/MediaList/components/Card';
 import DetailedView from '@/src/features/Library/components/MediaList/components/DetailedView/DetailedView';
 import { mediaTypes } from '@/src/features/Library/constants/mediaTypes';
-import { useEffect, useState } from 'react';
-import { BackHandler } from 'react-native';
 
 export default function MediaTypePage() {
     const { type } = useLocalSearchParams<{ type: string }>();
@@ -26,15 +24,6 @@ export default function MediaTypePage() {
     const handleOpenModal = () => {
         setModalVisible(true);
     };
-
-    useEffect(() => {
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            router.navigate('/library');
-            return true;
-        });
-
-        return () => backHandler.remove();
-    }, []);
 
     const mediaTypesWithState = mediaTypes.map(type => ({
         ...type,
