@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.stfrigerio.LoS.dev'
+    namespace 'com.stfrigerio.LoS'
     defaultConfig {
-        applicationId 'com.stfrigerio.LoS.dev'
+        applicationId 'com.stfrigerio.LoS'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

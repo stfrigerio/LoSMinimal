@@ -5,7 +5,9 @@ import Markdown from '@/src/components/Markdown/Markdown';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { Project } from '../types/types';
 import AlertModal from '@/src/components/modals/AlertModal';
-
+import TaskModal from '../../../modals/TaskModal';
+import { TaskData } from '@/src/types/Task';
+import { useTasksData } from '@/src/features/Tasks/hooks/useTasksData';
 interface ProjectViewProps {
     project: Project;
     onClose: () => void;
@@ -20,7 +22,11 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
     const [content, setContent] = useState(project.markdown);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showDiscardModal, setShowDiscardModal] = useState(false);
+    const [taskModalOpen, setTaskModalOpen] = useState(false);
+    const [task, setTask] = useState<TaskData | null>(null);
 
+    const { addTask, updateTask } = useTasksData();
+    
     useEffect(() => {
         if (Platform.OS === 'android') {
             const backHandler = BackHandler.addEventListener(
@@ -73,6 +79,51 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
         }
     };
 
+    const [selection, setSelection] = useState<{ start: number; end: number }>({ start: 0, end: 0 });
+
+    const handleTextChange = (newContent: string) => {
+        // If content got shorter, just update it (handling deletions)
+        if (newContent.length < content.length) {
+            setContent(newContent);
+            return;
+        }
+    
+        setContent(newContent);
+    };
+    
+    const handleKeyPress = (e: any) => {
+        if (e.nativeEvent.key === 'Enter') {
+            // Find the cursor position in the text
+            const cursorPosition = selection.start;
+            
+            // Split content into lines and find which line we're on
+            const lines = content.split('\n');
+            let charCount = 0;
+            let currentLineIndex = 0;
+        
+            // Find the current line by counting characters
+            for (let i = 0; i < lines.length; i++) {
+                const lineLength = lines[i].length + 1; // +1 for newline character
+                if (charCount + lineLength > cursorPosition) {
+                    currentLineIndex = i;
+                    break;
+                }
+                charCount += lineLength;
+            }
+        
+            const currentLine = lines[currentLineIndex];
+
+            if (currentLine?.trim().startsWith('- [ ]')) {
+                const beforeCursor = content.slice(0, cursorPosition);
+                const afterCursor = content.slice(cursorPosition);
+                setContent(beforeCursor + '\n- [ ] ' + afterCursor);
+                return;
+            }
+            
+            setContent(content);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -104,14 +155,28 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
                 <TextInput
                     style={styles.markdownInput}
                     value={content}
-                    onChangeText={setContent}
+                    onChangeText={handleTextChange}
+                    onSelectionChange={(event) => {
+                        setSelection(event.nativeEvent.selection);
+                    }}
+                    onKeyPress={handleKeyPress}
+                    selection={selection}
                     multiline
                     autoCapitalize="none"
-                    autoCorrect={false}
+                    autoCorrect={true}
                 />
             ) : (
                 <Markdown 
+                    onCreateTask={(title) => {
+                        // Open your TaskModal here with the title pre-filled
+                        setTaskModalOpen(true);
+                        setTask({
+                            text: title,
+                            completed: false,
+                        });
+                    }}
                     onChange={handleMarkdownChange}
+                    activeChecklists={true}
                 >
                     {content}
                 </Markdown>
@@ -137,6 +202,15 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
                         onClose();
                     }}
                     onCancel={() => setShowDiscardModal(false)}
+                />
+            )}
+            {taskModalOpen && (
+                <TaskModal
+                    isOpen={taskModalOpen}
+                    onClose={() => setTaskModalOpen(false)}
+                    onAddItem={addTask}
+                    onUpdateItem={updateTask}
+                    task={task || undefined}
                 />
             )}
         </View>
