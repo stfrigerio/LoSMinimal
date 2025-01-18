@@ -4,9 +4,12 @@ import { View, Text, StyleSheet, Pressable, ScrollView, BackHandler } from 'reac
 import { projectsHelpers } from './helpers';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import AlertModal from '@/src/components/modals/AlertModal';
 import { Project } from './types/types';
 import ProjectView from './components/ProjectView';
 import { ProgressBar } from './components/ProgressBar';
+import { exportProjects } from './hooks/exportProjects';
+import { importProjects } from './hooks/importProjects';
 
 interface ProjectsScreenProps {
     pillars: any[];
@@ -19,17 +22,30 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
     const styles = useMemo(() => getStyles(themeColors), [themeColors]);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [projects, setProjects] = useState<Project[]>([]);
+    const [alertConfig, setAlertConfig] = useState<{
+        isVisible: boolean;
+        title: string;
+        message: string;
+        onConfirm: () => void;
+        singleButton?: boolean;
+    }>({
+        isVisible: false,
+        title: '',
+        message: '',
+        onConfirm: () => {},
+        singleButton: true
+    });
+
+    const loadProjects = async () => {
+        try {
+            const projectFiles = await projectsHelpers.load();
+            setProjects(projectFiles);
+        } catch (error) {
+            console.error('Error loading project files:', error);
+        }
+    };
 
     useEffect(() => {
-        const loadProjects = async () => {
-            try {
-                const projectFiles = await projectsHelpers.load();
-                setProjects(projectFiles);
-            } catch (error) {
-                console.error('Error loading project files:', error);
-            }
-        };
-
         loadProjects();
     }, []);
 
@@ -72,9 +88,36 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
             setProjects(prevProjects => 
                 prevProjects.map(p => p.id === project.id ? project : p)
             );
+            loadProjects();
         } catch (error) {
             console.error('Error updating project:', error);
         }
+    };
+    
+    const handleExportProjects = async () => {
+        const result = await exportProjects();
+        setAlertConfig({
+            isVisible: true,
+            title: result.success ? 'Success' : 'Error',
+            message: result.message,
+            onConfirm: () => setAlertConfig(prev => ({ ...prev, isVisible: false })),
+            singleButton: true
+        });
+    };
+
+    // Import with alert feedback
+    const handleImportProjects = async () => {
+        const result = await importProjects();
+        if (result.success) {
+            await loadProjects(); // Reload projects after successful import
+        }
+        setAlertConfig({
+            isVisible: true,
+            title: result.success ? 'Success' : 'Error',
+            message: result.message,
+            onConfirm: () => setAlertConfig(prev => ({ ...prev, isVisible: false })),
+            singleButton: true
+        });
     };
 
     const getProgressColor = (completion: number) => {
@@ -122,6 +165,18 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
                         onPress={handleAddProject}
                     />
                 </View>
+                <View style={styles.addProjectButton}>
+                    <PrimaryButton
+                        text="Export Projects"
+                        onPress={handleExportProjects}
+                    />
+                </View>
+                <View style={styles.addProjectButton}>
+                    <PrimaryButton
+                        text="Import Projects"
+                        onPress={handleImportProjects}
+                    />
+                </View>
             </ScrollView>
 
             {selectedProject && (
@@ -132,6 +187,13 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
                     onUpdate={handleUpdateProject}
                 />
             )}
+            <AlertModal
+                isVisible={alertConfig.isVisible}
+                title={alertConfig.title}
+                message={alertConfig.message}
+                onConfirm={alertConfig.onConfirm}
+                singleButton={alertConfig.singleButton}
+            />
         </View>
     );
 };

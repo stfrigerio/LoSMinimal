@@ -20,5 +20,9 @@ Path(MUSIC_LIBRARY_PATH).mkdir(parents=True, exist_ok=True)
 BOOK_LIBRARY_PATH = os.path.join(PROJECT_ROOT, '../bookLibrary')
 Path(BOOK_LIBRARY_PATH).mkdir(parents=True, exist_ok=True)
 
+# Define the path to the projects folder
+PROJECTS_PATH = os.path.join(PROJECT_ROOT, '../projectsLibrary')
+Path(PROJECTS_PATH).mkdir(parents=True, exist_ok=True)
+
 # Create database directory if it doesn't exist
 os.makedirs(DB_DIRECTORY, exist_ok=True)

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Pressable, Text, TextInput, ActivityIndicator, StyleSheet, Keyboard } from 'react-native';
+import { View, Pressable, Text, TextInput, ActivityIndicator, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faFileExport, faFileImport, faShareAlt } from '@fortawesome/free-solid-svg-icons';
 

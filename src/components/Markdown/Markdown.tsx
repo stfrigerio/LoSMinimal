@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { ChecklistItem } from './components/ChecklistItem';

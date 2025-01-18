@@ -1,5 +1,6 @@
 import * as FileSystem from 'expo-file-system';
 import { Project } from '../types/types';
+import { projectsDir } from '../constants';
 
 export async function createProject() {
     const project: Omit<Project, 'id'> = {
@@ -26,7 +27,6 @@ Additional information...`
     };
 
     try {
-        const projectsDir = `${FileSystem.documentDirectory}projects/`;
         
         // Ensure directory exists
         const dirInfo = await FileSystem.getInfoAsync(projectsDir);

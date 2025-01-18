@@ -5,7 +5,6 @@ from logger import logger
 
 from app.services.music_sync.music_sync import MusicSync
 from app.config import MUSIC_LIBRARY_PATH
-import re
 
 music_bp = Blueprint('music', __name__)
 
