@@ -42,7 +42,7 @@ const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
 
     // Update displayWeek to use UTC-based ISO week number
     const displayWeek = useMemo(() => {
-        const date = parseDate(startDate, timeZone);
+        const date = new Date(startDate);
         const { week } = getISOWeekData(date);
         return `W${week.toString().padStart(2, '0')}`;
     }, [startDate, timeZone]);
@@ -58,7 +58,6 @@ const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
 
     const handleOpenNote = (period: NotePeriod, specificDate?: string) => {
         try {
-            console.log('handleOpenNote', period, specificDate || startDate);
             openNote(period, specificDate || startDate);
         } catch (error) {
             console.error('Error in handleOpenNote', error);

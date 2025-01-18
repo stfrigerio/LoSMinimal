@@ -26,6 +26,10 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
     const [task, setTask] = useState<TaskData | null>(null);
 
     const { addTask, updateTask } = useTasksData();
+
+    useEffect(() => {
+        setContent(project.markdown);
+    }, [project.markdown]);
     
     useEffect(() => {
         if (Platform.OS === 'android') {
@@ -56,10 +60,6 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
         setIsEditing(false);
     };
 
-    useEffect(() => {
-        setContent(project.markdown);
-    }, [project.markdown]);
-
     const handleDelete = async () => {
         if (onDelete) {
             await onDelete(project.id);
@@ -81,16 +81,6 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
 
     const [selection, setSelection] = useState<{ start: number; end: number }>({ start: 0, end: 0 });
 
-    const handleTextChange = (newContent: string) => {
-        // If content got shorter, just update it (handling deletions)
-        if (newContent.length < content.length) {
-            setContent(newContent);
-            return;
-        }
-    
-        setContent(newContent);
-    };
-    
     const handleKeyPress = (e: any) => {
         if (e.nativeEvent.key === 'Enter') {
             // Find the cursor position in the text
@@ -112,15 +102,20 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
             }
         
             const currentLine = lines[currentLineIndex];
-
             if (currentLine?.trim().startsWith('- [ ]')) {
+                e.preventDefault();
+                // Create new content with the checklist item
                 const beforeCursor = content.slice(0, cursorPosition);
                 const afterCursor = content.slice(cursorPosition);
-                setContent(beforeCursor + '\n- [ ] ' + afterCursor);
-                return;
+                const newContent = beforeCursor + '\n- [ ] ' + afterCursor;
+                
+                // Force a state update
+                requestAnimationFrame(() => {
+                    setContent(newContent);
+                    const newPosition = cursorPosition + '\n- [ ] '.length;
+                    setSelection({ start: newPosition, end: newPosition });
+                });
             }
-            
-            setContent(content);
         }
     };
 
@@ -155,7 +150,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
                 <TextInput
                     style={styles.markdownInput}
                     value={content}
-                    onChangeText={handleTextChange}
+                    onChangeText={setContent}
                     onSelectionChange={(event) => {
                         setSelection(event.nativeEvent.selection);
                     }}
