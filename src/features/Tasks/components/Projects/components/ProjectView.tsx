@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet, Pressable, TextInput, BackHandler, Platform } from 'react-native';
+import { View, StyleSheet, Pressable, TextInput, BackHandler, Platform, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Markdown from '@/src/components/Markdown/Markdown';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
@@ -166,20 +166,22 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
                     autoCorrect={true}
                 />
             ) : (
-                <Markdown 
-                    onCreateTask={(title) => {
-                        // Open your TaskModal here with the title pre-filled
-                        setTaskModalOpen(true);
-                        setTask({
-                            text: title,
-                            completed: false,
-                        });
-                    }}
-                    onChange={handleMarkdownChange}
-                    activeChecklists={true}
-                >
-                    {content}
-                </Markdown>
+                <ScrollView>
+                    <Markdown 
+                        onCreateTask={(title) => {
+                            // Open your TaskModal here with the title pre-filled
+                            setTaskModalOpen(true);
+                            setTask({
+                                text: title,
+                                completed: false,
+                            });
+                        }}
+                        onChange={handleMarkdownChange}
+                        activeChecklists={true}
+                    >
+                        {content}
+                    </Markdown>
+                </ScrollView>
             )}
 
             {showDeleteModal && (
@@ -232,9 +234,10 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: themeColors.borderColor,
+        padding: 8,
+        borderWidth: 1,
+        borderRadius: 20,
+        borderColor: themeColors.borderColor,
     },
     headerButtons: {
         flexDirection: 'row',

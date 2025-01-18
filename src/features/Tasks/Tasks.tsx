@@ -12,6 +12,7 @@ import { useTasksData } from './hooks/useTasksData';
 
 import { TaskData } from '@/src/types/Task';
 import ProjectsScreen from './components/Projects/Projects';
+import { Project } from './components/Projects/types/types';
 
 const TasksHub: React.FC = () => {
     const { themeColors } = useThemeStyles();
@@ -22,6 +23,7 @@ const TasksHub: React.FC = () => {
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [screens, setScreens] = useState(['Task List', 'Checklist', 'Projects']);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     const { 
         tasks, 
@@ -84,6 +86,8 @@ const TasksHub: React.FC = () => {
                 return (
                     <ProjectsScreen 
                         pillars={pillars}
+                        selectedProject={selectedProject}
+                        setSelectedProject={setSelectedProject}
                     />
                 );
             default:
@@ -118,12 +122,14 @@ const TasksHub: React.FC = () => {
                     onUpdateItem={handleUpdateTask}
                 />
             )}
-            <MobileNavbar
-                items={navItems}
-                activeIndex={screens.findIndex(screen => screen.toLowerCase().replace(' ', '') === activeScreen)}
-                quickButtonFunction={activeScreen === 'checklist' || activeScreen === 'projects' ? undefined : openAddModal}
-                screen="tasks"
-            />
+            {!selectedProject && (
+                <MobileNavbar
+                    items={navItems}
+                    activeIndex={screens.findIndex(screen => screen.toLowerCase().replace(' ', '') === activeScreen)}
+                    quickButtonFunction={activeScreen === 'checklist' || activeScreen === 'projects' ? undefined : openAddModal}
+                    screen="tasks"
+                />
+            )}
         </View>
     );
 };

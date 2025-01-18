@@ -92,6 +92,7 @@ export const markdownStyles = (theme) => {
 			fontSize: 16,
 			fontWeight: '500',
 			color: theme.accentColor,
+			marginVertical: 10,
 		},
 		body: {
 			fontSize: 16,

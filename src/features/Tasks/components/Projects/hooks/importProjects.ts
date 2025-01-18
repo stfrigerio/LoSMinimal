@@ -49,7 +49,6 @@ export const importProjects = async (): Promise<ProjectExportResponse> => {
         // Verify files were written
         try {
             const files = await FileSystem.readDirectoryAsync(projectsDir);
-            console.log('Files in projects directory:', files);
         } catch (error) {
             console.warn('Error reading directory:', error);
         }

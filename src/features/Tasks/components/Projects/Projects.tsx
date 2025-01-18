@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView, BackHandler } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faPlus, faFileExport, faFileImport } from '@fortawesome/free-solid-svg-icons';
 
 import { projectsHelpers } from './helpers';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import AlertModal from '@/src/components/modals/AlertModal';
 import { Project } from './types/types';
 import ProjectView from './components/ProjectView';
@@ -13,14 +14,17 @@ import { importProjects } from './hooks/importProjects';
 
 interface ProjectsScreenProps {
     pillars: any[];
+    selectedProject: Project | null;
+    setSelectedProject: (project: Project | null) => void;
 }
 
 const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
     pillars,
+    selectedProject,
+    setSelectedProject,
 }) => {
     const { themeColors } = useThemeStyles();
     const styles = useMemo(() => getStyles(themeColors), [themeColors]);
-    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [projects, setProjects] = useState<Project[]>([]);
     const [alertConfig, setAlertConfig] = useState<{
         isVisible: boolean;
@@ -132,6 +136,56 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
                 <View style={styles.projectsListHeader}>
                     <Text style={styles.projectsListHeaderText}>Projects</Text>
                 </View>
+                <View style={styles.headerActions}>
+                    <Pressable 
+                        style={({ pressed }) => [
+                            styles.iconButton,
+                            pressed && styles.iconButtonPressed
+                        ]}
+                        onPress={handleAddProject}
+                    >
+                        <View style={styles.iconContainer}>
+                            <FontAwesomeIcon 
+                                icon={faPlus} 
+                                size={20} 
+                                color={themeColors.accentColor} 
+                            />
+                            <Text style={styles.iconText}>New Project</Text>
+                        </View>
+                    </Pressable>
+                    <Pressable 
+                        style={({ pressed }) => [
+                            styles.iconButton,
+                            pressed && styles.iconButtonPressed
+                        ]}
+                        onPress={handleExportProjects}
+                    >
+                        <View style={styles.iconContainer}>
+                            <FontAwesomeIcon 
+                                icon={faFileExport} 
+                                size={20} 
+                                color={themeColors.accentColor} 
+                            />
+                            <Text style={styles.iconText}>Export</Text>
+                        </View>
+                    </Pressable>
+                    <Pressable 
+                        style={({ pressed }) => [
+                            styles.iconButton,
+                            pressed && styles.iconButtonPressed
+                        ]}
+                        onPress={handleImportProjects}
+                    >
+                        <View style={styles.iconContainer}>
+                            <FontAwesomeIcon 
+                                icon={faFileImport} 
+                                size={20} 
+                                color={themeColors.accentColor} 
+                            />
+                            <Text style={styles.iconText}>Import</Text>
+                        </View>
+                    </Pressable>
+                </View>
                 {projects.map((project) => {
                     const completion = projectsHelpers.calculateCompletion(project.markdown);
                     return (
@@ -159,26 +213,7 @@ const ProjectsScreen: React.FC<ProjectsScreenProps> = ({
                         </Pressable>
                     );
                 })}
-                <View style={styles.addProjectButton}>
-                    <PrimaryButton
-                        text="Add Project"
-                        onPress={handleAddProject}
-                    />
-                </View>
-                <View style={styles.addProjectButton}>
-                    <PrimaryButton
-                        text="Export Projects"
-                        onPress={handleExportProjects}
-                    />
-                </View>
-                <View style={styles.addProjectButton}>
-                    <PrimaryButton
-                        text="Import Projects"
-                        onPress={handleImportProjects}
-                    />
-                </View>
             </ScrollView>
-
             {selectedProject && (
                 <ProjectView
                     project={selectedProject}
@@ -243,8 +278,29 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         color: themeColors.textColorItalic,
         minWidth: 35,
     },
-    addProjectButton: {
-        marginTop: 16,
+    headerActions: {
+        flexDirection: 'row',
+        gap: 16,
+        justifyContent: 'center',
+        marginBottom: 16,
+    },
+    iconContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 8,
+    },
+    iconButton: {
+        padding: 8,
+    },
+    iconText: {
+        fontSize: 10,
+        color: themeColors.gray,
+    },
+    iconButtonPressed: {
+        backgroundColor: themeColors.backgroundSecondary,
+        borderRadius: 16,
+        opacity: 0.7,
     },
 });
 

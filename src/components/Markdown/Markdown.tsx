@@ -1,11 +1,14 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { View, Pressable } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { ChecklistItem } from './components/ChecklistItem';
 import { stripFrontmatter, isChecklistItem } from './utils/markdownParser';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faLocationPin, faTrash } from '@fortawesome/free-solid-svg-icons';
+
+import { toggleChecklistItem } from './helpers/useChecklistItem';
+import { deleteChecklistItem } from './helpers/useChecklistItem';
+import { useCollapsibleHeaders } from './helpers/useCollapsibleheaders';
+import { HeaderComponent } from './components/Headers';
 
 interface MarkdownProps {
     children: string;
@@ -17,66 +20,46 @@ interface MarkdownProps {
 
 const MobileMarkdown: React.FC<MarkdownProps> = ({ children, style, onChange, activeChecklists, onCreateTask }) => {
     const { markdownStyles, themeColors } = useThemeStyles();
-
-    const toggleChecklistItem = (index: number, originalLine: string) => {
-        const lines = children.split('\n');
-        // Find the actual index of this line in the full content
-        const actualIndex = lines.findIndex(line => line === originalLine);
-        
-        if (actualIndex !== -1) {
-            const newLines = [...lines];
-            if (newLines[actualIndex].includes('- [ ]')) {
-                newLines[actualIndex] = newLines[actualIndex].replace('- [ ]', '- [x]');
-            } else if (newLines[actualIndex].includes('- [x]')) {
-                newLines[actualIndex] = newLines[actualIndex].replace('- [x]', '- [ ]');
-            }
-            onChange?.(newLines.join('\n'));
-        }
-    };
+    const { isHeader, toggleSection, getIsCollapsed, collapsedSections } = useCollapsibleHeaders();
 
     const renderLine = (line: string, index: number) => {
-        if (isChecklistItem(line)) {
+        if (isHeader(line)) {
             return (
-                <View 
-                    key={`line-${index}`}
-                    style={{ flexDirection: 'row', alignItems: 'center' }}
-                >
-                    <ChecklistItem
-                        text={line}
-                        isChecked={line.includes('- [x]')}
-                        onToggle={() => toggleChecklistItem(index, line)}
-                    />
-                    {activeChecklists && (
-                        <View style={{ flexDirection: 'row', marginLeft: 'auto' }}>
-                            <Pressable
-                                style={{ padding: 10 }}
-                                onPress={() => {
-                                    const cleanText = line.replace(/- \[(x| )\] /, '');
-                                    onCreateTask?.(cleanText);
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faLocationPin} color={themeColors.gray} />
-                            </Pressable>
-                            <Pressable
-                                style={{ padding: 10 }}
-                                onPress={() => {
-                                    const lines = children.split('\n');
-                                    // Find the actual index of this line in the full content
-                                    const actualIndex = lines.findIndex(l => l === line);
-
-                                    if (actualIndex !== -1) {
-                                        const newLines = lines.filter((_, i) => i !== actualIndex);
-                                        onChange?.(newLines.join('\n'));
-                                    }
-                                }}
-                            >
-                                <FontAwesomeIcon icon={faTrash} color={themeColors.gray} />
-                            </Pressable>
-                        </View>
-                    )}
-                </View>
+                <HeaderComponent
+                    line={line}
+                    isCollapsed={!!collapsedSections[index]}
+                    onToggle={() => toggleSection(index)}
+                    markdownStyles={markdownStyles}
+                />
             );
         }
+
+        const previousHeaderIndex = [...contentWithoutFrontmatter.split('\n')]
+            .slice(0, index)
+            .reverse()
+            .findIndex(l => isHeader(l));
+        
+        const isCollapsed = previousHeaderIndex !== -1 && 
+            collapsedSections[index - previousHeaderIndex - 1];
+
+        if (isCollapsed) {
+            return null;
+        }
+
+        if (isChecklistItem(line)) {
+            return (
+                <ChecklistItem
+                    key={`line-${index}`}
+                    text={line}
+                    isChecked={line.includes('- [x]')}
+                    onToggle={() => onChange && toggleChecklistItem(index, line, children, onChange)}
+                    showActions={activeChecklists}
+                    onCreateTask={onCreateTask}
+                    onDelete={() => onChange && deleteChecklistItem(index, line, children, onChange)}
+                />
+            );
+        }
+
         return <Markdown key={index} style={markdownStyles}>{line}</Markdown>;
     };
 

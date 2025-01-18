@@ -1,17 +1,19 @@
-// Add this new function
 export const calculateProjectCompletion = (content: string): number => {
-    // Find the Tasks section
-    const tasksMatch = content.match(/## Tasks\n([\s\S]*?)(?=\n#|$)/);
+    // Use greedy quantifier to capture entire Tasks section until next H2 or file end
+    const tasksMatch = content.match(/## Tasks\s*([\s\S]*)(?=\n##|$)/);
     if (!tasksMatch) return 0;
-    
-    const tasksSection = tasksMatch[1];
-    
-    // Match all checklist items
-    const checklistItems = tasksSection.match(/- \[[ x]\]/g) || [];
-    if (checklistItems.length === 0) return 0;
-    
-    // Count completed items
-    const completedItems = tasksSection.match(/- \[x\]/g)?.length || 0;
-    
-    return Math.round((completedItems / checklistItems.length) * 100);
+
+    const tasksSection = tasksMatch[1]; // Extract the Tasks section content
+
+    // Match all checklist items (- [ ] and - [x])
+    const allChecklistItems = tasksSection.match(/^- \[[ x]\]/gm) || [];
+    if (allChecklistItems.length === 0) return 0;
+
+    // Match completed checklist items (- [x])
+    const completedItems = tasksSection.match(/^- \[x\]/gm) || [];
+
+    // Calculate completion percentage
+    const percentage = Math.round((completedItems.length / allChecklistItems.length) * 100);
+
+    return percentage;
 };
