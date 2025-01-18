@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, Platform, Linking } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Platform, Linking, ActivityIndicator } from 'react-native';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -21,6 +21,7 @@ interface LocationData {
 
 const CarLocationModal: React.FC<CarLocationModalProps> = ({ isOpen, onClose }) => {
     const [locationData, setLocationData] = useState<LocationData | null>(null);
+    const [isSaving, setIsSaving] = useState(false);
     const { theme, themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors);
 
@@ -32,20 +33,25 @@ const CarLocationModal: React.FC<CarLocationModalProps> = ({ isOpen, onClose }) 
 
 
     const saveCarLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== 'granted') {
-            alert('Permission to access location was denied');
-            return;
-        }
+        setIsSaving(true);
+        try {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                alert('Permission to access location was denied');
+                return;
+            }
 
-        let currentLocation = await Location.getCurrentPositionAsync({});
-        const locationString = `${currentLocation.coords.latitude},${currentLocation.coords.longitude}`;
-        const data: LocationData = {
-            coords: locationString,
-            timestamp: new Date().toISOString(),
-        };
-        await AsyncStorage.setItem('@car_location', JSON.stringify(data));
-        setLocationData(data);
+            let currentLocation = await Location.getCurrentPositionAsync({});
+            const locationString = `${currentLocation.coords.latitude},${currentLocation.coords.longitude}`;
+            const data: LocationData = {
+                coords: locationString,
+                timestamp: new Date().toISOString(),
+            };
+            await AsyncStorage.setItem('@car_location', JSON.stringify(data));
+            setLocationData(data);
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const getCarLocation = async () => {
@@ -95,9 +101,19 @@ const CarLocationModal: React.FC<CarLocationModalProps> = ({ isOpen, onClose }) 
             )}
             
             <View style={styles.buttonContainer}>
-                <Pressable style={[styles.button]} onPress={saveCarLocation}>
-                    <FontAwesomeIcon icon={faMapLocation} size={20} color={themeColors.accentColor} style={{ marginRight: 15 }} />
-                    <Text style={designs.text.text}>Save Current Location</Text>
+                <Pressable 
+                    style={[styles.button]} 
+                    onPress={saveCarLocation}
+                    disabled={isSaving}
+                >
+                    {isSaving ? (
+                        <ActivityIndicator color={themeColors.accentColor} style={{ marginRight: 15 }} />
+                    ) : (
+                        <FontAwesomeIcon icon={faMapLocation} size={20} color={themeColors.accentColor} style={{ marginRight: 15 }} />
+                    )}
+                    <Text style={designs.text.text}>
+                        {isSaving ? 'Saving Location...' : 'Save Current Location'}
+                    </Text>
                 </Pressable>
                 {parsedLocation && (
                     <Pressable style={[styles.button]} onPress={openInMaps}>

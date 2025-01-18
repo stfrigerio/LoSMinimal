@@ -51,8 +51,8 @@ export const lightTheme = {
 	textColorItalic: '#cc8f0e',
 	opaqueTextColor: 'rgba(92, 106, 114, 0.5)',
 	borderColor: '#c7c7c7',
-	accentColor: '#CC5359',
-	accentColorShade: '#f0868b',
+	accentColor: '#3fabbe',
+	accentColorShade: '#7ad9eb',
 	hoverColor: '#4a5962',
 
 	shadowColor: 'rgba(250, 250, 250, 0.75)',

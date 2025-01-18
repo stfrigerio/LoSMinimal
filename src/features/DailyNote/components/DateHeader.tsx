@@ -89,7 +89,7 @@ const DateHeader: React.FC<DateHeaderProps> = ({ formattedDate, periodType }) =>
                 </Defs>
                 {/* Add a shadow effect by duplicating the text */}
                 <SvgText
-                    fill="rgba(0,0,0,0.3)"
+                    fill={themeColors.shadowColor}
                     stroke="none"
                     fontSize="24"
                     letterSpacing={1}

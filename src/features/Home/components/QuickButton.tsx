@@ -6,7 +6,6 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import TaskModal from '@/src/features/Tasks/modals/TaskModal';
 import TransactionModal from '@/src/features/Money/modals/TransactionModal';
 import MoodModal from '@/src/features/Mood/modals/MoodModal';
-import Journal from '@/src/features/Journal/components/Journal';
 import CarLocationModal from '@/src/features/Home/modals/CarLocationModal';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
@@ -25,7 +24,6 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
 	const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
-	const [isJournalModalOpen, setIsJournalModalOpen] = useState(false);
 	const [isCarLocationModalOpen, setIsCarLocationModalOpen] = useState(false);
 
 	const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -33,7 +31,6 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 	const { addTask, updateTask } = useTasksData();
 
 	const buttonConfig = [
-		{ key: 'journal', settingKey: 'HideJournal' },
 		{ key: 'mood', settingKey: 'HideMoods' },
 		{ key: 'task', settingKey: 'HideTasks' },
 		{ key: 'transaction', settingKey: 'HideMoney' },
@@ -46,7 +43,6 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 		task: new Animated.Value(0),
 		people: new Animated.Value(0),
 		contact: new Animated.Value(0),
-		journal: new Animated.Value(0),
 		carLocation: new Animated.Value(0),
 	}).current;
 
@@ -108,14 +104,8 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 
 	const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-	const handleNewJournal = () => {
-		setIsJournalModalOpen(true);
-		setIsExpanded(false); // Close the quick button menu
-	};
-
 	const getButtonText = (key: string) => {
 		switch (key) {
-			case 'journal': return '📝 Journal';
 			case 'task': return '✅ Task';
 			case 'mood': return '💭 Mood';
 			case 'transaction': return '💸 Transaction';
@@ -126,7 +116,6 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 	
 	const handleButtonPress = (key: string) => {
 		switch (key) {
-			case 'journal': handleNewJournal(); break;
 			case 'task': setIsAddModalOpen(true); break;
 			case 'mood': setIsMoodModalOpen(true); break;
 			case 'transaction': setIsTransactionModalOpen(true); break;
@@ -177,22 +166,6 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
                 </Pressable>
             </Animated.View>
 
-			{isJournalModalOpen &&
-				<Modal
-					visible={isJournalModalOpen}
-					animationType="slide"
-					onRequestClose={() => setIsJournalModalOpen(false)}
-				>
-					<SafeAreaView style={styles.modalContainer}>
-						<StatusBar backgroundColor={themeColors.backgroundColor} barStyle="dark-content" />
-						<Journal
-							date={new Date().toISOString()}
-							uuid=""
-							onClose={() => setIsJournalModalOpen(false)}
-						/>
-					</SafeAreaView>
-				</Modal>
-			}
 			{isAddModalOpen &&
 				<TaskModal
 					isOpen={isAddModalOpen}
@@ -233,7 +206,7 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
 		alignItems: 'center',
 	},
 	floatingButton: {
-		backgroundColor: themeColors.accentColor,
+		backgroundColor: '#CC5359',
 		width: 56,
 		height: 56,
 		borderRadius: 28,
@@ -242,7 +215,7 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
 		elevation: 4,
 	},
 	secondaryButton: {
-		backgroundColor: `${themeColors.accentColorShade}99`,
+		backgroundColor: `#f0868b99`,
 		marginBottom: 16,
 		width: 150,
 		height: 40,

@@ -155,7 +155,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     overlay: {
         flex: 1,
-        backgroundColor: theme === 'dark' ? 'rgba(0,0,0,0.3)' : undefined,
+        backgroundColor: 'rgba(0,0,0,0.2)',
     },
     content: {
         alignItems: 'center',

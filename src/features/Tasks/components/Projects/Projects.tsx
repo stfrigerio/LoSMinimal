@@ -262,21 +262,21 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: themeColors.textColor,
-        width: '40%', // Fixed width for title
+        width: '50%', // Fixed width for title
     },
     progressContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
-        width: '55%', // Fixed width for progress section
+        width: '45%', // Fixed width for progress section
     },
     progressBarWrapper: {
         flex: 1, // This will take up remaining space
     },
     projectCompletion: {
-        fontSize: 10,
+        fontSize: 8,
         color: themeColors.textColorItalic,
-        minWidth: 35,
+        minWidth: 8,
     },
     headerActions: {
         flexDirection: 'row',

@@ -144,7 +144,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		alignItems: 'flex-start',
 	},
 	floatingButton: {
-		backgroundColor: theme.accentColor,
+		backgroundColor: '#CC5359',
 		width: 56,
 		height: 56,
 		borderRadius: 28,

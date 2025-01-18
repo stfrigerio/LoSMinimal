@@ -39,7 +39,39 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
     const fadeAnim = useRef(new Animated.Value(0)).current; // Using useRef to persist the animated value across renders
 
     const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+
+    const styles = StyleSheet.create({
+        quoteContainer: {
+            maxWidth: 600,
+            alignSelf: 'center',
+            backgroundColor: themeColors.backgroundColor,
+        },
+        quoteContent: {
+            lineHeight: 28,
+            textAlign: 'center',
+            fontStyle: 'italic',
+            color: themeColors.textColor,
+            marginHorizontal: 50,
+            fontSize: 12,
+            letterSpacing: 0.5,
+            fontFamily: 'serif',
+        },
+        quoteAuthor: {
+            textAlign: 'right',
+            fontFamily: 'serif',
+            fontSize: 12,
+            marginTop: 10,
+            color: themeColors.gray,
+            fontWeight: '600',
+            letterSpacing: 1,
+            marginRight: 60,
+        },
+        horizontalSeparator: {
+            marginHorizontal: 50,
+            borderTopWidth: 1,
+            borderColor: themeColors.borderColor,
+        },
+    });
 
     const getRandomQuote = () => {
         const randomIndex = Math.floor(Math.random() * quotes.length);
@@ -112,38 +144,5 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
         </Pressable>
     );
 };
-
-const getStyles = (theme: any) => StyleSheet.create({
-    quoteContainer: {
-        maxWidth: 600,
-        alignSelf: 'center',
-        backgroundColor: theme.backgroundColor,
-    },
-    quoteContent: {
-        lineHeight: 28,
-        textAlign: 'center',
-        fontStyle: 'italic',
-        color: theme.textColor,
-        marginHorizontal: 50,
-        fontSize: 12,
-        letterSpacing: 0.5,
-        fontFamily: 'serif',
-    },
-    quoteAuthor: {
-        textAlign: 'right',
-        fontFamily: 'serif',
-        fontSize: 12,
-        marginTop: 10,
-        color: theme.gray,
-        fontWeight: '600',
-        letterSpacing: 1,
-        marginRight: 60,
-    },
-    horizontalSeparator: {
-        marginHorizontal: 50,
-        borderTopWidth: 1,
-        borderColor: theme.borderColor,
-    },
-});
 
 export default Quote;

@@ -254,7 +254,7 @@ const getStyles = (theme: any) => {
         },
         AINavbarButton: {
             position: 'absolute',
-            bottom: 15,
+            bottom: 10,
             right: 100,
             width: 50,
             height: 50,
