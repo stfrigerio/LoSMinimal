@@ -14,7 +14,6 @@ import { useThemeStyles } from '../../styles/useThemeStyles';
 import { useLibraryHub } from './hooks/useLibraryHub';
 import { router } from 'expo-router';
 
-
 const LibraryHub: React.FC = () => {
     const [isDashboard, setIsDashboard] = useState(true);
     const [currentSection, setCurrentSection] = useState<number | null>(0);

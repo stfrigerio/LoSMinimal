@@ -31,8 +31,6 @@ interface DetailedMusicViewProps {
 
 export const DetailedMusicView = ({ item, album, updateItem }: DetailedMusicViewProps) => {
     const { playSound } = useMusicPlayer();
-    // const { themeColors, designs } = useThemeStyles();
-    // const styles = getStyles(themeColors);
     const [dbOnlyTracks, setDbOnlyTracks] = React.useState<TrackData[]>([]);
     const [showAlbumSelector, setShowAlbumSelector] = useState(false);
     const [searchResults, setSearchResults] = useState<any[]>([]);

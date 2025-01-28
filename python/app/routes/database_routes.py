@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import shutil
 
-from app.services.images.images import save_images
+from app.services.image_sync.image_sync import save_images
 from app.services.route_services.database_services import cleanup_old_backups
 from app.config import DB_PATH, DB_DIRECTORY, DB_FILENAME
 from logger import logger

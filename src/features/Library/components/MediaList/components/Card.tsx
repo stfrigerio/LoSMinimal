@@ -73,16 +73,18 @@ const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
                     </Text>
                     <View style={styles.ratingSwitchContainer}>
                         <Text style={styles.rating}>{getStarRating(item.rating)}</Text>
-                        {item.type === 'music' || item.type === 'book' && onToggleDownload && (
-                            <View style={styles.downloadToggleContainer}>
-                                <Switch
-                                    trackColor={{ false: themeColors.backgroundColor, true: themeColors.accentColor }}
-                                    thumbColor={isDownloading ? themeColors.textColorBold : themeColors.textColor}
-                                    onValueChange={handleToggleDownload}
-                                    value={isDownloading}
-                                />
-                            </View>
-                        )}
+                        {(item.type === 'music' || item.type === 'book') ? (
+                            onToggleDownload && (
+                                <View style={styles.downloadToggleContainer}>
+                                    <Switch
+                                        trackColor={{ false: themeColors.backgroundColor, true: themeColors.accentColor }}
+                                        thumbColor={isDownloading ? themeColors.textColorBold : themeColors.textColor}
+                                        onValueChange={handleToggleDownload}
+                                        value={isDownloading}
+                                    />
+                                </View>
+                            )
+                        ) : null}
                     </View>
                 </View>
             </View>

@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet, Pressable } from 'react-native';
 
 import { LibraryData } from '@/src/types/Library';
 import { formatDistanceToNow } from 'date-fns';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { router } from 'expo-router';
 
 interface RecentActivityProps {
     recentActivity: LibraryData[];
@@ -29,6 +30,13 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ recentActivity }
         }
     };
 
+    const handleItemPress = (item: LibraryData) => {
+        router.push({
+            pathname: `/(drawer)/(screens)/library/${item.type}/${item.title}`,
+            params: { selectedItemId: item.id }
+        });
+    };
+
     return (
         <>
             <View style={[styles.separator, { marginTop: 16 }]} />
@@ -40,25 +48,31 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ recentActivity }
                 style={styles.recentContainer}
             >
                 {recentActivity.map((item) => (
-                    <View key={item.id} style={styles.recentCard}>
-                        {item.mediaImage ? (
-                            item.type === 'videogame' ? (
-                                <Image 
-                                    source={{ uri: `https://${item.mediaImage}` }} 
-                                    style={styles.recentImage}
-                                />
+                    <Pressable 
+                        key={item.id} 
+                        style={styles.recentCard}
+                        onPress={() => handleItemPress(item)}
+                    >
+                        <View key={item.id} style={styles.recentCard}>
+                            {item.mediaImage ? (
+                                item.type === 'videogame' ? (
+                                    <Image 
+                                        source={{ uri: `https://${item.mediaImage}` }} 
+                                        style={styles.recentImage}
+                                    />
+                                ) : (
+                                    <Image 
+                                        source={{ uri: item.mediaImage }} 
+                                        style={styles.recentImage}
+                                    />
+                                )
                             ) : (
-                                <Image 
-                                    source={{ uri: item.mediaImage }} 
-                                    style={styles.recentImage}
-                                />
-                            )
-                        ) : (
-                            <View style={styles.recentImagePlaceholder} />
-                        )}
-                        <Text style={styles.recentTitle}>{item.title}</Text>
-                        <Text style={styles.recentSubtitle}>{getTimeAgo(item.seen!)}</Text>
-                    </View>
+                                <View style={styles.recentImagePlaceholder} />
+                            )}
+                            <Text style={styles.recentTitle}>{item.title}</Text>
+                            <Text style={styles.recentSubtitle}>{getTimeAgo(item.seen!)}</Text>
+                        </View>
+                    </Pressable>
                 ))}
             </ScrollView>
         </>

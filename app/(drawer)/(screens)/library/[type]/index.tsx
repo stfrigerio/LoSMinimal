@@ -32,9 +32,15 @@ export default function MediaTypePage() {
         openModal: handleOpenModal
     }));
 
-    const navItems = ['Movies', 'Series', 'Books', 'Videogames', 'Music', 'Settings'].map((title, index) => ({
+    const navItems = ['Movies', 'Series', 'Books', 'Videogames', 'Music', 'Settings'].map((title) => ({
         label: title,
-        onPress: () => router.push(`/library/${type}`)
+        onPress: () => {
+            if (title === 'Settings') {
+                router.push('/library');
+            } else {
+                router.push(`/library/${title.toLowerCase()}`);
+            }
+        }
     }));
     
     return (
@@ -50,7 +56,7 @@ export default function MediaTypePage() {
             />
             <Navbar
                 items={navItems}
-                activeIndex={section + 1}
+                activeIndex={section}
                 screen={mediaTypesWithState[section].type}
                 quickButtonFunction={handleOpenModal}
             />

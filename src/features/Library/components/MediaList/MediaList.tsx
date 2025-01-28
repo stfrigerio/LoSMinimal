@@ -10,7 +10,7 @@ import { LibraryData } from '@/src/types/Library';
 import { SectionHeader } from './components/SectionHeader';
 import { useAlbumManagement } from '@/src/features/Music/hooks/useAlbumManagement';
 import { Album } from '@/src/features/Music/types';
-import { router, usePathname, useSegments } from 'expo-router';
+import { router } from 'expo-router';
 
 interface MediaListProps {
     mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music';
@@ -45,14 +45,6 @@ const MediaList: React.FC<MediaListProps> = ({
 
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
-
-    const pathname = usePathname();
-    const segments = useSegments();
-
-    useEffect(() => {
-        console.log('pathname:', pathname);
-        console.log('segments:', segments);
-    }, [pathname, segments]);
 
     const {
         items,
@@ -106,7 +98,7 @@ const MediaList: React.FC<MediaListProps> = ({
                 <CardComponent 
                     item={item} 
                     onPress={handleItemSelectWithAlbum} 
-                    onToggleDownload={mediaType === 'music' || mediaType === 'book' ? handleToggleDownload : undefined} 
+                    onToggleDownload={(mediaType === 'music' || mediaType === 'book') ? handleToggleDownload : undefined} 
                 />
             </View>
         );
