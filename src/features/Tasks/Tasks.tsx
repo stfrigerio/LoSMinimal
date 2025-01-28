@@ -7,19 +7,28 @@ import TaskListScreen from './components/TasksList';
 import ChecklistScreen from './components/Checklist';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation'
 import { useTasksData } from './hooks/useTasksData';
 
 import { TaskData } from '@/src/types/Task';
 import ProjectsScreen from './components/Projects/Projects';
 import { Project } from './components/Projects/types/types';
 
-const TasksHub: React.FC = () => {
+interface TasksHubProps {
+    initialScreen?: 'tasklist' | 'checklist' | 'projects';
+}
+
+const TasksHub: React.FC<TasksHubProps> = ({ initialScreen = 'tasklist' }) => {
+    const [activeScreen, setActiveScreen] = useState<'tasklist' | 'checklist' | 'projects'>(initialScreen);
+
+    useEffect(() => {
+        if (initialScreen) {
+            setActiveScreen(initialScreen);
+        }
+    }, [initialScreen]);
+
     const { themeColors } = useThemeStyles();
-    const { openHomepage } = useNavigationComponents();
     const styles = React.useMemo(() => getStyles(themeColors), [themeColors]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [activeScreen, setActiveScreen] = useState<'tasklist' | 'checklist' | 'projects'>('tasklist');
     const [refreshTrigger, setRefreshTrigger] = useState(0);
     const [screens, setScreens] = useState(['Task List', 'Checklist', 'Projects']);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);

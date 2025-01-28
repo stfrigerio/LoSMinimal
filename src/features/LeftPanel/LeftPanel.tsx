@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers, faMusic, faClock } from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './components/MenuButton';
+import PopupMenu, { MenuItem } from './components/PopupMenu';
 
 import { NotePeriod, useNavigationComponents } from './helpers/useNavigation';
 import { useTheme } from '@/src/contexts/ThemeContext';
@@ -17,6 +18,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { theme, toggleTheme } = useTheme();
     const { themeColors, designs } = useThemeStyles();
     const styles = useMemo(() => getStyles(themeColors, theme), [themeColors, theme]);
+    const [activePopup, setActivePopup] = useState<'tasks' | 'money' | 'time' | 'mood' | null>(null);
 
     const { 
         openTasks, 
@@ -47,6 +49,64 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const handleOpenPeople = withNavigationDelay(() => openPeople());
     const handleOpenLibrary = withNavigationDelay(() => openLibrary());
     const handleOpenTime = withNavigationDelay(() => openTime());
+
+    const getMenuItems = (type: 'tasks' | 'money' | 'time' | 'mood'): MenuItem[] => {
+        switch (type) {
+            case 'tasks':
+                return [
+                    { 
+                        label: 'Task List', 
+                        onPress: withNavigationDelay(() => openTasks('tasklist'))
+                    },
+                    { 
+                        label: 'Checklist', 
+                        onPress: withNavigationDelay(() => openTasks('checklist'))
+                    },
+                    { 
+                        label: 'Projects', 
+                        onPress: withNavigationDelay(() => openTasks('projects'))
+                    },
+                ];
+            // case 'money':
+            //     return [
+            //         { 
+            //             label: 'Overview', 
+            //             onPress: withNavigationDelay(() => openMoney('overview'))
+            //         },
+            //         { 
+            //             label: 'Transactions', 
+            //             onPress: withNavigationDelay(() => openMoney('transactions'))
+            //         },
+            //         // Add more money-related options
+            //     ];
+            // case 'time':
+            //     return [
+            //         { 
+            //             label: 'Timeline', 
+            //             onPress: withNavigationDelay(() => openTime('timeline'))
+            //         },
+            //         { 
+            //             label: 'Calendar', 
+            //             onPress: withNavigationDelay(() => openTime('calendar'))
+            //         },
+            //         // Add more time-related options
+            //     ];
+            // case 'mood':
+            //     return [
+            //         { 
+            //             label: 'Tracker', 
+            //             onPress: withNavigationDelay(() => openMoods('tracker'))
+            //         },
+            //         { 
+            //             label: 'Analytics', 
+            //             onPress: withNavigationDelay(() => openMoods('analytics'))
+            //         },
+            //         // Add more mood-related options
+            //     ];
+            default:
+                return [];
+        }
+    };
 
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' });
     const { week, year } = getISOWeekData(new Date());
@@ -89,12 +149,14 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                                 icon={faMoneyBill}
                                 label="Money"
                                 onPress={handleOpenMoney}
+                                onLongPress={() => setActivePopup('money')}
                                 color={colorRainbow[4]}
                             />
                             <MenuButton 
                                 icon={faCheckCircle}
                                 label="Tasks"
                                 onPress={handleOpenTasks}
+                                onLongPress={() => setActivePopup('tasks')}
                                 color={colorRainbow[5]}
                             />
                         </GridRow>
@@ -102,14 +164,16 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                         <GridRow>
                             <MenuButton 
                                 icon={faClock}
-                            label="Time"
-                            onPress={handleOpenTime}
+                                label="Time"
+                                onPress={handleOpenTime}
+                                onLongPress={() => setActivePopup('time')}
                                 color={colorRainbow[11]}
                             />
                             <MenuButton 
                                 icon={faCommentDots}
-                            label="Mood"
-                            onPress={handleOpenMood}
+                                label="Mood"
+                                onPress={handleOpenMood}
+                                onLongPress={() => setActivePopup('mood')}
                                 color={colorRainbow[6]}
                             />
                         </GridRow>
@@ -165,6 +229,11 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                     </View>
                 </View>
             </ScrollView>
+            <PopupMenu
+                isVisible={activePopup !== null}
+                onClose={() => setActivePopup(null)}
+                menuItems={activePopup ? getMenuItems(activePopup) : []}
+            />
         </View>
     );
 };

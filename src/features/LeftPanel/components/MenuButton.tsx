@@ -9,10 +9,11 @@ interface MenuButtonProps {
     icon: IconDefinition;
     label: string;
     onPress: () => void;
+    onLongPress?: () => void;
     color?: string;
 }
 
-export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, color }) => {
+export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, onLongPress, color }) => {
     const { themeColors, designs } = useThemeStyles();
     const { theme } = useTheme();
     const styles = getStyles(themeColors, theme);
@@ -24,6 +25,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, co
                 styles.button,
                 pressed && styles.buttonPressed
             ]}
+            onLongPress={onLongPress}
         >
             {({ pressed }) => (
                 <View style={styles.buttonContent}>

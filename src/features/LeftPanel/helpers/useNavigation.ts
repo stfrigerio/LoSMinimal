@@ -88,9 +88,12 @@ export const useNavigationComponents = () => {
 		router.push('/people');
 	}, [])
 
-    const openTasks = useCallback(() => {
-        router.push('/tasks');
-    }, []);
+	const openTasks = useCallback((screen: 'tasklist' | 'checklist' | 'projects' = 'tasklist') => {
+		console.log('Opening tasks with screen:', screen); // Debugging
+
+		// Navigate to the specific route based on the screen type
+		router.push(`/tasks/${screen}`);
+	}, [router]);
 
 	const openMoods = useCallback(() => {
 		router.push('/mood');
