@@ -39,7 +39,7 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
     const fetchWeeklyObjectives = async () => {
         try {
             const currentWeek = getISOWeekData(new Date());
-            const formattedWeek = `2024-W${currentWeek.week}`;
+            const formattedWeek = `${currentWeek.year}-W${currentWeek.week.toString().padStart(2, '0')}`;
             const response = await databaseManagers.objectives.getObjectives({ period: formattedWeek });
             const pillars = await databaseManagers.pillars.getPillars();
             

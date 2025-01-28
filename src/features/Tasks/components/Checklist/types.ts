@@ -10,7 +10,6 @@ export interface ChecklistProps {
 
 export interface ChecklistData {
     name: string;
-    color: string;
     collapsed: boolean;
 }
 

@@ -19,6 +19,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = useMemo(() => getStyles(themeColors, theme), [themeColors, theme]);
     const [activePopup, setActivePopup] = useState<'tasks' | 'money' | 'time' | 'mood' | null>(null);
+    const [menuPosition, setMenuPosition] = useState<{ x: number; y: number } | null>(null);
 
     const { 
         openTasks, 
@@ -118,6 +119,12 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
         </View>
     );    
 
+    const handleLongPress = (type: 'tasks' | 'money' | 'time' | 'mood', event: any) => {
+        const { pageX, pageY } = event.nativeEvent;
+        setMenuPosition({ x: pageX, y: pageY });
+        setActivePopup(type);
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -149,14 +156,14 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                                 icon={faMoneyBill}
                                 label="Money"
                                 onPress={handleOpenMoney}
-                                onLongPress={() => setActivePopup('money')}
+                                onLongPress={(event) => handleLongPress('money', event)}
                                 color={colorRainbow[4]}
                             />
                             <MenuButton 
                                 icon={faCheckCircle}
                                 label="Tasks"
                                 onPress={handleOpenTasks}
-                                onLongPress={() => setActivePopup('tasks')}
+                                onLongPress={(event) => handleLongPress('tasks', event)}
                                 color={colorRainbow[5]}
                             />
                         </GridRow>
@@ -166,14 +173,14 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                                 icon={faClock}
                                 label="Time"
                                 onPress={handleOpenTime}
-                                onLongPress={() => setActivePopup('time')}
+                                onLongPress={(event) => handleLongPress('time', event)}
                                 color={colorRainbow[11]}
                             />
                             <MenuButton 
                                 icon={faCommentDots}
                                 label="Mood"
                                 onPress={handleOpenMood}
-                                onLongPress={() => setActivePopup('mood')}
+                                onLongPress={(event) => handleLongPress('mood', event)}
                                 color={colorRainbow[6]}
                             />
                         </GridRow>
@@ -231,8 +238,12 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
             </ScrollView>
             <PopupMenu
                 isVisible={activePopup !== null}
-                onClose={() => setActivePopup(null)}
+                onClose={() => {
+                    setActivePopup(null);
+                    setMenuPosition(null);
+                }}
                 menuItems={activePopup ? getMenuItems(activePopup) : []}
+                anchorPosition={menuPosition || undefined}
             />
         </View>
     );

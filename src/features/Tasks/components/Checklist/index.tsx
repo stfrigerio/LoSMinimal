@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { ScrollView, Pressable, Text, StyleSheet } from 'react-native';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { ChecklistProps, ChecklistData } from './types';
-import { getRandomColor } from './utils';
 import SingleChecklist from './SingleChecklist';
 import AddChecklistModal from '../../modals/AddChecklistModal';
 
@@ -38,7 +37,6 @@ const Checklist: React.FC<ChecklistProps> = ({
                 if (!checklistMap.has(checklistName)) {
                     checklistMap.set(checklistName, {
                         name: checklistName,
-                        color: getRandomColor(),
                         collapsed: false
                     });
                 }
@@ -62,7 +60,6 @@ const Checklist: React.FC<ChecklistProps> = ({
                 return {
                     ...newChecklist,
                     collapsed: prevChecklist?.collapsed || false,
-                    color: prevChecklist?.color || newChecklist.color
                 };
             });
         });
@@ -110,10 +107,10 @@ const Checklist: React.FC<ChecklistProps> = ({
         }
     }, [deleteTask]);
 
-    const handleAddChecklist = (name: string, color: string) => {
+    const handleAddChecklist = (name: string) => {
         if (editingChecklist) {
             setChecklists(checklists.map(cl => 
-                cl.name === editingChecklist.name ? { ...cl, name, color } : cl
+                cl.name === editingChecklist.name ? { ...cl, name } : cl
             ));
             // Update tasks with the new checklist name
             localTasks.forEach(task => {
@@ -123,7 +120,7 @@ const Checklist: React.FC<ChecklistProps> = ({
             });
             setEditingChecklist(null);
         } else {
-            setChecklists([...checklists, { name, color, collapsed: false }]);
+            setChecklists([...checklists, { name, collapsed: false }]);
         }
         setShowAddChecklistModal(false);
     };

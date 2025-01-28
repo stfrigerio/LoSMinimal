@@ -7,32 +7,28 @@ import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 interface AddChecklistModalProps {
     visible: boolean;
     onClose: () => void;
-    onAdd: (name: string, color: string) => void;
-    initialChecklist?: { name: string; color: string } | null;
+    onAdd: (name: string) => void;
+    initialChecklist?: { name: string } | null;
 }
 
 const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ visible, onClose, onAdd, initialChecklist }) => {
     const { themeColors, designs } = useThemeStyles();
     const styles = getStyles(themeColors, designs);
     const [checklistName, setChecklistName] = useState('');
-    const [checklistColor, setChecklistColor] = useState('#FFFFFF');
 
     useEffect(() => {
         if (initialChecklist) {
             setChecklistName(initialChecklist.name);
-            setChecklistColor(initialChecklist.color);
         } else {
             setChecklistName('');
-            setChecklistColor('#FFFFFF');
         }
     }, [initialChecklist]);
 
     const handleAddChecklist = () => {
         if (checklistName.trim()) {
-        onAdd(checklistName.trim(), checklistColor);
-        setChecklistName('');
-        setChecklistColor('#FFFFFF');
-        onClose();
+            onAdd(checklistName.trim());
+            setChecklistName('');
+            onClose();
         }
     };
 

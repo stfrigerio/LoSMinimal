@@ -9,7 +9,7 @@ interface MenuButtonProps {
     icon: IconDefinition;
     label: string;
     onPress: () => void;
-    onLongPress?: () => void;
+    onLongPress?: (event: any) => void;
     color?: string;
 }
 
@@ -25,7 +25,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, on
                 styles.button,
                 pressed && styles.buttonPressed
             ]}
-            onLongPress={onLongPress}
+            onLongPress={(event) => onLongPress?.(event)}
         >
             {({ pressed }) => (
                 <View style={styles.buttonContent}>

@@ -82,18 +82,6 @@ const Homepage = () => {
                     <View style={styles.content}>
                         <CustomCalendar />
                         <DayNotesStatus />
-                        <Animated.View style={{
-                            width: '80%',
-                        }}>
-                            <NextObjective 
-                                fetchNextTask={(setTask, setTime) => {
-                                    fetchNextTask(
-                                        (task) => setTask(task ?? ''),
-                                        (time) => setTime(time ?? '')
-                                    );
-                                }} 
-                            />                    
-                        </Animated.View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Pressable onPress={() => openMusic()} style={{ padding: 20, borderRadius: 8 }}>
                                 {({ pressed }) => (
@@ -106,6 +94,18 @@ const Homepage = () => {
                                 )}
                             </Pressable>
                         </View>
+                        <Animated.View style={{
+                            width: '80%',
+                        }}>
+                            <NextObjective 
+                                fetchNextTask={(setTask, setTime) => {
+                                    fetchNextTask(
+                                        (task) => setTask(task ?? ''),
+                                        (time) => setTime(time ?? '')
+                                    );
+                                }} 
+                            />                    
+                        </Animated.View>
                     </View>
                 </View>
             </ImageBackground>

@@ -5,7 +5,6 @@ import { faPlus, faChevronDown, faChevronUp, faEdit } from '@fortawesome/free-so
 import Collapsible from '@/src/components/Collapsible';
 import { ChecklistData, ChecklistProps } from './types';
 import ChecklistItem from './ChecklistItem';
-import { getContrastColor } from './utils';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 interface SingleChecklistProps {
@@ -34,7 +33,6 @@ const SingleChecklist: React.FC<SingleChecklistProps> = ({
     const { themeColors, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(designs), [designs]);
     const inputRef = useRef<TextInput>(null);
-    const textColor = getContrastColor(checklistData.color);
     const filteredTasks = tasks
         .filter(task => task.type === `checklist_${checklistData.name}`)
         .reverse();
@@ -52,42 +50,42 @@ const SingleChecklist: React.FC<SingleChecklistProps> = ({
     };
 
     return (
-        <View style={[styles.container, { backgroundColor: checklistData.color }]}>
+        <View style={[styles.container, { backgroundColor: themeColors.backgroundSecondary }]}>
             <View style={styles.header}>
-                <Text style={[styles.title, { color: textColor }]}>{checklistData.name}</Text>
+                <Text style={[styles.title, { color: themeColors.textColor }]}>{checklistData.name}</Text>
                 <View style={styles.headerIcons}>
                     <Pressable onPress={() => onEdit(checklistData)} style={styles.headerIcon}>
-                        <FontAwesomeIcon icon={faEdit} color={textColor} size={18} />
+                        <FontAwesomeIcon icon={faEdit} color={themeColors.textColor} size={18} />
                     </Pressable>
                     <Pressable onPress={() => onToggleCollapse(checklistData.name)} style={styles.headerIcon}>
                         <FontAwesomeIcon 
                             icon={checklistData.collapsed ? faChevronDown : faChevronUp} 
-                            color={textColor} 
+                            color={themeColors.textColor} 
                             size={18} 
                         />
                     </Pressable>
                 </View>
             </View>
             <Collapsible collapsed={checklistData.collapsed}>
-                <View style={[styles.addItemContainer, { backgroundColor: `${checklistData.color}CC` }]}>
+                <View style={[styles.addItemContainer, { backgroundColor: `${themeColors.backgroundSecondary}CC` }]}>
                     <TextInput
                         ref={inputRef}
-                        style={[styles.input, { color: textColor, backgroundColor: `${checklistData.color}99` }]}
+                        style={[styles.input, { color: themeColors.textColor, backgroundColor: `${themeColors.backgroundSecondary}99` }]}
                         value={inputText}
                         onChangeText={(text) => onInputChange(text, checklistData.name)}
                         placeholder="Add new item"
-                        placeholderTextColor={`${textColor}99`}
+                        placeholderTextColor={`${themeColors.textColor}99`}
                         onSubmitEditing={() => handleAddItem(checklistData.name, true)}
                     />
                     <Pressable onPress={() => handleAddItem(checklistData.name)} style={styles.addButton}>
-                        <FontAwesomeIcon icon={faPlus} color={textColor} size={20} />
+                        <FontAwesomeIcon icon={faPlus} color={themeColors.textColor} size={20} />
                     </Pressable>
                 </View>
                 {filteredTasks.map(task => (
                     <ChecklistItem
                         key={task.uuid}
                         task={task}
-                        textColor={textColor}
+                        textColor={themeColors.textColor}
                         onToggle={onToggleItem}
                         onDelete={onDeleteTask}
                     />
