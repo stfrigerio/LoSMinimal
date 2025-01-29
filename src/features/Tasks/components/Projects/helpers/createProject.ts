@@ -7,22 +7,27 @@ export async function createProject() {
         title: 'New Project',
         description: 'This is a new project',
         markdown: `---
-title: New Project
-description: This is a new project
+title:
+description:
 status: active
 started: ${new Date().toISOString()}
 ---
 
-# New Project
+#
 
 ## Overview
-Start writing your project details here...
 
 ## Tasks
+
+### Active
+
 - [ ] First task
 - [ ] Second task
 
+### Done
+
 ## Notes
+
 Additional information...`
     };
 

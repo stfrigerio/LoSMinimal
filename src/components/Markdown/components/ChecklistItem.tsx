@@ -12,6 +12,7 @@ interface ChecklistItemProps {
     showActions?: boolean;
     onCreateTask?: (text: string) => void;
     onDelete?: () => void;
+    indentLevel: number;
 }
 
 export const ChecklistItem: React.FC<ChecklistItemProps> = ({ 
@@ -20,17 +21,18 @@ export const ChecklistItem: React.FC<ChecklistItemProps> = ({
     onToggle,
     showActions,
     onCreateTask,
-    onDelete 
+    onDelete,
+    indentLevel
 }) => {
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
-    const cleanText = text.replace(/- \[[x ]\] /, '');
+    const cleanText = text.replace(/^(\s*)- \[[x ]\] /, '');
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { marginLeft: indentLevel * 24 }]}>
             <Pressable 
                 onPress={onToggle} 
-                style={styles.checklistItem}
+                style={[styles.checklistItem]}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
                 <View style={styles.checklistItem}>

@@ -108,6 +108,19 @@ export const markdownStyles = (theme) => {
 			borderRadius: 10,
 			fontSize: 14,
 		},
+		code_inline: {
+			backgroundColor: theme.backgroundSecondary,
+			color: theme.textColorBold,
+			fontSize: 14,
+		},
+		fence: {
+			backgroundColor: theme.backgroundSecondary,
+			borderColor: theme.borderColor,
+			paddingLeft: 10,
+			marginVertical: 10,
+			opacity: 0.8,
+			borderRadius: 10,
+		},
 		hr: {
 			marginVertical: 10,
 			backgroundColor: theme.borderColor,
