@@ -239,6 +239,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     projectsList: {
         flex: 1,
+        marginBottom: 50,
     },
     projectsListHeader: {
         padding: 16,
