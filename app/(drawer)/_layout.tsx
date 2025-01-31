@@ -1,9 +1,10 @@
 import { Drawer } from 'expo-router/drawer';
 import { useDrawerState } from '../../src/contexts/DrawerState';
 import LeftPanel from '../../src/features/LeftPanel/LeftPanel';
+import RightPanel from '../../src/features/RightPanel/RightPanel';
 
 export default function DrawerLayout() {
-    const { isLeftDrawerSwipeEnabled } = useDrawerState();
+    const { isLeftDrawerSwipeEnabled, isRightDrawerSwipeEnabled } = useDrawerState();
 
     return (
         <Drawer
