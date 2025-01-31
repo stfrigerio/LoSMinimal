@@ -10,6 +10,13 @@ export async function scheduleTaskNotification(task: TaskData) {
     const notificationDate = new Date(task.due);
     notificationDate.setHours(notificationDate.getHours() - 1); // 1 hour before the task
 
+    // Check if notification time is in the future
+    const now = new Date();
+    if (notificationDate <= now) {
+        console.log(`Skipping notification for task "${task.text}" as due time has passed`);
+        return;
+    }
+
     await Notifications.scheduleNotificationAsync({
         content: {
             title: "Task Reminder",

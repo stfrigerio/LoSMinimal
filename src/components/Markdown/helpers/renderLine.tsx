@@ -23,12 +23,13 @@ const renderLine = (
     children: string
 ) => {
     const { markdownStyles } = useThemeStyles();
-    const { 
-        isHeader, 
-        toggleSection, 
-        getIsCollapsed, 
-        collapsedSections 
-    } = useCollapsibleHeaders();
+    // todo this was breaking the journal
+    // const { 
+    //     isHeader, 
+    //     toggleSection, 
+    //     getIsCollapsed, 
+    //     collapsedSections 
+    // } = useCollapsibleHeaders();
 
     // Handle code fence blocks
     if (line.startsWith('```')) {
@@ -57,20 +58,20 @@ const renderLine = (
     }
 
     // Handle headers
-    if (isHeader(line)) {
-        return {
-            element: (
-                <HeaderComponent
-                    key={`header-${index}`}
-                    line={line}
-                    isCollapsed={!!collapsedSections[index]}
-                    onToggle={() => toggleSection(index)}
-                    markdownStyles={markdownStyles}
-                />
-            ),
-            newInsideCodeFence: false
-        };
-    }
+    // if (isHeader(line)) {
+    //     return {
+    //         element: (
+    //             <HeaderComponent
+    //                 key={`header-${index}`}
+    //                 line={line}
+    //                 isCollapsed={!!collapsedSections[index]}
+    //                 onToggle={() => toggleSection(index)}
+    //                 markdownStyles={markdownStyles}
+    //             />
+    //         ),
+    //         newInsideCodeFence: false
+    //     };
+    // }
 
     // Handle tables
     if (isTable(line, lines[index + 1])) {
