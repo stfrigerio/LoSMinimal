@@ -1,7 +1,7 @@
 import { Drawer } from 'expo-router/drawer';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { usePathname } from 'expo-router';
+import { Slot, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import Toast, { BaseToast } from 'react-native-toast-message';
 
@@ -57,24 +57,7 @@ function AppContent() {
                             <AppInitializer />
                             <InitializeDatabasesWrapper />
                             <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
-                                <Drawer
-                                    screenOptions={{
-                                        drawerType: 'front',
-                                        swipeEnabled: false,
-                                        drawerStyle: {
-                                            width: 300,
-                                            backgroundColor: 'transparent',
-                                        },
-                                        headerShown: false,
-                                    }}
-                                >
-                                    <Drawer.Screen 
-                                        name="(drawer)" 
-                                        options={{
-                                            headerShown: false
-                                        }}
-                                    />
-                                </Drawer>
+                                <Slot />
                             </SafeAreaView>
                         </NavbarDrawerProvider>
                     </DrawerStateProvider>

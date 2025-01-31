@@ -11,7 +11,7 @@ export default function DrawerLayout() {
             screenOptions={{
                 drawerType: 'front',
                 swipeEnabled: isLeftDrawerSwipeEnabled,
-                swipeEdgeWidth: 50,
+                swipeEdgeWidth: 15,
                 drawerStyle: {
                     width: 300,
                     backgroundColor: 'transparent',
@@ -23,7 +23,8 @@ export default function DrawerLayout() {
             <Drawer.Screen 
                 name="(screens)" 
                 options={{
-                    headerShown: false
+                    headerShown: false,
+                    swipeEdgeWidth: 15,
                 }}
             />
         </Drawer>
