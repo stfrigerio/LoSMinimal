@@ -1,71 +1,61 @@
 import * as FileSystem from 'expo-file-system';
-import * as SQLite from 'expo-sqlite';
 import axios from 'axios';
-import { UploadResponse } from './types';
-import { LOCAL_DB_PATH, TEMP_DB_PATH } from './constants';
+
+import { 
+    LOCAL_DB_PATH, 
+    TEMP_DB_NAME, 
+    TEMP_DB_SQLITE_PATH, 
+    DOWNLOAD_TEMP_PATH 
+} from './constants';
 import { getFlaskServerURL } from '../../helpers/databaseConfig';
-import { capitalizedTableNames } from '@/src/constants/tableNames';
+import { validateDBInSQLiteFolder } from './validateDB';
 
-const validateDownloadedDB = async (dbPath: string): Promise<void> => {
-    const fileContent = await FileSystem.readAsStringAsync(dbPath, { length: 16 });
-    if (!fileContent.startsWith('SQLite format')) {
-        throw new Error('Downloaded file is not a valid SQLite database');
-    }
-
-    const tempDB = await SQLite.openDatabaseAsync(dbPath);
-    
-    try {
-        for (const tableName of [...capitalizedTableNames]) {
-            const result = await tempDB.getFirstAsync<{ count: number }>(
-                `SELECT count(*) as count FROM sqlite_master WHERE type='table' AND name=?;`,
-                [tableName]
-            );
-            
-            if (result?.count === 0) {
-                throw new Error(`Downloaded database is missing required table: ${tableName}`);
-            }
-        }
-    } finally {
-        await tempDB.closeAsync();
-    }
-};
-
-export const downloadDatabase = async (): Promise<UploadResponse> => {
+export async function downloadDatabase() {
     try {
         const flaskURL = await getFlaskServerURL();
-        
-        // Check if database exists on server
-        await axios.get(`${flaskURL}/download_db`, {
-            responseType: 'blob'
-        });
-
-        // Download to temporary location
+    
+        // 1) Check remote DB availability (optional, can skip if sure the endpoint is valid)
+        await axios.get(`${flaskURL}/download_db`, { responseType: 'blob' });
+    
+        // 2) Download to a normal temp path (not in the SQLite folder)
         const { uri } = await FileSystem.downloadAsync(
             `${flaskURL}/download_db`,
-            TEMP_DB_PATH
+            DOWNLOAD_TEMP_PATH
         );
-
-        if (!uri) {
-            throw new Error('Download failed');
-        }
-
-        await validateDownloadedDB(TEMP_DB_PATH);
-
-        // Move validated file to final location
+        if (!uri) throw new Error('Download failed: no URI');
+    
+        // 3) Move/copy from the normal temp file -> docDir/SQLite/temp_download.db
+        //    so we can open it with expo-sqlite by filename only.
+        // First, delete any leftover 'temp_download.db' if it exists
+        await FileSystem.deleteAsync(TEMP_DB_SQLITE_PATH, { idempotent: true }).catch(() => {});
         await FileSystem.moveAsync({
-            from: TEMP_DB_PATH,
-            to: LOCAL_DB_PATH
+            from: DOWNLOAD_TEMP_PATH,
+            to: TEMP_DB_SQLITE_PATH,
         });
+    
+        // 4) Validate by opening "temp_download.db" in docDir/SQLite
+        await validateDBInSQLiteFolder(TEMP_DB_NAME);
 
+        // 5) If valid, remove old 'LocalDB.db' and rename the temp file to 'LocalDB.db'
+        await FileSystem.deleteAsync(LOCAL_DB_PATH, { idempotent: true }).catch(() => {});
+        await FileSystem.moveAsync({
+            from: TEMP_DB_SQLITE_PATH,
+            to: LOCAL_DB_PATH,
+        });
+    
         return { success: true, message: 'Database downloaded and validated successfully' };
     } catch (error: any) {
-        // Clean up temp file if it exists
-        try {
-            await FileSystem.deleteAsync(TEMP_DB_PATH, { idempotent: true });
-        } catch {}
-
         console.error('Download error:', error);
-        const errorMessage = error.response?.data?.error || error.message || 'Download failed';
-        return { success: false, message: `Download failed: ${errorMessage}` };
+    
+        // Cleanup
+        try {
+            await FileSystem.deleteAsync(DOWNLOAD_TEMP_PATH, { idempotent: true });
+            await FileSystem.deleteAsync(TEMP_DB_SQLITE_PATH, { idempotent: true });
+        } catch {}
+    
+        return {
+            success: false,
+            message: `Failed to download or validate DB: ${error.message || error}`
+        };
     }
-}; 
+}

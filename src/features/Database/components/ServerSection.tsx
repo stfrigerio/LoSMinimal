@@ -1,5 +1,13 @@
-import React, { useEffect } from 'react';
-import { View, Pressable, Text, TextInput, ActivityIndicator, StyleSheet } from 'react-native';
+import React from 'react';
+import { 
+    View, 
+    Pressable, 
+    Text, 
+    TextInput, 
+    ActivityIndicator, 
+    StyleSheet, 
+    Platform 
+} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faFileExport, faFileImport, faShareAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -78,7 +86,7 @@ const ServerSection = () => {
                         value={serverURL}
                         placeholder="192.168.1.46"
                         placeholderTextColor={themeColors.gray}
-                        keyboardType="numeric"
+                        keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'numeric'}
                     />
                 </View>
             </View>

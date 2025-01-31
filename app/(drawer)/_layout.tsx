@@ -12,7 +12,7 @@ export default function DrawerLayout() {
             screenOptions={{
                 drawerType: 'front',
                 swipeEnabled: isLeftDrawerSwipeEnabled,
-                swipeEdgeWidth: 15,
+                swipeEdgeWidth: 30,
                 drawerStyle: {
                     width: 300,
                     backgroundColor: 'transparent',
@@ -25,7 +25,7 @@ export default function DrawerLayout() {
                 name="(screens)" 
                 options={{
                     headerShown: false,
-                    swipeEdgeWidth: 15,
+                    swipeEdgeWidth: 30,
                 }}
             />
         </Drawer>
