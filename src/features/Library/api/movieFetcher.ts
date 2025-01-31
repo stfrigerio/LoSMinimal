@@ -3,18 +3,22 @@ import { databaseManagers } from '@/database/tables';
 import { MovieItem } from '@/src/types/Library';
 
 const API_URL = "https://www.omdbapi.com/";
-let API_KEY = "";
+let API_KEY: string | null = null; // Set initial value to null
 
 async function initializeApiKey() {
     try {
         const setting = await databaseManagers.userSettings.getByKey('moviesApiKey');
         API_KEY = setting?.value || "";
     } catch (error) {
-        // console.error("Error initializing API key:", error);
+        console.error("Error initializing API key:", error);
     }
 }
 
-initializeApiKey();
+export async function ensureApiKeyLoaded() {
+    if (API_KEY === null) {
+        await initializeApiKey();
+    }
+}
 
 export interface Movie extends MovieItem {
     Director: string;
@@ -46,6 +50,8 @@ interface OmdbSearchResult {
 }
 
 export async function fetchMovies(query: string): Promise<Movie[]> {
+    await ensureApiKeyLoaded();
+
     try {
         const searchResults = await apiGet({ s: query });
         if (!searchResults || !searchResults.Search || !searchResults.Search.length) {
@@ -74,6 +80,8 @@ export function isImdbId(str: string): boolean {
 }
 
 export async function getByImdbId(id: string): Promise<Movie | null> {
+    await ensureApiKeyLoaded();
+
     const res = await apiGet({ i: id });
     if (!res) {
         return null;
@@ -103,6 +111,13 @@ export async function getByImdbId(id: string): Promise<Movie | null> {
 }
 
 async function apiGet(params: Record<string, string | undefined>): Promise<OmdbSearchResult | any> {
+    await ensureApiKeyLoaded(); 
+
+    if (!API_KEY) {
+        console.error("API Key is missing!");
+        return null;
+    }
+
     let finalURL = new URL(API_URL);
     Object.keys(params).forEach((key) => finalURL.searchParams.append(key, params[key] || ""));
     finalURL.searchParams.append("apikey", API_KEY);

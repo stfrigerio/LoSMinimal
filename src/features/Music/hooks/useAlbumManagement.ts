@@ -15,10 +15,16 @@ export const useAlbumManagement = () => {
 
     const loadAlbums = async () => {
         try {
+            // Ensure the Music folder exists
+            const folderInfo = await FileSystem.getInfoAsync(musicFolderPath);
+            if (!folderInfo.exists) {
+                console.warn('Music folder does not exist. Creating it now...');
+                await FileSystem.makeDirectoryAsync(musicFolderPath, { intermediates: true });
+            }
+    
+            // Read available album directories
             const albumDirs = await FileSystem.readDirectoryAsync(musicFolderPath);
-            const libraryAlbums = await databaseManagers.library.getLibrary({ 
-                type: 'music' 
-            });
+            const libraryAlbums = await databaseManagers.library.getLibrary({ type: 'music' });
     
             const loadedAlbums: Album[] = await Promise.all(
                 albumDirs.map(async (albumName) => {

@@ -128,9 +128,11 @@ const MediaList: React.FC<MediaListProps> = ({
                             <View style={styles.searchContainer}>
                                 <SearchComponent searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
                             </View>
-                            <View style={styles.pickerContainer}>
-                                <Text style={styles.sortText}>Sort by</Text>
-                                <Picker
+                            {/* TODO: This needs iOS and Android support */}
+
+                            {/* <View style={styles.pickerContainer}> 
+                                {/* <Text style={styles.sortText}>Sort by</Text> */}
+                                {/* <Picker
                                     selectedValue={sortOption}
                                     onValueChange={(itemValue) => setSortOption(itemValue)}
                                     style={{ color: themeColors.textColor }}
@@ -138,8 +140,8 @@ const MediaList: React.FC<MediaListProps> = ({
                                     <Picker.Item label="Seen" value="seen" />
                                     <Picker.Item label="Release Year" value="year" />
                                     <Picker.Item label="Rating" value="rating" />
-                                </Picker>
-                            </View>
+                                </Picker> 
+                            </View> */}
                         </View>
                         <FlatList
                             style={styles.flatList}
@@ -184,7 +186,7 @@ const getStyles = (theme: any) => {
             flexDirection: 'row',
             margin: 10,
             padding: 15,
-            marginBottom: -30
+            marginBottom: 10
         },
         listContainer: {
             flex: 1,
@@ -203,11 +205,6 @@ const getStyles = (theme: any) => {
         cardWrapper: {
             marginVertical: 6,
             marginHorizontal: 2, // Slight horizontal margin
-            shadowColor: theme.shadowColor,
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 3, // Android shadow
         },
     });
 };

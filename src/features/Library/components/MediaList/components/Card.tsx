@@ -102,8 +102,8 @@ const getStyles = (theme: any) => {
             marginHorizontal: 10,
             shadowColor: theme.shadowColor,
             shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 1,
-            shadowRadius: 3,
+            shadowOpacity: 0.5,
+            shadowRadius: 2,
             elevation: 12,
             borderWidth: 1,
             borderColor: theme.backgroundColor
