@@ -40,7 +40,6 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({
 
     const handleSearch = async () => {
         try {
-            console.log('Searching for movies with query:', query);
             const fetchedMovies = await fetchMovies(query);
             if (!fetchedMovies || fetchedMovies.length === 0) {
                 setError('No movies found. Please try a different search.');
@@ -209,16 +208,16 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({
                         />
                     </View>
                 )}
+                {error && 
+                    <AlertModal
+                        isVisible={!!error}
+                        title="Error"
+                        message={error}
+                            onConfirm={() => setError(null)}
+                            singleButton
+                        />
+                    }
             </UniversalModal>
-            {error && 
-                <AlertModal
-                    isVisible={!!error}
-                    title="Error"
-                    message={error || ''}
-                    onConfirm={() => setError(null)}
-                    singleButton
-                />
-            }
         </>
     );
 };

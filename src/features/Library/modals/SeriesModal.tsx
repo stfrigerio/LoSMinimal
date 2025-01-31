@@ -36,15 +36,21 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
     const handleSearch = async () => {
         try {
             const fetchedSeries = await fetchSeries(query);
-            if (!fetchedSeries || fetchedSeries.length === 0) {
+
+            // Check if fetchedSeries is falsy OR empty array
+            if (!fetchedSeries || !Array.isArray(fetchedSeries) || fetchedSeries.length === 0) {
                 setError('No series found. Please try a different search.');
+                setSeriesList([]); // Clear the list
                 return;
             }
+            
+            setError(null);
             setSeriesList(fetchedSeries);
             setShowSearch(false);
             setShowSeriesList(true);
         } catch (err) {
             setError('Failed to search for series. Please try again.');
+            setSeriesList([]); // Clear the list
         }
     };
 
@@ -166,16 +172,20 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
                         />
                     </View>
                 )}
+                {error && 
+                    <AlertModal
+                        isVisible={!!error}
+                        title="Error"
+                        message={error}
+                        onConfirm={() => {
+                            setError(null);
+                            setShowSearch(true);
+                            setShowSeriesList(false);
+                        }}
+                        singleButton
+                    />
+                }
             </UniversalModal>
-            {error && 
-                <AlertModal
-                    isVisible={!!error}
-                    title="Error"
-                    message={error || ''}
-                    onConfirm={() => setError(null)}
-                    singleButton
-                />
-            }
         </>
     );
 };

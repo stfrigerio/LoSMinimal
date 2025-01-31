@@ -189,16 +189,16 @@ const BookSearchModal: React.FC<BookSearchModalProps> = ({
                         />
                     </View>
                 )}
+                {error && 
+                    <AlertModal
+                        isVisible={!!error}
+                        title="Error"
+                        message={error || ''}
+                            onConfirm={() => setError(null)}
+                            singleButton
+                        />
+                    }
             </UniversalModal>
-            {error && 
-                <AlertModal
-                    isVisible={!!error}
-                    title="Error"
-                    message={error || ''}
-                    onConfirm={() => setError(null)}
-                    singleButton
-                />
-            }
         </>
     );
 };

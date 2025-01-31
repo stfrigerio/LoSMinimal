@@ -189,16 +189,16 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
                         />
                     </View>
                 )}
+                {error && 
+                    <AlertModal
+                        isVisible={!!error}
+                        title="Error"
+                        message={error}
+                        onConfirm={() => setError(null)}
+                        singleButton
+                    />
+                }
             </UniversalModal>
-            {error && 
-                <AlertModal
-                    isVisible={!!error}
-                    title="Error"
-                    message={error || ''}
-                    onConfirm={() => setError(null)}
-                    singleButton
-                />
-            }
         </>
     );
 }

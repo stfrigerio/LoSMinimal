@@ -33,19 +33,39 @@ export interface InvolvedCompany {
 
 const API_URL = "https://api.igdb.com/v4/games";
 const AUTH_URL = "https://id.twitch.tv/oauth2/token";
-let API_CLIENT_ID = "";
-let API_CLIENT_SECRET = "";
+let API_CLIENT_ID: string | null = null;
+let API_CLIENT_SECRET: string | null = null;
 
 async function initializeApiKey() {
-    const clientIdSetting = await databaseManagers.userSettings.getByKey('igdbClientId');
-    API_CLIENT_ID = clientIdSetting?.value || "";
-    const clientSecretSetting = await databaseManagers.userSettings.getByKey('igdbClientSecret');
-    API_CLIENT_SECRET = clientSecretSetting?.value || "";
+    if (API_CLIENT_ID !== null && API_CLIENT_SECRET !== null) return; // Avoid redundant calls
+
+    try {
+        const clientIdSetting = await databaseManagers.userSettings.getByKey('igdbClientId');
+        API_CLIENT_ID = clientIdSetting?.value || "";
+
+        const clientSecretSetting = await databaseManagers.userSettings.getByKey('igdbClientSecret');
+        API_CLIENT_SECRET = clientSecretSetting?.value || "";
+
+        console.log("✅ IGDB API Keys Initialized:", API_CLIENT_ID, API_CLIENT_SECRET);
+    } catch (error) {
+        console.error("❌ Error initializing API keys:", error);
+    }
 }
 
-initializeApiKey();
+async function ensureApiKeysLoaded() {
+    if (API_CLIENT_ID === null || API_CLIENT_SECRET === null) {
+        await initializeApiKey();
+    }
+}
 
 async function getAuthToken() {
+    await ensureApiKeysLoaded(); // 🔥 Wait for API keys before requesting auth
+
+    if (!API_CLIENT_ID || !API_CLIENT_SECRET) {
+        console.error("🚨 Missing API Credentials! Cannot request token.");
+        return null;
+    }
+
     try {
         const response = await fetch(AUTH_URL, {
             method: 'POST',
@@ -70,6 +90,8 @@ export async function searchGames(query: string): Promise<GameSearchResult[]> {
         return [];
     }
 
+    await ensureApiKeysLoaded();
+
     const token = await getAuthToken();
     if (!token) {
         return [];
@@ -83,7 +105,7 @@ export async function searchGames(query: string): Promise<GameSearchResult[]> {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
-                'Client-ID': API_CLIENT_ID,
+                'Client-ID': API_CLIENT_ID || '',
                 'Content-Type': 'application/json' // Make sure to include the content type header
             },
             body: requestBody // Include the request body
