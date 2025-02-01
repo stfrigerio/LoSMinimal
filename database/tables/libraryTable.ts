@@ -73,6 +73,7 @@ class LibraryManager extends BaseTableManager<LibraryData> {
 			conditions.push('isMarkedForDownload = ?');
 			queryParams.push(filter.isMarkedForDownload);
 		}
+	
 
 		if (filter.seen !== undefined) {
 			conditions.push('seen = ?');

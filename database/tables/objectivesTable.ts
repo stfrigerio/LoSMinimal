@@ -28,7 +28,7 @@ class ObjectivesTableManager extends BaseTableManager<ObjectiveData> {
 		super(objectivesTableStructure);
 	}
 
-	async getObjectives(filter: { period?: string, pillarId?: number }): Promise<ObjectiveData[]> {
+	async getObjectives(filter: { period?: string, pillarId?: number, completed?: number }): Promise<ObjectiveData[]> {
 		let query = `SELECT * FROM ${this.tableStructure.name}`;
 		const queryParams = [];
 		const conditions = [];
@@ -40,6 +40,11 @@ class ObjectivesTableManager extends BaseTableManager<ObjectiveData> {
 		if (filter.pillarId) {
 			conditions.push('pillarId = ?');
 			queryParams.push(filter.pillarId);
+		}
+
+		if (typeof filter.completed !== 'undefined') {
+			conditions.push('completed = ?');
+			queryParams.push(filter.completed);
 		}
 
 		if (conditions.length > 0) {

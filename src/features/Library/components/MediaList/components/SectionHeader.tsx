@@ -11,9 +11,18 @@ interface SectionHeaderProps {
     onBack: () => void;
     showWantToList: boolean;
     setShowWantToList: (value: boolean) => void;
+    showDownloadedOnly: boolean;
+    setShowDownloadedOnly: (value: boolean) => void;
 }
 
-export const SectionHeader = ({ section, onBack, showWantToList, setShowWantToList }: SectionHeaderProps) => {
+export const SectionHeader = ({ 
+    section, 
+    onBack, 
+    showWantToList, 
+    setShowWantToList,
+    showDownloadedOnly,
+    setShowDownloadedOnly,
+}: SectionHeaderProps) => {
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 
@@ -58,19 +67,34 @@ export const SectionHeader = ({ section, onBack, showWantToList, setShowWantToLi
                     />
                 </Pressable>
                 <Text style={styles.title}>{getTitle()}</Text>
-                {section !== 'music' && (
-                    <View style={styles.switchContainer}>
-                        <Text style={styles.switchLabel}>
-                            {showWantToList ? `${getActionText(section)}` : 'library'}
-                        </Text>
-                        <Switch
-                            value={showWantToList}
-                            onValueChange={setShowWantToList}
-                            trackColor={{ false: themeColors.gray, true: themeColors.accentColor }}
-                            thumbColor={themeColors.accentColor}
-                        />
-                    </View>
-                )}
+                <View style={styles.switchesContainer}>
+                    {(section === 'music' || section === 'book') && (
+                        <View style={styles.switchWrapper}>
+                            <Text style={styles.switchLabel}>
+                                {showDownloadedOnly ? 'downloaded' : 'all'}
+                            </Text>
+                            <Switch
+                                value={showDownloadedOnly}
+                                onValueChange={setShowDownloadedOnly}
+                                trackColor={{ false: themeColors.gray, true: themeColors.accentColor }}
+                                thumbColor={themeColors.accentColor}
+                            />
+                        </View>
+                    )}
+                    {section !== 'music' && (
+                        <View style={styles.switchWrapper}>
+                            <Text style={styles.switchLabel}>
+                                {showWantToList ? `${getActionText(section)}` : 'library'}
+                            </Text>
+                            <Switch
+                                value={showWantToList}
+                                onValueChange={setShowWantToList}
+                                trackColor={{ false: themeColors.gray, true: themeColors.accentColor }}
+                                thumbColor={themeColors.accentColor}
+                            />
+                        </View>
+                    )}
+                </View>
             </View>
         </>
     );
@@ -101,10 +125,14 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         color: themeColors.textColorBold,
         textAlign: 'center',
     },
-    switchContainer: {
+    switchesContainer: {
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 10,
+    },
+    switchWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft: 10,
     },
     switchLabel: {
         color: themeColors.textColor,

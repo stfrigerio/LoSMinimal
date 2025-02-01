@@ -7,7 +7,8 @@ import { LibraryData, SortOptionType } from '@/src/types/Library';
 
 export const useMediaList = (
     mediaType: 'movie' | 'book' | 'series' | 'videogame' | 'music', 
-    showWantToList: boolean
+    showWantToList: boolean,
+    showDownloadedOnly: boolean
 ) => {
     const [items, setItems] = useState<LibraryData[]>([]);
     const [sortedItems, setSortedItems] = useState<LibraryData[]>([]);
@@ -22,6 +23,7 @@ export const useMediaList = (
                 sort: sort,
                 search: search,
                 finished: showWantToList ? 0 : 1,
+                ...(showDownloadedOnly ? { isMarkedForDownload: 1 } : {})
             });
             setItems(fetchedItems);
         } catch (error) {

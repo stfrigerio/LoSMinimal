@@ -42,6 +42,7 @@ const MediaList: React.FC<MediaListProps> = ({
     setModalVisible,
 }) => {
     const [showWantToList, setShowWantToList] = useState(false);
+    const [showDownloadedOnly, setShowDownloadedOnly] = useState(false);
 
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
@@ -58,7 +59,7 @@ const MediaList: React.FC<MediaListProps> = ({
         handleDelete,
         handleToggleDownload,
         updateItem,
-    } = useMediaList(mediaType, showWantToList);
+    } = useMediaList(mediaType, showWantToList, showDownloadedOnly);
 
     const { 
         albums, 
@@ -123,6 +124,8 @@ const MediaList: React.FC<MediaListProps> = ({
                             onBack={() => router.navigate('/library')} 
                             showWantToList={showWantToList}
                             setShowWantToList={setShowWantToList}
+                            showDownloadedOnly={showDownloadedOnly}
+                            setShowDownloadedOnly={setShowDownloadedOnly}
                         />
                         <View style={styles.filteringView}>
                             <View style={styles.searchContainer}>

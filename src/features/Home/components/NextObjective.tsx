@@ -40,7 +40,13 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
         try {
             const currentWeek = getISOWeekData(new Date());
             const formattedWeek = `${currentWeek.year}-W${currentWeek.week.toString().padStart(2, '0')}`;
-            const response = await databaseManagers.objectives.getObjectives({ period: formattedWeek });
+            
+            const response = await databaseManagers.objectives.getObjectives({ 
+                period: formattedWeek,
+                completed: 0
+            });
+
+            console.log('response', response);
             const pillars = await databaseManagers.pillars.getPillars();
             
             const objectivesWithPillarEmoji = response.map(objective => {

@@ -41,6 +41,8 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
 		return [...tags].sort((a, b) => a.text.localeCompare(b.text));
 	}, [tags]);
 
+	const isMoodTable = sourceTable === 'MoodTable';
+
 	return (
 		<>
 			<UniversalModal
@@ -49,26 +51,36 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
 			>
 					<Text style={designs.modal.title}>Select Tag</Text>
 					{tags && tags.length > 0 ? (
-						<View style={styles.tagsContainer}>
-							{sortedTags.map((item, index) => (
-								<Pressable
-									key={`tag-${item.id || index}`}
-									style={[
-										styles.tagItem,
-										index === tags.length - 1 ? styles.lastItem : null,
-										{ backgroundColor: themeColors.backgroundColor },
-									]}
-									onPress={() => handleTagSelect(item)}
-									testID={`tag-item-${index}`}
-								>
-									<View style={styles.tagContent}>
-										<Text style={designs.text.text}>{item.emoji}</Text>
-										<View style={[styles.colorDot, { backgroundColor: item.color }]} />
-										<Text style={designs.text.text}>{item.text}</Text>
-									</View>
-								</Pressable>
-							))}
-						</View>
+                        <View style={[
+                            styles.tagsContainer,
+                            isMoodTable ? styles.moodTagsContainer : styles.listTagsContainer
+                        ]}>
+                            {sortedTags.map((item, index) => (
+                                <Pressable
+                                    key={`tag-${item.id || index}`}
+                                    style={[
+                                        styles.tagItem,
+                                        isMoodTable ? styles.moodTagItem : styles.listTagItem,
+                                        !isMoodTable && index === tags.length - 1 ? styles.lastItem : null,
+                                        { backgroundColor: themeColors.backgroundColor },
+                                    ]}
+                                    onPress={() => handleTagSelect(item)}
+                                    testID={`tag-item-${index}`}
+                                >
+                                    <View style={styles.tagContent}>
+                                        <Text style={designs.text.text}>{item.emoji}</Text>
+                                        <View style={[styles.colorDot, { backgroundColor: item.color }]} />
+                                        <Text 
+											style={[isMoodTable ? styles.moodTagText : designs.text.text]} 
+											numberOfLines={1}
+											ellipsizeMode="tail"
+										>
+											{item.text}
+										</Text>
+                                    </View>
+                                </Pressable>
+                            ))}
+                        </View>
 					) : (
 						<Text style={[designs.text.text, { textAlign: 'center', color: themeColors.gray }]}>
 							No tags available
@@ -110,9 +122,34 @@ const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
 		marginTop: 20,
 		width: '100%',
 	},
-	tagsContainer: {
-		marginHorizontal: 40,
+    tagsContainer: {
+        marginHorizontal: 20,
+    },
+    moodTagsContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 10,
+    },
+    listTagsContainer: {
+        flexDirection: 'column',
+    },
+    moodTagItem: {
+        flex: 1,
+        minWidth: '20%',
+
+        // borderWidth: 1,
+        // borderColor: themeColors.borderColor,
+    },
+	moodTagText: {
+		color: themeColors.textColor,
+		fontSize: 10,
 	},
+    listTagItem: {
+        width: '100%',
+        marginVertical: 2,
+        borderBottomWidth: 1,
+        borderColor: themeColors.borderColor,
+    },
 	tagContent: {
 		flexDirection: 'row',
 		alignItems: 'center',
