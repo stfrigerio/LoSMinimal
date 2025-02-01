@@ -107,18 +107,21 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                         onPress: withNavigationDelay(() => openTime('graph'))
                     },
                 ];
-            // case 'mood':
-            //     return [
-            //         { 
-            //             label: 'Tracker', 
-            //             onPress: withNavigationDelay(() => openMoods('tracker'))
-            //         },
-            //         { 
-            //             label: 'Analytics', 
-            //             onPress: withNavigationDelay(() => openMoods('analytics'))
-            //         },
-            //         // Add more mood-related options
-            //     ];
+            case 'mood':
+                return [
+                    { 
+                        label: 'Dashboard', 
+                        onPress: withNavigationDelay(() => openMoods())
+                    },
+                    { 
+                        label: 'List', 
+                        onPress: withNavigationDelay(() => openMoods('list'))
+                    },
+                    { 
+                        label: 'Graph', 
+                        onPress: withNavigationDelay(() => openMoods('graph'))
+                    },
+                ];
             default:
                 return [];
         }

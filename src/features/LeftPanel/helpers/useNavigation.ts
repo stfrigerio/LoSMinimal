@@ -96,8 +96,12 @@ export const useNavigationComponents = () => {
 		}
 	}, []);
 
-	const openMoods = useCallback(() => {
-		router.push('/mood');
+	const openMoods = useCallback((screen?: 'dashboard' | 'list' | 'graph') => {
+		if (screen) {
+			router.push(`/mood/${screen}`);
+		} else {
+			router.push('/mood');
+		}
 	}, []);
 
 	const openDatabase = useCallback(() => {
