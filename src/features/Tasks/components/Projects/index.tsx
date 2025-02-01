@@ -10,7 +10,7 @@ import MobileNavbar from '@/src/components/NavBar';
 import { ProjectCard, HeaderActions, ProjectView } from './components';
 import { exportProjects, importProjects } from './hooks';
 
-const ProjectsScreen: React.FC = () => {
+const Projects: React.FC = () => {
     const { themeColors } = useThemeStyles();
     const styles = useMemo(() => getStyles(themeColors), [themeColors]);
     const [projects, setProjects] = useState<Project[]>([]);
@@ -115,7 +115,7 @@ const ProjectsScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView style={styles.projectsList}>
+            <ScrollView style={[styles.projectsList, { marginBottom: 80 }]}>
                 <View style={styles.projectsListHeader}>
                     <Text style={styles.projectsListHeaderText}>Projects</Text>
                 </View>
@@ -185,4 +185,4 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 });
 
 
-export default ProjectsScreen;
+export default Projects;

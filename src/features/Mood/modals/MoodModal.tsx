@@ -208,24 +208,24 @@ const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, i
 						</View>
 						<View style={[styles.tagContainer]}>
 							{moodTags.map((tag, index) => (
-									<Pressable 
-										key={`${tag.text}-${index}`}
-										style={[styles.tag, { backgroundColor: tag.color ? `${tag.color}99` : undefined }]}
-										onPress={() => removeMoodTag(tag)}
-									>
-										<Text style={[
-											styles.tagText, 
-											{ color: tag.color ? getContrastColor(tag.color) : theme.textColor }
-										]}>
-											{tag.text}
-										</Text>
-										<Text style={[
-											styles.removeTag, 
-											{ color: tag.color ? getContrastColor(tag.color) : theme.textColor }
-										]}>
-											×
-										</Text>
-									</Pressable>
+								<Pressable 
+									key={`${tag.text}-${index}`}
+									style={[styles.tag, { backgroundColor: tag.color ? `${tag.color}99` : undefined }]}
+									onPress={() => removeMoodTag(tag)}
+								>
+									<Text style={[
+										styles.tagText, 
+										{ color: tag.color ? getContrastColor(tag.color) : theme.textColor }
+									]}>
+										{tag.text}
+									</Text>
+									<Text style={[
+										styles.removeTag, 
+										{ color: tag.color ? getContrastColor(tag.color) : theme.textColor }
+									]}>
+										×
+									</Text>
+								</Pressable>
 							))}
 						</View>
 					</View>
