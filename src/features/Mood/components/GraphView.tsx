@@ -1,23 +1,33 @@
 import React, { useState, useMemo } from 'react';
 import { View, Dimensions, Text, StyleSheet, Pressable } from 'react-native';
-import { MoodNoteData } from '@/src/types/Mood';
 import MoodChart from '@/src/components/charts/MoodChart';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import createTimePicker from '@/src/components/DateTimePicker';
+import { useMoodData } from '../hooks/useMoodData';
+import { navItems } from '../constants/navItems';
+import MobileNavbar from '@/src/components/NavBar';
 
-interface GraphViewProps {
-    moodData: MoodNoteData[];
-}
 
-const GraphView: React.FC<GraphViewProps> = ({ moodData }) => {
+const GraphView: React.FC = () => {
     const { themeColors } = useThemeStyles();
     const { width } = Dimensions.get('window');
     const height = 300;
     const timePicker = createTimePicker();
     const styles = getStyles(themeColors);
 
+    const { entries: moodData } = useMoodData();
+
     // Get min and max dates from the dataset
     const dateRange = useMemo(() => {
+        if (moodData.length === 0) {
+            const today = new Date();
+            const monthAgo = new Date();
+            monthAgo.setMonth(monthAgo.getMonth() - 1);
+            return {
+                min: monthAgo,
+                max: today
+            };
+        }
         const dates = moodData.map(d => new Date(d.date));
         return {
             min: new Date(Math.min(...dates.map(d => d.getTime()))),
@@ -112,6 +122,13 @@ const GraphView: React.FC<GraphViewProps> = ({ moodData }) => {
             </View>
 
             {timePicker.picker}
+
+            <MobileNavbar 
+                items={navItems} 
+                activeIndex={navItems.findIndex(item => item.label === 'Graph')} 
+                quickButtonFunction={undefined}
+                screen="mood"
+            />
         </View>
     );
 };
@@ -119,6 +136,8 @@ const GraphView: React.FC<GraphViewProps> = ({ moodData }) => {
 const getStyles = (themeColors: any) => StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: 40,
+        paddingHorizontal: 20,
     },
     datePickerContainer: {
         padding: 20,
