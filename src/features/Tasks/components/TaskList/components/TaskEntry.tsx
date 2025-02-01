@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faCircle, faTrash, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 
-import TaskModal from '../modals/TaskModal';
+import TaskModal from '../../../modals/TaskModal';
 import AlertModal from '@/src/components/modals/AlertModal';
 
-import { handlePostponeTask } from '../helpers/postponeTask';
+import { handlePostponeTask } from '../../../helpers/postponeTask';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { TaskData } from '@/src/types/Task';
 import { PillarData } from '@/src/types/Pillar';

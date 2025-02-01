@@ -188,12 +188,12 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
                         trackColorFalse={themeColors.greenOpacity}
                         trackColorTrue={themeColors.redOpacity}
                     />  
-                    <PickerInput
+                    {/* <PickerInput
                         label="Account"
                         selectedValue={selectedAccount}
                         onValueChange={handleAccountChange}
                         items={accounts}
-                    />
+                    /> */}
                     <View style={{ width: '100%', marginBottom: 20 }}>
                         <TagDescriptionSelector
                             tag={transaction.tag}

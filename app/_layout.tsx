@@ -68,16 +68,30 @@ function AppContent() {
     );
 }
 
-function RootLayout() {
+function ThemedRootLayout() {
+    const { themeColors } = useThemeStyles();
+    
     return (
-        <SafeAreaProvider>
+        <SafeAreaProvider
+            style={{ 
+                flex: 1, 
+                backgroundColor: themeColors?.backgroundColor 
+            }}
+        >
             <GestureHandlerRootView style={{ flex: 1 }}>
-                <ThemeProvider>
-                    <AppContent />
-                </ThemeProvider>
+                <AppContent />
             </GestureHandlerRootView>
         </SafeAreaProvider>
     );
 }
+
+function RootLayout() {
+    return (
+        <ThemeProvider>
+            <ThemedRootLayout />
+        </ThemeProvider>
+    );
+}
+
 
 export default RootLayout;

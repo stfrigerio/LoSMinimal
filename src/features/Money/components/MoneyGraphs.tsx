@@ -10,10 +10,9 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useColors } from '@/src/utils/useColors';
 import { useTransactionData } from '../hooks/useTransactionData';
 import MobileNavbar from '@/src/components/NavBar';
-import { router } from 'expo-router';
 import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';
 import { useTransactionFilters } from './MoneyList/helpers/useTransactionFilters';
-
+import { navItems } from '../constants/navItems';
 
 const MoneyGraphs: React.FC = () => {
     // Maintain filter and sort states
@@ -46,12 +45,6 @@ const MoneyGraphs: React.FC = () => {
             </View>
         );
     }
-
-    const navItems = [
-        { label: 'Dashboard', onPress: () => router.push('/money') },
-        { label: 'List', onPress: () => router.push('/money/list') },
-        { label: 'Graph', onPress: () => router.push('/money/graph') }
-    ];
 
     return (
         <View style={styles.container}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
@@ -36,7 +36,10 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
         <Pressable 
             style={({ pressed }) => [
                 styles.container,
-                pressed && { opacity: 0.7 },
+                pressed && { 
+                    opacity: 0.7,
+                    transform: [{ scale: Platform.OS === 'ios' ? 0.95 : 1 }]
+                },
             ]} 
             onPress={onPress}
             android_ripple={{ 

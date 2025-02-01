@@ -1,5 +1,5 @@
-import Tasks from '@/src/features/Tasks/Tasks';
+import Projects from '@/src/features/Tasks/components/Projects';
 
 export default function ProjectsPage() {
-    return <Tasks initialScreen="projects" />;
+    return <Projects />;
 }

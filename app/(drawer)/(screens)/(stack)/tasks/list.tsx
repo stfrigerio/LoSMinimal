@@ -1,5 +1,5 @@
-import Tasks from '@/src/features/Tasks/Tasks';
+import TaskList from '@/src/features/Tasks/components/TaskList';
 
 export default function TaskListPage() {
-    return <Tasks initialScreen="tasklist" />;
+    return <TaskList />;
 }

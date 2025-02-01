@@ -32,7 +32,9 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
             <View style={styles.switchWrapper}>
                 {!leftLabelOff && (
                     falseLabel ? (
-                        <Text style={[styles.switchLabel, !value && styles.activeSwitchLabel]}>{falseLabel}</Text>
+                        <Text style={[styles.switchLabel, !value && styles.activeSwitchLabel]}>
+                            {falseLabel}
+                        </Text>
                     ) : (
                         <View style={styles.emptyLabel} />
                     )
@@ -64,6 +66,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     switchWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         backgroundColor: themeColors.backgroundColor,
     },
     switchLabel: {
@@ -71,6 +74,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         color: themeColors.gray,
         opacity: 0.6,
         fontSize: 14,
+        textAlign: 'center',
     },
     activeSwitchLabel: {
         opacity: 1,

@@ -1,31 +1,41 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { ScrollView, Pressable, Text, StyleSheet } from 'react-native';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { ChecklistProps, ChecklistData } from './types';
-import SingleChecklist from './SingleChecklist';
+import { ChecklistData } from './types';
+import SingleChecklist from './components/SingleChecklist';
 import AddChecklistModal from '../../modals/AddChecklistModal';
 
 import { TaskData } from '@/src/types/Task';
+import { useTasksData } from '../../hooks/useTasksData';
+import MobileNavbar from '@/src/components/NavBar';
+import { navItems } from '../../constants/navItems';
 
-const Checklist: React.FC<ChecklistProps> = ({ 
-    tasks, 
-    addTask, 
-    updateTask, 
-    deleteTask, 
-    refreshTasks 
-}) => {
+const Checklist: React.FC= () => {
     const { themeColors, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
-    
+
+    const { 
+        tasks, 
+        addTask,
+        updateTask,
+        refreshTasks,
+        deleteTask,
+    } = useTasksData();
+
     const [inputTexts, setInputTexts] = useState<{[key: string]: string}>({});
     const [localTasks, setLocalTasks] = useState(tasks);
     const [checklists, setChecklists] = useState<ChecklistData[]>([]);
     const [showAddChecklistModal, setShowAddChecklistModal] = useState(false);
     const [editingChecklist, setEditingChecklist] = useState<ChecklistData | null>(null);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+    const filteredChecklistTasks = useMemo(() => {
+        return tasks.filter((task: TaskData) => task.type && task.type.startsWith('checklist'));
+    }, [tasks]);
 
     useEffect(() => {
-        setLocalTasks(tasks);
-    }, [tasks]);
+        setLocalTasks(filteredChecklistTasks);
+    }, [filteredChecklistTasks]);
 
     // Function to reconstruct checklists from tasks
     const reconstructChecklists = useCallback((taskList: TaskData[]) => {
@@ -183,16 +193,23 @@ const Checklist: React.FC<ChecklistProps> = ({
                     initialChecklist={editingChecklist}
                 />
             )}
+            <MobileNavbar
+                items={navItems}
+                activeIndex={navItems.findIndex(item => item.label === 'Checklist')}
+                quickButtonFunction={() => setIsAddModalOpen(true)}
+                screen="tasks"
+            />
         </>
     );
 };
 
 const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     container: {
+        backgroundColor: themeColors.backgroundColor,
         borderRadius: 8,
         padding: 10,
-        marginTop: 20,
-        marginBottom: 80
+        paddingTop: 50,
+        marginBottom: 60
     },
     addChecklistButton: {
         backgroundColor: themeColors.backgroundSecondary,

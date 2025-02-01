@@ -3,7 +3,7 @@ import { View, Text, Pressable, TextInput, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus, faChevronDown, faChevronUp, faEdit } from '@fortawesome/free-solid-svg-icons';
 import Collapsible from '@/src/components/Collapsible';
-import { ChecklistData, ChecklistProps } from './types';
+import { ChecklistData, ChecklistProps } from '../types';
 import ChecklistItem from './ChecklistItem';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 

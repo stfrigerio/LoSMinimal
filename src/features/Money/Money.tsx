@@ -6,8 +6,7 @@ import MobileNavbar from '@/src/components/NavBar';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useTransactionData } from './hooks/useTransactionData';
-
-import { router } from 'expo-router';
+import { navItems } from './constants/navItems';
 import Banner from '@/src/components/Banner';
 
 const MoneyHub: React.FC = () => {
@@ -39,12 +38,6 @@ const MoneyHub: React.FC = () => {
             balance: income - expenses,
         };
     }, [transactions]);
-
-    const navItems = [
-        { label: 'Dashboard', onPress: () => router.push('/money') },
-        { label: 'List', onPress: () => router.push('/money/list') },
-        { label: 'Graph', onPress: () => router.push('/money/graph') }
-    ];
 
     return (
         <View style={styles.container}>

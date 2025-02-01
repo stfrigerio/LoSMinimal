@@ -8,6 +8,7 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import TaskModal from '../../../modals/TaskModal';
 import { TaskData } from '@/src/types/Task';
 import { useTasksData } from '@/src/features/Tasks/hooks/useTasksData';
+
 interface ProjectViewProps {
     project: Project;
     onClose: () => void;
@@ -30,6 +31,8 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
     useEffect(() => {
         setContent(project.markdown);
     }, [project.markdown]);
+
+    // todo i need to find a way to disable the swipe interaction on ios
     
     useEffect(() => {
         if (Platform.OS === 'android') {
@@ -224,6 +227,8 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         right: 0,
         bottom: 0,
         zIndex: 100,
+        paddingTop: 50,
+        paddingHorizontal: 24,
     },
     header: {
         flexDirection: 'row',

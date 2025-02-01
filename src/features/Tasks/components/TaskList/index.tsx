@@ -1,37 +1,41 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { StyleSheet, FlatList, Dimensions, Platform, View, Text, Pressable,  } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faCircle, faList, faRepeat } from '@fortawesome/free-solid-svg-icons';
 
-import TaskEntry from './TaskEntry';
+import TaskEntry from './components/TaskEntry';
 import { TaskData } from '@/src/types/Task';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { PillarData } from '@/src/types/Pillar';
+import { useTasksData } from '../../hooks/useTasksData';
+import { FilterType } from './components/FilterIcon';
+import { FilterTray } from './components/FilterTray';
+import MobileNavbar from '@/src/components/NavBar';
+import TaskModal from '../../modals/TaskModal';
+import { navItems } from '../../constants/navItems';
 
-interface TaskListProps {
-    tasks: TaskData[];
-    updateTask: any;
-    deleteTask: any;
-    refreshTasks: () => void;
-    pillars: PillarData[];
-}
-
-type FilterType = 'all' | 'completed' | 'active' | 'repeat';
-
-const TaskListScreen = ({ 
-    tasks, 
-    updateTask,
-    deleteTask,
-    refreshTasks,
-    pillars,
-}: TaskListProps) => {
+const TaskListScreen = () => {
     const [filter, setFilter] = useState<FilterType>('all');
     const { themeColors, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+
+    const { 
+        tasks, 
+        addTask,
+        updateTask,
+        refreshTasks,
+        deleteTask,
+        pillars,
+    } = useTasksData();
+
+    const filteredTasks = useMemo(() => {
+        const tasksWithoutChecklist = tasks.filter((task: TaskData) => task.type !== 'checklist');
+        return tasksWithoutChecklist.filter((task: TaskData) => task.due);
+    }, [tasks]);
 
     // Sort and filter the tasks
     const filteredAndSortedTasks = useMemo(() => {
-        return tasks
+        return filteredTasks
             .filter((task: TaskData) => {
                 if (!task.uuid) {
                     console.warn('Task without UUID:', task);
@@ -49,7 +53,7 @@ const TaskListScreen = ({
                 const dateB = new Date(b.due || 0);
                 return dateB.getTime() - dateA.getTime(); // Newest to oldest
             });
-    }, [tasks, filter]);
+    }, [filteredTasks, filter]);
 
     const keyExtractor = useCallback((item: TaskData) => {
         if (!item.uuid) {
@@ -58,6 +62,18 @@ const TaskListScreen = ({
         }
         return item.uuid;
     }, []);
+
+    const handleUpdateTask = useCallback(async (newTask: TaskData) => {
+        await updateTask(newTask);
+        refreshTasks();
+        setIsUpdateModalOpen(false);
+    }, [updateTask, refreshTasks]);
+
+    const handleAddTask = useCallback(async (newTask: TaskData) => {
+        await addTask(newTask);
+        refreshTasks();
+        setIsAddModalOpen(false);
+    }, [addTask, refreshTasks]);
 
     const renderItem = ({ item, index }: { item: TaskData; index: number }) => {
         const today = new Date();
@@ -90,24 +106,9 @@ const TaskListScreen = ({
         );
     };
 
-    const FilterIcon: React.FC<{ type: FilterType, icon: any }> = ({ type, icon }) => (
-        <Pressable onPress={() => setFilter(type)} style={styles.filterIcon}>
-            <FontAwesomeIcon 
-                icon={icon} 
-                color={filter === type ? themeColors.accentColor : themeColors.gray} 
-                size={24} 
-            />
-        </Pressable>
-    );
-
     return (
-        <>
-            <View style={styles.filterContainer}>
-                <FilterIcon type="all" icon={faList} />
-                <FilterIcon type="active" icon={faCircle} />
-                <FilterIcon type="completed" icon={faCheckCircle} />
-                <FilterIcon type="repeat" icon={faRepeat} />
-            </View>
+        <View style={styles.container}>
+            <FilterTray setFilter={setFilter} filter={filter} />
             <View style={styles.divider} />
             <FlatList
                 data={filteredAndSortedTasks}
@@ -125,24 +126,48 @@ const TaskListScreen = ({
                 windowSize={5}
                 removeClippedSubviews={true}
             />
-        </>
+            {isAddModalOpen && (
+                <TaskModal
+                    isOpen={isAddModalOpen}
+                    onClose={() => setIsAddModalOpen(false)}
+                    onAddItem={handleAddTask}
+                    onUpdateItem={handleUpdateTask}
+                />
+            )}  
+            {isUpdateModalOpen && (
+                <TaskModal
+                    isOpen={isUpdateModalOpen}
+                    onClose={() => setIsUpdateModalOpen(false)}
+                    onAddItem={handleUpdateTask}
+                    onUpdateItem={handleUpdateTask}
+                />
+            )}
+            <MobileNavbar
+                items={navItems}
+                activeIndex={navItems.findIndex(item => item.label === 'List')}
+                quickButtonFunction={() => setIsAddModalOpen(true)}
+                screen="tasks"
+            />
+        </View>
     )
 };
 
 const getStyles = (themeColors: any, designs: any) => {
     return StyleSheet.create({
+        container: {
+            flex: 1,
+            paddingTop: 50,
+            backgroundColor: themeColors.backgroundColor,
+        },
         filterContainer: {
             marginTop: 15,
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
         },
-        filterIcon: {
-            marginHorizontal: 15,
-            padding: 5,
-        },
         list: {
             flex: 1,
+            marginHorizontal: 16,
         },
         divider: {
             height: 1,

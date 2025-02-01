@@ -45,10 +45,12 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ visible, onClose,
                         placeholderTextColor='#969DA3'
                         onSubmitEditing={handleAddChecklist}
                     />
-                    <PrimaryButton
-                        text={initialChecklist ? 'Update Checklist' : 'Add Checklist'}
-                        onPress={handleAddChecklist}
-                    />
+                    <View style={styles.buttonContainer}>
+                        <PrimaryButton
+                            text={initialChecklist ? 'Update Checklist' : 'Add Checklist'}
+                            onPress={handleAddChecklist}
+                        />
+                    </View>
                 </View>
             </UniversalModal>
         </>
@@ -73,35 +75,10 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         color: themeColors.textColor,
         height: 60
     },
-    colorPickerButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    buttonContainer: {
+        width: '100%',
         marginTop: 20,
-    },
-    colorDot: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: themeColors.borderColor,
-        marginRight: 10,
-    },
-    colorPickerButtonText: {
-        color: themeColors.textColor,
-    },
-    colorPickerContent: {
-        backgroundColor: themeColors.backgroundColor,
-        borderRadius: 10,
-        padding: 20,
-        width: '90%',
-        height: 400,
-    },
-    colorPickerButtons: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 20,
-        marginLeft: -40
-    },
+    }
 });
 
 export default AddChecklistModal;

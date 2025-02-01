@@ -1,124 +1,100 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, Platform, Pressable } from 'react-native';
+import { View, StyleSheet, Dimensions, Platform, Pressable, Text } from 'react-native';
 
 import TaskModal from '@/src/features/Tasks/modals/TaskModal';
 import MobileNavbar from '@/src/components/NavBar';
-import TaskListScreen from './components/TasksList';
-import ChecklistScreen from './components/Checklist';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useTasksData } from './hooks/useTasksData';
 
 import { TaskData } from '@/src/types/Task';
-import ProjectsScreen from './components/Projects/Projects';
 import { Project } from './components/Projects/types/types';
+import { router } from 'expo-router';
+import Banner from '@/src/components/Banner';
 
-interface TasksHubProps {
-    initialScreen?: 'tasklist' | 'checklist' | 'projects';
-}
 
-const TasksHub: React.FC<TasksHubProps> = ({ initialScreen = 'tasklist' }) => {
-    const [activeScreen, setActiveScreen] = useState<'tasklist' | 'checklist' | 'projects'>(initialScreen);
-
-    useEffect(() => {
-        if (initialScreen) {
-            setActiveScreen(initialScreen);
-        }
-    }, [initialScreen]);
-
-    const { themeColors } = useThemeStyles();
+const TasksHub: React.FC = () => {
+    const { themeColors, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(themeColors), [themeColors]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [refreshTrigger, setRefreshTrigger] = useState(0);
-    const [screens, setScreens] = useState(['Task List', 'Checklist', 'Projects']);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const { tasks } = useTasksData(); 
 
     const { 
-        tasks, 
         addTask,
         updateTask,
         refreshTasks,
-        deleteTask,
-        pillars,
     } = useTasksData();
-
-    const openAddModal = () => setIsAddModalOpen(true);
-    const closeAddModal = () => setIsAddModalOpen(false);
 
     const handleUpdateTask = useCallback(async (newTask: TaskData) => {
         await updateTask(newTask);
         refreshTasks();
-        setRefreshTrigger(prev => prev + 1);
-        closeAddModal();
-    }, [updateTask, refreshTasks, closeAddModal]);
+        setIsUpdateModalOpen(false);
+    }, [updateTask, refreshTasks]);
 
     const handleAddTask = useCallback(async (newTask: TaskData) => {
         await addTask(newTask);
         refreshTasks();
-        setRefreshTrigger(prev => prev + 1);
-        closeAddModal();
-    }, [addTask, refreshTasks, closeAddModal]);
+        setIsAddModalOpen(false);
+    }, [addTask, refreshTasks]);
 
-    const checklistTasks = useMemo(() => {
-        return tasks.filter((task: TaskData) => task.type && task.type.startsWith('checklist'));
+    const navItems = [
+        { label: 'Dashboard', onPress: () => router.push('/tasks') },
+        { label: 'List', onPress: () => router.push('/tasks/list') },
+        { label: 'Checklist', onPress: () => router.push('/tasks/checklist') },
+        { label: 'Projects', onPress: () => router.push('/tasks/projects') }
+    ];
+
+    const taskStats = useMemo(() => {
+        const totalTasks = tasks.length;
+        const completedTasks = tasks.filter(t => t.completed).length;
+        const pendingTasks = totalTasks - completedTasks;
+        const completionRate = totalTasks > 0 
+            ? Math.round((completedTasks / totalTasks) * 100) 
+            : 0;
+        
+        return {
+            totalTasks,
+            completedTasks,
+            pendingTasks,
+            completionRate,
+        };
     }, [tasks]);
-
-    const filteredTasks = useMemo(() => {
-        const tasksWithoutChecklist = tasks.filter((task: TaskData) => task.type !== 'checklist');
-        return tasksWithoutChecklist.filter((task: TaskData) => task.due);
-    }, [tasks]);
-
-    const renderContent = () => {
-        switch (activeScreen) {
-            case 'tasklist':
-                return (
-                    <TaskListScreen
-                        tasks={filteredTasks}
-                        updateTask={updateTask}
-                        deleteTask={deleteTask}
-                        refreshTasks={refreshTasks}
-                        pillars={pillars}
-                    />
-                );
-            case 'checklist':
-                return (
-                    <ChecklistScreen 
-                        tasks={checklistTasks}
-                        addTask={(task: Partial<TaskData>) => addTask(task as Omit<TaskData, "id" | "uuid">)}
-                        updateTask={updateTask}
-                        deleteTask={deleteTask}
-                        refreshTasks={refreshTasks}
-                    />
-                );
-            case 'projects':
-                return (
-                    <ProjectsScreen 
-                        pillars={pillars}
-                        selectedProject={selectedProject}
-                        setSelectedProject={setSelectedProject}
-                    />
-                );
-            default:
-                return null;
-        }
-    };
-
-    const navItems = useMemo(() => 
-        screens.map((screen) => ({
-            label: screen,
-            onPress: () => setActiveScreen(screen.toLowerCase().replace(' ', '') as 'tasklist' | 'checklist' | 'projects'),
-        })),
-        [screens]
-    );
 
     return (
         <View style={styles.container}>
-            {renderContent()}
+            <Banner imageSource={require('@/assets/images/tasks.webp')} />
+            <Text style={designs.text.title}>Tasks</Text>
+
+            {/* Add Summary Section */}
+            <View style={styles.summaryContainer}>
+                <View style={styles.summaryRow}>
+                    <View style={styles.summaryItem}>
+                        <Text style={styles.summaryLabel}>Total Tasks</Text>
+                        <Text style={styles.summaryValue}>{taskStats.totalTasks}</Text>
+                    </View>
+                    <View style={styles.summaryItem}>
+                        <Text style={styles.summaryLabel}>Completion Rate</Text>
+                        <Text style={[
+                            styles.summaryValue,
+                            { color: taskStats.completionRate > 50 ? themeColors.greenOpacity : themeColors.yellowOpacity }
+                        ]}>{taskStats.completionRate}%</Text>
+                    </View>
+                </View>
+                <View style={styles.summaryRow}>
+                    <View style={styles.summaryItem}>
+                        <Text style={styles.summaryLabel}>Pending</Text>
+                        <Text style={[styles.summaryValue, { color: themeColors.yellowOpacity }]}>
+                            {taskStats.pendingTasks}
+                        </Text>
+                    </View>
+                </View>
+            </View>
+
             {isAddModalOpen && (
                 <TaskModal
                     isOpen={isAddModalOpen}
-                    onClose={closeAddModal}
+                    onClose={() => setIsAddModalOpen(false)}
                     onAddItem={handleAddTask}
                     onUpdateItem={handleUpdateTask}
                 />
@@ -131,14 +107,12 @@ const TasksHub: React.FC<TasksHubProps> = ({ initialScreen = 'tasklist' }) => {
                     onUpdateItem={handleUpdateTask}
                 />
             )}
-            {!selectedProject && (
-                <MobileNavbar
-                    items={navItems}
-                    activeIndex={screens.findIndex(screen => screen.toLowerCase().replace(' ', '') === activeScreen)}
-                    quickButtonFunction={activeScreen === 'checklist' || activeScreen === 'projects' ? undefined : openAddModal}
-                    screen="tasks"
-                />
-            )}
+            <MobileNavbar
+                items={navItems}
+                activeIndex={navItems.findIndex(item => item.label === 'Dashboard')}
+                quickButtonFunction={() => setIsAddModalOpen(true)}
+                screen="tasks"
+            />
         </View>
     );
 };
@@ -150,6 +124,40 @@ const getStyles = (themeColors: any) => {
             backgroundColor: themeColors.backgroundColor,
             padding: 20,
             paddingTop: 40,
+        },
+        summaryContainer: {
+            backgroundColor: themeColors.cardBackground,
+            borderRadius: 12,
+            padding: 15,
+            marginBottom: 20,
+            shadowColor: "#000",
+            shadowOffset: {
+                width: 0,
+                height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+        },
+        summaryRow: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 15,
+        },
+        summaryItem: {
+            flex: 1,
+            alignItems: 'center',
+            padding: 10,
+        },
+        summaryLabel: {
+            fontSize: 14,
+            color: themeColors.textColorItalic,
+            marginBottom: 5,
+        },
+        summaryValue: {
+            fontSize: 24,
+            fontWeight: 'bold',
+            color: themeColors.textColor,
         },
     });
 };

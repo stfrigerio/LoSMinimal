@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { ChecklistItemProps } from './types';
+import { ChecklistItemProps } from '../types';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 const ChecklistItem: React.FC<ChecklistItemProps> = ({ 

@@ -88,12 +88,13 @@ export const useNavigationComponents = () => {
 		router.push('/people');
 	}, [])
 
-	const openTasks = useCallback((screen: 'tasklist' | 'checklist' | 'projects' = 'tasklist') => {
-		console.log('Opening tasks with screen:', screen); // Debugging
-
-		// Navigate to the specific route based on the screen type
-		router.push(`/tasks/${screen}`);
-	}, [router]);
+	const openTasks = useCallback((screen?: 'list' | 'projects' | 'checklist') => {
+		if (screen) {
+			router.push(`/tasks/${screen}`);
+		} else {
+			router.push('/tasks');
+		}
+	}, []);
 
 	const openMoods = useCallback(() => {
 		router.push('/mood');
@@ -103,8 +104,12 @@ export const useNavigationComponents = () => {
 		router.push('/database');
 	}, []);
 
-	const openMoney = useCallback(() => {
-		router.push('/money');
+	const openMoney = useCallback((screen?: 'list' | 'graph') => {
+		if (screen) {
+			router.push(`/money/${screen}`);
+		} else {
+			router.push('/money');
+		}
 	}, []);
 
 	const openHomepage = useCallback(() => {

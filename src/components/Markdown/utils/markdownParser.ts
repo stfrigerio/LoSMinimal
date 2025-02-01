@@ -14,7 +14,6 @@ export const isChecklistItem = (line: string): { isChecklist: boolean, indentLev
     // Calculate indent level by counting tabs or pairs of spaces
     const indentLevel = indentStr.replace(/\s{2}/g, '\t').length;
     
-    console.log('line:', line, 'indentLevel:', indentLevel, 'indentStr:', JSON.stringify(indentStr));
     return { isChecklist: true, indentLevel };
 };
 

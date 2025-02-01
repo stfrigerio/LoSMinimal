@@ -1,6 +1,5 @@
-import React, { useState, useMemo, useCallback } from 'react';
-import { View, StyleSheet, FlatList, Dimensions, Platform, Text, Pressable } from 'react-native';
-import { router } from 'expo-router';
+import React, { useState, useCallback } from 'react';
+import { View, StyleSheet, FlatList, Dimensions, Text, Pressable } from 'react-native';
 
 import TransactionEntry from './components/TransactionEntry';
 import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';
@@ -15,6 +14,7 @@ import { useTransactionSelection } from './helpers/useTransactionSelection';
 import { useMoneyColors } from './helpers/useColors';
 import MobileNavbar from '@/src/components/NavBar';
 import TransactionModal from '../../modals/TransactionModal';
+import { navItems } from '../../constants/navItems';
 
 const MoneyList: React.FC = () => {
     const { 
@@ -69,12 +69,6 @@ const MoneyList: React.FC = () => {
             toggleSelect={toggleSelect}
         />
     );
-
-    const navItems = [
-        { label: 'Dashboard', onPress: () => router.push('/money') },
-        { label: 'List', onPress: () => router.push('/money/list') },
-        { label: 'Graph', onPress: () => router.push('/money/graph') }
-    ];
 
     return (
         <View style={styles.container}>
@@ -151,7 +145,7 @@ const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelect
         },
         selectionHeader: {
             position: 'absolute',
-            top: 10,
+            top: 35,
             left: 0,
             right: 0,
             height: 60,

@@ -56,8 +56,12 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
             case 'tasks':
                 return [
                     { 
+                        label: 'Dashboard', 
+                        onPress: withNavigationDelay(() => openTasks())
+                    },
+                    { 
                         label: 'Task List', 
-                        onPress: withNavigationDelay(() => openTasks('tasklist'))
+                        onPress: withNavigationDelay(() => openTasks('list'))
                     },
                     { 
                         label: 'Checklist', 
@@ -68,18 +72,22 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                         onPress: withNavigationDelay(() => openTasks('projects'))
                     },
                 ];
-            // case 'money':
-            //     return [
-            //         { 
-            //             label: 'Overview', 
-            //             onPress: withNavigationDelay(() => openMoney('overview'))
-            //         },
-            //         { 
-            //             label: 'Transactions', 
-            //             onPress: withNavigationDelay(() => openMoney('transactions'))
-            //         },
-            //         // Add more money-related options
-            //     ];
+            case 'money':
+                return [
+                    { 
+                        label: 'Dashboard', 
+                        onPress: withNavigationDelay(() => openMoney())
+                    },
+                    { 
+                        label: 'List', 
+                        onPress: withNavigationDelay(() => openMoney('list'))
+                    },
+                    { 
+                        label: 'Graph', 
+                        onPress: withNavigationDelay(() => openMoney('graph'))
+                    },
+                    // Add more money-related options
+                ];
             // case 'time':
             //     return [
             //         { 

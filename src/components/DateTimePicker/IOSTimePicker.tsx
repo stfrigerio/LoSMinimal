@@ -59,7 +59,7 @@ const IOSTimePicker = () => {
                             is24Hour={true}
                             display="spinner"
                             onChange={handleChange}
-                            textColor={themeColors.textColorBold}
+                            textColor={themeColors.textColor}
                             accentColor={themeColors.accentColor}
                         />
                         <View style={styles.buttonContainer}>
