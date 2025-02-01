@@ -15,7 +15,7 @@ export const textStyles = (themeName: any): TextStyles => {
 		title: {
 			fontSize: 36,
 			fontWeight: 'bold',
-			color: theme.textColor,
+			color: theme.textColorBold,
 			textAlign: 'center',
 			marginBottom: 10,
 			textShadowColor: theme.shadowColor,

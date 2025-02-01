@@ -32,6 +32,7 @@ interface SwitchInputProps {
     trackColorFalse?: string;
     trackColorTrue?: string;
     leftLabelOff?: boolean;
+    style?: any;
 }
 
 export const FormInput: React.FC<FormInputProps> = ({ label, value, isNumeric = false, onChangeText, editable = true, ...props }) => {
@@ -82,13 +83,14 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
     falseLabel = 'Off',
     trackColorFalse,
     trackColorTrue,
-    leftLabelOff = false
+    leftLabelOff = false,
+    style
 }) => {
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
 
     return (
-        <View style={styles.switchContainer}>
+        <View style={[styles.switchContainer]}>
             <View style={styles.switchWrapper}>
                 {!leftLabelOff && (
                     falseLabel ? (
@@ -101,10 +103,11 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
                     value={value}
                     onValueChange={onValueChange}
                     trackColor={{ false: trackColorFalse, true: trackColorTrue }}
-                    thumbColor={themeColors.backgroundSecondary}
+                    thumbColor={themeColors.accentColor}
                 />
                 <Text style={[
                     styles.switchLabel, 
+                    style,
                     value && styles.activeSwitchLabel,
                     leftLabelOff && styles.fullWidthLabel
                 ]}>
@@ -147,10 +150,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     switchWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
         backgroundColor: theme.backgroundColor,
-        borderRadius: 8,
-        paddingHorizontal: 8,
     },
     switchLabel: {
         flex: 1,

@@ -3,8 +3,8 @@ import { useExportActions } from './useExportActions';
 import { useImportActions } from './useImportActions';
 import { useShareActions } from './useShareActions';
 
-export const useBackupActions = ({ showAlert, setIsImporting }: BackupActionsProps) => {
-    const { exportDatabaseJson, exportDatabaseSqlite } = useExportActions({ showAlert });
+export const useBackupActions = ({ showAlert, setIsImporting, setIsExporting }: BackupActionsProps) => {
+    const { exportDatabaseJson, exportDatabaseSqlite } = useExportActions({ showAlert, setIsExporting });
     const { importDatabaseJson, importDatabaseSqlite } = useImportActions({ showAlert, setIsImporting });
     const { shareBackupJson, shareBackupSqlite } = useShareActions({ showAlert });
 

@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, ScrollView } from 'react-native';
 
-import { SwitchInput } from '@/src/components/FormComponents';
 import DatabaseTable from './components/DatabaseTable';
+import Banner from '@/src/components/Banner';
+import TableSelector from './components/Table/TableSelector';
+import ServerSection from './components/ServerSection';
 
 import { useData } from './hooks/useData';
 import { sortTableData } from './helpers/sortTableData'
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
-import TableSelector from './components/Table/TableSelector';
-import DestructionSection from './components/DestructionSection';
-import ServerSection from './components/ServerSection';
-
 const Database: React.FC = () => {
 	const [selectedTable, setSelectedTable] = useState<string>('');
-
-	const [showServerSection, setShowServerSection] = useState(false);
-	const [showDestructionSection, setShowDestructionSection] = useState(false);
+	const [showTableSelector, setShowTableSelector] = useState(false);
 
 	const { themeColors, designs } = useThemeStyles();
 	const styles = getStyles(themeColors);
@@ -66,36 +62,19 @@ const Database: React.FC = () => {
 
 	return (
 		<View style={styles.superContainer}>
-			<View style={styles.switchContainer}>
-				<SwitchInput  
-					label='Show Server Section'
-					value={showServerSection}
-					onValueChange={(value) => setShowServerSection(value)}
-					trueLabel='Show Server Section'
-					falseLabel=''
-					leftLabelOff={true}
-				/>
-				<SwitchInput  
-					label='Show Destruction Section'
-					value={showDestructionSection}
-					onValueChange={(value) => setShowDestructionSection(value)}
-					trueLabel='Engage Database Destruction'
-					falseLabel=''
-					trackColorTrue={themeColors.accentColor}
-					leftLabelOff={true}
-				/>
-			</View>
-			{showDestructionSection && (
-				<DestructionSection />
-			)}
 			<ScrollView style={styles.container}>
-				<TableSelector
-					tables={tables}
-					selectedTable={selectedTable}
-					onSelectTable={setSelectedTable}
+				<Banner imageSource={require('@/assets/images/databased-wider.webp')} />
+				<Text style={designs.text.title}>Databased</Text>
+				<ServerSection 
+					setShowTableSelector={setShowTableSelector}
+					showTableSelector={showTableSelector}
 				/>
-				{showServerSection && (
-					<ServerSection />
+				{showTableSelector && (
+					<TableSelector
+						tables={tables}
+						selectedTable={selectedTable}
+						onSelectTable={setSelectedTable}
+					/>
 				)}
 				{selectedTable && tableData[selectedTable] && (
 					<DatabaseTable
@@ -117,14 +96,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 	superContainer: {
 		flex: 1,
 		backgroundColor: theme.backgroundColor,
-	},
-	switchContainer: {
-		paddingTop: 50,
-		marginLeft: 40,
-		flexDirection: 'column',
-		alignItems: 'stretch',
-		justifyContent: 'flex-start',
-		width: '100%'
+		paddingTop: 10,
 	},
 	container: {
 		flex: 1,

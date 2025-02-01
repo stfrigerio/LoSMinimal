@@ -4,10 +4,12 @@ import { AlertConfig } from '@/src/components/modals/AlertModal';
 
 interface ExportActionsProps {
     showAlert: (config: AlertConfig) => void;
+    setIsExporting: (isExporting: boolean) => void;
 }
 
-export const useExportActions = ({ showAlert }: ExportActionsProps) => {
+export const useExportActions = ({ showAlert, setIsExporting }: ExportActionsProps) => {
     const exportDatabaseJson = async () => {
+        setIsExporting(true);
         try {
             const data: Record<string, any> = {};
             for (const table in databaseManagers) {
@@ -34,10 +36,13 @@ export const useExportActions = ({ showAlert }: ExportActionsProps) => {
                 message: `Failed to export JSON backup: ${error}`,
                 onConfirm: () => {}
             });
+        } finally {
+            setIsExporting(false);
         }
     };
 
     const exportDatabaseSqlite = async () => {
+        setIsExporting(true);
         try {
             const result = await uploadDatabase();
             if (result.success) {
@@ -58,6 +63,8 @@ export const useExportActions = ({ showAlert }: ExportActionsProps) => {
                 onConfirm: () => {},
                 singleButton: true
             });
+        } finally {
+            setIsExporting(false);
         }
     };
 
