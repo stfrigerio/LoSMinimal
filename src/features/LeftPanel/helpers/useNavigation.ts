@@ -120,8 +120,12 @@ export const useNavigationComponents = () => {
 		router.push('/library/music');
 	}, []);
 
-	const openTime = useCallback(() => {
-		router.push('/time');
+	const openTime = useCallback((screen?: 'list' | 'timeline' | 'graph') => {
+		if (screen) {
+			router.push(`/time/${screen}`);
+		} else {
+			router.push('/time');
+		}
 	}, [])
 
 	return { 

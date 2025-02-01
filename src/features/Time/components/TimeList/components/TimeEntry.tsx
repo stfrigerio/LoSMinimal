@@ -3,11 +3,10 @@ import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTrash, faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-icons';
 
-import EditTimeEntryModal from '../modals/EditModal';
+import EditTimeEntryModal from '../../../modals/EditModal';
 
-import { TimeData } from '../../../types/Time';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
-
+import { TimeData } from '@/src/types/Time';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 interface TimeEntryProps {
 	item: TimeData;

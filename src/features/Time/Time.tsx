@@ -1,107 +1,94 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Dimensions, Platform} from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
 import Navbar from '@/src/components/NavBar';
-import TimeList from './components/TimeList';
-import TimeGraphs from './components/TimeGraphs';
 import EditTimeEntryModal from './modals/EditModal';
+import Banner from '@/src/components/Banner';
 
 import { useThemeStyles } from '../../styles/useThemeStyles';
 import { useTimeData } from './hooks/useTimeData';
-import { Timeline } from './components/Timeline/Timeline';
 import { TimeData } from '../../types/Time';
-import { SortOption } from '@/src/components/FilterAndSort';
-import { FilterOptions } from '@/src/components/FilterAndSort';
+import { navItems } from './constants/navItems';
 
 const TimeHub: React.FC = () => {
 	const { theme, themeColors, designs } = useThemeStyles();
 	const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
-	const [showFilter, setShowFilter] = useState(false);
-	const [activeView, setActiveView] = useState('List');
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-	const [filters, setFilters] = useState<FilterOptions>({
-        dateRange: { start: null, end: null },
-        tags: [],
-        searchTerm: '',
-    });
-    const [sortOption, setSortOption] = useState<SortOption>('recent');
 
-    const handleFilterChange = (newFilters: FilterOptions) => {
-        setFilters(newFilters);
-    };
+	// Assume useTimeData now provides a list of timeEntries
+	const { entries: timeEntries, addTimeEntry } = useTimeData();
 
-    const handleSortChange = (newSortOption: SortOption) => {
-        setSortOption(newSortOption);
-    };
+  	// Compute summary statistics based on the timeEntries array
+	const { totalEntries, totalTrackedTime, averageSession } = useMemo(() => {
+		const durationToSeconds = (duration: string) => {
+			const parts = duration.split(':').map(Number);
+			return parts[0] * 3600 + parts[1] * 60 + parts[2];
+		};
 
-	const closeAddModal = () => setIsAddModalOpen(false);
-	const openAddModal = () => setIsAddModalOpen(true);
+		const formatSeconds = (totalSeconds: number) => {
+			const hours = Math.floor(totalSeconds / 3600);
+			const minutes = Math.floor((totalSeconds % 3600) / 60);
+			const seconds = totalSeconds % 60;
+			return [
+				hours.toString().padStart(2, '0'),
+				minutes.toString().padStart(2, '0'),
+				seconds.toString().padStart(2, '0'),
+			].join(':');
+		};
 
-    const { 
-        entries, 
-        isLoading, 
-        error, 
-        deleteTimeEntry, 
-        editTimeEntry, 
-        addTimeEntry,
-		batchUpdateTimeEntries  // Add this
-    } = useTimeData();
+		const totalEntries = timeEntries.length;
+		const totalSeconds = timeEntries.reduce((sum, entry) => {
+			// If duration is not set, default to 0 seconds
+			return sum + (entry.duration ? durationToSeconds(entry.duration) : 0);
+		}, 0);
+		const averageSeconds = totalEntries ? Math.floor(totalSeconds / totalEntries) : 0;
+
+		return {
+			totalEntries,
+			totalTrackedTime: formatSeconds(totalSeconds),
+			averageSession: formatSeconds(averageSeconds),
+		};
+	}, [timeEntries]);
 
 	const handleAddNewTimer = (newEntry: TimeData) => {
 		addTimeEntry(newEntry);
-		closeAddModal();
+		setIsAddModalOpen(false);
 	};
-
-	const toggleFilter = () => {
-		setShowFilter(!showFilter);
-	};
-
-	const handleEditTimeEntry = (entryOrUuids: TimeData | string[], updatedFields?: Partial<TimeData>) => {
-		if (Array.isArray(entryOrUuids) && updatedFields) {
-			// Handle batch update
-			return batchUpdateTimeEntries(entryOrUuids, updatedFields);
-		} else {
-			// Handle single entry update
-			return editTimeEntry(entryOrUuids as TimeData);
-		}
-	};
-
-	const navItems = [
-		{ label: 'List', onPress: () => setActiveView('List') },
-		{ label: 'Timeline', onPress: () => setActiveView('Timeline') }
-	];
 
 	return (
 		<View style={styles.container}>
-            {activeView === 'List' && (
-                <TimeList 
-                    entries={entries}
-                    isLoading={isLoading}
-                    error={error || ''}
-                    deleteTimeEntry={deleteTimeEntry}
-                    editTimeEntry={handleEditTimeEntry} 
-                    showFilter={showFilter}
-                    filters={filters}
-                    sortOption={sortOption}
-                    onFilterChange={handleFilterChange}
-                    onSortChange={handleSortChange}
-                />
-            )}
-			{activeView === 'Timeline' && (
-				<Timeline />
-			)}
+			<Banner imageSource={require('@/assets/images/time.webp')} />
+			<Text style={designs.text.title}>
+				Time
+			</Text>
+			
+			<View style={styles.summaryContainer}>
+				<View style={styles.summaryItem}>
+					<Text style={styles.summaryLabel}>Total Entries</Text>
+					<Text style={styles.summaryValue}>{totalEntries}</Text>
+				</View>
+				<View style={styles.summaryItem}>
+					<Text style={styles.summaryLabel}>Total Tracked Time</Text>
+					<Text style={styles.summaryValue}>{totalTrackedTime.split(':')[0]}h</Text>
+				</View>
+				<View style={styles.summaryItem}>
+					<Text style={styles.summaryLabel}>Average Session</Text>
+					<Text style={styles.summaryValue}>{averageSession}</Text>
+				</View>
+			</View>
+			
 			<Navbar
 				items={navItems} 
-				activeIndex={navItems.findIndex(item => item.label === activeView)} 
-				showFilter={activeView === 'List' ? true : false}
-				onFilterPress={toggleFilter}
-				quickButtonFunction={openAddModal}
+				activeIndex={navItems.findIndex(item => item.label === 'Dashboard')} 
+				showFilter={false}
+				quickButtonFunction={() => setIsAddModalOpen(true)}
 				screen="time"
 			/>
+			
 			{isAddModalOpen && (
 				<EditTimeEntryModal
 					isVisible={isAddModalOpen}
-					onClose={closeAddModal}
+					onClose={() => setIsAddModalOpen(false)}
 					onSave={handleAddNewTimer}
 					timeEntry={{
 						date: new Date().toISOString(),
@@ -125,47 +112,25 @@ const getStyles = (themeColors: any, designs: any) => {
 			padding: 20,
 			paddingTop: 37,
 		},
-		header: {
-			alignItems: 'center',
-			marginBottom: 10,
-			fontFamily: 'serif',
-		},
-		headerText: {
-			...designs.text.title,
-			fontSize: 24,
-			fontFamily: 'serif',
-		},
-		viewToggle: {
+		summaryContainer: {
 			flexDirection: 'row',
-			justifyContent: 'center',
-			marginBottom: 20,
+			justifyContent: 'space-between',
+			marginVertical: 20,
+			paddingHorizontal: 10,
 		},
-		chartIcon: {
-			marginLeft: 15,
-		},
-		list: {
-			flex: 1,
-		},
-		graphPlaceholder: {
-			flex: 1,
-			justifyContent: 'center',
+		summaryItem: {
 			alignItems: 'center',
-		},
-		floatingButton: {
-			position: 'absolute',
-			bottom: 20,
-			right: 20,
-			width: 60,
-			height: 60,
-			borderRadius: 30,
-			backgroundColor: themeColors.hoverColor,
-			justifyContent: 'center',
-			alignItems: 'center',
-			flexDirection: 'row',
-		},
-		timeList: {
 			flex: 1,
-			marginTop: 30,
+		},
+		summaryLabel: {
+			color: themeColors.textColorItalic,
+			marginBottom: 5,
+			textAlign: 'center',
+		},
+		summaryValue: {
+			color: themeColors.textColor,
+			fontWeight: 'bold',
+			textAlign: 'center',
 		},
 	});
 };

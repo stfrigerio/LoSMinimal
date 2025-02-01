@@ -6,6 +6,7 @@ export default function TimeLayout() {
             <Stack.Screen name="index" />
             <Stack.Screen name="timeline" />
             <Stack.Screen name="list" />
+            <Stack.Screen name="graph" />
         </Stack>
     );
 }

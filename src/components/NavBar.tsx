@@ -79,7 +79,13 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                     </>
                 )}
                 {showFilter && (
-                    <Pressable style={styles.filterIconWrapper} onPress={handleFilterPress}>
+                    <Pressable 
+                        style={[
+                            styles.filterIconWrapper,
+                            !quickButtonFunction && styles.filterIconWrapperNoButton
+                        ]} 
+                        onPress={handleFilterPress}
+                    >
                         <FontAwesomeIcon 
                             icon={faSliders} 
                             color={isFilterActive ? themeColors.accentColor : themeColors.gray} 
@@ -141,6 +147,9 @@ const getStyles = (theme: any) => {
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 1002,
+        },
+        filterIconWrapperNoButton: {
+            right: 15, // Same position as quickButtonContainer when no button exists
         },
         quickButtonContainer: {
             position: 'absolute',

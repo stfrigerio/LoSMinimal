@@ -88,18 +88,25 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                     },
                     // Add more money-related options
                 ];
-            // case 'time':
-            //     return [
-            //         { 
-            //             label: 'Timeline', 
-            //             onPress: withNavigationDelay(() => openTime('timeline'))
-            //         },
-            //         { 
-            //             label: 'Calendar', 
-            //             onPress: withNavigationDelay(() => openTime('calendar'))
-            //         },
-            //         // Add more time-related options
-            //     ];
+            case 'time':
+                return [
+                    { 
+                        label: 'Dashboard', 
+                        onPress: withNavigationDelay(() => openTime())
+                    },
+                    { 
+                        label: 'List', 
+                        onPress: withNavigationDelay(() => openTime('list'))
+                    },
+                    { 
+                        label: 'Timeline', 
+                        onPress: withNavigationDelay(() => openTime('timeline'))
+                    },
+                    { 
+                        label: 'Graph', 
+                        onPress: withNavigationDelay(() => openTime('graph'))
+                    },
+                ];
             // case 'mood':
             //     return [
             //         { 

@@ -1,47 +1,46 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, StyleSheet, FlatList, Dimensions, Platform, Text, Pressable } from 'react-native';
 
-import TimeEntry from './TimeEntry';
+import TimeEntry from './components/TimeEntry';
 import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';
-import BatchTimeEntryModal from '../modals/BatchTimeEntryModal';
+import BatchTimeEntryModal from '../../modals/BatchTimeEntryModal';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useColors } from '@/src/utils/useColors';
 
 import { TimeData } from '@/src/types/Time';
+import { useTimeData } from '../../hooks/useTimeData';
+import { navItems } from '../../constants/navItems';
+import MobileNavbar from '@/src/components/NavBar';
+import EditTimeEntryModal from '../../modals/EditModal';
 
-interface TimeListProps {
-	entries: TimeData[];
-	deleteTimeEntry: (id: number) => void;
-    editTimeEntry: (entryOrUuids: TimeData | string[], updatedFields?: Partial<TimeData>) => Promise<void>;  // Update this
-	showFilter: boolean;
-	isLoading: boolean;
-	error: string;
-	filters: FilterOptions;
-	sortOption: SortOption;
-	onFilterChange: (newFilters: FilterOptions) => void;
-	onSortChange: (newSortOption: SortOption) => void;
-}
 
-const TimeList: React.FC<TimeListProps> = ({
-	entries,
-	deleteTimeEntry,
-	editTimeEntry,
-	showFilter,
-	filters,
-	sortOption,
-	onFilterChange,
-	onSortChange,
-	isLoading,
-	error,
-}) => {
+const TimeList: React.FC = () => {
 	const { themeColors, designs } = useThemeStyles();
 	const [selectionState, setSelectionState] = useState({
 		selectedUuids: new Set<string>(),
 		isSelectionMode: false
 	});
+    const [showFilter, setShowFilter] = useState(false);
+    const [filters, setFilters] = useState<FilterOptions>({
+        dateRange: { start: null, end: null },
+        tags: [],
+        searchTerm: '',
+    });
+    const [sortOption, setSortOption] = useState<SortOption>('recent');
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const styles = React.useMemo(() => getStyles(themeColors, designs, showFilter, selectionState.isSelectionMode), [themeColors, designs, showFilter, selectionState.isSelectionMode]);
 	const { colors: tagColors, loading: colorsLoading, error: colorsError } = useColors();
     const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
+
+    const { 
+        entries, 
+        isLoading, 
+        error, 
+        deleteTimeEntry, 
+        editTimeEntry, 
+        addTimeEntry,
+		batchUpdateTimeEntries  // Add this
+    } = useTimeData();
 
 	// Compute sorted entries
 	const sortedEntries = useMemo(() => {
@@ -133,8 +132,18 @@ const TimeList: React.FC<TimeListProps> = ({
         clearSelection();
     };
 
+    const handleEditTimeEntry = (entryOrUuids: TimeData | string[], updatedFields?: Partial<TimeData>) => {
+		if (Array.isArray(entryOrUuids) && updatedFields) {
+			// Handle batch update
+			return batchUpdateTimeEntries(entryOrUuids, updatedFields);
+		} else {
+			// Handle single entry update
+			return editTimeEntry(entryOrUuids as TimeData);
+		}
+	};
+
 	const handleBatchUpdate = (updatedFields: Partial<TimeData>) => {
-		editTimeEntry(Array.from(selectionState.selectedUuids), updatedFields);
+		handleEditTimeEntry(Array.from(selectionState.selectedUuids), updatedFields);
 		handleBatchModalClose();
 	};
 
@@ -150,6 +159,12 @@ const TimeList: React.FC<TimeListProps> = ({
 			isFilterActive={showFilter}
 		/>
 	), [selectionState, editTimeEntry, deleteTimeEntry, entryColors, showFilter, toggleSelect]);
+
+
+	const handleAddNewTimer = (newEntry: TimeData) => {
+		addTimeEntry(newEntry);
+		setIsAddModalOpen(false);
+	};
 
 	return (
         <View style={styles.container}>
@@ -177,8 +192,8 @@ const TimeList: React.FC<TimeListProps> = ({
 			/>
             {!selectionState.isSelectionMode && (
 				<FilterAndSort
-					onFilterChange={onFilterChange}
-					onSortChange={onSortChange}
+					onFilterChange={(newFilters: FilterOptions) => setFilters(newFilters)}
+					onSortChange={(newSortOption: SortOption) => setSortOption(newSortOption)}
 					tags={tags}
 					searchPlaceholder="Search by description"
 					isActive={showFilter}
@@ -192,6 +207,29 @@ const TimeList: React.FC<TimeListProps> = ({
                     onBatchUpdate={handleBatchUpdate}
                 />
             )}
+			{isAddModalOpen && (
+				<EditTimeEntryModal
+					isVisible={isAddModalOpen}
+					onClose={() => setIsAddModalOpen(false)}
+					onSave={handleAddNewTimer}
+					timeEntry={{
+						date: new Date().toISOString(),
+						startTime: new Date().toISOString(),
+						endTime: new Date().toISOString(),
+						duration: '00:00:00',
+						tag: '',
+						description: '',
+					}}
+				/>
+			)}
+            <MobileNavbar
+				items={navItems} 
+				activeIndex={navItems.findIndex(item => item.label === 'List')} 
+				showFilter={true}
+                onFilterPress={() => setShowFilter(!showFilter)}
+				quickButtonFunction={() => setIsAddModalOpen(true)}
+				screen="time"
+			/>
 		</View>
 	);
 };
@@ -204,12 +242,15 @@ const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelect
 	return StyleSheet.create({
 		container: {
             flex: 1,
+			backgroundColor: themeColors.backgroundColor,
+			paddingTop: 20,
             position: 'relative',
         },
         list: {
             marginTop: isSelectionMode ? 80 : 30, // Adjust margin if selection header is visible
             marginBottom: showFilter ? 80 : 0,
             flex: 1,
+			marginHorizontal: 16,
         },
 		selectionHeader: {
             position: 'absolute',

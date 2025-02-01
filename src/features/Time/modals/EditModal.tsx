@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, Pressable, TextInput } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 import TagModal from '@/src/components/modals/TagModal';
 import DescriptionModal from '@/src/components/modals/DescriptionModal';

@@ -59,6 +59,7 @@ export const Timeline: React.FC = () => {
 				))}
 				{events.length === 0 && <Text style={{...designs.text, color: themeColors.textColor}}>Nothing to see here</Text>}
 			</View>
+			
 		</ScrollView>
 	);
 };
@@ -66,6 +67,7 @@ export const Timeline: React.FC = () => {
 const getStyles = (theme: any) => StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingTop: 26,
 		backgroundColor: theme.backgroundColor,
 	},
 	loadingContainer: {

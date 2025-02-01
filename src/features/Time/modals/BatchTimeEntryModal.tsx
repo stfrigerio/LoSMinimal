@@ -1,16 +1,15 @@
 // BatchTransactionModal.tsx
 import React, { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
-import { PickerInput } from '@/src/components/FormComponents';
 import TagDescriptionSelector from '@/src/components/atoms/TagDescriptionSelector';
 import TagModal from '@/src/components/modals/TagModal';
 import DescriptionModal from '@/src/components/modals/DescriptionModal';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { TimeData } from '../../../types/Time';
-import { TagData } from '../../../types/TagsAndDescriptions';
+import { TimeData } from '@/src/types/Time';
+import { TagData } from '@/src/types/TagsAndDescriptions';
 import { SelectionData } from '../../Home/components/TimerComponent';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
