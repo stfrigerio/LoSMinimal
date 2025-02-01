@@ -62,7 +62,7 @@ const DestructionSection = () => {
 	};
 
 	return (
-		<View style={{ marginTop: 10, marginHorizontal: 50 }}>
+		<View style={{ marginTop: 10, marginHorizontal: 10 }}>
 			<PickerInput
 				label="Select a table to destroy"
 				selectedValue={selectedTable}

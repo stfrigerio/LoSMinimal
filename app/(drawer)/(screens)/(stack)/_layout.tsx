@@ -1,11 +1,6 @@
 import { Stack } from 'expo-router';
-import { Drawer } from 'expo-router/drawer';
-import { useDrawerState } from '../../../../src/contexts/DrawerState';
-import RightPanel from '../../../../src/features/RightPanel/RightPanel';
 
 export default function ScreensLayout() {
-    const { isRightDrawerSwipeEnabled } = useDrawerState();
-
     return (
         <Stack
             screenOptions={{

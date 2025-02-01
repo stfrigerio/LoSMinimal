@@ -73,9 +73,6 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNa
 
     return (
         <>
-            <View style={[styles.separator, { marginTop: 8 }]} />
-            <Text style={styles.sectionTitle}>Categories</Text>
-            <View style={[styles.separator, { marginBottom: 16 }]} />
             <View style={styles.gridContainer}>
                 {mediaTypes.map((media, index) => (
                     <Pressable

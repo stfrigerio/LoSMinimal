@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, Dimensions, StyleSheet, Text, ScrollView } from 'react-native';
 
 import SunburstChart from '@/src/components/charts/Sunburst/SunburstChart';
@@ -7,20 +7,32 @@ import EntriesList from '@/src/features/PeriodicNote/components/atoms/EntriesLis
 import { formatMoneyEntries } from '@/src/features/PeriodicNote/helpers/dataTransformer';
 import { processMoneySunburstData } from '@/src/features/PeriodicNote/helpers/dataProcessing';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { MoneyData } from '@/src/types/Money';
 import { useColors } from '@/src/utils/useColors';
+import { useTransactionData } from '../hooks/useTransactionData';
+import MobileNavbar from '@/src/components/NavBar';
+import { router } from 'expo-router';
+import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';
+import { useTransactionFilters } from './MoneyList/helpers/useTransactionFilters';
 
-interface ChartSectionProps {
-    transactions: MoneyData[];
-}
 
-const MoneyGraphs: React.FC<ChartSectionProps> = ({ transactions }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
+const MoneyGraphs: React.FC = () => {
+    // Maintain filter and sort states
+    const [filters, setFilters] = useState<FilterOptions>({
+        dateRange: { start: null, end: null },
+        tags: [],
+        searchTerm: '',
+    });
+
+    const [showFilter, setShowFilter] = useState(false);
+    const [sortOption, setSortOption] = useState<SortOption>('recent');
+
+    const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
     const { colors: tagColors} = useColors();
 
-    const moneySunburstData = useMemo(() => processMoneySunburstData(transactions), [transactions]);
-
+    const { transactions } = useTransactionData();
+    const { filteredTransactions, validTransactions, tags } = useTransactionFilters(transactions, filters, sortOption);
+    const moneySunburstData = useMemo(() => processMoneySunburstData(filteredTransactions), [filteredTransactions]);
     const moneyEntries = formatMoneyEntries(moneySunburstData, tagColors);
 
     const { width } = Dimensions.get('window');
@@ -35,28 +47,52 @@ const MoneyGraphs: React.FC<ChartSectionProps> = ({ transactions }) => {
         );
     }
 
+    const navItems = [
+        { label: 'Dashboard', onPress: () => router.push('/money') },
+        { label: 'List', onPress: () => router.push('/money/list') },
+        { label: 'Graph', onPress: () => router.push('/money/graph') }
+    ];
+
     return (
-        <ScrollView style={{ marginBottom: 50 }}>
-            <View style={{ alignItems: 'center' }}>
-                <SunburstChart
-                    data={moneySunburstData}
-                    width={chartWidth}
-                    height={chartHeight}
-                />      
-            </View>
-            {moneyEntries.length > 0 && (
-                <EntriesList entries={moneyEntries} title="Money Entries" valueLabel="€" />
-            )}
-        </ScrollView>
+        <View style={styles.container}>
+            <ScrollView style={{ marginBottom: 50 }}>
+                <View style={{ alignItems: 'center' }}>
+                    <SunburstChart
+                        data={moneySunburstData}
+                        width={chartWidth}
+                        height={chartHeight}
+                    />      
+                </View>
+                {moneyEntries.length > 0 && (
+                    <EntriesList entries={moneyEntries} title="Money Entries" valueLabel="€" />
+                )}
+            </ScrollView>
+            <FilterAndSort
+                onFilterChange={(newFilters) => setFilters(newFilters)}
+                onSortChange={(newSortOption) => setSortOption(newSortOption)}
+                tags={tags}
+                searchPlaceholder="Search by description"
+                isActive={showFilter}
+            />
+            <MobileNavbar 
+                items={navItems} 
+                activeIndex={navItems.findIndex(item => item.label === 'Graph')} 
+                showFilter={true}
+                onFilterPress={() => setShowFilter(!showFilter)}
+                quickButtonFunction={undefined}
+                screen="money"
+            />
+        </View>
     );
 };
 
 const getStyles = (theme: any) => {
     return StyleSheet.create({
         container: {
+            paddingTop: 60,
             flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
+            backgroundColor: theme.backgroundColor,
+            position: 'relative',
         },
     });
 };

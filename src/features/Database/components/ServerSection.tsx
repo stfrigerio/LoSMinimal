@@ -87,7 +87,7 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
                     <SwitchInput  
                         label='Show Destruction Section'
                         value={showDestructionSection}
-                        onValueChange={(value) => setShowDestructionSection(value)}
+                        onValueChange={(value: boolean) => setShowDestructionSection(value)}
                         trueLabel='Engage Database Destruction'
                         falseLabel=''
                         trackColorTrue={themeColors.accentColor}
@@ -97,7 +97,7 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
                     <SwitchInput  
                         label='Show Table Selector'
                         value={showTableSelector}
-                        onValueChange={(value) => setShowTableSelector(value)}
+                        onValueChange={(value: boolean) => setShowTableSelector(value)}
                         trueLabel='Show Table Selector'
                         falseLabel=''
                         trackColorTrue={themeColors.accentColor}

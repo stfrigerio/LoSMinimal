@@ -1,99 +1,75 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { View, StyleSheet, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
-import MoneyGraphs from './components/MoneyGraphs';
 import TransactionModal from './modals/TransactionModal';
 import MobileNavbar from '@/src/components/NavBar';
-import MoneyDashboard from './components/MoneyDashboard';
-import MoneyList from './components/MoneyList';
 
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { useTransactionData } from './hooks/useTransactionData';
 
-import { MoneyData } from '@/src/types/Money';
-import { FilterOptions } from '@/src/components/FilterAndSort';
-import { SortOption } from '@/src/components/FilterAndSort';
+import { router } from 'expo-router';
+import Banner from '@/src/components/Banner';
 
 const MoneyHub: React.FC = () => {
-    const { theme, themeColors, designs } = useThemeStyles();
+    const { themeColors, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [activeView, setActiveView] = useState('List');
-    const [showFilter, setShowFilter] = useState(false);
-
-    // Maintain filter and sort states
-    const [filters, setFilters] = useState<FilterOptions>({
-        dateRange: { start: null, end: null },
-        tags: [],
-        searchTerm: '',
-    });
-
-    const [sortOption, setSortOption] = useState<SortOption>('recent');
-
-    const handleFilterChange = (newFilters: FilterOptions) => {
-        setFilters(newFilters);
-    };
-
-    const handleSortChange = (newSortOption: SortOption) => {
-        setSortOption(newSortOption);
-    };
 
     const { 
-        transactions, 
-        addTransaction,
-        updateTransaction,
-        deleteTransaction,
+        transactions,
         refreshTransactions 
     } = useTransactionData();
 
-    const openAddModal = () => setIsAddModalOpen(true);
     const closeAddModal = useCallback(() => {
         setIsAddModalOpen(false);
         refreshTransactions();
     }, [refreshTransactions]);
 
-    // Filter and sort the transactions
-    const filteredAndSortedTransactions = useMemo(() => {
-        return transactions
-            .sort((a: MoneyData, b: MoneyData) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    const { totalIncome, totalExpenses, balance } = useMemo(() => {
+        const income = transactions
+            .filter(t => t.type === 'Income')
+            .reduce((sum, t) => sum + t.amount, 0);
+        const expenses = transactions
+            .filter(t => t.type === 'Expense')
+            .reduce((sum, t) => sum + t.amount, 0);
+    
+        return {
+            totalIncome: income,
+            totalExpenses: expenses,
+            balance: income - expenses,
+        };
     }, [transactions]);
 
     const navItems = [
-        // { label: 'Dashboard', onPress: () => setActiveView('Dashboard') },
-        { label: 'List', onPress: () => setActiveView('List') },
-        { label: 'Graph', onPress: () => setActiveView('Graph') }
+        { label: 'Dashboard', onPress: () => router.push('/money') },
+        { label: 'List', onPress: () => router.push('/money/list') },
+        { label: 'Graph', onPress: () => router.push('/money/graph') }
     ];
-
-    const toggleFilter = () => {
-        setShowFilter(!showFilter);
-    };
 
     return (
         <View style={styles.container}>
-
-            {/* {activeView === 'Dashboard' && (
-                <MoneyDashboard 
-                    transactions={filteredAndSortedTransactions} 
-                    addTransaction={addTransaction}
-                    updateTransaction={updateTransaction}
-                    deleteTransaction={deleteTransaction}
-                />
-            )} */}
-            {activeView === 'List' && (
-                <MoneyList 
-                    transactions={filteredAndSortedTransactions} 
-                    deleteTransaction={deleteTransaction}
-                    refreshTransactions={refreshTransactions}
-                    showFilter={showFilter}
-                    filters={filters}
-                    sortOption={sortOption}
-                    onFilterChange={handleFilterChange}
-                    onSortChange={handleSortChange}
-                />
-            )}
-            {activeView === 'Graph' && (
-                <MoneyGraphs transactions={filteredAndSortedTransactions}/>
-            )}
+            <View style={styles.container}>
+                <Banner imageSource={require('@/assets/images/money.webp')} />
+                <Text style={styles.title}>
+                    Moneyz
+                </Text>
+                <View style={styles.summaryContainer}>
+                    <View style={styles.summaryItem}>
+                        <Text style={styles.summaryLabel}>Total Income</Text>
+                        <Text style={styles.summaryValue}>{totalIncome.toFixed(2)} €</Text>
+                    </View>
+                    <View style={styles.summaryItem}>
+                        <Text style={styles.summaryLabel}>Total Expenses</Text>
+                        <Text style={styles.summaryValue}>{totalExpenses.toFixed(2)} €</Text>
+                    </View>
+                    <View style={styles.summaryItem}>
+                        <Text style={styles.summaryLabel}>Balance</Text>
+                        <Text style={[styles.summaryValue, { color: balance >= 0 ? 'green' : 'red' }]}>
+                            {balance.toFixed(2)} €
+                        </Text>
+                    </View>
+                </View>
+            </View>
             {isAddModalOpen && (   
                 <TransactionModal
                     isOpen={isAddModalOpen}
@@ -102,10 +78,8 @@ const MoneyHub: React.FC = () => {
             )}
             <MobileNavbar 
                 items={navItems} 
-                activeIndex={navItems.findIndex(item => item.label === activeView)} 
-                showFilter={activeView === 'List'}
-                onFilterPress={toggleFilter}
-                quickButtonFunction={openAddModal}
+                activeIndex={navItems.findIndex(item => item.label === 'Dashboard')} 
+                quickButtonFunction={() => setIsAddModalOpen(true)}
                 screen="money"
             />
         </View>
@@ -120,19 +94,32 @@ const getStyles = (themeColors: any, designs: any) => {
             flex: 1,
             backgroundColor: themeColors.backgroundColor,
             paddingHorizontal: 10,
-            paddingTop: 37,
+            paddingTop: 20,
         },
-        floatingButton: {
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            width: 60,
-            height: 60,
-            borderRadius: 30,
-            backgroundColor: themeColors.accentColor,
-            justifyContent: 'center',
-            alignItems: 'center',
+        title: {
+            ...designs.text.title,
+            marginBottom: 20,
+        },
+        summaryContainer: {
             flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 20,
+        },
+        summaryItem: {
+            alignItems: 'center',
+        },
+        summaryLabel: {
+            ...designs.text.text,
+            color: 'gray',
+            marginBottom: 5,
+        },
+        summaryValue: {
+            ...designs.text.text,
+            fontWeight: 'bold',
+        },
+        subtitle: {
+            ...designs.text.title,
+            marginBottom: 10,
         },
     });
 };

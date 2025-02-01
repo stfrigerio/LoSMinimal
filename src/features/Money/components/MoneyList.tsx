@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { View, StyleSheet, FlatList, Dimensions, Platform, Text, Pressable } from 'react-native';
 
-import TransactionEntry from './TransactionEntry';
+import TransactionEntry from './MoneyList/components/TransactionEntry';
 import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';
 import BatchTransactionModal from '../modals/BatchTransactionModal'; // New modal for batch editing
 
@@ -12,27 +12,39 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { MoneyData } from '@/src/types/Money';
 import { useColors } from '@/src/utils/useColors';
 
-interface MoneyListProps {
-    transactions: MoneyData[];
-    deleteTransaction: (id: string) => void;
-    refreshTransactions: () => void;
-    showFilter: boolean;
-    filters: FilterOptions;
-    sortOption: SortOption;
-    onFilterChange: (newFilters: FilterOptions) => void;
-    onSortChange: (newSortOption: SortOption) => void;
-}
+const MoneyList: React.FC = () => {
+    const { 
+        transactions, 
+        addTransaction,
+        updateTransaction,
+        deleteTransaction,
+        refreshTransactions 
+    } = useTransactionData();
 
-const MoneyList: React.FC<MoneyListProps> = ({
-    transactions,
-    deleteTransaction,
-    refreshTransactions,
-    showFilter,
-    filters,
-    sortOption,
-    onFilterChange,
-    onSortChange
-}) => {
+    const [showFilter, setShowFilter] = useState(false);
+
+    // Maintain filter and sort states
+    const [filters, setFilters] = useState<FilterOptions>({
+        dateRange: { start: null, end: null },
+        tags: [],
+        searchTerm: '',
+    });
+
+
+    const [sortOption, setSortOption] = useState<SortOption>('recent');
+
+    const handleFilterChange = (newFilters: FilterOptions) => {
+        setFilters(newFilters);
+    };
+
+    const handleSortChange = (newSortOption: SortOption) => {
+        setSortOption(newSortOption);
+    };
+
+    const toggleFilter = () => {
+        setShowFilter(!showFilter);
+    };
+
     const { themeColors, designs } = useThemeStyles();
     const [isSelectionMode, setIsSelectionMode] = useState(false);
     const styles = React.useMemo(() => getStyles(themeColors, designs, showFilter, isSelectionMode), [themeColors, designs, showFilter, isSelectionMode]);
@@ -40,12 +52,16 @@ const MoneyList: React.FC<MoneyListProps> = ({
     const [selectedUuids, setSelectedUuids] = useState<Set<string>>(new Set());
     const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
 
+    const filteredAndSortedTransactions = useMemo(() => {
+        return transactions
+            .sort((a: MoneyData, b: MoneyData) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }, [transactions]);
     // Compute valid transactions
     const validTransactions = useMemo(() => {
-        return transactions.filter(transaction => 
-            transaction.type === 'Income' || transaction.type === 'Expense'
+        return filteredAndSortedTransactions.filter(filteredAndSortedTransactions => 
+            filteredAndSortedTransactions.type === 'Income' || filteredAndSortedTransactions.type === 'Expense'
         );
-    }, [transactions]);
+    }, [filteredAndSortedTransactions]);
 
     // Derive unique tags
     const tags = useMemo(() => {
@@ -168,8 +184,8 @@ const MoneyList: React.FC<MoneyListProps> = ({
             />
             {!isSelectionMode && (
                 <FilterAndSort
-                    onFilterChange={onFilterChange}
-                    onSortChange={onSortChange}
+                    onFilterChange={handleFilterChange}
+                    onSortChange={handleSortChange}
                     tags={tags}
                     searchPlaceholder="Search by description"
                     isActive={showFilter}

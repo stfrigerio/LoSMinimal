@@ -1,10 +1,11 @@
 import { Stack } from 'expo-router';
 
-export default function LibraryLayout() {
+export default function MoneyLayout() {
     return (
         <Stack screenOptions={{ headerShown: false }}>
             <Stack.Screen name="index" />
-            <Stack.Screen name="[type]" />
+            <Stack.Screen name="list" />
+            <Stack.Screen name="graph" />
         </Stack>
     );
 }
