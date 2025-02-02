@@ -38,15 +38,18 @@ export const useMediaList = (
                 const matchesList = showWantToList
                     ? item.finished === 0  // Want to list: not finished
                     : item.finished === 1; // Library list: finished
-                return matchesSearch && matchesList;
+                const matchesDownload = showDownloadedOnly 
+                    ? item.isMarkedForDownload === 1
+                    : true; // Show all items when showDownloadedOnly is false
+                return matchesSearch && matchesList && matchesDownload;
             })
             .sort(sortOptions[sortOption]);
         setSortedItems(filteredAndSorted);
-    }, [items, sortOption, searchQuery, showWantToList]);
+    }, [items, sortOption, searchQuery, showWantToList, showDownloadedOnly]);
 
     useEffect(() => {
         fetchItems(sortOption, searchQuery);
-    }, [sortOption, searchQuery, showWantToList]);
+    }, [sortOption, searchQuery, showWantToList, showDownloadedOnly]);
 
     const onSaveToLibrary = async (item: LibraryData): Promise<LibraryData> => {
         try {
