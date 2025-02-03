@@ -5,6 +5,7 @@ import Navbar from '@/src/components/NavBar';
 import Card from '@/src/features/Library/components/MediaList/components/Card';
 import DetailedView from '@/src/features/Library/components/MediaList/components/DetailedView/DetailedView';
 import { mediaTypes } from '@/src/features/Library/constants/mediaTypes';
+import { MusicPlayerProvider } from '@/src/contexts/MusicPlayerContext';
 
 export default function MediaTypePage() {
     const { type } = useLocalSearchParams<{ type: string }>();
@@ -44,7 +45,7 @@ export default function MediaTypePage() {
     }));
     
     return (
-        <>
+        <MusicPlayerProvider>
             <MediaList
                 key={`media-list-${section}`}
                 mediaType={mediaTypesWithState[section!].type}
@@ -60,6 +61,6 @@ export default function MediaTypePage() {
                 screen={mediaTypesWithState[section].type}
                 quickButtonFunction={handleOpenModal}
             />
-        </>
+        </MusicPlayerProvider>
     )
 }

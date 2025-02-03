@@ -26,24 +26,25 @@ export function AppInitializer() {
         setGlobalNotificationHandler();
         registerForPushNotificationsAsync().then(token => console.log(token));
         
-        // Schedule reminders
-        checkMorningRoutineReminderScheduled().then(isScheduled => {
-            if (!isScheduled) {
-                scheduleMorningRoutineReminder();
-            }
-        });
+        //^ enough with the notifications for now
+        // // Schedule reminders
+        // checkMorningRoutineReminderScheduled().then(isScheduled => {
+        //     if (!isScheduled) {
+        //         scheduleMorningRoutineReminder();
+        //     }
+        // });
 
-        checkMoodReminderScheduled('MoodReminder15').then(isScheduled => {
-            if (!isScheduled) {
-                scheduleMoodReminder15();
-            }
-        });
+        // checkMoodReminderScheduled('MoodReminder15').then(isScheduled => {
+        //     if (!isScheduled) {
+        //         scheduleMoodReminder15();
+        //     }
+        // });
 
-        checkMoodReminderScheduled('MoodReminder19').then(isScheduled => {
-            if (!isScheduled) {
-                scheduleMoodReminder19();
-            }
-        });
+        // checkMoodReminderScheduled('MoodReminder19').then(isScheduled => {
+        //     if (!isScheduled) {
+        //         scheduleMoodReminder19();
+        //     }
+        // });
     }, []);
 
     const runCheckAndAddRepeatingTasks = useCallback(async () => {

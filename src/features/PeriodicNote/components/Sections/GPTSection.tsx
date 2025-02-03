@@ -68,10 +68,23 @@ const GPTSection: React.FC<GPTSectionProps> = ({ startDate, endDate, currentDate
 
     return (
         <View style={styles.container}>
-            <Text style={styles.subheading}>Nice:</Text>
-            <Text style={styles.text}>{aiSummary.reflection.nice}</Text>
-            <Text style={styles.subheading}>Not so nice:</Text>
-            <Text style={styles.text}>{aiSummary.reflection.notSoNice}</Text>
+            {aiSummary.reflection.nice && 
+                <View>
+                    <Text style={styles.subheading}>Nice:</Text>
+                    <Text style={styles.text}>{aiSummary.reflection.nice}</Text>
+                </View>
+            }
+            {aiSummary.reflection.notSoNice && 
+                <View>
+                    <Text style={styles.subheading}>Not so nice:</Text>
+                    <Text style={styles.text}>{aiSummary.reflection.notSoNice}</Text>
+                </View>
+            }
+
+            {/* TODO: we chucked everything into the nice fields if we have no tags. its notSoNice */}
+            {!aiSummary.reflection.nice && !aiSummary.reflection.notSoNice && 
+                <Text style={styles.text}>{aiSummary.reflection.nice}</Text>
+            }
             
             {isErrorAlertVisible && (
                 <AlertModal

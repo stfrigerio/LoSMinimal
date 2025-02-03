@@ -13,9 +13,7 @@ import { fetchNextTask } from './hooks/fetchNextTask';
 import { DrawerStateManager } from '@/src/contexts/DrawerState';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 import DayNotesStatus from './components/DayNotesStatus';
-import MusicPlayerControls from '../Music/components/MusicPlayerControls';
 import { getStartOfToday } from '@/src/utils/timezoneBullshit';
-import { useMusicPlayer } from '@/src/contexts/MusicPlayerContext';
 
 const Homepage = () => {
     const { theme, themeColors } = useThemeStyles();
@@ -27,7 +25,6 @@ const Homepage = () => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
     const { openSettings, openDailyNote, openMusic } = useNavigationComponents();
-    const { isPlaying } = useMusicPlayer();
 
     useEffect(() => {
         if (DrawerStateManager) {

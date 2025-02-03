@@ -50,20 +50,18 @@ function AppContent() {
                 style={isHomepage ? 'light' : (isDarkMode ? 'light' : 'dark')}
                 backgroundColor="transparent"
             />
-            <MusicPlayerProvider>
-                <ChecklistProvider>
-                    <DrawerStateProvider>
-                        <NavbarDrawerProvider>
-                            <AppInitializer />
-                            <InitializeDatabasesWrapper />
-                            <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
-                                <Slot />
-                            </SafeAreaView>
-                        </NavbarDrawerProvider>
-                    </DrawerStateProvider>
-                    <Toast config={toastConfig} />
-                </ChecklistProvider>
-            </MusicPlayerProvider>
+            <ChecklistProvider>
+                <DrawerStateProvider>
+                    <NavbarDrawerProvider>
+                        <AppInitializer />
+                        <InitializeDatabasesWrapper />
+                        <SafeAreaView style={{ flex: 1 }} edges={['left', 'right', 'bottom']}>
+                            <Slot />
+                        </SafeAreaView>
+                    </NavbarDrawerProvider>
+                </DrawerStateProvider>
+                <Toast config={toastConfig} />
+            </ChecklistProvider>
         </>
     );
 }

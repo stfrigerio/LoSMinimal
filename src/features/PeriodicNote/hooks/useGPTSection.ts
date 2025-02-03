@@ -158,8 +158,6 @@ export const useGPTSection = (startDate: Date, endDate: Date, currentDate: strin
     
                 await fetchAiSummary();
                 await fetchTextData();
-                console.log('Summary generated and saved successfully');
-
             } else {
                 throw new Error("Failed to generate summary: Unexpected response format");
             }

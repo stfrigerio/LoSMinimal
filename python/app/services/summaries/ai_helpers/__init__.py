@@ -42,7 +42,7 @@ class Claude:
         return generate_mood_recap(self.client, self.model, PERSON_NAME, INTERESTS, mood_data)
     
     def generate_monthly_summary(self, mood_data):
-        return generate_monthly_mood_recap_v2(self.client, self.model, PERSON_NAME, INTERESTS, mood_data)
+        return generate_monthly_mood_recap(self.client, self.model, PERSON_NAME, INTERESTS, mood_data)
     
     def generate_quarterly_summary(self, mood_data):
         return generate_quarterly_mood_recap(self.client, self.model, PERSON_NAME, INTERESTS, mood_data)

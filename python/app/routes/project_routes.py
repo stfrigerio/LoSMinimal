@@ -73,7 +73,6 @@ def download_projects():
                     'markdown': content  # Changed from 'content' to 'markdown' to match Project type
                 })
 
-        print(f"Sending {len(projects)} projects with data: {projects}")  # Debug log
         return jsonify(projects)
 
     except Exception as e:
