@@ -34,7 +34,12 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
     } = useServerSection();
 
     const handleServerURLChange = (text: string) => {
-        setServerURL(text);
+        // Replace any commas with dots
+        const transformedText = text.replace(/,/g, '.');
+        // Allow decimal point and numbers
+        if (/^\d*\.?\d*$/.test(transformedText)) {
+            setServerURL(transformedText);
+        }
     };
 
     const handleServerURLBlur = async () => {
@@ -78,7 +83,7 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
                             value={serverURL}
                             placeholder="192.168.1.46"
                             placeholderTextColor={themeColors.gray}
-                            keyboardType={Platform.OS === 'ios' ? 'numbers-and-punctuation' : 'numeric'}
+                            keyboardType={'numeric'}
                         />
                     </View>
                 </View>

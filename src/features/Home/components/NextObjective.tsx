@@ -46,7 +46,6 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
                 completed: 0
             });
 
-            console.log('response', response);
             const pillars = await databaseManagers.pillars.getPillars();
             
             const objectivesWithPillarEmoji = response.map(objective => {

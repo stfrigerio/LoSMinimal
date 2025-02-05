@@ -50,10 +50,8 @@ const MediaList: React.FC<MediaListProps> = ({
     const {
         items,
         selectedItem,
-        sortOption,
         searchQuery,
         setSearchQuery,
-        setSortOption,
         onSaveToLibrary,
         handleCloseDetail,
         handleDelete,
@@ -77,13 +75,14 @@ const MediaList: React.FC<MediaListProps> = ({
         };
         
         if (mediaType === 'music') {
-            const matchingAlbum = albums.find(album => {
-                return album.name === item.title;
-            });
+            const matchingAlbum = albums.find(album => album.name === item.title);
             setSelectedAlbum(matchingAlbum || null);
         }
-
-        router.push(`/library/${typeMap[mediaType]}/${item.title}`);
+    
+        // Navigate to the detailed view and pass the filter booleans in the query string.
+        router.push(
+            `/library/${typeMap[mediaType]}/${encodeURIComponent(item.title)}?showWantToList=${showWantToList}&showDownloadedOnly=${showDownloadedOnly}`
+        );
     };
 
     const handleCloseDetailWithAlbum = () => {

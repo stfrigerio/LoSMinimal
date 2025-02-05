@@ -62,10 +62,6 @@ export const useMediaList = (
         }
     };
 
-    const handleItemSelect = (item: LibraryData) => {
-        setSelectedItem(item);
-    };
-
     const handleCloseDetail = () => {
         setSelectedItem(null);
     };
@@ -149,10 +145,10 @@ export const useMediaList = (
         selectedItem,
         sortOption,
         searchQuery,
+        setSelectedItem,
         setSearchQuery,
         setSortOption,
         onSaveToLibrary,
-        handleItemSelect,
         handleCloseDetail,
         handleDelete,
         handleToggleDownload,

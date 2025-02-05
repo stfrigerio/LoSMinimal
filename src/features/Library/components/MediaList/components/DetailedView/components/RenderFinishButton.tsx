@@ -4,8 +4,8 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 
 export const RenderFinishButton = (item: any, handleMarkAsFinished: () => void) => {
-    const { theme, designs } = useThemeStyles();
-    const styles = getStyles(theme, designs);
+    const { themeColors, designs } = useThemeStyles();
+    const styles = getStyles(themeColors, designs);
 
     if (item.finished === 0) {
         return (
@@ -22,7 +22,7 @@ export const RenderFinishButton = (item: any, handleMarkAsFinished: () => void) 
     return null;
 };
 
-const getStyles = (theme: any, designs: any) => StyleSheet.create({
+const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     finishButton: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -30,12 +30,12 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
         padding: 15,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: themeColors.borderColor,
         marginTop: 30,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: themeColors.backgroundColor,
     },
     finishButtonText: {
-        color: theme.textColorBold,
+        color: themeColors.textColorBold,
         fontWeight: 'bold',
         fontSize: 16,
     },

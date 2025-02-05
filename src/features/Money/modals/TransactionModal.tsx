@@ -143,17 +143,25 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
             handleAddTransaction(transaction).catch((error: any) => alert(error.message));
         }
     };
-
+    
     const handleAmountChange = (text: string) => {
+        // Replace any commas with dots
+        const transformedText = text.replace(/,/g, '.');
         // Allow decimal point and numbers
-        if (/^\d*\.?\d*$/.test(text)) {
-            setAmountInput(text);
-            setTransaction(prev => ({
-                ...prev,
-                amount: parseFloat(text) || 0
-            }));
+        if (/^\d*\.?\d*$/.test(transformedText)) {
+            setAmountInput(transformedText);
         }
     };
+
+    const handleAmountBlur = () => {
+        const transformedText = amountInput.replace(/,/g, '.');
+        setTransaction(prev => ({
+            ...prev,
+            amount: parseFloat(transformedText) || 0
+        }));
+    };
+
+    //todo the keystrokes on the amount input are slow af
     
     return (
         <>
@@ -176,6 +184,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
                             label="Amount"
                             value={amountInput}
                             onChangeText={handleAmountChange}
+                            onBlur={handleAmountBlur}
                             isNumeric={true}
                         />
                     </View>

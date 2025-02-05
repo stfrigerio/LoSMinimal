@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Switch, Pressable, Modal, Platform } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import React from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 interface FormInputProps {
     label: string;
     value: string;
     onChangeText?: (value: string) => void;
+    onBlur?: () => void;
     placeholder?: string;
     keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad';
     multiline?: boolean;
@@ -17,9 +17,17 @@ interface FormInputProps {
 }
 
 
-export const FormInput: React.FC<FormInputProps> = ({ label, value, isNumeric = false, onChangeText, editable = true, ...props }) => {
+export const FormInput: React.FC<FormInputProps> = ({ 
+    label, 
+    value, 
+    isNumeric = false, 
+    onChangeText, 
+    onBlur,
+    editable = true, 
+    ...props 
+}) => {
     const { designs, themeColors } = useThemeStyles();
-    const styles = getStyles(useThemeStyles().themeColors);
+    const styles = getStyles(themeColors);
 
     return (
         <View style={styles.inputContainer}>
@@ -31,6 +39,7 @@ export const FormInput: React.FC<FormInputProps> = ({ label, value, isNumeric = 
                 onChangeText={onChangeText}
                 value={value}
                 editable={editable}
+                onBlur={onBlur}
                 {...props}
             />
         </View>
