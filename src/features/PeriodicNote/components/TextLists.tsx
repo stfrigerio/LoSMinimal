@@ -28,7 +28,7 @@ interface TextListsProps {
 
 const TextLists: React.FC<TextListsProps> = ({ startDate, endDate }) => {
 	const { theme, themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const styles = useMemo(() => getStyles(themeColors), [themeColors]);
 	const [activeSlide, setActiveSlide] = useState(0);
 	const { width: windowWidth } = useWindowDimensions();
 
@@ -41,10 +41,10 @@ const TextLists: React.FC<TextListsProps> = ({ startDate, endDate }) => {
 	const { current: { dailyTextData } } = usePeriodicData(startDate, endDate);
 
 	// Utility to format date with day name
-	const formatDateWithDay = (dateString: string) => {
+	const formatDateWithDay = useCallback((dateString: string) => {
 		const date = new Date(dateString);
-		return `${format(date, 'EEEE, MMM d')}`;
-	};
+		return format(date, 'EEEE, MMM d');
+	}, []);
 
 	const renderWeekCard = useCallback(({ item }: { item: WeeklyData }) => (
 		<View style={[styles.weekCard, {marginTop: 20}]}>
@@ -73,45 +73,49 @@ const TextLists: React.FC<TextListsProps> = ({ startDate, endDate }) => {
 	), [styles.weekCard, styles.gridContainer, styles.dayCard, styles.dateText, styles.listItem, formatDateWithDay]);
 
     const groupByWeek = useCallback((data: DailyTextData[]): WeeklyData[] => {
-        const weeks: WeeklyData[] = [];
-        if (data.length === 0) return weeks;
+		try {
+			const weeks: WeeklyData[] = [];
+			if (data.length === 0) return weeks;
 
-        const start = parseDate(startDate.toString());
-        const end = parseDate(endDate.toString());
+			const start = parseDate(startDate.toString());
+			const end = parseDate(endDate.toString());
 
-        let currentWeekStart = start;
-        let currentWeekData: DailyTextData[] = [];
+			let currentWeekStart = start;
+			let currentWeekData: DailyTextData[] = [];
 
-        data.forEach(note => {
-            const noteDate = parseDate(note.date);
-            if (!isSamePeriod(currentWeekStart, noteDate, 'week')) {
-                if (currentWeekData.length > 0) {
-                    weeks.push({
-                        weekStartDate: currentWeekStart,
-                        weekDays: currentWeekData,
-                    });
-                }
-                currentWeekStart = noteDate;
-                currentWeekData = [];
-            }
-            currentWeekData.push(note);
-        });
+			data.forEach(note => {
+				const noteDate = parseDate(note.date);
+				if (!isSamePeriod(currentWeekStart, noteDate, 'week')) {
+					if (currentWeekData.length > 0) {
+						weeks.push({
+							weekStartDate: currentWeekStart,
+							weekDays: currentWeekData,
+						});
+					}
+					currentWeekStart = noteDate;
+					currentWeekData = [];
+				}
+				currentWeekData.push(note);
+			});
 
-        // Add the last week if it exists
-        if (currentWeekData.length > 0) {
-            weeks.push({
-                weekStartDate: currentWeekStart,
-                weekDays: currentWeekData,
-            });
-        }
+			// Add the last week if it exists
+			if (currentWeekData.length > 0) {
+				weeks.push({
+					weekStartDate: currentWeekStart,
+					weekDays: currentWeekData,
+				});
+			}
 
-        return weeks;
+			return weeks;
+		} catch (error) {
+			console.error('Error in groupByWeek:', error);
+			return [];
+		}
     }, [startDate, endDate]);
 
 	// Modify viewMode and groupedData
 	const groupedData = useMemo(() => groupByWeek(dailyTextData), [groupByWeek, dailyTextData]);
 
-	// Modify the render section
 	return (
 		<View style={styles.container}>
 			{groupedData.length > 0 ? (
@@ -123,14 +127,14 @@ const TextLists: React.FC<TextListsProps> = ({ startDate, endDate }) => {
 						// Render Carousel for multiple weeks
 						<Carousel
 							width={windowWidth - 40}
-							height={650} // Adjust as needed
+							height={650}
 							data={groupedData}
 							scrollAnimationDuration={1000}
 							onSnapToItem={(index) => setActiveSlide(index)}
 							renderItem={renderWeekCard}
-							mode="parallax"
+							// mode="parallax" //!culprit
 							panGestureHandlerProps={{
-								activeOffsetX: [-10, 10],
+								activeOffsetX: [-10.0, 10.0],
 							}}
 						/>
 					)}
