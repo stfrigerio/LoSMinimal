@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { View, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import Svg, { G, Circle, Text, Line, Path, Rect } from 'react-native-svg';
 import * as d3 from 'd3';
 
@@ -28,21 +28,33 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 	const chartWidth = width - margin.left - margin.right;
 	const chartHeight = height - margin.top - margin.bottom;
 
+	// Process and filter out any invalid dates or ratings (NaN/infinite)
 	const processedData = useMemo(() => {
-		return moodData.map(mood => ({
-			...mood,
-			date: new Date(mood.date),
-			tag: mood.tag || 'untagged'
-		})) as ProcessedMoodData[];
+		return moodData
+			.map(mood => ({
+				...mood,
+				date: new Date(mood.date),
+				tag: mood.tag || 'untagged'
+			}))
+			.filter(mood => 
+				!isNaN(mood.date.getTime()) && 
+				isFinite(mood.rating)
+			) as ProcessedMoodData[];
 	}, [moodData]);
 
 	useEffect(() => {
+		const extentDates = d3.extent(processedData, d => d.date) as [Date, Date];
+		// If we don't have valid extent, avoid setting dimensions.
+		if (!extentDates[0] || !extentDates[1] || isNaN(extentDates[0].getTime()) || isNaN(extentDates[1].getTime())) {
+			return;
+		}
+
 		const x = d3.scaleTime()
-			.domain(d3.extent(processedData, d => new Date(d.date)) as [Date, Date])
+			.domain(extentDates)
 			.range([0, chartWidth]);
 	
 		const y = d3.scaleLinear()
-			.domain([1, 10])  // Changed to fixed range 1-10
+			.domain([1, 10]) // Fixed range 1-10
 			.range([chartHeight, 0]);
 	
 		setChartDimensions({ x, y });
@@ -50,10 +62,10 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 
 	const line = useMemo(() => {
 		return d3.line<ProcessedMoodData>()
-			.x(d => chartDimensions?.x(d.date) ?? 0)
-			.y(d => chartDimensions?.y(d.rating) ?? 0)
-			.defined(d => d.date != null && d.rating != null)
-			.curve(d3.curveMonotoneX); // Add smooth curve interpolation
+			.x(d => chartDimensions ? chartDimensions.x(d.date) : 0)
+			.y(d => chartDimensions ? chartDimensions.y(d.rating) : 0)
+			.defined(d => !isNaN(d.date.getTime()) && isFinite(d.rating))
+			.curve(d3.curveMonotoneX); // Smooth curve interpolation
 	}, [chartDimensions]);
 
 	const colorScale = useMemo(() => {
@@ -71,13 +83,9 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 	};
 
 	return (
-		<View style={[{ width, height }]}>
-			<Svg 
-				width={width} 
-				height={height}
-			>				
-				<G transform={`translate(${margin.left},${margin.top})`}>    
-
+		<View style={{ width, height }}>
+			<Svg width={width} height={height}>
+				<G transform={`translate(${margin.left},${margin.top})`}>
 					{/* Background Touchable Area */}
 					<Rect
 						x={0}
@@ -101,7 +109,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 							strokeDasharray="4,4"
 						/>
 					))}
-				
+
 					{/* Connecting lines between data points */}
 					<Path
 						d={line(processedData) ?? undefined}
@@ -110,7 +118,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 						strokeWidth={1}
 						strokeOpacity={0.7}
 					/>
-				
+
 					{/* Y-axis */}
 					<Line
 						x1={0}
@@ -133,7 +141,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 							</Text>
 						</G>
 					))}
-				
+
 					{/* X-axis (dates) */}
 					<G transform={`translate(0,${chartHeight})`}>
 						{chartDimensions.x.ticks(6).map((tick, i) => (
@@ -180,7 +188,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 								<Circle
 									cx={chartDimensions.x(mood.date)}
 									cy={chartDimensions.y(mood.rating)}
-									r={10} // Adjusted radius
+									r={10}
 									fill="transparent"
 									onPress={() => handleSelectMood(mood)}
 								/>
@@ -199,7 +207,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 								rx={5}
 								fill={themeColors.backgroundSecondary}
 								stroke={themeColors.borderColor}
-								strokeWidth={1} // Added for better visibility
+								strokeWidth={1}
 							/>
 							<Text
 								x={chartDimensions.x(selectedMood.date)}
@@ -230,13 +238,13 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 							</Text>
 							{selectedMood.comment && (
 								<Text
-								x={chartDimensions.x(selectedMood.date)}
-								y={chartDimensions.y(selectedMood.rating) - 15}
-								fontSize={12}
-								fill={themeColors.textColor}
-								textAnchor="middle"
+									x={chartDimensions.x(selectedMood.date)}
+									y={chartDimensions.y(selectedMood.rating) - 15}
+									fontSize={12}
+									fill={themeColors.textColor}
+									textAnchor="middle"
 								>
-								{`Note: ${selectedMood.comment.substring(0, 20)}${selectedMood.comment.length > 20 ? '...' : ''}`}
+									{`Note: ${selectedMood.comment.substring(0, 20)}${selectedMood.comment.length > 20 ? '...' : ''}`}
 								</Text>
 							)}
 						</G>
@@ -247,8 +255,6 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
-
-});
+const getStyles = (theme: any) => StyleSheet.create({});
 
 export default MoodChart;

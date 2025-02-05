@@ -7,7 +7,6 @@ import { useMoodData } from '../hooks/useMoodData';
 import { navItems } from '../constants/navItems';
 import MobileNavbar from '@/src/components/NavBar';
 
-
 const GraphView: React.FC = () => {
     const { themeColors } = useThemeStyles();
     const { width } = Dimensions.get('window');
