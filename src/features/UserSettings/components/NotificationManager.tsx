@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { View, ScrollView, Switch, StyleSheet, Text } from 'react-native';
 import * as Notifications from 'expo-notifications';
+
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { ScheduledNotificationItem } from './atoms/ScheduledNotificationItem';
+import { useSettings } from '@/src/features/UserSettings/hooks/useSettings';
 
 export const NotificationManager: React.FC = () => {
     const { themeColors } = useThemeStyles();
     const styles = getStyles(themeColors);
-    
+    const { settings, updateSetting } = useSettings();
+
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+
+    useEffect(() => {
+        if (settings && settings.NotificationEnabled) {
+            const currentValue = settings.NotificationEnabled.value;
+            setNotificationsEnabled(currentValue === 'true');
+        }
+    }, [settings]);
+
     const [scheduledNotifications, setScheduledNotifications] = useState<
         Notifications.NotificationRequest[]
     >([]);
@@ -18,6 +29,11 @@ export const NotificationManager: React.FC = () => {
         const notifications = await Notifications.getAllScheduledNotificationsAsync();
         setScheduledNotifications(notifications);
     };
+
+    useEffect(() => {
+        // Fetch scheduled notifications when the component mounts.
+        fetchScheduledNotifications();
+    }, []);
 
     useEffect(() => {
         const checkPermissions = async () => {
@@ -29,18 +45,30 @@ export const NotificationManager: React.FC = () => {
         fetchScheduledNotifications();
     }, []);
 
+
     const toggleNotifications = async () => {
         try {
             if (notificationsEnabled) {
+                // When disabling notifications, cancel scheduled ones...
                 await Notifications.cancelAllScheduledNotificationsAsync();
                 setScheduledNotifications([]);
+                
+                if (settings && settings.NotificationEnabled) {
+                    await updateSetting({ ...settings.NotificationEnabled, value: 'false' });
+                }
             } else {
+                // When enabling, request permissions
                 const { status } = await Notifications.requestPermissionsAsync();
                 if (status !== 'granted') {
                     // Handle permission denied
                     return;
                 }
+                // Update the persistent setting to "true"
+                if (settings && settings.NotificationEnabled) {
+                    await updateSetting({ ...settings.NotificationEnabled, value: 'true' });
+                }
             }
+            // Toggle the local state
             setNotificationsEnabled(!notificationsEnabled);
         } catch (error) {
             console.error('Failed to toggle notifications:', error);

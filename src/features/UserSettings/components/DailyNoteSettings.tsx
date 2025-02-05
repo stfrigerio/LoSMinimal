@@ -1,6 +1,6 @@
 // Libraries
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, ScrollView, Platform, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 // Components

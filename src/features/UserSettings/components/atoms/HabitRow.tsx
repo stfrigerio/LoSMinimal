@@ -22,6 +22,7 @@ const HabitRow: React.FC<HabitRowProps> = ({ habitName, setting, updateSetting, 
 	const { colors: tagColors } = useColors();
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
+	
 	const handlePress = () => {
 		setIsModalVisible(true);
 	}

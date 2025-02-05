@@ -15,17 +15,6 @@ export const updateNotificationState = async (): Promise<void> => {
                 shouldSetBadge: false,
             }),
         });
-
-        // Reschedule notifications if they're not already scheduled
-        if (!(await checkMorningRoutineReminderScheduled())) {
-            await scheduleMorningRoutineReminder();
-        }
-        if (!(await checkMoodReminderScheduled('MoodReminder15'))) {
-            await scheduleMoodReminder15();
-        }
-        if (!(await checkMoodReminderScheduled('MoodReminder19'))) {
-            await scheduleMoodReminder19();
-        }
     } else {
         // Disable notifications
         Notifications.setNotificationHandler({
