@@ -9,6 +9,7 @@ import createTimePicker from '@/src/components/DateTimePicker';
 
 import { useTasksData } from '@/src/features/Tasks/hooks/useTasksData';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useChecklist } from '@/src/contexts/checklistContext';
 
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import { TaskBasicInfo } from './components/TaskModal/TaskBasicInfo';
@@ -58,6 +59,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 	const { showPicker, picker } = createTimePicker();
 	const { themeColors, designs } = useThemeStyles();
 	const styles = getStyles(themeColors);
+	const { updateChecklist } = useChecklist();
+
 
 	useEffect(() => {
 		if (isOpen) {
@@ -121,6 +124,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 					type: task?.type,
 				};
 				onUpdateItem(newTask);
+				updateChecklist();
 				resetForm();
 				onClose();
 				Toast.show({
@@ -143,6 +147,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 					priority: priority,
 				};
 				onAddItem(newTask);
+				updateChecklist();
 				resetForm();
 				onClose();
 				Toast.show({
