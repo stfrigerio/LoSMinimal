@@ -30,8 +30,9 @@ export async function loadProjectFiles() {
                     return {
                         id: file.replace('.md', ''),
                         title: metadata.title || 'Untitled Project',
+                        status: metadata.status || 'active',
                         description: metadata.description || 'No description provided',
-                        markdown: content, // Store the full markdown content
+                        markdown: content,
                     };
                 })
         );

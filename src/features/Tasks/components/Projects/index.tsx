@@ -1,14 +1,17 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, BackHandler } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, BackHandler, Pressable } from 'react-native';
 
-import { projectsHelpers } from './helpers';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import AlertModal from '@/src/components/modals/AlertModal';
-import { Project } from './types/types';
-import { navItems } from '../../constants/navItems';
-import MobileNavbar from '@/src/components/NavBar';
+import Collapsible from '@/src/components/Collapsible';
 import { ProjectCard, HeaderActions, ProjectView } from './components';
+import MobileNavbar from '@/src/components/NavBar';
+import AlertModal from '@/src/components/modals/AlertModal';
+
+import { navItems } from '../../constants/navItems';
+import { projectsHelpers } from './helpers';
 import { exportProjects, importProjects } from './hooks';
+
+import { Project } from './types/types';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 const Projects: React.FC = () => {
     const { themeColors } = useThemeStyles();
@@ -28,6 +31,10 @@ const Projects: React.FC = () => {
         onConfirm: () => {},
         singleButton: true
     });
+
+    const [activeCollapsed, setActiveCollapsed] = useState<boolean>(false);
+    const [completedCollapsed, setCompletedCollapsed] = useState<boolean>(true);
+    const [onHoldCollapsed, setOnHoldCollapsed] = useState<boolean>(true);
 
     const loadProjects = async () => {
         try {
@@ -124,19 +131,81 @@ const Projects: React.FC = () => {
                     handleExportProjects={handleExportProjects}
                     handleImportProjects={handleImportProjects}
                 />
-                
-                {projects.map((project) => {
-                    const completion = projectsHelpers.calculateCompletion(project.markdown);
-                    return (
-                        <View key={project.id}>
-                            <ProjectCard
-                                project={project}
-                                setSelectedProject={setSelectedProject}
-                                completion={completion}
-                            />
-                        </View>
-                    );
-                })}
+
+                {/* Active Projects Section */}
+                <View style={styles.sectionContainer}>
+                    <Pressable onPress={() => setActiveCollapsed(prev => !prev)}>
+                        <Text style={styles.sectionTitle}>
+                            Active Projects {activeCollapsed ? '+' : '-'}
+                        </Text>
+                    </Pressable>
+                    <Collapsible collapsed={activeCollapsed}>
+                        {projects
+                            .filter(project => project.status === 'active')
+                            .map(project => {
+                                const completion = projectsHelpers.calculateCompletion(project.markdown);
+                                return (
+                                    <View key={project.id}>
+                                        <ProjectCard
+                                            project={project}
+                                            setSelectedProject={setSelectedProject}
+                                            completion={completion}
+                                        />
+                                    </View>
+                                );
+                            })}
+                    </Collapsible>
+                </View>
+
+                {/* On Hold Projects Section */}
+                <View style={styles.sectionContainer}>
+                    <Pressable onPress={() => setOnHoldCollapsed(prev => !prev)}>
+                        <Text style={styles.sectionTitle}>
+                            On Hold Projects {onHoldCollapsed ? '+' : '-'}
+                        </Text>
+                    </Pressable>
+                    <Collapsible collapsed={onHoldCollapsed}>
+                        {projects
+                            .filter(project => project.status === 'onHold')
+                            .map(project => {
+                                const completion = projectsHelpers.calculateCompletion(project.markdown);
+                                return (
+                                    <View key={project.id}>
+                                        <ProjectCard
+                                            project={project}
+                                            setSelectedProject={setSelectedProject}
+                                            completion={completion}
+                                        />
+                                    </View>
+                                );
+                            })}
+                    </Collapsible>
+                </View>
+
+                {/* Completed Projects Section */}
+                <View style={styles.sectionContainer}>
+                    <Pressable onPress={() => setCompletedCollapsed(prev => !prev)}>
+                        <Text style={styles.sectionTitle}>
+                            Completed Projects {completedCollapsed ? '+' : '-'}
+                        </Text>
+                    </Pressable>
+                    <Collapsible collapsed={completedCollapsed}>
+                        {projects
+                            .filter(project => project.status === 'completed')
+                            .map(project => {
+                                const completion = projectsHelpers.calculateCompletion(project.markdown);
+                                return (
+                                    <View key={project.id}>
+                                        <ProjectCard
+                                            project={project}
+                                            setSelectedProject={setSelectedProject}
+                                            completion={completion}
+                                        />
+                                    </View>
+                                );
+                            })}
+                    </Collapsible>
+                </View>
             </ScrollView>
             {selectedProject && (
                 <ProjectView
@@ -180,6 +249,17 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
+        color: themeColors.accentColor,
+    },
+    sectionContainer: {
+        marginBottom: 20,
+        paddingHorizontal: 16,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        textAlign: 'center',
+        fontWeight: '600',
+        marginBottom: 10,
         color: themeColors.accentColor,
     },
 });
