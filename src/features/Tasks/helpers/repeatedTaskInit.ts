@@ -1,70 +1,148 @@
 import { calculateNextOccurrence } from "./frequencyCalculator";
 import { databaseManagers } from "@/database/tables";
-import { setHours, setMinutes, setSeconds, setMilliseconds, startOfDay, endOfDay } from 'date-fns';
+import { 
+    setHours, 
+    setMinutes, 
+    setSeconds, 
+    setMilliseconds, 
+    startOfDay, 
+    endOfDay 
+} from 'date-fns';
+
+let isRunning = false;
 
 const checkAndAddRepeatingTasks = async (updateChecklist: () => void) => {
+    if (isRunning) {
+        console.log('checkAndAddRepeatingTasks is already running');
+        return;
+    }
+    
     try {
+        isRunning = true;
+
+        //? first we get the tasks which have repeat = 1 and indication of frequency
+        //? ive called this repeatingTasks to differentiate from the repeatedTasks which are the ones that have been generated
         const repeatingTasks = await databaseManagers.tasks.getRepeatingTasks();
-        // console.log('Number of repeating tasks:', repeatingTasks.length);
         let tasksAdded = false;
+        const now = new Date();
+        const currentMonth = now.getMonth();
+        const currentYear = now.getFullYear();
 
+        //? we iterate over all the different repeated tasks (identified by the text)
         for (const task of repeatingTasks) {
+            // Retrieve all repeatedTasks with the same text
+            //? this tasks have repeat = 0, frequency = null and type = repeatedTask
             const repeatedTasks = await databaseManagers.tasks.getRepeatedTaskByText(task.text);
-            let nextOccurrence: Date;
+            let baseDate: Date;
 
-            const now = new Date();
             if (repeatedTasks.length === 0) {
+                // If no repeated tasks exist, use task.due or default to today at 14:30.
                 const defaultDue = setMilliseconds(setSeconds(setMinutes(setHours(now, 14), 30), 0), 0);
-                const due = task.due ? new Date(task.due) : defaultDue;
-                nextOccurrence = calculateNextOccurrence(due, task.frequency!);
+                baseDate = task.due ? new Date(task.due) : defaultDue;
             } else {
-                const sortedRepeatedTasks = repeatedTasks.sort((a, b) => new Date(b.due!).getTime() - new Date(a.due!).getTime());
-                const mostRecentTask = sortedRepeatedTasks[0];
-                const mostRecentDue = new Date(mostRecentTask.due!);
-                nextOccurrence = calculateNextOccurrence(mostRecentDue, task.frequency!);
+                // Use the most recent repeated task’s due date (if any) as the base.
+                const sorted = repeatedTasks
+                    .filter(t => t.due)
+                    .sort((a, b) => new Date(a.due!).getTime() - new Date(b.due!).getTime());
+                baseDate = sorted.length ? new Date(sorted[sorted.length - 1].due!) : (task.due ? new Date(task.due) : now);
             }
 
-            // Ensure the next occurrence is always in the future
+            // Calculate the next occurrence using the template’s frequency.
+            let nextOccurrence = calculateNextOccurrence(baseDate, task.frequency!);
+            // Normalize the computed time to the nearest second.
+            nextOccurrence = new Date(Math.floor(nextOccurrence.getTime() / 1000) * 1000);
+
+            // Ensure the next occurrence is in the future.
             while (nextOccurrence <= now) {
                 nextOccurrence = calculateNextOccurrence(nextOccurrence, task.frequency!);
+                nextOccurrence = new Date(Math.floor(nextOccurrence.getTime() / 1000) * 1000);
             }
 
-            const startOfNextOccurrence = startOfDay(nextOccurrence);
-            const endOfNextOccurrence = endOfDay(nextOccurrence);
-            const existingTasksOnNextOccurrence = await databaseManagers.tasks.listByDateRange(
-                startOfNextOccurrence.toISOString(),
-                endOfNextOccurrence.toISOString()
-            );
+            // Check if the task should be limited by week
+            const isDailyType = ['daily', 'weekday', 'weekend'].includes(task.frequency!);
+            if (isDailyType) {
+                // Calculate the end of next week
+                const endOfNextWeek = new Date(now);
+                // Get to the end of current week (Sunday)
+                endOfNextWeek.setDate(now.getDate() + (7 - now.getDay()));
+                // Add 7 more days to get to the end of next week
+                endOfNextWeek.setDate(endOfNextWeek.getDate() + 7);
+                // Set to end of day
+                endOfNextWeek.setHours(23, 59, 59, 999);
 
-            const taskAlreadyExists = existingTasksOnNextOccurrence.some(
-                t => t.text.trim() === task.text.trim() && t.type === 'repeatedTask'
-            );
-
-            if (!taskAlreadyExists) {
-                const newTask = {
-                    ...task,
-                    due: nextOccurrence.toISOString(),
-                    repeat: false,
-                    frequency: null,
-                    id: undefined,
-                    uuid: undefined,
-                    type: 'repeatedTask',
-                    completed: false // Ensure the new task is not completed
-                };
-                await databaseManagers.tasks.upsert(newTask);
-                console.log('New repeated task added for', nextOccurrence.toISOString());
-                tasksAdded = true;
+                if (nextOccurrence > endOfNextWeek) {
+                    continue;
+                }
+            } else {
+                // For non-daily tasks, keep the existing month/year check
+                if (
+                    nextOccurrence.getFullYear() !== currentYear ||
+                    nextOccurrence.getMonth() !== currentMonth
+                ) {
+                    continue;
+                }
             }
+
+            // Query tasks on that day.
+            const startOfNextOccurrence = startOfDay(nextOccurrence).toISOString();
+            const endOfNextOccurrence = endOfDay(nextOccurrence).toISOString();
+            const tasksOnDate = await databaseManagers.tasks.listByDateRange(startOfNextOccurrence, endOfNextOccurrence);
+
+            console.log(`Tasks on ${startOfNextOccurrence}:`, tasksOnDate.map(t => t.text));
+
+            // Check for any existing repeated tasks with the same text on this day
+            const existingRepeatedTasks = tasksOnDate.filter(t => {
+                console.log(`Checking task "${t.text}" on ${startOfNextOccurrence}`);
+                const textMatch = t.text.trim().toLowerCase() === task.text.trim().toLowerCase();
+                console.log(`Text match: ${textMatch}`);
+                const typeMatch = t.type === 'repeatedTask';
+                console.log(`Type match: ${typeMatch}`);
+
+                return textMatch && typeMatch;
+            });
+
+            if (existingRepeatedTasks.length > 1) {
+                // Keep the first one and delete the rest
+                const [keepTask, ...duplicateTasks] = existingRepeatedTasks;
+                for (const dupTask of duplicateTasks) {
+                    await databaseManagers.tasks.removeByUuid(dupTask.uuid!);
+                    console.log(`Removed duplicate task "${task.text}" for ${startOfNextOccurrence}`);
+                }
+                tasksAdded = true; // Trigger refresh since we modified the tasks
+                continue; // Skip creating a new task since we already have one
+            }
+
+            // If we have exactly one task for this day, skip creating a new one
+            if (existingRepeatedTasks.length === 1) {
+                console.log(`Task "${task.text}" already exists for ${startOfNextOccurrence}, skipping.`);
+                continue;
+            }
+
+            // If we reach here, we need to create a new task
+            const newTask = {
+                ...task,
+                due: nextOccurrence.toISOString(),
+                repeat: false,
+                frequency: null,
+                id: undefined,
+                uuid: undefined,
+                type: 'repeatedTask',
+                completed: false,
+            };
+            await databaseManagers.tasks.upsert(newTask);
+            console.log('New repeated task added for', nextOccurrence.toISOString());
+            tasksAdded = true;
         }
 
         if (tasksAdded) {
             updateChecklist();
         }
-
-        console.log('Finished checking and adding repeating tasks');
+    // Mark the check as completed for today.
     } catch (err) {
         console.error(err);
+    } finally {
+        isRunning = false;
     }
-}
+};
 
 export default checkAndAddRepeatingTasks;

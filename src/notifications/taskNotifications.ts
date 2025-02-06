@@ -13,7 +13,7 @@ export async function scheduleTaskNotification(task: TaskData) {
     // Check if notification time is in the future
     const now = new Date();
     if (notificationDate <= now) {
-        console.log(`Skipping notification for task "${task.text}" as due time has passed`);
+        // console.log(`Skipping notification for task "${task.text}" as due time has passed`);
         return;
     }
 

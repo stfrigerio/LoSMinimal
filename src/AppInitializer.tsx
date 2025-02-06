@@ -4,11 +4,6 @@ import { useChecklist } from '@/src/contexts/checklistContext';
 import {
     setGlobalNotificationHandler,
     registerForPushNotificationsAsync,
-    checkMorningRoutineReminderScheduled,
-    scheduleMorningRoutineReminder,
-    checkMoodReminderScheduled,
-    scheduleMoodReminder15,
-    scheduleMoodReminder19
 } from '@/src/notifications/notificationManager';
 
 import checkAndAddRepeatingTasks from '@/src/features/Tasks/helpers/repeatedTaskInit';
@@ -25,26 +20,6 @@ export function AppInitializer() {
         // Initialize notifications
         setGlobalNotificationHandler();
         registerForPushNotificationsAsync().then(token => console.log(token));
-        
-        //^ enough with the notifications for now
-        // // Schedule reminders
-        // checkMorningRoutineReminderScheduled().then(isScheduled => {
-        //     if (!isScheduled) {
-        //         scheduleMorningRoutineReminder();
-        //     }
-        // });
-
-        // checkMoodReminderScheduled('MoodReminder15').then(isScheduled => {
-        //     if (!isScheduled) {
-        //         scheduleMoodReminder15();
-        //     }
-        // });
-
-        // checkMoodReminderScheduled('MoodReminder19').then(isScheduled => {
-        //     if (!isScheduled) {
-        //         scheduleMoodReminder19();
-        //     }
-        // });
     }, []);
 
     const runCheckAndAddRepeatingTasks = useCallback(async () => {
