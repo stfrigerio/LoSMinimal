@@ -23,6 +23,7 @@ export async function scheduleTaskNotification(task: TaskData) {
             body: `Your task "${task.text}" is due in 1 hour`,
             data: { taskUuid: task.uuid, screen: 'TaskDetails' },
         },
+        // @ts-ignore
         trigger: notificationDate,
     });
 }

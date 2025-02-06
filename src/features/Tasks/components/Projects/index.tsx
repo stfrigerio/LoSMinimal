@@ -260,7 +260,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         textAlign: 'center',
         fontWeight: '600',
         marginBottom: 10,
-        color: themeColors.accentColor,
+        color: themeColors.textColorItalic,
     },
 });
 

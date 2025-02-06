@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, Switch } from 'react-native';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 interface SwitchInputProps {
-    label: string;
     value: boolean;
     onValueChange: (value: boolean) => void;
     trueLabel?: string;

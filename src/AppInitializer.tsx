@@ -11,7 +11,7 @@ import {
     scheduleMoodReminder19
 } from '@/src/notifications/notificationManager';
 
-import checkAndAddRepeatingTasks from '@/src/notifications/repeatedTaskInit';
+import checkAndAddRepeatingTasks from '@/src/features/Tasks/helpers/repeatedTaskInit';
 import { 
     checkTasksDueToday, 
     setNotificationsForDueTasks, 

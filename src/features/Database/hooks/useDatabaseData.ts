@@ -3,7 +3,7 @@ import { databaseManagers } from '@/database/tables';
 
 import { TableData } from '@/src/features/Database/types/types';
 
-import { capitalizedTableNames, apiTableNames } from '@/src/utils/tableNames';
+import { capitalizedTableNames, apiTableNames } from '@/src/constants/tableNames';
 
 export const useDatabaseData = () => {
 	const [tables, setTables] = useState<string[]>([...capitalizedTableNames, 'BooleanHabits', 'QuantifiableHabits']);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { PickerInput } from '@/src/components/FormComponents';
-import { getFrequencyOptions } from '../../_utils/frequencyOptions';
+import { getFrequencyOptions } from '../../utils/frequencyOptions';
 
 interface TaskFrequencyProps {
     frequency: string | undefined;
