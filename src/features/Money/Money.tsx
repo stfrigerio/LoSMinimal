@@ -26,10 +26,10 @@ const MoneyHub: React.FC = () => {
 
     const { totalIncome, totalExpenses, balance } = useMemo(() => {
         const income = transactions
-            .filter(t => t.type === 'Income')
+            .filter(t => t.type === 'Income' || t.type === 'RepeatedIncome')
             .reduce((sum, t) => sum + t.amount, 0);
         const expenses = transactions
-            .filter(t => t.type === 'Expense')
+            .filter(t => t.type === 'Expense' || t.type === 'RepeatedExpense')
             .reduce((sum, t) => sum + t.amount, 0);
     
         return {

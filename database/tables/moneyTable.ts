@@ -79,6 +79,18 @@ class MoneyTableManager extends BaseTableManager<MoneyData> {
         const result = await databaseManager.executeSqlAsync<{ account: string }>(query);
         return result;
     }
+
+	async getRepeatingTransactions(): Promise<MoneyData[]> {
+		const query = `SELECT * FROM ${this.tableStructure.name} WHERE due IS NOT NULL AND due != '' ORDER BY date DESC;`;
+		const result = await databaseManager.executeSqlAsync<MoneyData>(query);
+		return result;
+	}
+
+	async getRepeatedTransactionsByDescriptionAndAmount(description: string, amount: number): Promise<MoneyData[]> {
+		const query = `SELECT * FROM ${this.tableStructure.name} WHERE description = ? AND amount = ? ORDER BY date DESC;`;
+		const result = await databaseManager.executeSqlAsync<MoneyData>(query, [description, amount]);
+		return result;
+	}
 }
 
 export const moneyTableManager = new MoneyTableManager();

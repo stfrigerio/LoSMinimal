@@ -93,7 +93,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     todayText: {
         fontSize: 16,
-        color: theme.textColorItalic,
+        color: theme.accentColor,
         fontWeight: 'bold'
     },
     todayContainer: {

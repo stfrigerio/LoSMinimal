@@ -10,7 +10,7 @@ export const useTransactionFilters = (
     // Filter valid transactions
     const validTransactions = useMemo(() => {
         return transactions.filter(transaction => 
-            transaction.type === 'Income' || transaction.type === 'Expense'
+            transaction.type === 'Income' || transaction.type === 'Expense' || transaction.type === 'RepeatedIncome' || transaction.type === 'RepeatedExpense'
         );
     }, [transactions]);
 

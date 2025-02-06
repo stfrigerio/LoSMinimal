@@ -63,7 +63,7 @@ export function transformMoneyDataForSunburst(data: MoneyData[]): SunBurstRecord
 	const tagMap: { [key: string]: SunBurstRecord } = {};
 
 	data.forEach(transaction => {
-		if (transaction.type === 'Expense') {
+		if (transaction.type === 'Expense' || transaction.type === 'RepeatedExpense') {
 			if (!tagMap[transaction.tag]) {
 				tagMap[transaction.tag] = { name: transaction.tag, children: [] };
 				root.children!.push(tagMap[transaction.tag]);

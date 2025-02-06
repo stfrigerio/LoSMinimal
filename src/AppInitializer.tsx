@@ -7,6 +7,7 @@ import {
 } from '@/src/notifications/notificationManager';
 
 import checkAndAddRepeatingTasks from '@/src/features/Tasks/helpers/repeatedTaskInit';
+import checkAndAddRepeatingMoney from '@/src/features/Money/helpers/repeatedMoneyInit';
 import { 
     checkTasksDueToday, 
     setNotificationsForDueTasks, 
@@ -30,6 +31,14 @@ export function AppInitializer() {
         }
     }, [updateChecklist]);
 
+    const runCheckAndAddRepeatingMoney = useCallback(async () => {
+        try {
+            await checkAndAddRepeatingMoney(updateChecklist);
+        } catch (error) {
+            console.error('Error in checkAndAddRepeatingMoney:', error);
+        }
+    }, [updateChecklist]);
+
     const checkAndSetTaskNotifications = useCallback(async () => {
         try {
             const tasksDueToday = await checkTasksDueToday();
@@ -42,8 +51,9 @@ export function AppInitializer() {
 
     useEffect(() => {
         runCheckAndAddRepeatingTasks();
+        runCheckAndAddRepeatingMoney();
         setTimeout(checkAndSetTaskNotifications, 1000);
-    }, [runCheckAndAddRepeatingTasks, checkAndSetTaskNotifications]);
+    }, [runCheckAndAddRepeatingTasks, checkAndSetTaskNotifications, runCheckAndAddRepeatingMoney]);
 
     return null;
 }

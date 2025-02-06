@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 import TagModal from '@/src/components/modals/TagModal';
 import DescriptionModal from '@/src/components/modals/DescriptionModal';
 import TagDescriptionSelector from '@/src/components/atoms/TagDescriptionSelector';
-import { FormInput, PickerInput, SwitchInput } from '@/src/components/FormComponents';
+import { FormInput, RepeatFrequencySelector, SwitchInput } from '@/src/components/FormComponents';
 import createTimePicker from '@/src/components/DateTimePicker';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import AlertModal from '@/src/components/modals/AlertModal';
@@ -37,11 +37,16 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
     const [isExpense, setIsExpense] = useState(initialTransaction ? initialTransaction.type !== 'Income' : true);
     const [showAlert, setShowAlert] = useState(false);
 
+    const [repeat, setRepeat] = useState<string>(initialTransaction?.due ? 'true' : '');
+    const [frequency, setFrequency] = useState<string>(initialTransaction?.due || '');
+
     const handleTypeChange = (value: boolean) => {
         setIsExpense(value);
         setTransaction(prev => ({
             ...prev,
-            type: value ? 'Expense' : 'Income'
+            type: prev.due 
+                ? (value ? 'RepeatedExpense' : 'RepeatedIncome')
+                : (value ? 'Expense' : 'Income')
         }));
     };
 
@@ -161,6 +166,30 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
         }));
     };
 
+    const handleRepeatChange = (value: string) => {
+        setRepeat(value);
+        setTransaction(prev => ({
+            ...prev,
+            due: value ? frequency : undefined,
+            // Update type when turning repeat on/off
+            type: value 
+                ? (isExpense ? 'RepeatedExpense' : 'RepeatedIncome')
+                : (isExpense ? 'Expense' : 'Income')
+        }));
+    };
+    
+    const handleFrequencyChange = (value: string) => {
+        setFrequency(value);
+        setTransaction(prev => ({
+            ...prev,
+            due: value || undefined,
+            // Ensure type is set to repeated when frequency is selected
+            type: value 
+                ? (isExpense ? 'RepeatedExpense' : 'RepeatedIncome')
+                : (isExpense ? 'Expense' : 'Income')
+        }));
+    };
+
     //todo the keystrokes on the amount input are slow af
     
     return (
@@ -189,7 +218,6 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
                         />
                     </View>
                     <SwitchInput
-                        label="Type"
                         value={isExpense}
                         onValueChange={handleTypeChange}
                         trueLabel="Expense"
@@ -197,6 +225,17 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
                         trackColorFalse={themeColors.greenOpacity}
                         trackColorTrue={themeColors.redOpacity}
                     />  
+
+                    <View style={{ width: '100%', marginBottom: 20 }}>
+                        <RepeatFrequencySelector
+                            repeat={repeat}
+                            frequency={frequency}
+                            onRepeatChange={handleRepeatChange}
+                            onFrequencyChange={handleFrequencyChange}
+                            leftLabelOff={false}
+                        />
+                    </View>
+
                     {/* <PickerInput
                         label="Account"
                         selectedValue={selectedAccount}

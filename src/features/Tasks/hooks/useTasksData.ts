@@ -7,6 +7,7 @@ import { scheduleTaskNotification, cancelTaskNotification, rescheduleTaskNotific
 import { TaskData } from '@/src/types/Task';
 import { PillarData } from '@/src/types/Pillar';
 import { ObjectiveData } from '@/src/types/Objective';
+import { MoneyData } from '@/src/types/Money';
 
 export type UseTaskDataType = {
     tasks: TaskData[];

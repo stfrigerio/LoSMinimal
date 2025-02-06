@@ -1,10 +1,13 @@
 import { useState, useCallback } from 'react';
+import Toast from 'react-native-toast-message';
 
 import { databaseManagers } from '@/database/tables';
 import { getDayItems } from './useCalendar';
+import { parseMoneyTask } from '@/src/features/Tasks/helpers/parseMoneyTask';
 
 import { ExtendedTaskData } from '@/src/types/Task';
 import { MarkedDateDetails } from '@/src/types/Task';
+import { MoneyData } from '@/src/types/Money';
 
 export const useTaskModal = (
     fetchMarkedDates: () => Promise<void>,
@@ -47,6 +50,44 @@ export const useTaskModal = (
                 ...currentItem,
                 completed: !completed,
             };
+
+            if (newItem.completed && (currentItem.text.startsWith('💸') || currentItem.text.startsWith('💰'))) {
+                try {
+                    const moneyTransaction = await parseMoneyTask(
+                        currentItem.due || new Date().toISOString(),
+                        currentItem.text,
+                        currentItem.note
+                    );
+                    
+                    if (moneyTransaction) {
+                        // Check for existing identical transaction
+                        const existingTransactions = await databaseManagers.money.getByDateRange(
+                            moneyTransaction.date,
+                            moneyTransaction.date
+                        );
+                        
+                        const isDuplicate = existingTransactions.some(existing => 
+                            existing.amount === moneyTransaction.amount &&
+                            existing.tag === moneyTransaction.tag &&
+                            existing.description === moneyTransaction.description
+                        );
+
+                        if (!isDuplicate) {
+                            await databaseManagers.money.upsert(moneyTransaction);
+                            Toast.show({
+                                text1: '💰 Transaction saved',
+                            });
+                        } else {
+                            Toast.show({
+                                text1: '💰 Transaction already exists',
+                            });
+                        }
+                    }
+                } catch (moneyErr) {
+                    console.error('Error creating money transaction:', moneyErr);
+                    throw new Error('Failed to create money transaction');
+                }
+            }
     
             await databaseManagers.tasks.upsert(newItem);
             updateChecklistItems();

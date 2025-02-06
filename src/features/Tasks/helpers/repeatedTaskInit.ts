@@ -8,6 +8,7 @@ import {
     startOfDay, 
     endOfDay 
 } from 'date-fns';
+import { TaskData } from '@/src/types/Task';
 
 let isRunning = false;
 
@@ -88,15 +89,10 @@ const checkAndAddRepeatingTasks = async (updateChecklist: () => void) => {
             const endOfNextOccurrence = endOfDay(nextOccurrence).toISOString();
             const tasksOnDate = await databaseManagers.tasks.listByDateRange(startOfNextOccurrence, endOfNextOccurrence);
 
-            console.log(`Tasks on ${startOfNextOccurrence}:`, tasksOnDate.map(t => t.text));
-
             // Check for any existing repeated tasks with the same text on this day
             const existingRepeatedTasks = tasksOnDate.filter(t => {
-                console.log(`Checking task "${t.text}" on ${startOfNextOccurrence}`);
                 const textMatch = t.text.trim().toLowerCase() === task.text.trim().toLowerCase();
-                console.log(`Text match: ${textMatch}`);
                 const typeMatch = t.type === 'repeatedTask';
-                console.log(`Type match: ${typeMatch}`);
 
                 return textMatch && typeMatch;
             });
@@ -106,7 +102,6 @@ const checkAndAddRepeatingTasks = async (updateChecklist: () => void) => {
                 const [keepTask, ...duplicateTasks] = existingRepeatedTasks;
                 for (const dupTask of duplicateTasks) {
                     await databaseManagers.tasks.removeByUuid(dupTask.uuid!);
-                    console.log(`Removed duplicate task "${task.text}" for ${startOfNextOccurrence}`);
                 }
                 tasksAdded = true; // Trigger refresh since we modified the tasks
                 continue; // Skip creating a new task since we already have one
@@ -114,23 +109,22 @@ const checkAndAddRepeatingTasks = async (updateChecklist: () => void) => {
 
             // If we have exactly one task for this day, skip creating a new one
             if (existingRepeatedTasks.length === 1) {
-                console.log(`Task "${task.text}" already exists for ${startOfNextOccurrence}, skipping.`);
                 continue;
             }
 
             // If we reach here, we need to create a new task
-            const newTask = {
+            const newTask: TaskData = {
                 ...task,
                 due: nextOccurrence.toISOString(),
-                repeat: false,
-                frequency: null,
+                note: '',
+                repeat: 'false',
+                frequency: undefined,
                 id: undefined,
                 uuid: undefined,
                 type: 'repeatedTask',
                 completed: false,
             };
             await databaseManagers.tasks.upsert(newTask);
-            console.log('New repeated task added for', nextOccurrence.toISOString());
             tasksAdded = true;
         }
 

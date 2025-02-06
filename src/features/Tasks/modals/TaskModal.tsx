@@ -16,11 +16,10 @@ import { TaskBasicInfo } from './components/TaskModal/TaskBasicInfo';
 import { TaskDateTime } from './components/TaskModal/TaskDateTime';
 import { TaskNote } from './components/TaskModal/TaskNote';
 import { TaskPriority } from './components/TaskModal/TaskPriority';
-import { TaskRepeat } from './components/TaskModal/TaskRepeat';
-import { TaskFrequency } from './components/TaskModal/TaskFrequency';
 import { TaskPillar } from './components/TaskModal/TaskPillar';
 import { TaskObjective } from './components/TaskModal/TaskObjective';
 import { TaskEndDateTime } from './components/TaskModal/TaskEndDateTime';
+import { RepeatFrequencySelector } from '@/src/components/FormComponents';
 
 import { TaskData } from '@/src/types/Task';
 import { PillarData } from '@/src/types/Pillar';
@@ -261,20 +260,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
                     {/* Timing Group */}
                     <View style={styles.optionsGroup}>
                         <Text style={styles.groupTitle}>Timing</Text>
-                        <TaskRepeat
+                        <RepeatFrequencySelector
                             repeat={repeat}
-                            setRepeat={setRepeat}
-                            setShowFrequency={setShowFrequency}
+                            frequency={frequency}
+                            onRepeatChange={setRepeat}
+                            onFrequencyChange={setFrequency}
                             styles={styles}
+                            customFrequencyItems={frequencyItems}
                         />
-                        {showFrequency && (
-                            <TaskFrequency
-                                frequency={frequency}
-                                setFrequency={setFrequency}
-                                frequencyItems={frequencyItems}
-                                styles={styles}
-                            />
-                        )}
                         <TaskEndDateTime
                             showEndDateTime={showEndDateTime}
                             setShowEndDateTime={setShowEndDateTime}
