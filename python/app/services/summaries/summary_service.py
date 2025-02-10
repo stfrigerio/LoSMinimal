@@ -2,6 +2,7 @@ from datetime import datetime
 from app.services.summaries.data_processing.data_cleaning import clean_data
 from app.services.route_services.fetch_pillars import fetch_pillars
 from app.services.summaries.ai_helpers import Claude, GPT
+from app.services.summaries.data_processing.obsidian_note_creator import create_periodic_note
 
 Claude = Claude()  # Create an instance of Claude
 GPT = GPT()
@@ -36,6 +37,8 @@ def process_weekly_summary(data):
     
     pillars = fetch_pillars()
     gpt_response = GPT.create_thoughts(data_to_give_gpt, pillars)
+
+    create_periodic_note()
     
     return {
         "id": None,

@@ -26,3 +26,7 @@ Path(PROJECTS_PATH).mkdir(parents=True, exist_ok=True)
 
 # Create database directory if it doesn't exist
 os.makedirs(DB_DIRECTORY, exist_ok=True)
+
+# Define the path to the periodic notes folder
+PERIODIC_NOTES_PATH = os.path.join(PROJECT_ROOT, '../Lossidian/06 Periodic Notes')
+Path(PERIODIC_NOTES_PATH).mkdir(parents=True, exist_ok=True)
