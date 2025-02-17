@@ -38,7 +38,7 @@ def process_weekly_summary(data):
     pillars = fetch_pillars()
     gpt_response = GPT.create_thoughts(data_to_give_gpt, pillars)
 
-    create_periodic_note()
+    create_periodic_note(week_date)
     
     return {
         "id": None,

@@ -7,6 +7,17 @@ PERIODIC_NOTES_PATH = '/home/stefano/Github/LoSMinimal/Lossidian/06 Periodic Not
 Path(PERIODIC_NOTES_PATH).mkdir(parents=True, exist_ok=True)
 
 def create_periodic_note(date):    
+    print(f"Creating periodic note for date: {date}")
+    
+    if isinstance(date, str):
+        # Extract year and week from string format "YYYY-WXX"
+        year = int(date.split('-')[0])
+        week = int(date.split('W')[1])
+        # Create a date object for January 1st of that year
+        date = datetime.datetime.strptime(f'{year}-01-01', '%Y-%m-%d')
+        # Add the weeks (minus 1 since we want the start of the specified week)
+        date = date + datetime.timedelta(weeks=week-1)
+
     # Compute the start and end dates of the ISO week (Monday to Sunday)
     # Python's weekday() returns 0 for Monday
     start_date = date - datetime.timedelta(days=date.weekday())
