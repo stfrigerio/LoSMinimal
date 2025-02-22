@@ -35,6 +35,7 @@ const Projects: React.FC = () => {
     const [activeCollapsed, setActiveCollapsed] = useState<boolean>(false);
     const [completedCollapsed, setCompletedCollapsed] = useState<boolean>(true);
     const [onHoldCollapsed, setOnHoldCollapsed] = useState<boolean>(true);
+    const [uncategorisedCollapsed, setUncategorisedCollapsed] = useState<boolean>(true);
 
     const loadProjects = async () => {
         try {
@@ -204,6 +205,27 @@ const Projects: React.FC = () => {
                                     </View>
                                 );
                             })}
+                    </Collapsible>
+                </View>
+
+                {/* Uncategorised Projects Section */}
+                <View style={styles.sectionContainer}>
+                    <Pressable onPress={() => setUncategorisedCollapsed(prev => !prev)}>
+                        <Text style={styles.sectionTitle}>Uncategorised Projects {uncategorisedCollapsed ? '+' : '-'}</Text>
+                    </Pressable>
+                    <Collapsible collapsed={uncategorisedCollapsed}>
+                        {projects.filter(project => project.status !== 'active' && project.status !== 'onHold' && project.status !== 'completed').map(project => {
+                            const completion = projectsHelpers.calculateCompletion(project.markdown);
+                            return (
+                                <View key={project.id}>
+                                    <ProjectCard
+                                        project={project}
+                                        setSelectedProject={setSelectedProject}
+                                        completion={completion}
+                                    />
+                                </View>
+                            );
+                        })}
                     </Collapsible>
                 </View>
             </ScrollView>
