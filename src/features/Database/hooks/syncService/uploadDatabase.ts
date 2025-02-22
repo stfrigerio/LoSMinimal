@@ -30,8 +30,15 @@ const uploadSqliteDatabase = async (flaskURL: string): Promise<UploadResponse> =
         },
     });
 
-    const { totalImages, totalSaved, totalDuplicates } = await uploadAllImages(flaskURL);
+    let imageResults = { totalImages: 0, totalSaved: 0, totalDuplicates: 0 };
+    try {
+        imageResults = await uploadAllImages(flaskURL);
+    } catch (error) {
+        console.error('Image upload failed:', error);
+        // Continue execution - database upload was successful
+    }
 
+    const { totalImages, totalSaved, totalDuplicates } = imageResults;
     const successMessage = totalImages > 0 
         ? `Database uploaded successfully. Processed ${totalImages} images (${totalSaved} saved, ${totalDuplicates} duplicates skipped)`
         : 'Database uploaded successfully';

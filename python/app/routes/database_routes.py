@@ -45,6 +45,7 @@ def upload_sqlite():
 
         logger.info("Request size: %s bytes", request.content_length)
         
+        logger.info(request.form)
         if 'images' in request.form and 'date' in request.form:
             try:
                 images = request.form.getlist('images')
@@ -55,7 +56,7 @@ def upload_sqlite():
                 logger.error(f"Error processing images: {str(e)}")
                 # Continue with the response even if image processing fails
         
-        # Optional: Maintain only last N backups
+        # Maintain only last N backups
         cleanup_old_backups(backup_dir, keep_last=10)
         
         return jsonify({
