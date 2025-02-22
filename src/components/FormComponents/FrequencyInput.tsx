@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { SwitchInput, PickerInput } from '@/src/components/FormComponents';
+import { SwitchInput } from '@/src/components/FormComponents/SwitchInput';
+import { PickerInput } from '@/src/components/FormComponents/PickerInput';
 import { getFrequencyOptions } from '@/src/components/FormComponents/helpers/frequencyOptions';
 
 interface RepeatFrequencySelectorProps {
