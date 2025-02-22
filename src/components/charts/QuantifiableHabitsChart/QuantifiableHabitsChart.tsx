@@ -66,21 +66,13 @@ const QuantifiableHabitsChart: React.FC<QuantifiableHabitsChartProps> = ({
 				return ['weekly', 'monthly'] as ViewType[];
 			case 'year':
 				return ['weekly', 'monthly', 'quarterly'] as ViewType[];
+			case 'allTime':
+				return ['monthly', 'quarterly'] as ViewType[];
 			default:
 				return ['daily'] as ViewType[];
 		}
 	}, [periodType]);
 
-	useEffect(() => {
-		setIsLoading(true);
-		const filteredData: ChartData = { dates: data.dates };
-		activeHabits.forEach(habit => {
-			if (habit in data) {
-				filteredData[habit] = data[habit];
-			}
-		});
-		setChartData(filteredData);
-	}, [data, activeHabits]);
 
 	const toggleHabit = useCallback((habit: string) => {
 		setActiveHabits(prev => 
@@ -97,6 +89,23 @@ const QuantifiableHabitsChart: React.FC<QuantifiableHabitsChartProps> = ({
 		}
 		return isRgba(baseColor) ? getRgbaOpacity(baseColor, 1) : hexToRgba(baseColor, 0.5);
 	}, [tagColors]);
+
+	useEffect(() => {
+		if (periodType === 'allTime' && !['monthly', 'quarterly'].includes(viewType)) {
+			setViewType('monthly');
+		}
+	}, [periodType, viewType]);
+
+	useEffect(() => {
+		setIsLoading(true);
+		const filteredData: ChartData = { dates: data.dates };
+		activeHabits.forEach(habit => {
+			if (habit in data) {
+				filteredData[habit] = data[habit];
+			}
+		});
+		setChartData(filteredData);
+	}, [data, activeHabits]);
 
 	useEffect(() => {
 		const renderChartData = async () => {

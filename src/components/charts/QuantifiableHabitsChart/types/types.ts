@@ -3,7 +3,7 @@ export interface ChartData {
 	dates: string[];
 }
 
-export type PeriodType = 'day' | 'week' | 'month' | 'quarter' | 'year';
+export type PeriodType = 'week' | 'month' | 'quarter' | 'year' | 'allTime';
 
 export interface QuantifiableHabitsChartProps {
 	data: ChartData;

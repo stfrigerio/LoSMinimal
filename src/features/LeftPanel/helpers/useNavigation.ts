@@ -4,7 +4,7 @@ import { router } from 'expo-router';
 
 import { formatDate, parseDate, startOfPeriod, getLocalTimeZone } from '@/src/utils/timezoneBullshit';
 
-export type NotePeriod = 'day' | 'week' | 'lastWeek' | 'month' | 'quarter' | 'year' | 'allYears';
+export type NotePeriod = 'day' | 'week' | 'lastWeek' | 'month' | 'quarter' | 'year' | 'allTime';
 
 export const useNavigationComponents = () => {
 
@@ -17,45 +17,40 @@ export const useNavigationComponents = () => {
 			router.push({
 				pathname: "daily-note",
 				params: { date: formattedDate }
-			});	
+			});    
 			return;
 		}
 	
 		let start: Date, end: Date;
 	
-		switch (period) {
-			case 'week':
-			case 'lastWeek':
-			case 'month':
-			case 'quarter':
-			case 'year':
-			case 'allYears':
-				start = startOfPeriod(parsedDate, period as any, timeZone);
-				end = startOfPeriod(parsedDate, period as any, timeZone);
-				break;
-		}
+		if (period === 'allTime') {
+			start = new Date(2000, 0, 1);
+			end = new Date(2100, 11, 31);
+		} else {
+			start = startOfPeriod(parsedDate, period as any, timeZone);
+			end = start; // Initialize end date
 	
-		// Adjust end date calculation based on period
-		switch (period) {
-			case 'week':
-			case 'lastWeek':
-				end = endOfWeek(start, { weekStartsOn: 1 });
-				break;
-			case 'month':
-				end = endOfMonth(start);
-				break;
-			case 'quarter':
-				end = endOfQuarter(start);
-				break;
-			case 'year':
-				end = endOfYear(start);
-				break;
+			// Adjust end date calculation based on period
+			switch (period) {
+				case 'week':
+				case 'lastWeek':
+					end = endOfWeek(start, { weekStartsOn: 1 });
+					break;
+				case 'month':
+					end = endOfMonth(start);
+					break;
+				case 'quarter':
+					end = endOfQuarter(start);
+					break;
+				case 'year':
+					end = endOfYear(start);
+					break;
+			}
 		}
 	
 		const startDate = formatDate(start, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timeZone);
 		const endDate = formatDate(end, "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timeZone);
-
-		// Add periodicNote to RootStackParamList if not already there
+	
 		router.push({
 			pathname: "periodic-note",
 			params: { startDate, endDate }

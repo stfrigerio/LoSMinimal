@@ -19,11 +19,14 @@ interface AxesProps {
     };
 }
 
-const Axes: React.FC<AxesProps> = ({ x, y, width, height, theme, viewType, data }) => {
-	
+const Axes: React.FC<AxesProps> = ({ x, y, width, height, theme, viewType, data }) => {	
+    
     const getXAxisFormat = () => {
         switch (viewType) {
-            case 'weekly': return (d: Date) => `W${d3.timeFormat("%V")(d)}`;
+            case 'weekly': return (d: Date) => {
+                // Only display the week number, but the Date object still contains the full year info for ordering
+                return `W${d3.timeFormat("%V")(d)}`;
+            };
             case 'monthly': return d3.timeFormat("%b");
             case 'quarterly': return (d: Date) => `Q${Math.floor(d.getMonth() / 3) + 1}`;
             default: {

@@ -29,6 +29,47 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
     setIsModalVisible,
     tagColors,
 }) => {
+    // Early return for sections that shouldn't be shown in allTime view
+    if (dateState.periodType === 'allTime') {
+        switch (activeSection) {
+            case 'quantifiable':
+                return (
+                    <QuantifiableSection
+                        startDate={dateState.startDate}
+                        endDate={dateState.endDate}
+                        tagColors={tagColors}
+                        periodType={dateState.periodType}
+                    />
+                );
+            case 'boolean':
+                return (
+                    <BooleanSection
+                        startDate={dateState.startDate}
+                        endDate={dateState.endDate}
+                        periodType={dateState.periodType}
+                    />
+                );
+            case 'money':
+                return (
+                    <MoneySection
+                        startDate={dateState.startDate}
+                        endDate={dateState.endDate}
+                        tagColors={tagColors}
+                    />
+                );
+            case 'time':
+                return (
+                    <TimeSection
+                        startDate={dateState.startDate}
+                        endDate={dateState.endDate}
+                        tagColors={tagColors}
+                    />
+                );
+            default:
+                return null;
+        }
+    }
+
     switch (activeSection) {
         case 'objectives':
             return (

@@ -24,6 +24,8 @@ export const calculatePeriodTypeAndFormatDate = (startDate: string | Date, endDa
             periodType = 'quarter';
         } else if (differenceInCalendarYears(end, start) < 2) {
             periodType = 'year';
+        } else if (differenceInCalendarYears(end, start) >= 50) {
+            periodType = 'allTime';
         } else {
             periodType = 'unknown';
         }
@@ -42,6 +44,9 @@ export const calculatePeriodTypeAndFormatDate = (startDate: string | Date, endDa
                 break;
             case 'year':
                 formattedDate = format(start, 'yyyy');
+                break;
+            case 'allTime':
+                formattedDate = 'All Time';
                 break;
             default:
                 formattedDate = 'Unknown Period';

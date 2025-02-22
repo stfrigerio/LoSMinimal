@@ -54,16 +54,18 @@ const PeriodicNote: React.FC = () => {
 								formattedDate={dateState.formattedDate}
 								periodType={dateState.periodType}
 							/>
-							<View style={styles.navigation}>
-								<TimeBox
-									startDate={dateState.startDate.toISOString()}
-									currentViewType={dateState.periodType}
-								/>
-								<DateNavigation
-									periodType={dateState.periodType}
-									onNavigate={handleNavigatePeriod}
-								/>
-							</View>
+							{dateState.periodType !== 'allTime' && (
+								<View style={styles.navigation}>
+									<TimeBox
+										startDate={dateState.startDate.toISOString()}
+										currentViewType={dateState.periodType}
+									/>
+									<DateNavigation
+										periodType={dateState.periodType}
+										onNavigate={handleNavigatePeriod}
+									/>
+								</View>
+							)}
 						</View>
 
 						<View>

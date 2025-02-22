@@ -72,6 +72,10 @@ const DateHeader: React.FC<DateHeaderProps> = ({ formattedDate, periodType }) =>
         const monthName = format(new Date(parseInt(year, 10), 0, 1), 'MMMM');
         startColor = getFillColorForMonth(monthName);
         endColor = getNextMonthColor(monthName);
+    } else if (periodType === 'allTime') {
+        startColor = '#4A90E2';  // A nice blue shade
+        endColor = '#50E3C2';    // A complementary teal shade
+        dateText = 'All Time';
     }
 
     // Ensure colors are valid

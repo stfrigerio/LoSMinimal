@@ -80,6 +80,15 @@ const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
         );
     };
 
+    const renderAllTime = () => (
+        <>
+            <Pressable onPress={() => handleOpenNote('allTime')} style={styles.button}>
+                <Text style={[styles.buttonText, styles.allTimeText]}>All Time</Text>
+            </Pressable>
+            <Text style={styles.arrow}> » </Text>
+        </>
+    );
+
     const isDaily = currentViewType === 'daily';
     const isWeekly = currentViewType === 'week';
     const isMonthly = currentViewType === 'month';
@@ -89,6 +98,7 @@ const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
     return (
         <View style={{alignItems: 'center'}}>
             <View style={styles.container}>
+                {isYearly && renderAllTime()}
                 {!isDaily && !isWeekly && renderPeriod('year', displayYear, isCurrentYear, currentViewType === 'year')}
                 {!isDaily && !isYearly && (
                     <>
@@ -159,7 +169,11 @@ const getStyles = (theme: any) => StyleSheet.create({
         opacity: 0.7,
         marginHorizontal: 2,
     },
-
+    allTimeText: {
+        color: theme.accentColor,
+        opacity: 0.8,
+        fontSize: 18, // Slightly smaller than other periods
+    },
     subPeriodsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
