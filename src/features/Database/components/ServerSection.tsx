@@ -36,8 +36,8 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
     const handleServerURLChange = (text: string) => {
         // Replace any commas with dots
         const transformedText = text.replace(/,/g, '.');
-        // Allow decimal point and numbers
-        if (/^\d*\.?\d*$/.test(transformedText)) {
+        // Allow numbers and dots for IP address format
+        if (/^[\d.]*$/.test(transformedText)) {
             setServerURL(transformedText);
         }
     };
@@ -90,7 +90,6 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
 
                 <View style={styles.switchContainer}>
                     <SwitchInput  
-                        label='Show Destruction Section'
                         value={showDestructionSection}
                         onValueChange={(value: boolean) => setShowDestructionSection(value)}
                         trueLabel='Engage Database Destruction'
@@ -100,7 +99,6 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
                         style={styles.switch}
                     />
                     <SwitchInput  
-                        label='Show Table Selector'
                         value={showTableSelector}
                         onValueChange={(value: boolean) => setShowTableSelector(value)}
                         trueLabel='Show Table Selector'
