@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Pressable, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMoneyBill, faClock, faSmile } from '@fortawesome/free-solid-svg-icons';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface SectionSelectorProps {
 	selectedSection: string;
 	onSectionChange: (section: string, isTagSelected: boolean) => void;
@@ -13,8 +12,8 @@ export const SectionSelector: React.FC<SectionSelectorProps> = ({
 	selectedSection,
 	onSectionChange,
 }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const sections = [
 		{ key: 'money', icon: faMoneyBill },
@@ -22,7 +21,7 @@ export const SectionSelector: React.FC<SectionSelectorProps> = ({
 		{ key: 'mood', icon: faSmile }
 	];
 
-  return (
+	return (
 		<View style={styles.sectionSelectorContainer}>
 			{sections.map((section) => (
 				<Pressable
@@ -32,7 +31,7 @@ export const SectionSelector: React.FC<SectionSelectorProps> = ({
 				>
 					<FontAwesomeIcon 
 						icon={section.icon} 
-						color={selectedSection === section.key ? themeColors.backgroundColor : themeColors.textColor} 
+						color={selectedSection === section.key ? theme.colors.backgroundColor : theme.colors.textColor} 
 						size={24} 
 					/>
 				</Pressable>
@@ -41,7 +40,7 @@ export const SectionSelector: React.FC<SectionSelectorProps> = ({
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	sectionSelectorContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
@@ -53,6 +52,6 @@ const getStyles = (theme: any) => StyleSheet.create({
 		borderRadius: 5,
 	},
 	activeSectionButton: {
-		backgroundColor: theme.accentColor,
+		backgroundColor: theme.colors.accentColor,
 	},
 }); 

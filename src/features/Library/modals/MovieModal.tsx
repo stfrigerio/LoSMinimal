@@ -7,7 +7,7 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import Toast from 'react-native-toast-message';
 
 import { fetchMovies, isImdbId, getByImdbId, Movie } from '../api/movieFetcher';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../../styles/useThemeStyles';
 
 import { LibraryData } from '../../../types/Library';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -35,8 +35,8 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({
     const [detailedMovie, setDetailedMovie] = useState<Movie | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const handleSearch = async () => {
         try {
@@ -197,7 +197,7 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({
                                     <FontAwesomeIcon 
                                         icon={faStar} 
                                         size={20} 
-                                        color={star <= personalRating ? themeColors.textColor : 'gray'} 
+                                        color={star <= personalRating ? theme.colors.textColor : 'gray'} 
                                     />
                                 </Pressable>
                             ))}
@@ -224,14 +224,14 @@ const MovieSearchModal: React.FC<MovieSearchModalProps> = ({
 
 export default MovieSearchModal;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     movieItem: {
         paddingHorizontal: 10,
         padding: 15,
         marginVertical: 0,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderBottomWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 5,
     },
     movieImage: {
@@ -242,7 +242,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     ratingContainer: {
         flexDirection: 'row',
         marginBottom: 20,
-        backgroundColor: theme.cardColor,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 12,
         borderRadius: 12,
         justifyContent: 'center',

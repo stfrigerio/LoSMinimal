@@ -3,11 +3,11 @@ import { View, StyleSheet } from "react-native";
 import { faCheckCircle, faCircle, faList, faRepeat } from '@fortawesome/free-solid-svg-icons';
 
 import { FilterIcon, FilterType } from './FilterIcon';
-import { useThemeStyles } from "@/src/styles/useThemeStyles";
+import { useThemeStyles, Theme } from "@/src/styles/useThemeStyles";
 
 export const FilterTray = ({ setFilter, filter }: { setFilter: (filter: FilterType) => void, filter: FilterType }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = useMemo(() => getStyles(themeColors), [themeColors]);
+    const { theme } = useThemeStyles();
+    const styles = useMemo(() => getStyles(theme), [theme]);
 
     return (
         <View style={styles.filterContainer}>
@@ -39,7 +39,7 @@ export const FilterTray = ({ setFilter, filter }: { setFilter: (filter: FilterTy
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     filterContainer: {
         flexDirection: 'row',
         justifyContent: 'center',

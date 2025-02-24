@@ -8,14 +8,13 @@ import ServerSection from './components/ServerSection';
 
 import { useData } from './hooks/useData';
 import { sortTableData } from './helpers/sortTableData'
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 const Database: React.FC = () => {
 	const [selectedTable, setSelectedTable] = useState<string>('');
 	const [showTableSelector, setShowTableSelector] = useState(false);
 
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const {
 		tableData,
@@ -92,32 +91,32 @@ const Database: React.FC = () => {
 
 export default Database;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	superContainer: {
 		flex: 1,
-		backgroundColor: theme.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 		paddingTop: 10,
 	},
 	container: {
 		flex: 1,
 		padding: 20,
-		backgroundColor: theme.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 	},
 	loadingContainer: {
-		backgroundColor: theme.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	loadingText: {
 		fontSize: 18,
-		color: theme.textColor,
+		color: theme.colors.textColor,
 	},
 	errorContainer: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: theme.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 	},
 	errorText: {
 		fontSize: 18,
@@ -142,7 +141,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: theme.colors.borderColor,
 		padding: 10,
 		borderRadius: 10,
 	},

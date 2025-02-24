@@ -6,8 +6,7 @@ import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/Filte
 import BatchTransactionModal from '../../modals/BatchTransactionModal';
 
 import { useTransactionData } from '@/src/features/Money/hooks/useTransactionData';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import { MoneyData } from '@/src/types/Money';
 import { useTransactionFilters } from './helpers/useTransactionFilters';
 import { useTransactionSelection } from './helpers/useTransactionSelection';
@@ -28,9 +27,9 @@ const MoneyList: React.FC = () => {
     const [sortOption, setSortOption] = useState<SortOption>('recent');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
-    const { themeColors, designs } = useThemeStyles();
+    const { theme, designs } = useThemeStyles();
     const { isSelectionMode, selectedUuids, toggleSelect, clearSelection } = useTransactionSelection();
-    const styles = React.useMemo(() => getStyles(themeColors, designs, showFilter, isSelectionMode), [themeColors, designs, showFilter, isSelectionMode]);
+    const styles = React.useMemo(() => getStyles(theme, designs, showFilter, isSelectionMode), [theme, designs, showFilter, isSelectionMode]);
 
     // Maintain filter and sort states
     const [filters, setFilters] = useState<FilterOptions>({
@@ -63,7 +62,7 @@ const MoneyList: React.FC = () => {
             transaction={item}
             deleteTransaction={deleteTransaction}
             refreshTransactions={refreshTransactions}
-            tagColor={entryColors[item.id!] || themeColors.textColor}
+            tagColor={entryColors[item.id!] || theme.colors.textColor}
             isSelectionMode={isSelectionMode}
             isSelected={selectedUuids.has(item.uuid!)}
             toggleSelect={toggleSelect}
@@ -128,14 +127,14 @@ const MoneyList: React.FC = () => {
     );
 };
 
-const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelectionMode: boolean) => {
+const getStyles = (theme: Theme, designs: any, showFilter: boolean, isSelectionMode: boolean) => {
     const { width } = Dimensions.get('window');
 
     return StyleSheet.create({
         container: {
             paddingTop: 20,
             flex: 1,
-            backgroundColor: themeColors.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             position: 'relative',
         },
         list: {
@@ -149,9 +148,9 @@ const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelect
             left: 0,
             right: 0,
             height: 60,
-            backgroundColor: themeColors.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
             borderBottomWidth: 1,
-            borderBottomColor: themeColors.borderColor,
+            borderBottomColor: theme.colors.borderColor,
             borderRadius: 10,
             flexDirection: 'row',
             alignItems: 'center',
@@ -168,7 +167,7 @@ const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelect
             marginRight: 10,
         },
         batchButtonText: {
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
             fontWeight: 'bold',
         },
         cancelButton: {

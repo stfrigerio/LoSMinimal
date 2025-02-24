@@ -3,16 +3,15 @@ import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendarDay, faCalendarWeek, faCalendar, faChartPie } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { ChartToggleProps } from '../types/types';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ChartToggleProps } from '../types/types';
 
 const ChartToggle: React.FC<ChartToggleProps> = ({ 
 	availableViewTypes, 
 	viewType, 
 	setViewType, 
 }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	return (
 		<View style={styles.chartToggle}>
@@ -29,7 +28,7 @@ const ChartToggle: React.FC<ChartToggleProps> = ({
 							type === 'monthly' ? faCalendar :
 							faChartPie
 						}
-						color={viewType === type ? themeColors.accentColor : themeColors.textColor}
+						color={viewType === type ? theme.colors.accentColor : theme.colors.textColor}
 					/>
 					<Text style={[styles.chartButtonText, viewType === type && styles.activeChartButtonText]}>
 						{type.charAt(0).toUpperCase() + type.slice(1)}
@@ -40,7 +39,7 @@ const ChartToggle: React.FC<ChartToggleProps> = ({
 	);
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
 	const { width } = Dimensions.get('window');
 	const isDesktop = width > 768;
 
@@ -62,10 +61,10 @@ const getStyles = (theme: any) => {
 		chartButtonText: {
 			marginLeft: 10,
 			fontSize: 12,
-			color: theme.textColor
+			color: theme.colors.textColor
 		},
 		activeChartButtonText: {
-			color: theme.gray,
+			color: theme.colors.gray,
 		},
 	});
 };

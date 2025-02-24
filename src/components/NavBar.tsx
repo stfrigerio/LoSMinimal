@@ -6,8 +6,7 @@ import { faSliders } from '@fortawesome/free-solid-svg-icons';
 import DrawerContent from './NavBar/DrawerContent';
 import DrawerIcon from './NavBar/DrawerIcon';
 import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import NavbarQuickButton from './NavBar/NavbarQuickButton';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import NavbarQuickButton from './NavBar/NavbarQuickButton';
 
 import { MobileNavbarProps } from './NavBar/NavbarTypes';
 
@@ -19,8 +18,8 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
     quickButtonFunction,
     screen,
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const { slideAnim } = useNavbarDrawer();
     const [isFilterActive, setIsFilterActive] = useState(false);
     const keyboardHeight = useRef(new Animated.Value(0)).current;
@@ -88,7 +87,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
                     >
                         <FontAwesomeIcon 
                             icon={faSliders} 
-                            color={isFilterActive ? themeColors.accentColor : themeColors.gray} 
+                            color={isFilterActive ? theme.colors.accentColor : theme.colors.gray} 
                             size={24} 
                         />
                     </Pressable>
@@ -114,13 +113,13 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         navbarContent: {
             height: 60,
             borderTopWidth: 1,
-            borderTopColor: theme.textColor,
-            backgroundColor: theme.backgroundColor,
+            borderTopColor: theme.colors.textColor,
+            backgroundColor: theme.colors.backgroundColor,
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -165,7 +164,7 @@ const getStyles = (theme: any) => {
             left: 0,
             right: 0,
             height: 10,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
         },
     });
 };

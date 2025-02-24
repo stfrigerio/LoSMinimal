@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Switch, StyleSheet } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 export type BooleanHabitProps = {
     name: React.ReactNode;
     value: boolean;
@@ -10,8 +9,8 @@ export type BooleanHabitProps = {
 };
 
 const Habit: React.FC<BooleanHabitProps> = ({ name, value, setValue }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors, value);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme, value);
 
     return (
         <View style={styles.habit}>
@@ -19,15 +18,15 @@ const Habit: React.FC<BooleanHabitProps> = ({ name, value, setValue }) => {
             <Switch
                 value={value}
                 onValueChange={setValue}
-                trackColor={{ false: themeColors.gray, true: themeColors.greenOpacity }}
-                thumbColor={value ? themeColors.backgroundSecondary : themeColors.backgroundSecondary}
-                ios_backgroundColor={themeColors.gray}
+                trackColor={{ false: theme.colors.gray, true: theme.colors.greenOpacity }}
+                thumbColor={value ? theme.colors.backgroundSecondary : theme.colors.backgroundSecondary}
+                ios_backgroundColor={theme.colors.gray}
             />
         </View>
     );
 };
 
-const getStyles = (theme: any, value: boolean) => StyleSheet.create({
+const getStyles = (theme: Theme, value: boolean) => StyleSheet.create({
     habit: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -43,7 +42,7 @@ const getStyles = (theme: any, value: boolean) => StyleSheet.create({
     habitName: {
         marginRight: 10, 
         fontSize: 18,
-        color: theme.textColor
+        color: theme.colors.textColor
     },
 });
 

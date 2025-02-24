@@ -1,8 +1,7 @@
 import React from 'react';
 import { Pressable, View, Text, StyleSheet } from 'react-native';
 import { ProgressBar } from './ProgressBar';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface ProjectCardProps {
     project: any;
     setSelectedProject: (project: any) => void;
@@ -10,13 +9,13 @@ interface ProjectCardProps {
 }
 
 export const ProjectCard = ({ project, setSelectedProject, completion }: ProjectCardProps) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     const getProgressColor = (completion: number) => {
-        if (completion >= 75) return themeColors.greenOpacity;
-        if (completion >= 25) return themeColors.yellowOpacity;
-        return themeColors.redOpacity;
+        if (completion >= 75) return theme.colors.greenOpacity;
+        if (completion >= 25) return theme.colors.yellowOpacity;
+        return theme.colors.redOpacity;
     };
 
     return (
@@ -33,7 +32,7 @@ export const ProjectCard = ({ project, setSelectedProject, completion }: Project
                     <ProgressBar
                         progress={completion}
                         height={6}
-                        backgroundColor={themeColors.backgroundSecondary}
+                        backgroundColor={theme.colors.backgroundSecondary}
                         fillColor={getProgressColor(completion)}
                     />
             </View>
@@ -45,10 +44,10 @@ export const ProjectCard = ({ project, setSelectedProject, completion }: Project
     )
 }
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         projectCard: {
-            backgroundColor: themeColors.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
             borderRadius: 8,
             padding: 16,
             marginBottom: 12,
@@ -60,7 +59,7 @@ const getStyles = (themeColors: any, designs: any) => {
         projectTitle: {
             fontSize: 18,
             fontWeight: 'bold',
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
             width: '50%', // Fixed width for title
         },
         progressContainer: {
@@ -74,7 +73,7 @@ const getStyles = (themeColors: any, designs: any) => {
         },
         projectCompletion: {
             fontSize: 8,
-            color: themeColors.textColorItalic,
+            color: theme.colors.textColorItalic,
             minWidth: 8,
         },
     });

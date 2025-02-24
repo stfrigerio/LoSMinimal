@@ -4,8 +4,7 @@ import Svg, { Path, G, Text } from 'react-native-svg';
 import * as d3 from 'd3';
 import { colorPalette, adjustRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { TimeData } from '@/src/types/Time';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TimeData } from '@/src/types/Time';
 import { useColors } from '@/src/utils/useColors';
 
 interface TagData {
@@ -30,7 +29,7 @@ interface SunburstChartProps {
 }
 
 const HoursSunburst: React.FC<SunburstChartProps> = ({ data, width, height }) => {
-    const { themeColors, theme } = useThemeStyles();
+    const { theme } = useThemeStyles();
     const { colors: tagColors, loading, error } = useColors();
 
     const windowDimensions = Dimensions.get('window');
@@ -124,7 +123,7 @@ const HoursSunburst: React.FC<SunburstChartProps> = ({ data, width, height }) =>
                                 <Path
                                     d={arcGenerator(arc) as string}
                                     fill={getColor(arc.data)}
-                                    stroke={theme === 'dark' ? themeColors.backgroundColor : 'transparent'}
+                                    stroke={theme.name === 'dark' ? theme.colors.backgroundColor : 'transparent'}
                                     strokeWidth="2"
                                 />
                                 {arc.data.tags.length > 0 && arc.data.tags.map((tag, tagIndex) => {
@@ -138,7 +137,7 @@ const HoursSunburst: React.FC<SunburstChartProps> = ({ data, width, height }) =>
                                                 data: tag
                                             } as d3.PieArcDatum<TagData>) as string}
                                             fill={getColor(tag)}
-                                            stroke={theme === 'dark' ? themeColors.backgroundColor : 'transparent'}
+                                            stroke={theme.name === 'dark' ? theme.colors.backgroundColor : 'transparent'}
                                             strokeWidth="2"
                                         />
                                     );
@@ -170,7 +169,7 @@ const HoursSunburst: React.FC<SunburstChartProps> = ({ data, width, height }) =>
                                 x={0}
                                 y={0}
                                 fontSize={6}
-                                fill={theme === 'dark' ? themeColors.gray : 'white'}
+                                fill={theme.name === 'dark' ? theme.colors.gray : 'white'}
                                 textAnchor="middle"
                                 alignmentBaseline="middle"
                                 transform={`rotate(${angle}) translate(0, -${labelRadius})`}

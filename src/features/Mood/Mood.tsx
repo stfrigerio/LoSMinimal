@@ -4,15 +4,14 @@ import { View, StyleSheet, Text } from 'react-native';
 import MobileNavbar from '@/src/components/NavBar';
 import MoodModal from '@/src/features/Mood/modals/MoodModal';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useMoodData } from './hooks/useMoodData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useMoodData } from './hooks/useMoodData';
 
 import { navItems } from './constants/navItems';
 import Banner from '@/src/components/Banner';
 
 const Moods: React.FC = () => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
     const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
 
     const { entries: moods, refreshMoods } = useMoodData();
@@ -90,11 +89,11 @@ const Moods: React.FC = () => {
 };
 
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: themeColors.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             paddingTop: 30,
             paddingHorizontal: 20,
         },
@@ -109,12 +108,12 @@ const getStyles = (themeColors: any, designs: any) => {
 			flex: 1,
 		},
 		summaryLabel: {
-			color: themeColors.textColorItalic,
+			color: theme.colors.textColorItalic,
 			marginBottom: 5,
 			textAlign: 'center',
 		},
 		summaryValue: {
-			color: themeColors.textColor,
+			color: theme.colors.textColor,
 			fontWeight: 'bold',
 			textAlign: 'center',
 		},

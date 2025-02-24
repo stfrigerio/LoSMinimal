@@ -3,8 +3,7 @@ import { View, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { formatDate, parseDate } from '@/src/utils/timezoneBullshit';
 import { getMonthWeeks, getWeekStart } from '@/src/components/TimeBox/helpers/dateUtils';
 import { NotePeriod } from '@/src/features/LeftPanel/helpers/useNavigation';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface SubPeriodsProps {
     currentViewType?: string;
     date: string;
@@ -20,8 +19,8 @@ export const SubPeriods: React.FC<SubPeriodsProps> = ({
     displayYear,
     handleOpenNote,
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const renderSubPeriods = (startDate: string) => {
         const date = parseDate(startDate, timeZone);
@@ -127,7 +126,7 @@ export const SubPeriods: React.FC<SubPeriodsProps> = ({
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     subPeriodsContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
@@ -144,10 +143,10 @@ const getStyles = (theme: any) => StyleSheet.create({
         padding: 6,
         borderRadius: 4,
 
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
     },
     subPeriodText: {
         fontSize: 14,
-        color: theme.accentColor,
+        color: theme.colors.accentColor,
     },
 });

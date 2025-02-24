@@ -5,7 +5,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 
 import { ContactData } from '../../../types/Contact';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { useThemeStyles, Theme } from '../../../styles/useThemeStyles';
 
 interface ContactsModalProps {
     isVisible: boolean;
@@ -15,8 +15,8 @@ interface ContactsModalProps {
 }
 
 const ContactsModal: React.FC<ContactsModalProps> = ({ isVisible, onClose, personName, contacts }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     return (
         <Modal
@@ -30,7 +30,7 @@ const ContactsModal: React.FC<ContactsModalProps> = ({ isVisible, onClose, perso
                     <View style={styles.modalHeader}>
                         <Text style={styles.modalTitle}>Contacts for {personName}</Text>
                         <Pressable onPress={onClose} style={styles.closeButton}>
-                            <FontAwesomeIcon icon={faTimes} color={themeColors.textColor} size={20} />
+                            <FontAwesomeIcon icon={faTimes} color={theme.colors.textColor} size={20} />
                         </Pressable>
                     </View>
                     <ScrollView style={{ width: '100%' }}>
@@ -53,7 +53,7 @@ const ContactsModal: React.FC<ContactsModalProps> = ({ isVisible, onClose, perso
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     modalHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -72,7 +72,7 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     contactItem: {
         marginBottom: 15,
         borderBottomWidth: 1,
-        borderBottomColor: themeColors.borderColor,
+        borderBottomColor: theme.colors.borderColor,
         paddingBottom: 10,
         flexDirection: 'row',
     },

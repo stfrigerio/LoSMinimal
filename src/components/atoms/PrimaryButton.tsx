@@ -1,7 +1,6 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet, Animated } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface ButtonProps {
     onPress: () => void;
     text: string;
@@ -15,9 +14,9 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
     variant = 'primary',
     disabled = false,
 }) => {
-    const { theme, themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
     const animatedScale = new Animated.Value(1);
-    const styles = getStyles(theme, themeColors, variant);
+    const styles = getStyles(theme, variant);
 
     const handlePressIn = () => {
         Animated.spring(animatedScale, {
@@ -54,20 +53,20 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
     );
 };
 
-const getButtonColor = (theme: any, themeColors: any, variant: string) => {
+const getButtonColor = (theme: any, variant: string) => {
     if (variant === 'primary') {
-        return theme === 'dark' ? themeColors.textColor : themeColors.backgroundSecondary;
+        return theme.name === 'dark' ? theme.colors.textColor : theme.colors.backgroundSecondary;
     }
-    return themeColors.accentColor;
+    return theme.colors.accentColor;
 }
 
-const getStyles = (theme: any, themeColors: any, variant: string) => StyleSheet.create({
+const getStyles = (theme: Theme, variant: string) => StyleSheet.create({
     button: {
         paddingVertical: 10,
         paddingHorizontal: 20,  
-        backgroundColor: getButtonColor(theme, themeColors, variant),
-        borderWidth: theme === 'dark' ? 2 : 1,
-        borderColor: themeColors.borderColor,
+        backgroundColor: getButtonColor(theme, variant),
+        borderWidth: theme.name === 'dark' ? 2 : 1,
+        borderColor: theme.colors.borderColor,
         borderRadius: 10,
         minWidth: 120,  
     },
@@ -79,7 +78,7 @@ const getStyles = (theme: any, themeColors: any, variant: string) => StyleSheet.
     },
     buttonText: {
         alignSelf: 'center',
-        color: theme === 'dark' ? themeColors.backgroundColor : themeColors.textColor,
+        color: theme.name === 'dark' ? theme.colors.backgroundColor : theme.colors.textColor,
         fontWeight: 'bold',
     },
 });

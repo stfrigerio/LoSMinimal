@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, Modal, FlatList, Pressable, StyleSheet } from 'react-native';
 import { TrackData } from '@/src/types/Library';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
 interface LinkTrackModalProps {
     isVisible: boolean;
@@ -23,8 +22,8 @@ const LinkTrackModal = ({
     availableTracks, 
     onLinkTrack 
 }: LinkTrackModalProps) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <UniversalModal
@@ -64,7 +63,7 @@ const LinkTrackModal = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     modalOverlay: {
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -72,7 +71,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         padding: 20,
     },
     modalContent: {
-        backgroundColor: themeColors.cardColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 12,
         padding: 20,
         maxHeight: '80%',
@@ -80,42 +79,42 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     modalTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         marginBottom: 8,
     },
     modalSubtitle: {
         fontSize: 14,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
         marginBottom: 20,
     },
     trackOption: {
         padding: 15,
         borderRadius: 8,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         marginBottom: 8,
     },
     trackOptionTitle: {
         fontSize: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         marginBottom: 4,
     },
     trackOptionDetails: {
         fontSize: 12,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
     },
     closeButton: {
         marginTop: 20,
         padding: 15,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 8,
         alignItems: 'center',
     },
     closeButtonText: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         fontSize: 16,
     },
     emptyText: {
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
         textAlign: 'center',
         padding: 20,
     },

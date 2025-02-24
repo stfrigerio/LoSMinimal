@@ -7,7 +7,7 @@ interface BirthdayRecord {
 
 import { TaskData, TempDueDates, MarkedDateDetails, ExtendedTaskData } from '@/src/types/Task'; 
 
-export const parseChecklistItems = (items: TaskData[], themeColors: any): TempDueDates => {
+export const parseChecklistItems = (items: TaskData[], theme: any): TempDueDates => {
     const tempDueDates: TempDueDates = {};
     items.forEach(item => {
         if (item.due) {
@@ -15,14 +15,14 @@ export const parseChecklistItems = (items: TaskData[], themeColors: any): TempDu
             if (!tempDueDates[datePart]) {
                 tempDueDates[datePart] = { 
                     marked: true, 
-                    dotColor: themeColors.greenOpacity,
+                    dotColor: theme.colors.greenOpacity,
                     incompleteTasks: 0, 
                     tasks: [] 
                 };
             }
             tempDueDates[datePart].tasks.push(item);
             if (!item.completed) {
-                tempDueDates[datePart].dotColor = themeColors.yellowOpacity;
+                tempDueDates[datePart].dotColor = theme.colors.yellowOpacity;
                 tempDueDates[datePart].incompleteTasks++;
             }
         }
@@ -32,7 +32,7 @@ export const parseChecklistItems = (items: TaskData[], themeColors: any): TempDu
 
 export const getUpdatedBirthdayDates = async (
     currentYear: number,
-    themeColors: any
+    theme: any
 ): Promise<Record<string, MarkedDateDetails>> => {
     const birthdaysRecords = await databaseManagers.people.getAllBirthdays();
     const updatedBirthdayDates: Record<string, MarkedDateDetails> = {};
@@ -43,7 +43,7 @@ export const getUpdatedBirthdayDates = async (
         const age = calculateAge(birthday.birthDay);
         updatedBirthdayDates[fullDate] = {
             marked: true,
-            dotColor: themeColors.accentColor,  // Changed from hardcoded 'rgba(247, 92, 120, 0.8)'
+            dotColor: theme.colors.accentColor,  // Changed from hardcoded 'rgba(247, 92, 120, 0.8)'
             isBirthday: true,
             name: birthday.name, 
             dateOfBirth: birthday.birthDay,

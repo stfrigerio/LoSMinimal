@@ -4,8 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faGear, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { router } from 'expo-router';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { colorRainbow } from '@/src/styles/theme';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { colorRainbow } from '@/src/styles/theme';
 
 interface MediaGridProps {
     mediaTypes: Array<{
@@ -17,8 +16,8 @@ interface MediaGridProps {
 }
 
 export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNavigate }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
     const animatedScales = React.useRef(
         // Add +1 to account for the Settings card
         [...mediaTypes, 'settings'].map(() => new Animated.Value(1))
@@ -62,7 +61,7 @@ export const MediaGrid: React.FC<MediaGridProps> = ({ mediaTypes, navItems, onNa
         if(type === 'settings') {
             return colorRainbow[13];
         }
-        return themeColors.textColor;
+        return theme.colors.textColor;
     }
 
 
@@ -135,7 +134,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         ...design.text.title,
         fontSize: 20,
         fontWeight: 'bold',
-        color: theme.textColorItalic,
+        color: theme.colors.textColorItalic,
         padding: 8,
         paddingVertical: 16,
         textAlign: 'center',
@@ -143,7 +142,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: theme.borderColor,
+        backgroundColor: theme.colors.borderColor,
         marginHorizontal: PADDING,
     },
     gridContainer: {
@@ -155,7 +154,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
     gridCard: {
         width: cardWidth,
         height: 160,
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
@@ -167,7 +166,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         gap: 12,
     },
     gridCardText: {
-        color: theme.textColor,
+        color: theme.colors.textColor,
         fontSize: 16,
         fontWeight: 'bold',
     },

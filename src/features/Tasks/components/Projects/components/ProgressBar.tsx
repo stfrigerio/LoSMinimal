@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface ProgressBarProps {
     progress: number;  // 0 to 100
     height?: number;
@@ -16,8 +15,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     backgroundColor = '#E0E0E0',
     fillColor = '#4CAF50',
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <View style={[styles.container, { height, backgroundColor }]}>
@@ -34,12 +33,12 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         width: '100%',
         borderRadius: 4,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         overflow: 'hidden',
     },
     fill: {

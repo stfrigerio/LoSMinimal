@@ -1,8 +1,6 @@
 import { Platform } from 'react-native';
 import { Theme, FontWeight } from './types';
 
-
-
 // Design tokens
 export const tokens = {
 	spacing: {
@@ -68,6 +66,7 @@ export const tokens = {
 
 
 export const darkTheme: Theme = {
+	name: 'dark',
 	colors: {
 		backgroundColor: '#212121',
 		backgroundSecondary: '#333232',
@@ -96,6 +95,7 @@ export const darkTheme: Theme = {
 };
 
 export const lightTheme: Theme = {
+	name: 'light',
 	colors: {
 		backgroundColor: '#f7f2e4',
 		backgroundSecondary: '#efebd4',
@@ -124,6 +124,7 @@ export const lightTheme: Theme = {
 };
 
 export const signalisTheme: Theme = {
+	name: 'signalis',
 	colors: {
 		backgroundColor: '#0e0d0d',
 		backgroundSecondary: '#333232',
@@ -149,6 +150,12 @@ export const signalisTheme: Theme = {
 		gray: 'gray',
 	},
 	...tokens,
+	borderRadius: {
+		...tokens.borderRadius,
+		sm: 0,
+		md: 0,
+		lg: 0,
+	},
 };
 
 export const colorRainbow = {

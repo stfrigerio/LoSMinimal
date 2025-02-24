@@ -1,15 +1,14 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface NavigationButtonsProps {
 	viewMode: 'table' | 'changes';
 	onBack: () => void;
 }
 
 const NavigationButtons: React.FC<NavigationButtonsProps> = ({ viewMode, onBack }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	if (viewMode === 'table') return null;
 
@@ -25,7 +24,7 @@ const NavigationButtons: React.FC<NavigationButtonsProps> = ({ viewMode, onBack 
 
 export default NavigationButtons;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	navigationButtons: {
 		flexDirection: 'row',
 		justifyContent: 'flex-start',
@@ -36,7 +35,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		alignItems: 'center',
 	},
 	backButtonText: {
-		color: theme.textColor,
+		color: theme.colors.textColor,
 		marginLeft: 5,
 		fontSize: 18,
 	},

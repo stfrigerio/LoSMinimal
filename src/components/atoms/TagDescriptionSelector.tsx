@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { TagData } from '@/src/types/TagsAndDescriptions';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TagData } from '@/src/types/TagsAndDescriptions';
 
 interface TagDescriptionSelectorProps {
     tag?: TagData | string;
@@ -10,8 +9,8 @@ interface TagDescriptionSelectorProps {
 }
 
 const TagDescriptionSelector: React.FC<TagDescriptionSelectorProps> = ({ tag, description, onPress }) => {
-    const { designs, themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { designs, theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const renderTagOrDescription = (item: TagData | string | undefined, defaultText: string) => {
         if (!item) return defaultText;
@@ -37,14 +36,14 @@ const TagDescriptionSelector: React.FC<TagDescriptionSelectorProps> = ({ tag, de
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     displayView: {
         padding: 10,
         borderRadius: 5,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
     },
     displayText: {
-        color: themeColors.gray,
+        color: theme.colors.gray,
         textAlign: 'center',
         fontSize: 16,
     },

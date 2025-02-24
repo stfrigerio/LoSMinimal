@@ -2,7 +2,7 @@ import { Pressable, Text, View, Image, StyleSheet } from "react-native";
 import { UniversalModal } from "@/src/components/modals/UniversalModal";
 import { Album, useSpotifyFetcher } from "@/src/features/Library/api/musicFetcher";
 
-import { useThemeStyles } from "@/src/styles/useThemeStyles";
+import { useThemeStyles, Theme } from "@/src/styles/useThemeStyles";
 import FetchedTracksModal from "./FetchedTracksModal";
 import { LibraryData } from "@/src/types/Library";
 import { AlbumSelectionProps } from "../helpers/refetchTracks";
@@ -38,8 +38,8 @@ const AlbumSelector = ({
     refresh,
     fetcher
 }: AlbumSelectorProps) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <UniversalModal
@@ -83,14 +83,14 @@ const AlbumSelector = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     albumItem: {
         paddingHorizontal: 10,
         padding: 15,
         marginVertical: 0,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderBottomWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 5,
     },
     albumImage: {

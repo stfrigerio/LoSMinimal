@@ -7,8 +7,7 @@ import TaskModal from '../../../modals/TaskModal';
 import AlertModal from '@/src/components/modals/AlertModal';
 
 import { handlePostponeTask } from '../../../helpers/postponeTask';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { TaskData } from '@/src/types/Task';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TaskData } from '@/src/types/Task';
 import { PillarData } from '@/src/types/Pillar';
 
 interface TaskEntryProps {
@@ -26,8 +25,8 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
     deleteTask,
     refreshTasks
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDeleteAlertVisible, setIsDeleteAlertVisible] = useState(false);
 
@@ -62,17 +61,17 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
                     <Pressable 
                         onPress={handleToggleCompletion} 
                         style={styles.completionToggle} 
-                        android_ripple={{ color: themeColors.redOpacity, borderless: true }}
+                        android_ripple={{ color: theme.colors.redOpacity, borderless: true }}
                     >
-                        <FontAwesomeIcon icon={faCheckCircle} color={themeColors.greenOpacity} size={20} /> 
+                        <FontAwesomeIcon icon={faCheckCircle} color={theme.colors.greenOpacity} size={20} /> 
                     </Pressable>
                     : 
                     <Pressable 
                         onPress={handleToggleCompletion} 
                         style={styles.completionToggle} 
-                        android_ripple={{ color: themeColors.greenOpacity, borderless: true }}
+                        android_ripple={{ color: theme.colors.greenOpacity, borderless: true }}
                     >
-                        <FontAwesomeIcon icon={faCircle} color={themeColors.gray} size={20} />
+                        <FontAwesomeIcon icon={faCircle} color={theme.colors.gray} size={20} />
                     </Pressable>
             }
 
@@ -102,14 +101,14 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
                     !item.completed ?
                         <Pressable onPress={() => handlePostponeTask({ item, onUpdateTask })} style={[styles.actionButton, { marginRight: 15}]}>
                             {({ pressed }) => (
-                                <FontAwesomeIcon icon={faRotateRight} color={pressed ? themeColors.accentColor : themeColors.gray} size={20} />
+                                <FontAwesomeIcon icon={faRotateRight} color={pressed ? theme.colors.accentColor : theme.colors.gray} size={20} />
                             )}
                         </Pressable>
                         :
                         <View style={styles.fakeIcon}/>
                 }
                 <Pressable onPress={handleDelete} style={styles.actionButton}>
-                    <FontAwesomeIcon icon={faTrash} color={themeColors.gray} size={20} />
+                    <FontAwesomeIcon icon={faTrash} color={theme.colors.gray} size={20} />
                 </Pressable>
             </View>
             {isEditModalVisible && (
@@ -137,9 +136,9 @@ const TaskEntry: React.FC<TaskEntryProps> = ({
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     container: {
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 8,
         marginBottom: 10,
         overflow: 'hidden',
@@ -197,7 +196,7 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         fontSize: 12,
     },
     completedText: {
-        color: themeColors.gray,
+        color: theme.colors.gray,
         textDecorationLine: 'line-through',
     },
 });

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Platform, Alert } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTrash, faPencil, faAddressBook, faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import AddPersonModal from '../modals/PersonModal';
 
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../../styles/useThemeStyles';
 import { PersonData } from '../../../types/People';
 import { ContactData } from '../../../types/Contact';
 
@@ -23,8 +23,8 @@ const PersonEntry: React.FC<PersonEntryProps> = ({
     deletePerson,
     refreshPeople,
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
     const [isExpanded, setIsExpanded] = useState(false); // State to toggle expanded view
 
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -104,12 +104,12 @@ const PersonEntry: React.FC<PersonEntryProps> = ({
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     container: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 8,
         marginBottom: 10,
         padding: 12,

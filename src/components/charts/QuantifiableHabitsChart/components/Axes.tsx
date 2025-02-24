@@ -80,20 +80,20 @@ const Axes: React.FC<AxesProps> = ({ x, y, width, height, theme, viewType, data 
         <>
             {/* X Axis */}
             <G transform={`translate(0, ${height})`}>
-                <Line x2={width} stroke={theme.borderColor} />
+                <Line x2={width} stroke={theme.colors.borderColor} />
                 {limitedTicks.map((tick, i) => (
                     <G key={i} transform={`translate(${x(tick)}, 0)`}> 
-                        <Line y2={6} stroke={theme.borderColor} />
-                        <SvgText y={9} dy=".71em" textAnchor="middle" fill={theme.textColor} fontSize={10}>
+                        <Line y2={6} stroke={theme.colors.borderColor} />
+                        <SvgText y={9} dy=".71em" textAnchor="middle" fill={theme.colors.textColor} fontSize={10}>
                             {getXAxisFormat()(tick)}
                         </SvgText>
                         {viewType === 'daily' && data.dates.length > 7 && tick.getDate() === 1 && (
-                            <SvgText y={22} dy=".71em" textAnchor="middle" fill={theme.textColor} fontSize={10}>
+                            <SvgText y={22} dy=".71em" textAnchor="middle" fill={theme.colors.textColor} fontSize={10}>
                                 {d3.timeFormat("%b")(tick)}
                             </SvgText>
                         )}
                         {viewType === 'quarterly' && (
-                            <SvgText y={22} dy=".71em" textAnchor="middle" fill={theme.textColor} fontSize={10}>
+                            <SvgText y={22} dy=".71em" textAnchor="middle" fill={theme.colors.textColor} fontSize={10}>
                                 {d3.timeFormat("%Y")(tick)}
                             </SvgText>
                         )}
@@ -103,11 +103,11 @@ const Axes: React.FC<AxesProps> = ({ x, y, width, height, theme, viewType, data 
 
             {/* Y Axis */}
             <G>
-                <Line y2={height} stroke={theme.borderColor} />
+                <Line y2={height} stroke={theme.colors.borderColor} />
                 {yAxisTicks.map((tick, i) => (
                     <G key={i} transform={`translate(0, ${y(tick)})`}>
-                        <Line x2={-6} stroke={theme.borderColor} />
-                        <SvgText x={-9} dy=".32em" textAnchor="end" fill={theme.textColor} fontSize={10}>
+                        <Line x2={-6} stroke={theme.colors.borderColor} />
+                        <SvgText x={-9} dy=".32em" textAnchor="end" fill={theme.colors.textColor} fontSize={10}>
                             {tick}
                         </SvgText>
                     </G>

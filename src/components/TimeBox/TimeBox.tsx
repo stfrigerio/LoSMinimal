@@ -3,8 +3,7 @@ import React, { useMemo } from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
 
 import { useNavigationComponents, NotePeriod } from '@/src/features/LeftPanel/helpers/useNavigation';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import {
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import {
 	parseDate,
 	formatDate,
 	getStartOfToday,
@@ -25,8 +24,8 @@ const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
         return null;
     }
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const { openNote } = useNavigationComponents();
     const timeZone = getLocalTimeZone();
@@ -136,7 +135,7 @@ const TimeBox: React.FC<TimeBoxProps> = ({ startDate, currentViewType }) => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -150,9 +149,9 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     buttonText: {
         fontSize: 20,
-        color: theme.accentColor,
+        color: theme.colors.accentColor,
         fontWeight: '500',
-        textShadowColor: theme.shadowColor,
+        textShadowColor: theme.colors.shadowColor,
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 4,
     },
@@ -160,17 +159,17 @@ const getStyles = (theme: any) => StyleSheet.create({
         fontWeight: '600',
     },
     currentViewText: {
-        color: theme.textColorBold,
+        color: theme.colors.textColorBold,
         fontWeight: '600',
     },
     arrow: {
         fontSize: 20, // Slightly smaller
-        color: theme.gray,
+        color: theme.colors.gray,
         opacity: 0.7,
         marginHorizontal: 2,
     },
     allTimeText: {
-        color: theme.accentColor,
+        color: theme.colors.accentColor,
         opacity: 0.8,
         fontSize: 18, // Slightly smaller than other periods
     },
@@ -190,11 +189,11 @@ const getStyles = (theme: any) => StyleSheet.create({
         padding: 6,
         borderRadius: 4,
 
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
     },
     subPeriodText: {
         fontSize: 14,
-        color: theme.accentColor,
+        color: theme.colors.accentColor,
     },
 });
 

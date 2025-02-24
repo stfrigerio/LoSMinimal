@@ -3,11 +3,10 @@ import { View, Switch, Text, StyleSheet, ScrollView } from 'react-native';
 
 import { StepProps } from '../PersonModal';
 import { FormInput, PickerInput } from '@/src/components/FormComponents';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 const PreferencesStep: React.FC<StepProps> = ({ person, updatePerson }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     useEffect(() => {
         if (person.notificationEnabled === undefined) {
@@ -64,7 +63,7 @@ const PreferencesStep: React.FC<StepProps> = ({ person, updatePerson }) => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 
 });
 

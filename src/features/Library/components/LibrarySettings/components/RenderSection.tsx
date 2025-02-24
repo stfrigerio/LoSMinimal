@@ -1,13 +1,12 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Collapsible from '@/src/components/Collapsible';
 import { useState } from 'react';
 
 export const renderSection = (title: string, section: string, children: React.ReactNode) => {
-    const { designs, themeColors } = useThemeStyles();
-    const styles = getStyles(designs, themeColors);
+    const { designs, theme } = useThemeStyles();
+    const styles = getStyles(designs, theme);
 
 
     const [collapsedSections, setCollapsedSections] = useState({
@@ -34,7 +33,7 @@ export const renderSection = (title: string, section: string, children: React.Re
                 <FontAwesomeIcon 
                     icon={collapsedSections[section as keyof typeof collapsedSections] ? faChevronDown : faChevronUp}
                     size={16}
-                    color={themeColors.textColor}
+                    color={theme.colors.textColor}
                 />
             </Pressable>
             <Collapsible collapsed={collapsedSections[section as keyof typeof collapsedSections]}>
@@ -46,19 +45,20 @@ export const renderSection = (title: string, section: string, children: React.Re
     )
 };
 
-const getStyles = (designs: any, themeColors: any) => StyleSheet.create({
+const getStyles = (designs: any, theme: Theme) => StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     section: {
         marginBottom: 16,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 16,
         marginHorizontal: 20,
         overflow: 'hidden',
-        shadowColor: themeColors.shadowColor,
+        shadowColor: theme.colors.shadowColor
+,
         shadowOffset: {
             width: 0,
             height: 2,
@@ -72,11 +72,11 @@ const getStyles = (designs: any, themeColors: any) => StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 16,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
     },
     activeSectionHeader: {
         borderBottomWidth: 1,
-        borderBottomColor: themeColors.borderColor,
+        borderBottomColor: theme.colors.borderColor,
     },
     sectionContent: {
         padding: 16,

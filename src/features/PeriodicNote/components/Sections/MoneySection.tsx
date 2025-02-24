@@ -8,8 +8,7 @@ import SummaryItem from '../atoms/SummaryItem';
 import { formatMoneyEntries } from '../../helpers/dataTransformer';
 import { processMoneySunburstData } from '../../helpers/dataProcessing';
 import { calculateMoneySummary } from '../../helpers/moneyHelpers';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 
 interface ChartSectionProps {
     startDate: Date;
@@ -22,8 +21,8 @@ const MoneySection: React.FC<ChartSectionProps> = ({
     endDate,
     tagColors,
 }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     // Destructure both current and previous moneyData
     const { 
         current: { moneyData: currentMoneyData },
@@ -87,12 +86,12 @@ const MoneySection: React.FC<ChartSectionProps> = ({
 };
 
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         container: {
             flex: 1,
             padding: 20,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
         },
         chartContainer: {
             alignItems: 'center',
@@ -107,7 +106,7 @@ const getStyles = (theme: any) => {
             fontSize: 20,
             fontWeight: 'bold',
             marginBottom: 15,
-            color: theme.textColor,
+            color: theme.colors.textColor,
             textAlign: 'center',
         },
         summaryGrid: {
@@ -122,7 +121,7 @@ const getStyles = (theme: any) => {
             fontSize: 18,
             fontWeight: 'bold',
             marginBottom: 10,
-            color: theme.textColor,
+            color: theme.colors.textColor,
             textAlign: 'center',
         },
         noDataText: {

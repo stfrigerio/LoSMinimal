@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { View, Dimensions, Platform, StyleSheet } from 'react-native';
 import Svg, { Rect, Text, G } from 'react-native-svg';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { ProcessedHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ProcessedHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
 import { useColors } from '@/src/utils/useColors';
 
 interface HeatmapChartProps {
@@ -13,9 +12,9 @@ interface HeatmapChartProps {
 }
 
 const TimeHeatmap: React.FC<HeatmapChartProps> = ({ data, width, height, fullScreen = false }) => {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
     const { colors: tagColors} = useColors();
-    const styles = getStyles(themeColors);
+    const styles = getStyles(theme);
 
     const [selectedCells, setSelectedCells] = useState<Array<{ day: string; hour: number }>>([]);
     const [tooltipPosition, setTooltipPosition] = useState<{ x: number; y: number } | null>(null);
@@ -137,8 +136,8 @@ const TimeHeatmap: React.FC<HeatmapChartProps> = ({ data, width, height, fullScr
                         {hours.map(hour => {
                             const cellData = dataByDate[day]?.[hour];
                             const cellColor = cellData && cellData.dominantTag 
-                                ? tagColors[cellData.dominantTag] || themeColors.backgroundColor
-                                : themeColors.backgroundColor;
+                                ? tagColors[cellData.dominantTag] || theme.colors.backgroundColor
+                                : theme.colors.backgroundColor;
                             const opacity = cellData ? 1 : 0.1;
                             const isSelected = selectedCells.some(cell => cell.day === day && cell.hour === hour);
                             return (
@@ -149,7 +148,7 @@ const TimeHeatmap: React.FC<HeatmapChartProps> = ({ data, width, height, fullScr
                                         width={cellWidth - 1}
                                         height={cellHeight - 1}
                                         fill={cellColor}
-                                        stroke={isSelected ? themeColors.accentColor : themeColors.borderColor}
+                                        stroke={isSelected ? theme.colors.accentColor : theme.colors.borderColor}
                                         strokeWidth={isSelected ? 2 : 0.5}
                                         opacity={opacity}
                                         rx={Math.min(cellWidth / 4, 2)}
@@ -196,8 +195,8 @@ const TimeHeatmap: React.FC<HeatmapChartProps> = ({ data, width, height, fullScr
                             y={tooltipPosition.y}
                             width={140}
                             height={60}
-                            fill={themeColors.backgroundColor}
-                            stroke={themeColors.textColor}
+                            fill={theme.colors.backgroundColor}
+                            stroke={theme.colors.textColor}
                             strokeWidth={0.4}
                             rx={4}
                             ry={4}
@@ -207,7 +206,7 @@ const TimeHeatmap: React.FC<HeatmapChartProps> = ({ data, width, height, fullScr
                             y={tooltipPosition.y + 15}
                             fontSize={10}
                             fontWeight="bold"
-                            fill={themeColors.textColor}
+                            fill={theme.colors.textColor}
                             textAnchor="middle"
                             alignmentBaseline="middle"
                         >
@@ -217,7 +216,7 @@ const TimeHeatmap: React.FC<HeatmapChartProps> = ({ data, width, height, fullScr
                             x={tooltipPosition.x - 10}
                             y={tooltipPosition.y + 30}
                             fontSize={8}
-                            fill={themeColors.textColor}
+                            fill={theme.colors.textColor}
                             textAnchor="middle"
                             alignmentBaseline="middle"
                         >
@@ -227,7 +226,7 @@ const TimeHeatmap: React.FC<HeatmapChartProps> = ({ data, width, height, fullScr
                             x={tooltipPosition.x - 10}
                             y={tooltipPosition.y + 45}
                             fontSize={8}
-                            fill={themeColors.textColor}
+                            fill={theme.colors.textColor}
                             textAnchor="middle"
                             alignmentBaseline="middle"
                         >
@@ -246,7 +245,7 @@ const TimeHeatmap: React.FC<HeatmapChartProps> = ({ data, width, height, fullScr
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     const { width } = Dimensions.get('window');
     const isDesktop = Platform.OS === 'web';
 

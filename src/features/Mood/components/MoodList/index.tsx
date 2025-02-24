@@ -6,14 +6,13 @@ import MoodEntry from './components/MoodEntry';
 import MoodModal from '@/src/features/Mood/modals/MoodModal';
 
 import { useMoodData } from '../../hooks/useMoodData';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { navItems } from '../../constants/navItems';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { navItems } from '../../constants/navItems';
 import MobileNavbar from '@/src/components/NavBar';
 
 export const MoodList = () => { 
     const [expandedEntries, setExpandedEntries] = useState<Set<number>>(new Set());
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
     const [isMoodModalOpen, setIsMoodModalOpen] = useState(false);
 
     const { entries, isLoading, error, deleteMood, refreshMoods } = useMoodData();
@@ -78,11 +77,11 @@ export const MoodList = () => {
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: themeColors.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             paddingTop: 30
         },
         list: {

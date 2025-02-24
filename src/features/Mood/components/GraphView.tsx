@@ -1,18 +1,17 @@
 import React, { useState, useMemo } from 'react';
 import { View, Dimensions, Text, StyleSheet, Pressable } from 'react-native';
 import MoodChart from '@/src/components/charts/MoodChart';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import createTimePicker from '@/src/components/DateTimePicker';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import createTimePicker from '@/src/components/DateTimePicker';
 import { useMoodData } from '../hooks/useMoodData';
 import { navItems } from '../constants/navItems';
 import MobileNavbar from '@/src/components/NavBar';
 
 const GraphView: React.FC = () => {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
     const { width } = Dimensions.get('window');
     const height = 300;
     const timePicker = createTimePicker();
-    const styles = getStyles(themeColors);
+    const styles = getStyles(theme);
 
     const { entries: moodData } = useMoodData();
 
@@ -92,7 +91,7 @@ const GraphView: React.FC = () => {
     };
 
     return (
-        <View style={[styles.container, { backgroundColor: themeColors.backgroundColor }]}>
+        <View style={[styles.container, { backgroundColor: theme.colors.backgroundColor }]}>
             <View style={{ height: 20 }} />
             <MoodChart
                 moodData={filteredData}
@@ -105,7 +104,7 @@ const GraphView: React.FC = () => {
                     style={[styles.dateButton]}
                     onPress={handleStartDatePress}
                 >
-                    <Text style={[styles.dateText, { color: themeColors.textColor }]}>
+                    <Text style={[styles.dateText, { color: theme.colors.textColor }]}>
                         From: {formatDate(range.start)}
                     </Text>
                 </Pressable>
@@ -114,7 +113,7 @@ const GraphView: React.FC = () => {
                     style={[styles.dateButton]}
                     onPress={handleEndDatePress}
                 >
-                    <Text style={[styles.dateText, { color: themeColors.textColor }]}>
+                    <Text style={[styles.dateText, { color: theme.colors.textColor }]}>
                         To: {formatDate(range.end)}
                     </Text>
                 </Pressable>
@@ -132,7 +131,7 @@ const GraphView: React.FC = () => {
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 40,
@@ -148,7 +147,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     dateButton: {
         padding: 10,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 8,
         minWidth: '35%',
     },

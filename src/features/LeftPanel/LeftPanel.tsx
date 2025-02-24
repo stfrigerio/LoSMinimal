@@ -1,9 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { View, StyleSheet, ScrollView, Dimensions, Text, Pressable } from 'react-native';
+import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers, faMusic, faClock } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers, faMusic, faClock } from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './components/MenuButton';
 import PopupMenu, { MenuItem } from './components/PopupMenu';
@@ -12,8 +11,7 @@ import { ThemeSelector } from './components/ThemeSelector';
 import { NotePeriod, useNavigationComponents } from './helpers/useNavigation';
 import { useTheme } from '@/src/contexts/ThemeContext';
 import { colorRainbow } from '@/src/styles/theme';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { getISOWeekData, getStartOfToday } from '@/src/utils/timezoneBullshit';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getISOWeekData, getStartOfToday } from '@/src/utils/timezoneBullshit';
 
 const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { themeName, setTheme } = useTheme(); // Update this line
@@ -241,7 +239,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                             <ThemeSelector
                                 currentTheme={themeName}
                                 onSelectTheme={setTheme}
-                                themeColors={theme.colors}
+                                theme={theme}
                             />
                         </View>
                     </View>
@@ -260,7 +258,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
         height: Dimensions.get('window').height,
@@ -283,7 +281,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: theme.name === 'dark' ? theme.colors.borderColor : theme.colors.gray,
+        backgroundColor: theme.colors.borderColor,
         marginVertical: theme.spacing.md,
     },
     header: {

@@ -6,8 +6,7 @@ import EntriesList from '@/src/features/PeriodicNote/components/atoms/EntriesLis
 
 import { formatTimeEntries } from '@/src/features/PeriodicNote/helpers/dataTransformer';
 import { processTimeSunburstData } from '@/src/features/PeriodicNote/helpers/dataProcessing';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { processMultiDayHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { processMultiDayHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
 
 import TimeHeatmap from '@/src/components/charts/Heatmaps/TimeHeatmap/TimeHeatmap';
 import { useColors } from '@/src/utils/useColors';
@@ -18,8 +17,8 @@ import MobileNavbar from '@/src/components/NavBar';
 import { navItems } from '../constants/navItems';
 
 const TimeGraphs: React.FC = () => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const { colors: tagColors} = useColors();
     const [showFilter, setShowFilter] = useState(false);
 	const [filters, setFilters] = useState<FilterOptions>({
@@ -131,7 +130,7 @@ const TimeGraphs: React.FC = () => {
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     const { width } = Dimensions.get('window');
     const isDesktop = Platform.OS === 'web';
 
@@ -140,7 +139,7 @@ const getStyles = (theme: any) => {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             paddingTop: 56,
         },
     });

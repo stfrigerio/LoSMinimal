@@ -3,8 +3,7 @@ import { Pressable, View, StyleSheet } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface HeaderComponentProps {
     line: string;
     isCollapsed: boolean;
@@ -18,7 +17,7 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({
     onToggle,
     markdownStyles,
 }) => {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
     
     return (
         <Pressable onPress={onToggle} style={styles.headerContainer}>
@@ -30,7 +29,7 @@ export const HeaderComponent: React.FC<HeaderComponentProps> = ({
                         { transform: [{ rotate: isCollapsed ? '0deg' : '90deg' }] }
                     ]}
                     size={10}
-                    color={themeColors.textColor}
+                    color={theme.colors.textColor}
                 />
             </View>
             <View style={styles.headerContent}>

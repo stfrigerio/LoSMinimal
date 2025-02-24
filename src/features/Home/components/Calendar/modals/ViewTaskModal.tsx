@@ -11,8 +11,7 @@ import TaskModal from '@/src/features/Tasks/modals/TaskModal';
 import TaskView from './TaskView';
 
 import { handlePostponeTask } from '@/src/features/Tasks/helpers/postponeTask';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 
 import { TaskData } from '@/src/types/Task';
 import { ExtendedTaskData } from '@/src/types/Task';
@@ -231,7 +230,7 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	modalTitle: {
 		textAlign: 'center',
 		fontWeight: 'bold',

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Platform } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import DeleteButton from '@/src/components/atoms/DeleteButton';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import DeleteButton from '@/src/components/atoms/DeleteButton';
 import EditButton from '@/src/components/atoms/EditButton';
 import AlertModal from '@/src/components/modals/AlertModal';
 
@@ -21,8 +20,8 @@ const PillarManager = () => {
 	const [alertMessage, setAlertMessage] = useState('');
 	const [alertAction, setAlertAction] = useState<() => void>(() => {});
 
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 	const { fetchPillars, handleDeletePillar, handleAddOrUpdatePillar } = usePillars();
 
 	useEffect(() => {
@@ -131,7 +130,7 @@ const PillarManager = () => {
 	);
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: { 
 		flex: 1,
 		paddingTop: 0,
@@ -149,7 +148,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 	},
 	pillarWrapper: {
 		marginTop: 20,
-		backgroundColor: themeColors.backgroundSecondary,
+		backgroundColor: theme.colors.backgroundSecondary,
 		borderRadius: 10,
 	},
 	pillarContainer: {
@@ -157,7 +156,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		padding: 10,
-		backgroundColor: themeColors.cardColor,
+		backgroundColor: theme.colors.backgroundSecondary,
 		borderRadius: 5,
 	},
 	pillarText: {
@@ -168,7 +167,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		// marginTop: 5,
 		marginLeft: 10,
 		marginBottom: 10,
-		color: themeColors.textColorItalic,
+		color: theme.colors.textColorItalic,
 	},   
 	bottomPadding: {
 		height: 60, // Adjust this value based on your GluedQuickbutton height
@@ -180,11 +179,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		right: 0,
 	},
 	description: {
-		color: themeColors.gray,
+		color: theme.colors.gray,
 		marginBottom: 10,
 	},
 	bulletPoint: {
-		color: themeColors.gray,
+		color: theme.colors.gray,
 		marginBottom: 5,
 		marginLeft: 10,
 	},

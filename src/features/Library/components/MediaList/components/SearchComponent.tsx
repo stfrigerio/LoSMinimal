@@ -1,16 +1,15 @@
 // SearchComponent.tsx
 import React from 'react';
 import { TextInput, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface SearchComponentProps {
     searchQuery: string;
     setSearchQuery: (query: string) => void;
 }
 
 const SearchComponent: React.FC<SearchComponentProps> = ({ searchQuery, setSearchQuery}) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <TextInput
@@ -23,14 +22,14 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ searchQuery, setSearc
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     input: {
         height: 40,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 10,
         borderWidth: 1,
         padding: 10,
-        color: theme.textColor
+        color: theme.colors.textColor
     },
 });
 

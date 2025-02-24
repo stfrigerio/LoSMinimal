@@ -5,8 +5,7 @@ import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import { FormInput, PickerInput } from '@/src/components/FormComponents';
 import AlertModal from '@/src/components/modals/AlertModal';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import { PillarData } from '@/src/types/Pillar';
 import { ExtendedObjectiveData } from '@/src/features/PeriodicNote/types/ObjectivesSection';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
@@ -27,8 +26,8 @@ export const AddObjectivesModal: React.FC<AddObjectivesModalProps> = ({ isVisibl
     const [completionStatus, setCompletionStatus] = useState<0 | 1 | 2>(0);
     const [showAlert, setShowAlert] = useState(false);
 
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     useEffect(() => {
         if (isVisible) {
@@ -144,7 +143,7 @@ export const AddObjectivesModal: React.FC<AddObjectivesModalProps> = ({ isVisibl
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     modalContent: {
         width: '100%',
         alignItems: 'center',
@@ -178,9 +177,9 @@ const getStyles = (theme: any) => StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
     },
     selectedPillarButton: {
-        backgroundColor: theme.accentColor,
+        backgroundColor: theme.colors.accentColor,
     },
 });

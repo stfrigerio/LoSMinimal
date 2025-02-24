@@ -2,8 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Modal, View, Text, StyleSheet, FlatList, Pressable, Platform } from 'react-native';
 
 import { SelectionData } from '@/src/features/Home/components/TimerComponent';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import AddTagDescriptionModal from '@/src/features/UserSettings/components/modals/AddTagDescriptionModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import AddTagDescriptionModal from '@/src/features/UserSettings/components/modals/AddTagDescriptionModal';
 
 import { useTagsAndDescriptions } from '@/src/features/UserSettings/hooks/useTagsAndDescriptions';
 import { TagData } from '@/src/types/TagsAndDescriptions';
@@ -18,8 +17,8 @@ interface TagModalProps {
 }
 
 const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTable }) => {
-	const { theme, themeColors, designs } = useThemeStyles();
-	const styles = getStyles(theme, themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
 	const {
@@ -62,7 +61,7 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
                                         styles.tagItem,
                                         isMoodTable ? styles.moodTagItem : styles.listTagItem,
                                         !isMoodTable && index === tags.length - 1 ? styles.lastItem : null,
-                                        { backgroundColor: themeColors.backgroundColor },
+                                        { backgroundColor: theme.colors.backgroundColor },
                                     ]}
                                     onPress={() => handleTagSelect(item)}
                                     testID={`tag-item-${index}`}
@@ -82,7 +81,7 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
                             ))}
                         </View>
 					) : (
-						<Text style={[designs.text.text, { textAlign: 'center', color: themeColors.gray }]}>
+						<Text style={[designs.text.text, { textAlign: 'center', color: theme.colors.gray }]}>
 							No tags available
 						</Text>
 					)}
@@ -106,13 +105,13 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
 	);
 };
 
-const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	tagItem: {
 		alignItems: 'center',
 		padding: 15,
 		marginVertical: 2,
 		borderBottomWidth: 1,
-		borderColor: themeColors.borderColor,
+		borderColor: theme.colors.borderColor,
 		borderRadius: 5,
 	},
 	lastItem: {
@@ -138,17 +137,17 @@ const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
         minWidth: '20%',
 
         // borderWidth: 1,
-        // borderColor: themeColors.borderColor,
+        // borderColor: theme.colors.borderColor,
     },
 	moodTagText: {
-		color: themeColors.textColor,
+		color: theme.colors.textColor,
 		fontSize: 10,
 	},
     listTagItem: {
         width: '100%',
         marginVertical: 2,
         borderBottomWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
     },
 	tagContent: {
 		flexDirection: 'row',

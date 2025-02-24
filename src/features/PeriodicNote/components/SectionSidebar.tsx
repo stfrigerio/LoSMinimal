@@ -5,7 +5,7 @@ import { View, Text, Pressable, StyleSheet, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Path } from 'react-native-svg';
 
-import { useThemeStyles } from '../../../styles/useThemeStyles'; 
+import { useThemeStyles, Theme } from '../../../styles/useThemeStyles'; 
 import Color from 'color'; 
 
 type SidebarVisibility = 'hidden' | 'icons' | 'extended';
@@ -23,7 +23,7 @@ const SectionSidebar: React.FC<SectionSidebarProps> = ({
 	activeSection,
 	visibility,
 }) => {
-	const { themeColors } = useThemeStyles();
+	const { theme } = useThemeStyles();
 
 	const sidebarWidth = visibility === 'extended' ? 150 : 50; // Adjust width based on visibility
 	const curveControlPoint = 10; // Adjust this to control the curve's shape
@@ -96,9 +96,9 @@ const SectionSidebar: React.FC<SectionSidebarProps> = ({
 	let translucentBackgroundColor: any;
 
 	if (visibility !== 'extended') {
-		translucentBackgroundColor = Color(themeColors.backgroundSecondary).alpha(0.4).toString();
+		translucentBackgroundColor = Color(theme.colors.backgroundSecondary).alpha(0.4).toString();
 	} else {
-		translucentBackgroundColor = Color(themeColors.backgroundSecondary).alpha(0.9).toString();
+		translucentBackgroundColor = Color(theme.colors.backgroundSecondary).alpha(0.9).toString();
 	}
 
 	return (
@@ -114,7 +114,7 @@ const SectionSidebar: React.FC<SectionSidebarProps> = ({
 						onPress={() => onSectionSelect(section.id)}
 					>
 						<View style={{ 
-							backgroundColor: activeSection === section.id ? themeColors.backgroundSecondary : 'transparent',
+							backgroundColor: activeSection === section.id ? theme.colors.backgroundSecondary : 'transparent',
 							borderRadius: 10
 						}}>
 							{section.icon && (

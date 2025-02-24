@@ -7,8 +7,7 @@ import { faLocationDot, faMapLocation } from '@fortawesome/free-solid-svg-icons'
 
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import { FormInput } from '@/src/components/FormComponents';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface CarLocationModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -22,8 +21,8 @@ interface LocationData {
 const CarLocationModal: React.FC<CarLocationModalProps> = ({ isOpen, onClose }) => {
     const [locationData, setLocationData] = useState<LocationData | null>(null);
     const [isSaving, setIsSaving] = useState(false);
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     useEffect(() => {
         if (isOpen) {
@@ -107,9 +106,9 @@ const CarLocationModal: React.FC<CarLocationModalProps> = ({ isOpen, onClose }) 
                     disabled={isSaving}
                 >
                     {isSaving ? (
-                        <ActivityIndicator color={themeColors.accentColor} style={{ marginRight: 15 }} />
+                        <ActivityIndicator color={theme.colors.accentColor} style={{ marginRight: 15 }} />
                     ) : (
-                        <FontAwesomeIcon icon={faMapLocation} size={20} color={themeColors.accentColor} style={{ marginRight: 15 }} />
+                        <FontAwesomeIcon icon={faMapLocation} size={20} color={theme.colors.accentColor} style={{ marginRight: 15 }} />
                     )}
                     <Text style={designs.text.text}>
                         {isSaving ? 'Saving Location...' : 'Save Current Location'}
@@ -117,7 +116,7 @@ const CarLocationModal: React.FC<CarLocationModalProps> = ({ isOpen, onClose }) 
                 </Pressable>
                 {parsedLocation && (
                     <Pressable style={[styles.button]} onPress={openInMaps}>
-                        <FontAwesomeIcon icon={faLocationDot} size={20} color={themeColors.accentColor} style={{ marginRight: 15 }} />
+                        <FontAwesomeIcon icon={faLocationDot} size={20} color={theme.colors.accentColor} style={{ marginRight: 15 }} />
                         <Text style={designs.text.text}>Open in Maps</Text>
                     </Pressable>
                 )}
@@ -132,10 +131,10 @@ const CarLocationModal: React.FC<CarLocationModalProps> = ({ isOpen, onClose }) 
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         paddingHorizontal: 20,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 20,
     },
     title: {
@@ -156,10 +155,10 @@ const getStyles = (theme: any) => StyleSheet.create({
         marginBottom: 15,
         marginTop: 10,
         borderWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 12,
         padding: 15,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         shadowColor: theme.shadowColor || '#000',
         shadowOffset: {
             width: 0,
@@ -171,7 +170,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     timestamp: {
         textAlign: 'center',
-        color: theme.gray,
+        color: theme.colors.gray,
         marginTop: -15,
         marginBottom: 20,
         fontSize: 12,

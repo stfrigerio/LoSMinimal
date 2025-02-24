@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChartLine, faClock, faListCheck } from '@fortawesome/free-solid-svg-icons';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface StatsProps {
     stats: {
         totalItems: number;
@@ -20,8 +19,8 @@ interface StatsProps {
 }
 
 export const Stats: React.FC<StatsProps> = ({ stats }) => {
-    const { designs, themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { designs, theme } = useThemeStyles();
+    const styles = getStyles(theme, designs);
 
     return (
         <>
@@ -30,17 +29,17 @@ export const Stats: React.FC<StatsProps> = ({ stats }) => {
             <View style={[styles.separator, { marginBottom: 16 }]} />
             <View style={styles.statsContainer}>
                 <View style={styles.statCard}>
-                    <FontAwesomeIcon icon={faChartLine} size={24} color={themeColors.accentColor} />
+                    <FontAwesomeIcon icon={faChartLine} size={24} color={theme.colors.accentColor} />
                     <Text style={styles.statNumber}>{stats.totalItems}</Text>
                     <Text style={styles.statLabel}>Total Items</Text>
                 </View>
                 <View style={styles.statCard}>
-                    <FontAwesomeIcon icon={faClock} size={24} color={themeColors.accentColor} />
+                    <FontAwesomeIcon icon={faClock} size={24} color={theme.colors.accentColor} />
                     <Text style={styles.statNumber}>{stats.thisYear}</Text>
                     <Text style={styles.statLabel}>This Year</Text>
                 </View>
                 <View style={styles.statCard}>
-                    <FontAwesomeIcon icon={faListCheck} size={24} color={themeColors.accentColor} />
+                    <FontAwesomeIcon icon={faListCheck} size={24} color={theme.colors.accentColor} />
                     <Text style={styles.statNumber}>{stats.thisMonth}</Text>
                     <Text style={styles.statLabel}>This Month</Text>
                 </View>
@@ -68,13 +67,13 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         padding: 16,
     },
     statCard: {
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 16,
         borderRadius: 12,
         alignItems: 'center',
         width: '30%',
         elevation: 2,
-        shadowColor: theme.shadowColor,
+        shadowColor: theme.colors.shadowColor,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
@@ -82,21 +81,21 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
     statNumber: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: theme.textColor,
+        color: theme.colors.textColor,
         marginTop: 8,
     },
     statLabel: {
         fontSize: 12,
-        color: theme.textColor + '99',
+        color: theme.colors.textColor + '99',
         marginTop: 4,
     },
     genreContainer: {
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         marginHorizontal: 16,
         padding: 16,
         borderRadius: 12,
         elevation: 2,
-        shadowColor: theme.shadowColor,
+        shadowColor: theme.colors.shadowColor,
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
@@ -104,7 +103,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
     genreHeader: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: theme.textColorBold,
+        color: theme.colors.textColorBold,
         marginBottom: 12,
         textAlign: 'center',
     },
@@ -113,23 +112,23 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 8,
         borderBottomWidth: 1,
-        borderBottomColor: theme.textColor + '20',
+        borderBottomColor: theme.colors.textColor + '20',
     },
     mediaType: {
-        color: theme.textColor,
+        color: theme.colors.textColor,
         fontSize: 14,
         textTransform: 'capitalize',
         fontWeight: '500',
     },
     genreText: {
-        color: theme.textColor + 'CC',
+        color: theme.colors.textColor + 'CC',
         fontSize: 14,
     },
     sectionTitle: {
         ...design.text.title,
         fontSize: 20,
         fontWeight: 'bold',
-        color: theme.textColorItalic,
+        color: theme.colors.textColorItalic,
         padding: 8,
         paddingVertical: 16,
         textAlign: 'center',
@@ -137,7 +136,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: theme.borderColor,
+        backgroundColor: theme.colors.borderColor,
         marginHorizontal: 16,
     },
 }); 

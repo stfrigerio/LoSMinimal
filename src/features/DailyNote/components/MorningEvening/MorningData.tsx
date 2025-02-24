@@ -6,8 +6,7 @@ import { format } from 'date-fns';
 import createTimePicker from '@/src/components/DateTimePicker';
 import ButtonsSlider from '@/src/components/atoms/ButtonsSlider';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { DailyNoteData } from '@/src/types/DailyNote';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { DailyNoteData } from '@/src/types/DailyNote';
 
 type MorningDataProps = {
     data?: DailyNoteData | null;
@@ -20,8 +19,8 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
         wakeHour: data?.wakeHour || '',
         energy: data?.energy || 0,
     };
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const [morningData, setMorningData] = useState(initialData);
 
     useEffect(() => {
@@ -64,9 +63,9 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
     const getWakeHourColor = (wakeHour: string): string => {
         const [hours, minutes] = wakeHour.split(':').map(Number);
         const decimalHour = hours + minutes / 60;
-        if (decimalHour < 9.5) return themeColors.greenOpacity;
-        if (decimalHour <= 11) return themeColors.yellowOpacity;
-        return themeColors.redOpacity;
+        if (decimalHour < 9.5) return theme.colors.greenOpacity;
+        if (decimalHour <= 11) return theme.colors.yellowOpacity;
+        return theme.colors.redOpacity;
     };
 
     return (
@@ -80,7 +79,7 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
                     value={morningData.morningComment}
                     onChangeText={(value) => handleInputChange('morningComment', value)}
                     placeholder="Share your morning thoughts..."
-                    placeholderTextColor={themeColors.gray}
+                    placeholderTextColor={theme.colors.gray}
                     numberOfLines={1}
                 />
             </View>
@@ -97,13 +96,13 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
                 {/* <Text style={styles.label}>🌞 Wake-up Time</Text> */}
                 <Pressable style={styles.timeInputWrapper} onPress={showWakeHourPicker}>
                     <View style={[styles.input, styles.timeInput]}>
-                        <Text style={{ color: morningData.wakeHour ? getWakeHourColor(morningData.wakeHour) : themeColors.gray }}>
+                        <Text style={{ color: morningData.wakeHour ? getWakeHourColor(morningData.wakeHour) : theme.colors.gray }}>
                             {morningData.wakeHour || 'Set time'}
                         </Text>
                         <MaterialCommunityIcons 
                             name="clock-outline" 
                             size={20} 
-                            color={themeColors.opaqueTextColor} 
+                            color={theme.colors.opaqueTextColor} 
                         />
                     </View>
                 </Pressable>
@@ -115,13 +114,13 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
 
 export default MorningData;
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     morningContainer: {
         padding: 20,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 16,
         marginVertical: 10,
-        // shadowColor: themeColors.shadowColor,
+        // shadowColor: theme.colors.shadowColor,
         // shadowOffset: { width: 0, height: 2 },
         // shadowOpacity: 0.1,
         // shadowRadius: 8,
@@ -130,7 +129,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     sectionTitle: {
         fontSize: 18,
         fontWeight: '600',
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         marginBottom: 15,
         alignSelf: 'center',
     },
@@ -139,17 +138,17 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        color: themeColors.opaqueTextColor,
+        color: theme.colors.opaqueTextColor,
         marginBottom: 8,
         fontWeight: '500',
     },
     input: {
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 10,
         padding: 10,
-        color: themeColors.textColor,
-        backgroundColor: themeColors.backgroundSecondary,
+        color: theme.colors.textColor,
+        backgroundColor: theme.colors.backgroundSecondary,
         fontSize: 16,
     },
     timeInputWrapper: {

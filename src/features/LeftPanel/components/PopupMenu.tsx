@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, View, Text, StyleSheet, Dimensions, Animated } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 export interface MenuItem {
     label: string;
     onPress: () => void;
@@ -125,7 +124,7 @@ const PopupMenu: React.FC<PopupMenuProps> = ({ isVisible, onClose, menuItems, an
 };
 
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     modalOverlay: {
         flex: 1,
     },

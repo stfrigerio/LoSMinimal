@@ -1,8 +1,7 @@
 // Libraries
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 // Components
 import AddHabitModal from './modals/AddHabitModal';
 import HabitRow from './atoms/HabitRow'
@@ -22,8 +21,8 @@ const SECTION_TYPES = {
 type SectionType = typeof SECTION_TYPES[keyof typeof SECTION_TYPES];
 
 const DailyNoteSettings: React.FC = () => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
 
     const [expandedSections, setExpandedSections] = useState({
         [SECTION_TYPES.DAILY_NOTE]: false,
@@ -203,7 +202,7 @@ const DailyNoteSettings: React.FC = () => {
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         container: {
             flex: 1,
@@ -220,7 +219,7 @@ const getStyles = (themeColors: any, designs: any) => {
         sectionContainer: {
             marginBottom: 20,
             borderRadius: 12,
-            backgroundColor: themeColors.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
             padding: 10
         },
         settingsGroup: {
@@ -234,7 +233,7 @@ const getStyles = (themeColors: any, designs: any) => {
         headerText: {
             ...designs.text.title,
             fontSize: designs.text.title.fontSize * 0.7,
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
         },
         subHeader: {
             borderBottomWidth: 0,
@@ -243,7 +242,7 @@ const getStyles = (themeColors: any, designs: any) => {
             ...designs.text.subtitle,
         },
         arrow: {
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
             transform: [{ rotate: '0deg' }],
             width: 20,
         },
@@ -256,7 +255,7 @@ const getStyles = (themeColors: any, designs: any) => {
             marginVertical: 5,
         },
         explainerText: {
-            color: themeColors.gray,
+            color: theme.colors.gray,
             lineHeight: 20,
             fontSize: 14,
         },

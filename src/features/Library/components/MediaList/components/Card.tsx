@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Pressable, Switch, StyleSheet } from 'react-native';
 
 import { getStarRating } from '@/src/features/Library/helpers/getStarRating';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { getActionText, ensureHttpsUrl } from '@/src/features/Library/components/MediaList/components/DetailedView/helpers';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getActionText, ensureHttpsUrl } from '@/src/features/Library/components/MediaList/components/DetailedView/helpers';
 
 import { LibraryData } from '@/src/types/Library';
 
@@ -14,8 +13,8 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const [isDownloading, setIsDownloading] = useState(item.isMarkedForDownload === 1);
 
     const formatDate = (dateString: string): string => {
@@ -77,8 +76,8 @@ const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
                             onToggleDownload && (
                                 <View style={styles.downloadToggleContainer}>
                                     <Switch
-                                        trackColor={{ false: themeColors.backgroundColor, true: themeColors.accentColor }}
-                                        thumbColor={isDownloading ? themeColors.textColorBold : themeColors.textColor}
+                                        trackColor={{ false: theme.colors.backgroundColor, true: theme.colors.accentColor }}
+                                        thumbColor={isDownloading ? theme.colors.textColorBold : theme.colors.textColor}
                                         onValueChange={handleToggleDownload}
                                         value={isDownloading}
                                     />
@@ -92,21 +91,21 @@ const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         card: {
-            backgroundColor: theme.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
             borderRadius: 10,
             padding: 10,
             marginVertical: 5,
             marginHorizontal: 10,
-            shadowColor: theme.shadowColor,
+            shadowColor: theme.colors.shadowColor,
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.5,
             shadowRadius: 2,
             elevation: 12,
             borderWidth: 1,
-            borderColor: theme.backgroundColor
+            borderColor: theme.colors.backgroundColor
         },
         cardPressed: {
             opacity: 0.7,
@@ -123,11 +122,11 @@ const getStyles = (theme: any) => {
         title: {
             fontSize: 18,
             fontWeight: 'bold',
-            color: theme.textColorBold
+            color: theme.colors.textColorBold
         },
         rating: {
             fontSize: 14,
-            color: theme.textColor,
+            color: theme.colors.textColor,
             marginTop: 10,
         },
         poster: {
@@ -138,7 +137,7 @@ const getStyles = (theme: any) => {
         },
         creator: {
             fontSize: 12,
-            color: theme.textColor,
+            color: theme.colors.textColor,
             marginTop: 5,
             width: 150,
             marginRight: 10,
@@ -147,16 +146,16 @@ const getStyles = (theme: any) => {
         year: {
             marginTop: 5,
             fontSize: 12,
-            color: theme.textColor,
+            color: theme.colors.textColor,
             flexGrow: 1,
         },
         text: {
-            color: theme.textColor,
+            color: theme.colors.textColor,
             fontSize: 10,
             marginTop: 5
         },
         seenText: {
-            color: theme.gray,
+            color: theme.colors.gray,
             fontSize: 10,
             marginTop: 5
         },

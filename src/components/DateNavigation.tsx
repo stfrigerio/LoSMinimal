@@ -3,16 +3,15 @@ import { View, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Entypo from '@expo/vector-icons/Entypo';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface DateNavigationProps {
 	periodType: string;
 	onNavigate: (direction: 'previous' | 'next' | 'current') => void;
 }
 
 const DateNavigation: React.FC<DateNavigationProps> = ({ onNavigate }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	return (
 		<View style={styles.container}>
@@ -29,7 +28,7 @@ const DateNavigation: React.FC<DateNavigationProps> = ({ onNavigate }) => {
 	);
 };  
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		justifyContent: 'center',

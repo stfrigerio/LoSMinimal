@@ -4,8 +4,7 @@ import Svg, { G, Rect, Text as SvgText } from 'react-native-svg';
 import * as d3 from 'd3';
 
 import { colorRainbow } from '@/src/styles/theme';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface WeeklyData {
     movies: number[];
     series: number[];
@@ -29,8 +28,8 @@ export const LibraryChart: React.FC<LibraryChartProps> = ({
     const chartWidth = width - margin.left - margin.right;
     const chartHeight = height - margin.top - margin.bottom;
 
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
 
     const stackedData = useMemo(() => {
         const categories = Object.keys(weeklyData) as (keyof WeeklyData)[];
@@ -107,7 +106,7 @@ export const LibraryChart: React.FC<LibraryChartProps> = ({
                                 x={scales.xScale.bandwidth() / 2}
                                 y={20}
                                 fontSize={10}
-                                fill={themeColors.textColor}
+                                fill={theme.colors.textColor}
                                 textAnchor="middle"
                             >
                                 {week.toString().slice(1)} {/* Remove the 'W' prefix */}
@@ -121,7 +120,7 @@ export const LibraryChart: React.FC<LibraryChartProps> = ({
                             <SvgText
                                 x={-10}
                                 fontSize={10}
-                                fill={themeColors.textColor}
+                                fill={theme.colors.textColor}
                                 textAnchor="end"
                                 alignmentBaseline="middle"
                             >

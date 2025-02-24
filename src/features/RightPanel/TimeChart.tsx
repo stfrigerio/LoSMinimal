@@ -6,8 +6,7 @@ import { faChartPie, faClock } from '@fortawesome/free-solid-svg-icons';
 import { databaseManagers } from '@/database/tables';
 import { getDatesOfWeek } from '@/src/utils/timeUtils';
 import { formatTimeEntries } from '@/src/features/PeriodicNote/helpers/dataTransformer';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { processTimeSunburstData } from '@/src/features/PeriodicNote/helpers/dataProcessing';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { processTimeSunburstData } from '@/src/features/PeriodicNote/helpers/dataProcessing';
 import { processHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
 import { processTimerSpanningMidnight } from './helpers/chartDataProcessing';
 import { useColors } from '@/src/utils/useColors';
@@ -194,7 +193,7 @@ function TimeSunburstChart() {
 
 export default TimeSunburstChart;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     controlsContainer: {
         flexDirection: 'row', // Horizontal layout for the switch and texts
         padding: theme.spacing.xs,

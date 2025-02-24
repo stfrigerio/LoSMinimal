@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Pressable, Animated, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Color from 'color';
-import { useThemeStyles } from '../../../../styles/useThemeStyles';
+import { useThemeStyles, Theme } from '../../../../styles/useThemeStyles';
 
 type SidebarButtonProps = {
 	sidebarVisibility: 'hidden' | 'icons' | 'extended';
@@ -13,7 +13,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({
 	sidebarVisibility,
 	toggleSidebarVisibility
 }) => {
-	const { themeColors } = useThemeStyles();
+	const { theme } = useThemeStyles();
 	const rotateAnim = useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
@@ -24,7 +24,7 @@ const SidebarButton: React.FC<SidebarButtonProps> = ({
 		}).start();
 	}, [sidebarVisibility]);
 
-	const translucentBackgroundColor = Color(themeColors.backgroundSecondary).alpha(0.3).toString();
+	const translucentBackgroundColor = Color(theme.colors.backgroundSecondary).alpha(0.3).toString();
 
 	return (
 		<Animated.View style={[styles.chevronButton, { backgroundColor: translucentBackgroundColor }]}>

@@ -10,8 +10,7 @@ import Navbar from '@/src/components/NavBar';
 import createTimePicker from '@/src/components/DateTimePicker';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { getFlaskServerURL } from '@/src/features/Database/helpers/databaseConfig';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getFlaskServerURL } from '@/src/features/Database/helpers/databaseConfig';
 
 import { JournalData } from '@/src/types/Journal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
@@ -27,8 +26,8 @@ const JournalHub: React.FC = () => {
     const [isGeneratingAI, setIsGeneratingAI] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const startDatePicker = createTimePicker();
     const endDatePicker = createTimePicker();
@@ -163,7 +162,7 @@ const JournalHub: React.FC = () => {
                 />
             </View>
             <Pressable style={styles.AINavbarButton} onPress={() => setIsModalVisible(true)}>
-                <FontAwesomeIcon icon={faRobot} color={themeColors.backgroundColor} size={24} />
+                <FontAwesomeIcon icon={faRobot} color={theme.colors.backgroundColor} size={24} />
             </Pressable>
             <Navbar
                 items={[]}
@@ -183,17 +182,17 @@ const JournalHub: React.FC = () => {
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         mainContainer: {
             paddingTop: 37,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             flex: 1,
         },
         container: {
             flex: 1,
             padding: 10,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             marginBottom: 80
         },
         title: {
@@ -202,7 +201,7 @@ const getStyles = (theme: any) => {
         journalItem: {
             padding: 15,
             borderBottomWidth: 1,
-            borderBottomColor: theme.borderColor,
+            borderBottomColor: theme.colors.borderColor,
         },
         floatingButton: {
             position: 'absolute',
@@ -211,7 +210,7 @@ const getStyles = (theme: any) => {
             width: 60,
             height: 60,
             borderRadius: 30,
-            backgroundColor: theme.accentColor,
+            backgroundColor: theme.colors.accentColor,
             justifyContent: 'center',
             alignItems: 'center',
         },
@@ -220,7 +219,7 @@ const getStyles = (theme: any) => {
         },
         datePickerContainer: {
             padding: 20,
-            backgroundColor: theme.cardBackgroundColor,
+            backgroundColor: theme.colors.backgroundSecondary,
             borderRadius: 8,
         },
         dateTimeContainer: {
@@ -232,21 +231,21 @@ const getStyles = (theme: any) => {
         dateTimeButton: {
             flex: 1,
             padding: 10,
-            borderColor: theme.borderColor,
+            borderColor: theme.colors.borderColor,
             borderWidth: 1,
             borderRadius: 5,
             marginHorizontal: 5,
             alignItems: 'center',
         },
         dateTimeText: {
-            color: theme.textColor,
+            color: theme.colors.textColor,
         },
         labels: {
             color: 'gray',
             marginBottom: 10,
         },
         generateButton: {
-            backgroundColor: theme.primaryColor,
+            backgroundColor: theme.colors.accentColor,
             padding: 10,
             borderRadius: 5,
             alignItems: 'center',

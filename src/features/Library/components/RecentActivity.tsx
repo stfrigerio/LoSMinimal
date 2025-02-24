@@ -3,16 +3,15 @@ import { View, Text, ScrollView, Image, StyleSheet, Pressable } from 'react-nati
 
 import { LibraryData } from '@/src/types/Library';
 import { formatDistanceToNow } from 'date-fns';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { router } from 'expo-router';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { router } from 'expo-router';
 
 interface RecentActivityProps {
     recentActivity: LibraryData[];
 }
 
 export const RecentActivity: React.FC<RecentActivityProps> = ({ recentActivity }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
 
     const getTimeAgo = (date: string) => {
         if (!date) return '';
@@ -80,19 +79,19 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ recentActivity }
     );
 };
 
-const getStyles = (theme: any, design: any) => StyleSheet.create({
+const getStyles = (theme: Theme, design: any) => StyleSheet.create({
     sectionTitle: {
         ...design.text.title,
         fontSize: 20,
         fontWeight: 'bold',
-        color: theme.textColorItalic,
+        color: theme.colors.textColorItalic,
         textAlign: 'center',
         padding: 16,
         marginBottom: 0,
     },
     separator: {
         height: 1,
-        backgroundColor: theme.borderColor,
+        backgroundColor: theme.colors.borderColor,
         marginHorizontal: 16,
     },
     recentContainer: {
@@ -109,7 +108,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         borderRadius: 8,
         marginBottom: 8,
         elevation: 3,
-        shadowColor: theme.shadowColor,
+        shadowColor: theme.colors.shadowColor,
         shadowOffset: { width: 1, height: 1 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
@@ -117,17 +116,17 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
     recentImagePlaceholder: {
         width: 120,
         height: 180,
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 8,
         marginBottom: 8,
     },
     recentTitle: {
         fontSize: 14,
         fontWeight: '500',
-        color: theme.textColor,
+        color: theme.colors.textColor,
     },
     recentSubtitle: {
         fontSize: 12,
-        color: theme.textColor + '99',
+        color: theme.colors.textColor + '99',
     },
 }); 

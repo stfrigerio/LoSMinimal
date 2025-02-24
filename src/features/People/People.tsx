@@ -5,8 +5,7 @@ import PersonEntry from './components/PersonEntry';
 import MobileNavbar from '@/src/components/NavBar';
 import AddPersonModal from './modals/PersonModal';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { usePeopleData } from './hooks/usePeopleData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeopleData } from './hooks/usePeopleData';
 import { useContactData } from './hooks/useContactData';
 
 import { PersonData } from '@/src/types/People';
@@ -14,8 +13,8 @@ import { ContactData } from '@/src/types/Contact';
 
 
 const PeopleHub: React.FC = () => {
-    const { themeColors } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors), [themeColors]);
+    const { theme } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme), [theme]);
     const [activeView, setActiveView] = useState('List');
 
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -88,11 +87,11 @@ const PeopleHub: React.FC = () => {
 
 export default PeopleHub;
 
-const getStyles = (themeColors: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: themeColors.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             paddingHorizontal: 10,
             paddingTop: 37,
         },

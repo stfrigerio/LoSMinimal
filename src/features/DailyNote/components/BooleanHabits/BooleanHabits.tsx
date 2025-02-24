@@ -2,8 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import Habit from './BooleanHabit';
 import { capitalize } from '@/src/utils/textManipulations';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import { useBooleanHabits } from '@/src/features/DailyNote/helpers/useBooleanHabits';
 
 import { BooleanHabitsData } from '@/src/types/BooleanHabits';
@@ -16,8 +15,8 @@ export interface BooleanHabitsProps {
 
 const BooleanHabits: React.FC<BooleanHabitsProps> = ({ data, date, booleanHabitsName }) => {
     const { habits, emojis, handleToggle } = useBooleanHabits(data, date);
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const renderHabitName = (habit: { key: string }) => {
         const emoji = emojis[habit.key] || '';
@@ -37,7 +36,7 @@ const BooleanHabits: React.FC<BooleanHabitsProps> = ({ data, date, booleanHabits
 
     return (
         <View style={styles.BooleanHabitsContainer}>
-            {habits.map((habit, index) => (
+            {habits.map((habit: any, index: any) => (
                 <React.Fragment key={habit.key}>
                     <Habit 
                         name={renderHabitName(habit)}
@@ -53,12 +52,12 @@ const BooleanHabits: React.FC<BooleanHabitsProps> = ({ data, date, booleanHabits
 
 export default BooleanHabits;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     BooleanHabitsContainer: {
         flex: 1,
         marginTop: 10,
         padding: 10,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 16,
         marginVertical: 10,
         // shadowColor: theme.shadowColor,
@@ -69,7 +68,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: theme.borderColor,
+        backgroundColor: theme.colors.borderColor,
         marginVertical: 4, 
     },
     habitNameContainer: {
@@ -82,6 +81,6 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     habitName: {
         fontSize: 14,
-        color: theme.textColor,
+        color: theme.colors.textColor,
     },
 });

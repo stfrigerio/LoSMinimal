@@ -2,29 +2,28 @@ import React from 'react';
 import { View, Image, StyleSheet, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface BannerProps {
     imageSource: any;
     height?: number;
 }
 
 const Banner: React.FC<BannerProps> = ({ imageSource, height = 180 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <View style={[styles.bannerContainer, { height }]}>
             <Image source={imageSource} style={styles.bannerImage} resizeMode="cover" />
             <LinearGradient
-                colors={[`${themeColors.backgroundColor}`, 'transparent', `${themeColors.backgroundColor}`]}
+                colors={[`${theme.colors.backgroundColor}`, 'transparent', `${theme.colors.backgroundColor}`]}
                 style={styles.gradient}
             />
         </View>
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     bannerContainer: {
         width: Dimensions.get('window').width,
         marginHorizontal: -20,

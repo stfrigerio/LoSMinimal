@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface PaginationProps {
 	currentPage: number;
 	setCurrentPage: (page: number) => void;
@@ -15,8 +14,8 @@ const Pagination: React.FC<PaginationProps> = ({
 	totalItems,
 	itemsPerPage,
 }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -47,7 +46,7 @@ const Pagination: React.FC<PaginationProps> = ({
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -56,16 +55,16 @@ const getStyles = (theme: any) => StyleSheet.create({
 	},
 	button: {
 		padding: 10,
-		backgroundColor: theme.backgroundColor,
-		borderColor: theme.borderColor,
+		backgroundColor: theme.colors.backgroundColor,
+		borderColor: theme.colors.borderColor,
 		borderWidth: 1,
 		borderRadius: 5,
 	},
 	buttonText: {
-		color: theme.textColor,
+		color: theme.colors.textColor,
 	},
 	pageInfo: {
-		color: theme.textColor,
+		color: theme.colors.textColor,
 	},
 });
 

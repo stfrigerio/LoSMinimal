@@ -2,7 +2,7 @@ import { View, Pressable, Text, StyleSheet } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMusic, faLink, faPlay, faStar } from "@fortawesome/free-solid-svg-icons";
 
-import { useThemeStyles } from "@/src/styles/useThemeStyles";
+import { Theme, useThemeStyles } from "@/src/styles/useThemeStyles";
 
 interface TracksContainerProps {
     trackDetails: any;
@@ -17,8 +17,8 @@ const TracksContainer = ({
     setSelectedSongForLinking, 
     dbOnlyTracks 
 }: TracksContainerProps) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const renderRating = (rating: number = 0) => (
         <View style={styles.ratingContainer}>
@@ -27,7 +27,7 @@ const TracksContainer = ({
                     key={star}
                     icon={faStar} 
                     size={14} 
-                    color={star <= rating ? themeColors.textColor : themeColors.borderColor} 
+                    color={star <= rating ? theme.colors.textColor : theme.colors.borderColor} 
                 />
             ))}
         </View>
@@ -52,7 +52,7 @@ const TracksContainer = ({
                             <FontAwesomeIcon 
                                 icon={faMusic} 
                                 size={16} 
-                                color={themeColors.textColorItalic} 
+                                color={theme.colors.textColorItalic} 
                             />
                             <Text style={styles.trackNumber}>
                                 {trackData?.trackNumber?.toString().padStart(2, '0') || '--'}
@@ -75,7 +75,7 @@ const TracksContainer = ({
                                     <FontAwesomeIcon 
                                         icon={faLink} 
                                         size={14} 
-                                        color={themeColors.textColorItalic} 
+                                        color={theme.colors.textColorItalic} 
                                     />
                                     <Text style={styles.linkText}>Link to track</Text>
                                 </Pressable>
@@ -84,7 +84,7 @@ const TracksContainer = ({
                         <FontAwesomeIcon 
                             icon={faPlay} 
                             size={16} 
-                            color={themeColors.textColorItalic} 
+                            color={theme.colors.textColorItalic} 
                         />
                     </Pressable>
                 );
@@ -101,7 +101,7 @@ const TracksContainer = ({
                         <FontAwesomeIcon 
                             icon={faMusic} 
                             size={16} 
-                            color={themeColors.textColorItalic} 
+                            color={theme.colors.textColorItalic} 
                         />
                         <Text style={styles.trackNumber}>
                             {track.trackNumber?.toString().padStart(2, '0') || '--'}
@@ -127,7 +127,7 @@ const TracksContainer = ({
     )
 }
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     tracksContainer: {
         paddingHorizontal: 0,
     },
@@ -135,15 +135,15 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 15,
         borderRadius: 12,
         marginBottom: 8,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
     },
     trackItemPressed: {
-        backgroundColor: themeColors.accentColor,
+        backgroundColor: theme.colors.accentColor,
         transform: [{ scale: 0.98 }],
     },
     trackIconContainer: {
@@ -159,12 +159,12 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },  
     trackName: {
         fontSize: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         marginBottom: 4,
     },
     trackNumber: {
         fontSize: 14,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
         fontFamily: 'monospace',
     },
     trackMetadata: {
@@ -178,11 +178,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     playCount: {
         fontSize: 12,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
     },
     duration: {
         fontSize: 12,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
         fontFamily: 'monospace',
     },
     linkButton: {
@@ -193,7 +193,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     linkText: {
         fontSize: 12,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
     },
     dbTrackContainer: {
         opacity: 0.7,
@@ -204,8 +204,8 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     dbIndicator: {
         fontSize: 10,
-        color: themeColors.textColorItalic,
-        backgroundColor: themeColors.borderColor,
+        color: theme.colors.textColorItalic,
+        backgroundColor: theme.colors.borderColor,
         paddingHorizontal: 6,
         paddingVertical: 2,
         borderRadius: 4,

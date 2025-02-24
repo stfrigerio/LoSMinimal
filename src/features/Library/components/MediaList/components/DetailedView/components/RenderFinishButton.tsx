@@ -1,11 +1,10 @@
 import { Pressable, Text, StyleSheet} from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 
 export const RenderFinishButton = (item: any, handleMarkAsFinished: () => void) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     if (item.finished === 0) {
         return (
@@ -22,7 +21,7 @@ export const RenderFinishButton = (item: any, handleMarkAsFinished: () => void) 
     return null;
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     finishButton: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -30,12 +29,12 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         padding: 15,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         marginTop: 30,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
     },
     finishButtonText: {
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         fontWeight: 'bold',
         fontSize: 16,
     },

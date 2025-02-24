@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
 interface PickerInputProps {
     label: string;
@@ -16,8 +15,8 @@ export const PickerInput: React.FC<PickerInputProps> = ({
     selectedValue,
     onValueChange,
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     return (
@@ -65,13 +64,13 @@ export const PickerInput: React.FC<PickerInputProps> = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     inputContainer: {
         marginVertical: 10,
     },
     pickerLabel: {
         fontSize: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         marginBottom: 5,
     },
     pickerTouchable: {
@@ -79,13 +78,13 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 10,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 4,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
     },
     pickerText: {
         fontSize: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     modalContent: {
         padding: 16,
@@ -97,14 +96,14 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         marginBottom: 8,
     },
     selectedOption: {
-        backgroundColor: themeColors.textColor + '20', // 20 is hex for 12% opacity
+        backgroundColor: theme.colors.textColor + '20', // 20 is hex for 12% opacity
     },
     optionText: {
         fontSize: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     selectedOptionText: {
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
         fontWeight: '600',
     },
 });

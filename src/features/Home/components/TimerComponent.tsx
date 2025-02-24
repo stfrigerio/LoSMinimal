@@ -8,8 +8,7 @@ import TagModal from '@/src/components/modals/TagModal';
 import DescriptionModal from '@/src/components/modals/DescriptionModal';
 
 import { useTimer } from '@/src/features/Home/hooks/useTimer';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { TagData } from '@/src/types/TagsAndDescriptions';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TagData } from '@/src/types/TagsAndDescriptions';
 
 export interface SelectionData {
 	isTagModalOpen: boolean;
@@ -29,8 +28,8 @@ const TimerComponent: React.FC = () => {
 	const { timerRunning, initialSeconds, startTimer, stopTimer, getCurrentTimerSecondsRef, tag, description, fetchActiveTimer, checkAndClearStuckNotification } = useTimer();
 	const scaleAnim = useRef(new Animated.Value(1)).current;
 
-	const { theme, themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const handleTagDescriptionSelection = () => {
 		if (selectionData.selectedTag && selectionData.selectedDescription) {
@@ -90,7 +89,7 @@ const TimerComponent: React.FC = () => {
                         <FontAwesomeIcon 
                             icon={faPlay} 
                             size={16} 
-                            color={theme === 'dark' ? themeColors.backgroundColor : '#333333'} 
+                            color={theme.name === 'dark' ? theme.colors.backgroundColor : '#333333'} 
                             style={{ marginLeft: 3}}
                         />
                     </Pressable>
@@ -99,7 +98,7 @@ const TimerComponent: React.FC = () => {
 			{timerRunning && (
 				<View style={styles.timerContent}>
 					<Pressable style={styles.stopButton} onPress={handleStopTimer}>
-						<FontAwesomeIcon icon={faPause} size={24} color={theme === 'dark' ? themeColors.textColor : '#d3c6aa'} />
+						<FontAwesomeIcon icon={faPause} size={24} color={theme.name === 'dark' ? theme.colors.textColor : '#d3c6aa'} />
 					</Pressable>
 				</View>
 			)}
@@ -139,7 +138,7 @@ const TimerComponent: React.FC = () => {
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		alignItems: 'flex-start',
 	},

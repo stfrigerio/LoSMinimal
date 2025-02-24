@@ -1,9 +1,8 @@
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 export const renderAPIKeyInput = (label: string, value: string, onChangeText: (text: string) => void, onBlur: () => void) => {
-    const { designs, themeColors } = useThemeStyles();
-    const styles = getStyles(designs, themeColors);
+    const { designs, theme } = useThemeStyles();
+    const styles = getStyles(designs, theme);
     return (
         <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>{label}</Text>
@@ -13,30 +12,30 @@ export const renderAPIKeyInput = (label: string, value: string, onChangeText: (t
                 onBlur={onBlur}
                 value={value}
                 placeholder={`Enter ${label}`}
-                placeholderTextColor={themeColors.gray}
+                placeholderTextColor={theme.colors.gray}
                 secureTextEntry={label.toLowerCase().includes('secret')}
             />
         </View>
     );
 };
 
-const getStyles = (designs: any, themeColors: any) => StyleSheet.create({
+const getStyles = (designs: any, theme: Theme) => StyleSheet.create({
     inputContainer: {
         marginBottom: 20,
     },
     inputLabel: {
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
         fontSize: 14,
         marginBottom: 8,
         fontWeight: '600',
     },
     input: {
         borderWidth: 1,
-        borderColor: themeColors.backgroundColor,
+        borderColor: theme.colors.backgroundColor,
         borderRadius: 12,
         padding: 12,
-        backgroundColor: themeColors.backgroundColor,
-        color: themeColors.textColor,
+        backgroundColor: theme.colors.backgroundColor,
+        color: theme.colors.textColor,
         fontSize: 16,
     },
 });

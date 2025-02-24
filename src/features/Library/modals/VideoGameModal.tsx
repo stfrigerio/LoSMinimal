@@ -9,7 +9,7 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 import { searchGames, GameSearchResult } from '../api/videogameFetcher';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../../styles/useThemeStyles';
 import { LibraryData } from '../../../types/Library';
 
 interface GameSearchModalProps {
@@ -29,8 +29,8 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
     const [detailedGame, setDetailedGame] = useState<GameSearchResult | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const handleSearch = async () => {
         try {
@@ -178,7 +178,7 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
                                     <FontAwesomeIcon 
                                         icon={faStar} 
                                         size={20} 
-                                        color={star <= personalRating ? themeColors.textColor : 'gray'} 
+                                        color={star <= personalRating ? theme.colors.textColor : 'gray'} 
                                     />
                                 </Pressable>
                             ))}
@@ -205,14 +205,14 @@ const VideoGameSearchModal: React.FC<GameSearchModalProps> = ({ isOpen, onClose,
 
 export default VideoGameSearchModal
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     gameItem: {
         paddingHorizontal: 10,
         padding: 15,
         marginVertical: 0,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderBottomWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 5,
     },
     gameImage: {
@@ -221,13 +221,13 @@ const getStyles = (theme: any) => StyleSheet.create({
         marginRight: 10,
     },
     loadingText: {
-        color: theme.textColor,
+        color: theme.colors.textColor,
         marginTop: 10
     },
     ratingContainer: {
         flexDirection: 'row',
         marginBottom: 20,
-        backgroundColor: theme.cardColor,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 12,
         borderRadius: 12,
         justifyContent: 'center',

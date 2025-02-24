@@ -2,8 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
 import { PickerInput } from '@/src/components/FormComponents';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TableSelectorProps {
 	tables: string[];
 	selectedTable: string;
@@ -23,8 +22,8 @@ const tableDisplayNames: { [key: string]: string } = {
 };
 
 const TableSelector: React.FC<TableSelectorProps> = ({ tables, selectedTable, onSelectTable }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	if (!tables || tables.length === 0) {
 		return (
@@ -49,14 +48,14 @@ const TableSelector: React.FC<TableSelectorProps> = ({ tables, selectedTable, on
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		marginBottom: 20,
 		marginTop: 0,
 		marginHorizontal: 20,
 	},
 	errorText: {
-		color: theme.errorColor,
+		color: theme.colors.red,
 		fontSize: 16,
 		textAlign: 'center',
 	},

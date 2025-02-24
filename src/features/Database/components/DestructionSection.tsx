@@ -4,14 +4,13 @@ import { View } from 'react-native';
 import { PickerInput } from '@/src/components/FormComponents';
 import AlertModal from '@/src/components/modals/AlertModal';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { databaseManagers } from '@/database/tables';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { databaseManagers } from '@/database/tables';
 import { databaseManager } from '@/database/databaseManager';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 const DestructionSection = () => {
 	const [selectedTable, setSelectedTable] = useState('');
-	const { themeColors, designs } = useThemeStyles();
+	const { theme } = useThemeStyles();
 
 	const [alertModalVisible, setAlertModalVisible] = useState(false);
 	const [alertTitle, setAlertTitle] = useState('');

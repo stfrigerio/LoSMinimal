@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface FetchedTracksModalProps {     
     progress: {
         current: number;
@@ -11,8 +10,8 @@ interface FetchedTracksModalProps {
 }
 
 const FetchedTracksModal = ({ progress, loadingTrack }: FetchedTracksModalProps) => {        
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         loadingTrack && (
@@ -28,7 +27,7 @@ const FetchedTracksModal = ({ progress, loadingTrack }: FetchedTracksModalProps)
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     loadingContainer: {
         position: 'absolute',
         top: 0,
@@ -37,10 +36,10 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         padding: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         margin: 20,
         zIndex: 1000,
         shadowColor: "#000",
@@ -57,13 +56,13 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         textAlign: 'center',
         fontSize: 18,
         fontWeight: 'bold',
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
     },
     loadingTrackName: {
         fontStyle: 'italic',
         textAlign: 'center',
         fontSize: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
 });
 

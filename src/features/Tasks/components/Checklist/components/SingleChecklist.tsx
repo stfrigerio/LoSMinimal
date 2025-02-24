@@ -5,7 +5,7 @@ import { faPlus, faChevronDown, faChevronUp, faEdit } from '@fortawesome/free-so
 import Collapsible from '@/src/components/Collapsible';
 import { ChecklistData, ChecklistProps } from '../types';
 import ChecklistItem from './ChecklistItem';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 
 interface SingleChecklistProps {
     checklistData: ChecklistData;
@@ -30,7 +30,7 @@ const SingleChecklist: React.FC<SingleChecklistProps> = ({
     onEdit,
     onToggleCollapse,
 }) => {
-    const { themeColors, designs } = useThemeStyles();
+    const { theme, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(designs), [designs]);
     const inputRef = useRef<TextInput>(null);
     const filteredTasks = tasks
@@ -50,42 +50,42 @@ const SingleChecklist: React.FC<SingleChecklistProps> = ({
     };
 
     return (
-        <View style={[styles.container, { backgroundColor: themeColors.backgroundSecondary }]}>
+        <View style={[styles.container, { backgroundColor: theme.colors.backgroundSecondary }]}>
             <View style={styles.header}>
-                <Text style={[styles.title, { color: themeColors.textColor }]}>{checklistData.name}</Text>
+                <Text style={[styles.title, { color: theme.colors.textColor }]}>{checklistData.name}</Text>
                 <View style={styles.headerIcons}>
                     <Pressable onPress={() => onEdit(checklistData)} style={styles.headerIcon}>
-                        <FontAwesomeIcon icon={faEdit} color={themeColors.textColor} size={18} />
+                        <FontAwesomeIcon icon={faEdit} color={theme.colors.textColor} size={18} />
                     </Pressable>
                     <Pressable onPress={() => onToggleCollapse(checklistData.name)} style={styles.headerIcon}>
                         <FontAwesomeIcon 
                             icon={checklistData.collapsed ? faChevronDown : faChevronUp} 
-                            color={themeColors.textColor} 
+                            color={theme.colors.textColor} 
                             size={18} 
                         />
                     </Pressable>
                 </View>
             </View>
             <Collapsible collapsed={checklistData.collapsed}>
-                <View style={[styles.addItemContainer, { backgroundColor: `${themeColors.backgroundSecondary}CC` }]}>
+                <View style={[styles.addItemContainer, { backgroundColor: `${theme.colors.backgroundSecondary}CC` }]}>
                     <TextInput
                         ref={inputRef}
-                        style={[styles.input, { color: themeColors.textColor, backgroundColor: `${themeColors.backgroundSecondary}99` }]}
+                        style={[styles.input, { color: theme.colors.textColor, backgroundColor: `${theme.colors.backgroundSecondary}99` }]}
                         value={inputText}
                         onChangeText={(text) => onInputChange(text, checklistData.name)}
                         placeholder="Add new item"
-                        placeholderTextColor={`${themeColors.textColor}99`}
+                        placeholderTextColor={`${theme.colors.textColor}99`}
                         onSubmitEditing={() => handleAddItem(checklistData.name, true)}
                     />
                     <Pressable onPress={() => handleAddItem(checklistData.name)} style={styles.addButton}>
-                        <FontAwesomeIcon icon={faPlus} color={themeColors.textColor} size={20} />
+                        <FontAwesomeIcon icon={faPlus} color={theme.colors.textColor} size={20} />
                     </Pressable>
                 </View>
                 {filteredTasks.map(task => (
                     <ChecklistItem
                         key={task.uuid}
                         task={task}
-                        textColor={themeColors.textColor}
+                        textColor={theme.colors.textColor}
                         onToggle={onToggleItem}
                         onDelete={onDeleteTask}
                     />

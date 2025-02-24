@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Text, Switch, TextInput } from 'react-native';
 
 import { StepProps } from '../PersonModal';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { FormInput, PickerInput } from '@/src/components/FormComponents';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { FormInput, PickerInput } from '@/src/components/FormComponents';
 
 const BasicInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const [showMiddleName, setShowMiddleName] = useState(false);
     const [birthday, setBirthday] = useState({ year: '', month: '', day: '' });
     const [showAliases, setShowAliases] = useState(false);  // Add this line for the new switch
@@ -53,8 +52,8 @@ const BasicInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {
                 <Switch
                     value={showMiddleName}
                     onValueChange={setShowMiddleName}
-                    trackColor={{ false: themeColors.textColor, true: themeColors.textColor }}
-                    thumbColor={showMiddleName ? themeColors.hoverColor : themeColors.textColor}
+                    trackColor={{ false: theme.colors.textColor, true: theme.colors.textColor }}
+                    thumbColor={showMiddleName ? theme.hoverColor : theme.colors.textColor}
                 />
             </View>
 
@@ -63,8 +62,8 @@ const BasicInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {
                 <Switch
                     value={showAliases}
                     onValueChange={setShowAliases}
-                    trackColor={{ false: themeColors.textColor, true: themeColors.textColor }}
-                    thumbColor={showAliases ? themeColors.hoverColor : themeColors.textColor}
+                    trackColor={{ false: theme.colors.textColor, true: theme.colors.textColor }}
+                    thumbColor={showAliases ? theme.hoverColor : theme.colors.textColor}
                 />
             </View>
 
@@ -129,7 +128,7 @@ const BasicInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     switchContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -150,12 +149,12 @@ const getStyles = (theme: any) => StyleSheet.create({
     birthdayInput: {
         flex: 1,
         height: 40,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
         marginHorizontal: 5,
-        color: theme.textColor,
+        color: theme.colors.textColor,
     },
 });
 

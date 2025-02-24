@@ -10,7 +10,7 @@ import { Welcome } from './components/Welcome';
 import { LibraryChart } from '@/src/components/charts/StackBar/LibraryChart';
 
 import { mediaTypes } from './constants/mediaTypes';
-import { useThemeStyles } from '../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../styles/useThemeStyles';
 import { useLibraryHub } from './hooks/useLibraryHub';
 import { router } from 'expo-router';
 
@@ -18,8 +18,8 @@ const LibraryHub: React.FC = () => {
     const [isDashboard, setIsDashboard] = useState(true);
     const [currentSection, setCurrentSection] = useState<number | null>(0);
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const { isLoading, error, stats, recentActivity, weeklyActivity } = useLibraryHub();
 
     const navigateToSection = (index: number) => {
@@ -39,7 +39,7 @@ const LibraryHub: React.FC = () => {
     const Dashboard = () => (
         <ScrollView style={styles.dashboardContainer}>
             {isLoading ? (
-                <ActivityIndicator size="large" color={themeColors.textColor} />
+                <ActivityIndicator size="large" color={theme.colors.textColor} />
             ) : error ? (
                 <Text style={styles.errorText}>{error}</Text>
             ) : (
@@ -73,23 +73,23 @@ const LibraryHub: React.FC = () => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     // Keep only the main container styles here
     mainContainer: {
         paddingTop: 37,
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
     },
     container: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         marginBottom: 20
     },
     dashboardContainer: {
         flex: 1,
     },
     errorText: {
-        color: theme.errorColor || 'red',
+        color: theme.colors.red,
         textAlign: 'center',
         padding: 16,
         fontSize: 16,

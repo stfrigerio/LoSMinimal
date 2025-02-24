@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Pressable, Text, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TagTypeSelectorProps {
     isTagSelected: boolean;
     selectedSection: string;
@@ -17,8 +16,8 @@ export const TagTypeSelector: React.FC<TagTypeSelectorProps> = ({
     onDescriptionWarning,
     hasLinkedDescriptions,
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <View style={styles.tagTypeSelectorContainer}>
@@ -48,7 +47,7 @@ export const TagTypeSelector: React.FC<TagTypeSelectorProps> = ({
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     tagTypeSelectorContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
@@ -58,16 +57,16 @@ const getStyles = (theme: any) => StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         flex: 1,
         marginHorizontal: 5,
         alignItems: 'center',
     },
     activeTagTypeButton: {
-        backgroundColor: theme.accentColor,
+        backgroundColor: theme.colors.accentColor,
     },
     activeTagTypeText: {
-        color: theme.backgroundColor,
+        color: theme.colors.backgroundColor,
         fontWeight: 'bold',
     },
 }); 

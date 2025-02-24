@@ -4,8 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTrash, faRotateRight } from '@fortawesome/free-solid-svg-icons';
 
 import { ExtendedTaskData } from '@/src/types/Task';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TaskViewProps {
     item: ExtendedTaskData;
     toggleItemCompletion: (id: number, completed: boolean) => Promise<void>;
@@ -83,7 +82,7 @@ const TaskView: React.FC<TaskViewProps> = ({
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',

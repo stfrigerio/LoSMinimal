@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import AlertModal from '@/src/components/modals/AlertModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import AlertModal from '@/src/components/modals/AlertModal';
 import { useGPTSection } from '../../hooks/useGPTSection';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
@@ -12,8 +11,8 @@ interface GPTSectionProps {
 }
 
 const GPTSection: React.FC<GPTSectionProps> = ({ startDate, endDate, currentDate }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const {
         aiSummary,
@@ -98,7 +97,7 @@ const GPTSection: React.FC<GPTSectionProps> = ({ startDate, endDate, currentDate
         </View>
     );
 };
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         container: {
             padding: 16,
@@ -119,13 +118,13 @@ const getStyles = (theme: any) => {
         },
         text: {
             fontSize: 12,
-            color: theme.textColor,
+            color: theme.colors.textColor,
             marginBottom: 12,
         },
         listItem: {
             fontSize: 12,
             marginBottom: 8,
-            color: theme.textColor
+            color: theme.colors.textColor
         },
         noTextcontainer: {
             flex: 1,

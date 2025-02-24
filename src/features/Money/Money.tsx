@@ -4,14 +4,13 @@ import { View, StyleSheet, Text } from 'react-native';
 import TransactionModal from './modals/TransactionModal';
 import MobileNavbar from '@/src/components/NavBar';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useTransactionData } from './hooks/useTransactionData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useTransactionData } from './hooks/useTransactionData';
 import { navItems } from './constants/navItems';
 import Banner from '@/src/components/Banner';
 
 const MoneyHub: React.FC = () => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     const { 
@@ -81,11 +80,11 @@ const MoneyHub: React.FC = () => {
 
 export default MoneyHub;
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: themeColors.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             paddingHorizontal: 10,
             paddingTop: 20,
         },

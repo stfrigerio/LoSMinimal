@@ -7,7 +7,7 @@ import TagDescriptionSelector from '@/src/components/atoms/TagDescriptionSelecto
 import createTimePicker from '@/src/components/DateTimePicker';
 
 import { TimeData } from '../../../types/Time';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { useThemeStyles, Theme } from '../../../styles/useThemeStyles';
 import { TagData } from '../../../types/TagsAndDescriptions';
 import { SelectionData } from '../../Home/components/TimerComponent';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
@@ -26,8 +26,8 @@ const EditTimeEntryModal: React.FC<EditTimeEntryModalProps> = ({
     onSave,
     timeEntry,
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     const [isTagModalOpen, setIsTagModalOpen] = useState(false);
     const [isDescriptionModalOpen, setIsDescriptionModalOpen] = useState(false);
@@ -221,7 +221,7 @@ const EditTimeEntryModal: React.FC<EditTimeEntryModalProps> = ({
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     centeredView: {
         flex: 1,
         justifyContent: 'center',
@@ -261,7 +261,7 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     dateTimeButton: {
         flex: 1,
         padding: 10,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderWidth: 1,
         borderRadius: 5,
         marginHorizontal: 5,

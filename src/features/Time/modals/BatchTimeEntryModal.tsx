@@ -7,8 +7,7 @@ import TagDescriptionSelector from '@/src/components/atoms/TagDescriptionSelecto
 import TagModal from '@/src/components/modals/TagModal';
 import DescriptionModal from '@/src/components/modals/DescriptionModal';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { TimeData } from '@/src/types/Time';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TimeData } from '@/src/types/Time';
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import { SelectionData } from '../../Home/components/TimerComponent';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
@@ -26,8 +25,8 @@ const BatchTransactionModal: React.FC<BatchTransactionModalProps> = ({
     selectedTimeEntries,
     onBatchUpdate,
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
 
     // State for fields
     const [tag, setTag] = useState<string | null>(null);
@@ -130,13 +129,13 @@ const BatchTransactionModal: React.FC<BatchTransactionModalProps> = ({
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     label: {
         ...designs.text.label,
         marginTop: 15,
     },
     input: {
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderWidth: 1,
         borderRadius: 5,
         padding: 10,
@@ -147,7 +146,7 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     },
     cancelButton: {
         marginTop: 10,
-        backgroundColor: themeColors.cancelButtonBackground,
+        backgroundColor: theme.colors.backgroundColor,
     },
 });
 

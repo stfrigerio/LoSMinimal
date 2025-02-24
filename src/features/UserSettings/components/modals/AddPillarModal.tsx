@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, Pressable, StyleSheet, Modal } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { PillarData } from '@/src/types/Pillar';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { PillarData } from '@/src/types/Pillar';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import Toast from 'react-native-toast-message';
@@ -27,8 +26,8 @@ const AddPillarModal: React.FC<AddPillarModalProps> = ({
         description: '',
     });
     const [showAlert, setShowAlert] = useState(false);
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     useEffect(() => {
         if (initialData) {
@@ -67,21 +66,21 @@ const AddPillarModal: React.FC<AddPillarModalProps> = ({
                 </Text>
                 <TextInput
                     placeholder="Pillar Name"
-                    placeholderTextColor={themeColors.gray}
+                    placeholderTextColor={theme.colors.gray}
                     value={pillarData.name}
                     onChangeText={(text) => updatePillarData('name', text)}
                     style={designs.text.input}
                 />
                 <TextInput
                     placeholder="Emoji (optional)"
-                    placeholderTextColor={themeColors.gray}
+                    placeholderTextColor={theme.colors.gray}
                     value={pillarData.emoji}
                     onChangeText={(emoji) => updatePillarData('emoji', emoji)}
                     style={designs.text.input}
                 />
                 <TextInput
                     placeholder="Description (optional)"
-                    placeholderTextColor={themeColors.gray}
+                    placeholderTextColor={theme.colors.gray}
                     value={pillarData.description}
                     onChangeText={(description) => updatePillarData('description', description)}
                     style={designs.text.input}
@@ -112,7 +111,7 @@ const AddPillarModal: React.FC<AddPillarModalProps> = ({
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     modalButtonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',

@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import * as Notifications from 'expo-notifications';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface ScheduledNotificationItemProps {
     notification: Notifications.NotificationRequest;
     onDelete?: (id: string) => void;
@@ -12,8 +11,8 @@ export const ScheduledNotificationItem: React.FC<ScheduledNotificationItemProps>
     notification, 
     onDelete 
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const triggerTime = React.useMemo(() => {
         if (
@@ -54,13 +53,13 @@ export const ScheduledNotificationItem: React.FC<ScheduledNotificationItemProps>
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 8,
         padding: 16,
         marginBottom: 12,
-        shadowColor: theme.shadowColor,
+        shadowColor: theme.colors.shadowColor,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
@@ -75,30 +74,30 @@ const getStyles = (theme: any) => StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: '600',
-        color: theme.textColorItalic,
+        color: theme.colors.textColorItalic,
         flex: 1,
         marginRight: 8,
     },
     body: {
         fontSize: 14,
-        color: theme.textColor,
+        color: theme.colors.textColor,
         marginBottom: 8,
     },
     deleteButton: {
         padding: 4,
     },
     deleteText: {
-        color: theme.textColor,
+        color: theme.colors.textColor,
         fontSize: 16,
         fontWeight: '500',
     },
     timeContainer: {
         borderTopWidth: StyleSheet.hairlineWidth,
-        borderTopColor: theme.borderColor,
+        borderTopColor: theme.colors.borderColor,
     },
     scheduleText: {
         fontSize: 12,
-        color: theme.gray,
+        color: theme.colors.gray,
         marginTop: 4,
     },
 });

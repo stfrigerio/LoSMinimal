@@ -3,13 +3,12 @@ import { View, ScrollView, Switch, StyleSheet, Text } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { ScheduledNotificationItem } from './atoms/ScheduledNotificationItem';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ScheduledNotificationItem } from './atoms/ScheduledNotificationItem';
 import { useSettings } from '@/src/features/UserSettings/hooks/useSettings';
 
 export const NotificationManager: React.FC = () => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const { settings, updateSetting } = useSettings();
 
     const [notificationsEnabled, setNotificationsEnabled] = useState(false);
@@ -102,8 +101,8 @@ export const NotificationManager: React.FC = () => {
                     <Switch
                         value={notificationsEnabled}
                         onValueChange={toggleNotifications}
-                        trackColor={{ false: themeColors.backgroundColor, true: themeColors.backgroundColor }}
-                        thumbColor={notificationsEnabled ? themeColors.accentColor : themeColors.backgroundSecondary}
+                        trackColor={{ false: theme.colors.backgroundColor, true: theme.colors.backgroundColor }}
+                        thumbColor={notificationsEnabled ? theme.colors.accentColor : theme.colors.backgroundSecondary}
                     />
                 </View>
             </View>
@@ -137,7 +136,7 @@ export const NotificationManager: React.FC = () => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         padding: 16,
     },
@@ -147,20 +146,20 @@ const getStyles = (theme: any) => StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: '700',
-        color: theme.textColor,
+        color: theme.colors.textColor,
         marginBottom: 16,
     },
     toggleContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 16,
         borderRadius: 8,
     },
     toggleText: {
         fontSize: 16,
-        color: theme.textColor,
+        color: theme.colors.textColor,
     },
     listHeader: {
         flexDirection: 'row',
@@ -171,7 +170,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     sectionTitle: {
         fontSize: 18,
         fontWeight: '600',
-        color: theme.textColor,
+        color: theme.colors.textColor,
     },
     clearButton: {
         minWidth: 100,
@@ -179,12 +178,12 @@ const getStyles = (theme: any) => StyleSheet.create({
     emptyState: {
         alignItems: 'center',
         padding: 32,
-        backgroundColor: theme.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 8,
         marginTop: 16,
     },
     emptyStateText: {
-        color: theme.textColor,
+        color: theme.colors.textColor,
         fontSize: 16,
     },
 });

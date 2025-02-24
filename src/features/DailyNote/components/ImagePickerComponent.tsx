@@ -14,8 +14,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import {
     getImageUrisForDate,
     addImageUri,
@@ -44,8 +43,8 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
         onConfirm: () => {},
     });
 
-    const { designs, themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { designs, theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     useEffect(() => {
         // Load images for the given date when the component mounts or date changes
@@ -186,7 +185,7 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
                     style={[styles.button]} 
                     onPress={handleCaptureImage}
                 >
-                    <MaterialIcons name="camera-alt" size={24} color={themeColors.opaqueTextColor} />
+                    <MaterialIcons name="camera-alt" size={24} color={theme.colors.opaqueTextColor} />
                     <Text style={[designs.text.text, styles.buttonText]}>
                         Take Photo
                     </Text>
@@ -195,7 +194,7 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
                     style={[styles.button]} 
                     onPress={handleSelectImage}
                 >
-                    <MaterialIcons name="photo-library" size={24} color={themeColors.opaqueTextColor} />
+                    <MaterialIcons name="photo-library" size={24} color={theme.colors.opaqueTextColor} />
                     <Text style={[designs.text.text, styles.buttonText]}>
                         Gallery
                     </Text>
@@ -262,13 +261,13 @@ const ImagePickerComponent: React.FC<ImagePickerComponentProps> = ({ date }) => 
 
 export default ImagePickerComponent;
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         marginVertical: 20,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 16,
         padding: 20,
-        // shadowColor: themeColors.shadowColor,
+        // shadowColor: theme.colors.shadowColor,
         // shadowOffset: { width: 0, height: 2 },
         // shadowOpacity: 0.1,
         // shadowRadius: 8,
@@ -287,9 +286,9 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     button: {
         flex: 1,
         padding: 12,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 12,
         flexDirection: 'row',
         alignItems: 'center',
@@ -297,7 +296,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         gap: 8,
     },
     buttonText: {
-        color: themeColors.opaqueTextColor,
+        color: theme.colors.opaqueTextColor,
         textAlign: 'center',
         fontSize: 15,
         fontWeight: '500',
@@ -317,7 +316,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     imagePressable: {
         borderRadius: 12,
         overflow: 'hidden',
-        shadowColor: themeColors.shadowColor,
+        shadowColor: theme.colors.shadowColor,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
         shadowRadius: 4,

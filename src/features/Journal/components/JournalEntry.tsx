@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../../styles/useThemeStyles';
 import { JournalData } from '../../../types/Journal';
 
 interface JournalEntryProps {
@@ -12,8 +12,8 @@ interface JournalEntryProps {
 }
 
 const JournalEntry: React.FC<JournalEntryProps> = ({ item, onSelect }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     const formatDateTime = (date: string | number | Date) => {
         const d = new Date(date);
@@ -28,14 +28,14 @@ const JournalEntry: React.FC<JournalEntryProps> = ({ item, onSelect }) => {
                     {item.text}
                 </Text>
             </View>
-            <FontAwesomeIcon icon={faChevronRight} color={themeColors.textColor} size={16} />
+            <FontAwesomeIcon icon={faChevronRight} color={theme.colors.textColor} size={16} />
         </Pressable>
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     container: {
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 8,
         marginBottom: 10,
         overflow: 'hidden',

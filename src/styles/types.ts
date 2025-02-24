@@ -66,7 +66,7 @@ export interface Elevation {
     };
 }
 
-export interface ThemeColors {
+export interface theme {
     backgroundColor: string;
     backgroundSecondary: string;
     textColor: string;
@@ -89,8 +89,11 @@ export interface ThemeColors {
     gray: string;
 }
 
+export type ThemeName = 'light' | 'dark' | 'signalis';
+
 export interface Theme {
-    colors: ThemeColors;
+    name: ThemeName;
+    colors: theme;
     spacing: Spacing;
     borderRadius: BorderRadius;
     typography: Typography;

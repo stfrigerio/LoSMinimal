@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { View, Image, Text, Pressable, StyleSheet } from 'react-native';
 import { getImageUrisForDate } from '@/src/Images/ImageFileManager';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface ImageSlideShowProps {
     startDate: string; // 'YYYY-MM-DD' format
     endDate: string;   // 'YYYY-MM-DD' format
@@ -15,8 +14,8 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
     endDate, 
     intervalMs = 3000 // Default to 3 seconds
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const [imageUris, setImageUris] = useState<string[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
@@ -73,7 +72,7 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
     }, [imageUris.length]);
 
     if (imageUris.length === 0) {
-        return <Text style={{ color: themeColors.textColor, marginBottom: 80}}>No images available for this date range.</Text>;
+        return <Text style={{ color: theme.colors.textColor, marginBottom: 80}}>No images available for this date range.</Text>;
     }
 
     const INTERVAL_OPTIONS = [
@@ -90,20 +89,20 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
                 source={{ uri: imageUris[currentIndex] }}
                 style={styles.image}
             />
-            <Text style={{ color: themeColors.textColor, marginLeft: 10 }}>{`${currentIndex + 1} / ${imageUris.length}`}</Text>
+            <Text style={{ color: theme.colors.textColor, marginLeft: 10 }}>{`${currentIndex + 1} / ${imageUris.length}`}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Pressable onPress={prevImage} style={styles.button}>
-                    <Text style={{ color: themeColors.textColor }}>Previous</Text>
+                    <Text style={{ color: theme.colors.textColor }}>Previous</Text>
                 </Pressable>
                 <Pressable onPress={togglePlayPause} style={styles.button}>
-                    <Text style={{ color: themeColors.textColor }}>{isPlaying ? "Pause" : "Play"}</Text>
+                    <Text style={{ color: theme.colors.textColor }}>{isPlaying ? "Pause" : "Play"}</Text>
                 </Pressable>
                 <Pressable onPress={nextImage} style={styles.button}>
-                    <Text style={{ color: themeColors.textColor }}>Next</Text>
+                    <Text style={{ color: theme.colors.textColor }}>Next</Text>
                 </Pressable>
             </View>
             <View style={styles.speedControls}>
-                <Text style={{ color: themeColors.textColor }}>Speed:</Text>
+                <Text style={{ color: theme.colors.textColor }}>Speed:</Text>
                 <View style={styles.speedButtons}>
                     {INTERVAL_OPTIONS.map((option) => (
                         <Pressable
@@ -130,7 +129,7 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
 
 export default ImageSlideShow;
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         image: {
             width: 300, 
@@ -144,7 +143,7 @@ const getStyles = (theme: any) => {
             marginTop: 10,
             alignItems: 'center',
             borderWidth: 1,
-            borderColor: theme.borderColor,
+            borderColor: theme.colors.borderColor,
             borderRadius: 10,
             padding: 10,
             minWidth: 80
@@ -164,19 +163,19 @@ const getStyles = (theme: any) => {
             paddingVertical: 6,
             borderRadius: 15,
             borderWidth: 1,
-            borderColor: theme.borderColor,
+            borderColor: theme.colors.borderColor,
             backgroundColor: 'transparent'
         },
         speedButtonActive: {
-            backgroundColor: theme.accentColor,
-            borderColor: theme.accentColor
+            backgroundColor: theme.colors.accentColor,
+            borderColor: theme.colors.accentColor
         },
         speedButtonText: {
-            color: theme.textColor,
+            color: theme.colors.textColor,
             fontSize: 12
         },
         speedButtonTextActive: {
-            color: theme.backgroundColor
+            color: theme.colors.backgroundColor
         }
     });
 };

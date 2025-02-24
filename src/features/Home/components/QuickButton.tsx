@@ -8,8 +8,7 @@ import TransactionModal from '@/src/features/Money/modals/TransactionModal';
 import MoodModal from '@/src/features/Mood/modals/MoodModal';
 import CarLocationModal from '@/src/features/Home/modals/CarLocationModal';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface QuickButtonProps {  
 	isExpanded: boolean;
 	setIsExpanded: (isExpanded: boolean) => void;
@@ -196,7 +195,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		alignItems: 'flex-end',
 		zIndex: 2

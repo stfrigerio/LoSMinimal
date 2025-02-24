@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { ScrollView, Pressable, Text, StyleSheet, View } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 type ButtonsSliderProps = {
     selectedValue: number;
     onChange: (value: number) => void;
@@ -10,8 +9,8 @@ type ButtonsSliderProps = {
 
 const ButtonsSlider: React.FC<ButtonsSliderProps> = ({ selectedValue, onChange, twoRows = false }) => {
     const scrollViewRef = useRef<ScrollView>(null);
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const handleChange = (value: number) => {
         setTimeout(() => {
@@ -30,9 +29,9 @@ const ButtonsSlider: React.FC<ButtonsSliderProps> = ({ selectedValue, onChange, 
     };
 
     const getColor = (value: number): string => {
-        if (value <= 4) return adjustOpacity(themeColors.redOpacity, 0.5); 
-        if (value <= 7) return adjustOpacity(themeColors.yellowOpacity, 0.5); 
-        return adjustOpacity(themeColors.greenOpacity, 0.3);
+        if (value <= 4) return adjustOpacity(theme.colors.redOpacity, 0.5); 
+        if (value <= 7) return adjustOpacity(theme.colors.yellowOpacity, 0.5); 
+        return adjustOpacity(theme.colors.greenOpacity, 0.3);
     };
 
     const buttons = [...Array(11)].map((_, index) => (
@@ -41,7 +40,7 @@ const ButtonsSlider: React.FC<ButtonsSliderProps> = ({ selectedValue, onChange, 
             style={[
                 styles.button,
                 selectedValue === index && styles.selectedButton,
-                { backgroundColor: selectedValue === index ? getColor(index) : themeColors.backgroundSecondary }
+                { backgroundColor: selectedValue === index ? getColor(index) : theme.colors.backgroundSecondary }
             ]}
             onPress={() => handleChange(index)}
         >
@@ -83,7 +82,7 @@ const ButtonsSlider: React.FC<ButtonsSliderProps> = ({ selectedValue, onChange, 
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     scrollView: {
         marginHorizontal: -16,  // Negative margin to allow padding
         paddingHorizontal: 16,  // Padding to show partial next button
@@ -101,18 +100,18 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
     },
     selectedButton: {
         borderColor: 'transparent',
     },
     buttonText: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         fontSize: 16,
         fontWeight: '500',
     },
     selectedButtonText: {
-        color: themeColors.borderColor,
+        color: theme.colors.borderColor,
     },
     twoRowsContainer: {
         width: '100%',

@@ -11,11 +11,11 @@ import { projectsHelpers } from './helpers';
 import { exportProjects, importProjects } from './hooks';
 
 import { Project } from './types/types';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 
 const Projects: React.FC = () => {
-    const { themeColors } = useThemeStyles();
-    const styles = useMemo(() => getStyles(themeColors), [themeColors]);
+    const { theme } = useThemeStyles();
+    const styles = useMemo(() => getStyles(theme), [theme]);
     const [projects, setProjects] = useState<Project[]>([]);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [alertConfig, setAlertConfig] = useState<{
@@ -254,10 +254,10 @@ const Projects: React.FC = () => {
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         paddingTop: 50,
     },
     projectsList: {
@@ -271,7 +271,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
-        color: themeColors.accentColor,
+        color: theme.colors.accentColor,
     },
     sectionContainer: {
         marginBottom: 20,
@@ -282,7 +282,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         textAlign: 'center',
         fontWeight: '600',
         marginBottom: 10,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
     },
 });
 

@@ -3,8 +3,7 @@ import { View, Dimensions, StyleSheet, Platform } from 'react-native';
 import Svg, { Path, G, Text } from 'react-native-svg';
 import * as d3 from 'd3';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { colorPalette, adjustRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { colorPalette, adjustRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
 import { useColors } from '@/src/utils/useColors';
 
 export interface SunBurstRecord {
@@ -20,8 +19,8 @@ interface SunburstChartProps {
 }
 
 const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) => {
-	const { themeColors, theme, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 	const { colors: tagColors, loading, error } = useColors();
 
 	const windowDimensions = Dimensions.get('window');
@@ -97,7 +96,7 @@ const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) =>
 								key={index}
 								d={arcGenerator(node) as string}
 								fill={getColor(node)}
-								stroke={theme === 'dark' ? themeColors.backgroundColor : 'transparent'}
+								stroke={theme.name === 'dark' ? theme.colors.backgroundColor : 'transparent'}
 								strokeWidth="2"
 							/>
 						);
@@ -114,7 +113,7 @@ const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) =>
 								x={labelProps.x}
 								y={labelProps.y}
 								fontSize={10}
-								fill={theme === 'dark' ? themeColors.textColor : 'white'}
+								fill={theme.name === 'dark' ? theme.colors.textColor : 'white'}
 								textAnchor="middle"
 							>
 								{node.data.name}
@@ -127,7 +126,7 @@ const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) =>
 	);
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
 	const { width } = Dimensions.get('window');
 	const isSmall = width > 768;
 	const isDesktop = Platform.OS === 'web';

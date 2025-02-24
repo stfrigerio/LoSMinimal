@@ -9,7 +9,7 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 import { fetchSeries, isImdbId, getByImdbId, Series } from '../api/seriesFetcher';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../../styles/useThemeStyles';
 
 import { LibraryData } from '../../../types/Library';
 
@@ -30,8 +30,8 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
     const [detailedSeries, setDetailedSeries] = useState<LibraryData | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const handleSearch = async () => {
         try {
@@ -161,7 +161,7 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
                                     <FontAwesomeIcon 
                                         icon={faStar} 
                                         size={20} 
-                                        color={star <= personalRating ? themeColors.textColor : 'gray'} 
+                                        color={star <= personalRating ? theme.colors.textColor : 'gray'} 
                                     />
                                 </Pressable>
                             ))}
@@ -192,14 +192,14 @@ const SeriesSearchModal: React.FC<SeriesSearchModalProps> = ({ isOpen, onClose, 
 
 export default SeriesSearchModal;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     seriesItem: {
         paddingHorizontal: 10,
         padding: 15,
         marginVertical: 0,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderBottomWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 5,
     },
     serieImage: {
@@ -210,7 +210,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     ratingContainer: {
         flexDirection: 'row',
         marginBottom: 20,
-        backgroundColor: theme.cardColor,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 12,
         borderRadius: 12,
         justifyContent: 'center',

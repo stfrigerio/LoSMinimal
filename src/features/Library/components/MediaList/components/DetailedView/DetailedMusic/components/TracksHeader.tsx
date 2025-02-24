@@ -9,7 +9,7 @@ import {
     onPressUnlinkAll 
 } from '../helpers';
 
-import { useThemeStyles } from "@/src/styles/useThemeStyles";
+import { Theme, useThemeStyles } from "@/src/styles/useThemeStyles";
 import { LibraryData } from '@/src/types/Library';
 import { Album, useSpotifyFetcher } from '@/src/features/Library/api/musicFetcher';
 
@@ -32,8 +32,8 @@ const TracksHeader = ({
     setShowAlbumSelector,
     fetcher
 }: TracksHeaderProps) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <View style={styles.autoLinkContainer}>
@@ -45,7 +45,7 @@ const TracksHeader = ({
                     <FontAwesomeIcon 
                         icon={faMagicWandSparkles} 
                         size={18} 
-                        color={pressed ? themeColors.accentColor : themeColors.textColorItalic} 
+                        color={pressed ? theme.colors.accentColor : theme.colors.textColorItalic} 
                     />
                 )}
             </Pressable>
@@ -56,7 +56,7 @@ const TracksHeader = ({
                     <FontAwesomeIcon 
                         icon={faUnlink} 
                         size={18} 
-                        color={pressed ? themeColors.accentColor : themeColors.textColorItalic} 
+                        color={pressed ? theme.colors.accentColor : theme.colors.textColorItalic} 
                     />
                 )}
             </Pressable>
@@ -67,7 +67,7 @@ const TracksHeader = ({
                     <FontAwesomeIcon 
                         icon={faRefresh} 
                         size={18} 
-                        color={pressed ? themeColors.accentColor : themeColors.textColorItalic} 
+                        color={pressed ? theme.colors.accentColor : theme.colors.textColorItalic} 
                     />
                 )}
             </Pressable>
@@ -76,11 +76,11 @@ const TracksHeader = ({
 };
 
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     sectionTitle: {
         fontSize: 28,
         fontWeight: 'bold',
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         marginBottom: 16,
         paddingHorizontal: 20,
         textAlign: 'center',

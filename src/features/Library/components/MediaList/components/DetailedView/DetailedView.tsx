@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Image, StyleSheet, ScrollView, BackHandler } from 'react-native';
 
 import { LibraryData } from '@/src/types/Library';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { Album } from '@/src/features/Music/types';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { Album } from '@/src/features/Music/types';
 import { ensureHttpsUrl, handleMarkAsFinished, handleRatingChange } from './helpers';
 import { RenderRating, RenderFinishButton, RenderCommonDetails, RenderSpecificDetails, EditableTitle, DeleteButton } from './components';
 
@@ -17,9 +16,9 @@ interface DetailedViewProps {
 }
 
 const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, onToggleDownload, updateItem, album }) => {
-    const { themeColors, designs } = useThemeStyles();
+    const { theme } = useThemeStyles();
     const [currentRating, setCurrentRating] = useState(item.rating);
-    const styles = getStyles(themeColors, designs);
+    const styles = getStyles(theme);
     const [isEditingTitle, setIsEditingTitle] = useState(false);
     const [editedTitle, setEditedTitle] = useState(item.title);
 
@@ -58,22 +57,22 @@ const DetailedView: React.FC<DetailedViewProps> = ({ item, onClose, onDelete, on
     );
 };
 
-const getStyles = (theme: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         paddingTop: 40
     },
     details: {
         flex: 1,
         padding: 20,
-        color: theme.textColor,
+        color: theme.colors.textColor,
         fontSize: 14,
     }, 
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: theme.textColorBold,
+        color: theme.colors.textColorBold,
         marginBottom: 5,
         marginTop: 15,
     },
@@ -84,7 +83,7 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
     },
     divider: {
         height: 2,
-        backgroundColor: theme.borderColor,
+        backgroundColor: theme.colors.borderColor,
         marginVertical: 20,
         opacity: 0.5,
     },

@@ -10,8 +10,7 @@ import Carousel from 'react-native-reanimated-carousel';
 import { format } from 'date-fns';
 import { parseDate, isSamePeriod, getLocalTimeZone } from '@/src/utils/timezoneBullshit';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { DailyTextData } from '@/src/types/TextNotes';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { DailyTextData } from '@/src/types/TextNotes';
 import Pagination from './atoms/TextPagination'; // Adjust the path as necessary
 import { usePeriodicData } from '../hooks/usePeriodicData';
 
@@ -27,8 +26,8 @@ interface TextListsProps {
 }
 
 const TextLists: React.FC<TextListsProps> = ({ startDate, endDate }) => {
-	const { theme, themeColors } = useThemeStyles();
-	const styles = useMemo(() => getStyles(themeColors), [themeColors]);
+	const { theme } = useThemeStyles();
+	const styles = useMemo(() => getStyles(theme), [theme]);
 	const [activeSlide, setActiveSlide] = useState(0);
 	const { width: windowWidth } = useWindowDimensions();
 
@@ -156,11 +155,11 @@ const TextLists: React.FC<TextListsProps> = ({ startDate, endDate }) => {
 };
 
 // Styles
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
 	return StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 		},
 		paginationContainer: {
 			backgroundColor: 'transparent',
@@ -170,27 +169,27 @@ const getStyles = (theme: any) => {
 			width: 10,
 			height: 10,
 			borderRadius: 5,
-			backgroundColor: theme.textColorBold,
+			backgroundColor: theme.colors.textColorBold,
 		},
 		inactiveDot: {
-			backgroundColor: theme.opaqueTextColor,
+			backgroundColor: theme.colors.opaqueTextColor,
 		},
 		weekNumberCard: {
 			justifyContent: 'center',
 			alignItems: 'center',
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 		},
 		weekNumberText: {
 			fontWeight: 'bold',
 			fontSize: 16,
-			color: theme.accentColor,
+			color: theme.colors.accentColor,
 		},
 		weekCard: {
-			backgroundColor: theme.backgroundSecondary,
+			backgroundColor: theme.colors.backgroundSecondary,
 			borderRadius: 10,
 			padding: 10,
 			marginVertical: 10,
-			shadowColor: theme.textColor,
+			shadowColor: theme.colors.textColor,
 			elevation: 5,
 			alignSelf: 'center',
 		},
@@ -200,11 +199,11 @@ const getStyles = (theme: any) => {
 			justifyContent: 'space-between',
 		},
 		dayCard: {
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 			borderRadius: 8,
 			padding: 6,
 			marginBottom: 10,
-			shadowColor: theme.textColor,
+			shadowColor: theme.colors.textColor,
 			elevation: 3,
 			width: '48%', // Adjust this value to control card width
 		},
@@ -212,21 +211,21 @@ const getStyles = (theme: any) => {
 			fontWeight: 'bold',
 			fontSize: 14,
 			marginBottom: 10,
-			color: theme.textColorBold,
+			color: theme.colors.textColorBold,
 		},
 		listItem: {
 			fontSize: 14,
-			color: theme.textColor,
+			color: theme.colors.textColor,
 			marginBottom: 5,
 		},
 		label: {
 			fontSize: 12,
 			marginBottom: 5,
-			color: theme.gray,
+			color: theme.colors.gray,
 		},
 		noDataText: {
 			textAlign: 'center',
-			color: theme.opaqueTextColor,
+			color: theme.colors.opaqueTextColor,
 			marginTop: 20,
 			fontSize: 16,
 		},

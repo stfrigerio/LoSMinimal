@@ -5,8 +5,7 @@ import BooleanHeatmap from '@/src/components/charts/Heatmaps/BooleansHeatmap/Boo
 import AlertModal from '@/src/components/modals/AlertModal';
 import { PickerInput } from '@/src/components/FormComponents';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 
 interface BooleanSectionProps {
     startDate: Date;
@@ -19,8 +18,8 @@ const BooleanSection: React.FC<BooleanSectionProps> = ({
     endDate,
     periodType,
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const [error, setError] = useState<Error | null>(null);
     const [selectedHabit, setSelectedHabit] = useState<string>('');
     const [selectedHabitName, setSelectedHabitName] = useState<string>('');
@@ -127,7 +126,7 @@ const BooleanSection: React.FC<BooleanSectionProps> = ({
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         container: {
             flex: 1,

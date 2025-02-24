@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Text, Switch } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { FormInput } from '@/src/components/FormComponents';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { FormInput } from '@/src/components/FormComponents';
 import { StepProps } from '../PersonModal';
 
 const ContactInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const [showState, setShowState] = useState(false);
 
     return (
@@ -21,8 +20,8 @@ const ContactInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {
                 <Switch
                     value={showState}
                     onValueChange={setShowState}
-                    trackColor={{ false: themeColors.textColor, true: themeColors.textColor }}
-                    thumbColor={showState ? themeColors.hoverColor : themeColors.textColor}
+                    trackColor={{ false: theme.colors.textColor, true: theme.colors.textColor }}
+                    thumbColor={showState ? theme.hoverColor : theme.colors.textColor}
                 />
             </View>
             {showState && <FormInput label="State" value={person.state || ''} onChangeText={(value) => updatePerson('state', value)} />}
@@ -31,7 +30,7 @@ const ContactInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     switchContainer: {
         flexDirection: 'row',
         alignItems: 'center',

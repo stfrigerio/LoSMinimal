@@ -3,8 +3,7 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMoneyBill, faClock, faSmile } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import DeleteButton from '@/src/components/atoms/DeleteButton';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import DeleteButton from '@/src/components/atoms/DeleteButton';
 import EditButton from '@/src/components/atoms/EditButton';
 import Collapsible from '@/src/components/Collapsible';
 import AlertModal from '@/src/components/modals/AlertModal';
@@ -25,8 +24,8 @@ const DefaultTagsAndDescriptions = () => {
 	const [alertActions, setAlertActions] = useState<(() => void)[]>([]);
 	const [alertModalVisible, setAlertModalVisible] = useState(false);
 
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 	
 	const { 
 		fetchItems, 
@@ -119,7 +118,7 @@ const DefaultTagsAndDescriptions = () => {
 				>
 					<FontAwesomeIcon 
 						icon={section.icon} 
-						color={currentSection === section.key ? themeColors.accentColor : themeColors.textColor} 
+						color={currentSection === section.key ? theme.colors.accentColor : theme.colors.textColor} 
 						size={24} 
 					/>
 				</Pressable>
@@ -191,12 +190,12 @@ const DefaultTagsAndDescriptions = () => {
 		<>
 			<ScrollView style={styles.container}>
 				{renderSectionSelector()}
-				<Text style={{ color: themeColors.gray, marginLeft: 10 }}>
+				<Text style={{ color: theme.colors.gray, marginLeft: 10 }}>
 					Tags and Descriptions help you quickly categorize timers and expenses.
 					Tags are broad categories (e.g., "Work", "Exercise"), while descriptions are specific activities or items (e.g., "Meeting", "Groceries").
 					Each description is linked to one tag, but a tag can have multiple descriptions.
 				</Text>
-				<Text style={{ color: themeColors.gray, marginLeft: 10, marginTop: 10 }}>
+				<Text style={{ color: theme.colors.gray, marginLeft: 10, marginTop: 10 }}>
 					Moods are the exception as they do not have descriptions, and a single mood entry can have many tags.
 				</Text>
 				<View style={{height: 20}} />
@@ -235,7 +234,7 @@ const DefaultTagsAndDescriptions = () => {
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: { 
 		padding: 20,
 	},
@@ -250,7 +249,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		borderRadius: 5,
 	},
 	sectionContainer: {
-		backgroundColor: theme.backgroundSecondary,
+		backgroundColor: theme.colors.backgroundSecondary,
 		padding: 20,
 		borderRadius: 10,
 	},
@@ -271,7 +270,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 	},
 	descriptionText: {
 		flex: 1,
-		color: theme.gray
+		color: theme.colors.gray
 	},
 	tagNameContainer: {
 		flex: 1,
@@ -280,14 +279,14 @@ const getStyles = (theme: any) => StyleSheet.create({
 		gap: 10,
 	},
 	tagText: {
-		color: theme.textColor,
+		color: theme.colors.textColor,
 		fontFamily: 'serif',
 		marginRight: 5,
 		flex: 1,
 	},
 	arrow: {
 		fontSize: 16,
-		color: theme.gray,
+		color: theme.colors.gray,
 		transform: [{ rotate: '0deg' }],
 		marginRight: 20,
 		marginBottom: 5

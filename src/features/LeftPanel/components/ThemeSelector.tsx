@@ -4,12 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons'; // Add this import
 
 import { ThemeName } from '@/src/styles/theme';
+import { Theme, useThemeStyles } from '@/src/styles/useThemeStyles';
 
 export const ThemeSelector: React.FC<{
     currentTheme: ThemeName;
     onSelectTheme: (theme: ThemeName) => void;
-    themeColors: any;
-}> = ({ currentTheme, onSelectTheme, themeColors }) => {
+    theme: Theme;
+}> = ({ currentTheme, onSelectTheme, theme }) => {
+
     const [isOpen, setIsOpen] = useState(false);
     const availableThemes: ThemeName[] = ['dark', 'light', 'signalis'];
 
@@ -18,12 +20,12 @@ export const ThemeSelector: React.FC<{
             position: 'absolute',
             bottom: 60,
             right: 10,
-            backgroundColor: themeColors.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
             borderRadius: 8,
             padding: 8,
             display: isOpen ? 'flex' : 'none',
             borderWidth: 1,
-            borderColor: themeColors.borderColor,
+            borderColor: theme.colors.borderColor,
         },
         option: {
             padding: 8,
@@ -31,10 +33,10 @@ export const ThemeSelector: React.FC<{
             borderRadius: 4,
         },
         selectedOption: {
-            backgroundColor: themeColors.accentColor,
+            backgroundColor: theme.colors.accentColor,
         },
         optionText: {
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
             textTransform: 'capitalize',
         },
     });
@@ -49,7 +51,7 @@ export const ThemeSelector: React.FC<{
                         borderRadius: 20,
                     },
                     pressed && {
-                        backgroundColor: `${themeColors.backgroundColor}EE`,
+                        backgroundColor: `${theme.colors.backgroundColor}EE`,
                         transform: [{ scale: 0.9 }],
                     }
                 ]}
@@ -57,7 +59,7 @@ export const ThemeSelector: React.FC<{
                 <FontAwesomeIcon 
                     icon={faPalette}
                     size={20}
-                    color={themeColors.textColor}
+                    color={theme.colors.textColor}
                 />
             </Pressable>
             

@@ -1,8 +1,9 @@
 import { StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { Theme, useThemeStyles } from '@/src/styles/useThemeStyles';
 
 export const getStyles = (themeName: any) => {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
+
     return StyleSheet.create({
         MorningContainer: {
             padding: 15,
@@ -10,7 +11,7 @@ export const getStyles = (themeName: any) => {
             borderBottomWidth: 1,
             borderRadius: 25,
             marginTop: 10,
-            borderColor: themeColors.borderColor
+            borderColor: theme.colors.borderColor
         },
         EveningContainer: {
             padding: 15,
@@ -18,7 +19,7 @@ export const getStyles = (themeName: any) => {
             borderRadius: 25,
             marginTop: 10,
             marginBottom: 20,
-            borderColor: themeColors.borderColor
+            borderColor: theme.colors.borderColor
         },
         inputGroup: {
             flexDirection: 'row',
@@ -27,16 +28,16 @@ export const getStyles = (themeName: any) => {
         },
         label: {
             width: 120,
-            color: themeColors.textColor
+            color: theme.colors.textColor
         },
         input: {
             borderWidth: 1,
-            borderColor: themeColors.borderColor,
+            borderColor: theme.colors.borderColor,
             borderRadius: 5,
             padding: 5,
             flex: 1,
             marginLeft: 10,
-            color: themeColors.textColor
+            color: theme.colors.textColor
         },
         timeInputContainer: {
             flexDirection: 'column',

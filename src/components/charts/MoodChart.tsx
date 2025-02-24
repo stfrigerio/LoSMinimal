@@ -3,8 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import Svg, { G, Circle, Text, Line, Path, Rect } from 'react-native-svg';
 import * as d3 from 'd3';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { MoodNoteData } from '@/src/types/Mood';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { MoodNoteData } from '@/src/types/Mood';
 
 interface MoodChartProps {
 	moodData: MoodNoteData[];
@@ -15,8 +14,8 @@ interface MoodChartProps {
 type ProcessedMoodData = Omit<MoodNoteData, 'date'> & { date: Date };
 
 const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 	const [chartDimensions, setChartDimensions] = useState<{
 		x: d3.ScaleTime<number, number>;
 		y: d3.ScaleLinear<number, number>;
@@ -104,7 +103,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 							y1={chartDimensions.y(tick)}
 							x2={chartWidth}
 							y2={chartDimensions.y(tick)}
-							stroke={themeColors.textColor}
+							stroke={theme.colors.textColor}
 							strokeOpacity={0.08}
 							strokeDasharray="4,4"
 						/>
@@ -114,7 +113,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 					<Path
 						d={line(processedData) ?? undefined}
 						fill="none"
-						stroke={themeColors.textColor}
+						stroke={theme.colors.textColor}
 						strokeWidth={1}
 						strokeOpacity={0.7}
 					/>
@@ -125,7 +124,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 						y1={0}
 						x2={0}
 						y2={chartHeight}
-						stroke={themeColors.borderColor}
+						stroke={theme.colors.borderColor}
 						strokeOpacity={0.3}
 					/>
 					{chartDimensions.y.ticks(10).map((tick, i) => (
@@ -134,7 +133,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 								x={-9}
 								dy=".32em"
 								textAnchor="end"
-								fill={themeColors.textColor}
+								fill={theme.colors.textColor}
 								fontSize={10}
 							>
 								{tick}
@@ -150,7 +149,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 									y={12}
 									dy=".71em"
 									textAnchor="middle"
-									fill={themeColors.textColor}
+									fill={theme.colors.textColor}
 									fontSize={10}
 									opacity={0.7}
 									transform="rotate(45)"
@@ -205,15 +204,15 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 								width={160}
 								height={70}
 								rx={5}
-								fill={themeColors.backgroundSecondary}
-								stroke={themeColors.borderColor}
+								fill={theme.colors.backgroundSecondary}
+								stroke={theme.colors.borderColor}
 								strokeWidth={1}
 							/>
 							<Text
 								x={chartDimensions.x(selectedMood.date)}
 								y={chartDimensions.y(selectedMood.rating) - 55}
 								fontSize={12}
-								fill={themeColors.textColor}
+								fill={theme.colors.textColor}
 								textAnchor="middle"
 							>
 								{selectedMood.date.toLocaleDateString()}
@@ -222,7 +221,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 								x={chartDimensions.x(selectedMood.date)}
 								y={chartDimensions.y(selectedMood.rating) - 45}
 								fontSize={12}
-								fill={themeColors.textColor}
+								fill={theme.colors.textColor}
 								textAnchor="middle"
 							>
 								{`Rating: ${selectedMood.rating}`}
@@ -231,7 +230,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 								x={chartDimensions.x(selectedMood.date)}
 								y={chartDimensions.y(selectedMood.rating) - 30}
 								fontSize={12}
-								fill={themeColors.textColor}
+								fill={theme.colors.textColor}
 								textAnchor="middle"
 							>
 								{`Tag: ${selectedMood.tag}`}
@@ -241,7 +240,7 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 									x={chartDimensions.x(selectedMood.date)}
 									y={chartDimensions.y(selectedMood.rating) - 15}
 									fontSize={12}
-									fill={themeColors.textColor}
+									fill={theme.colors.textColor}
 									textAnchor="middle"
 								>
 									{`Note: ${selectedMood.comment.substring(0, 20)}${selectedMood.comment.length > 20 ? '...' : ''}`}
@@ -255,6 +254,6 @@ const MoodChart: React.FC<MoodChartProps> = ({ moodData, width, height }) => {
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({});
+const getStyles = (theme: Theme) => StyleSheet.create({});
 
 export default MoodChart;

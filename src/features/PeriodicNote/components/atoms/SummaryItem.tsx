@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import { useThemeStyles } from "../../../../styles/useThemeStyles";
+import { Theme, useThemeStyles } from "../../../../styles/useThemeStyles";
 
 const SummaryItem = ({ 
     title, 
@@ -16,8 +16,8 @@ const SummaryItem = ({
     isPercentage?: boolean;
     isTime?: boolean;
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     
     return (
         <View style={styles.summaryItem}>
@@ -37,13 +37,13 @@ const SummaryItem = ({
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         summaryTitle: {
             fontSize: 20,
             fontWeight: 'bold',
             marginBottom: 15,
-            color: theme.textColor,
+            color: theme.colors.textColor,
             textAlign: 'center',
         },
         summaryItem: {
@@ -51,7 +51,7 @@ const getStyles = (theme: any) => {
             marginBottom: 15,
             padding: 10,
             borderRadius: 8,
-            backgroundColor: theme.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
         },
         summaryItemTitle: {
             fontSize: 14,
@@ -61,7 +61,7 @@ const getStyles = (theme: any) => {
         summaryItemValue: {
             fontSize: 14,
             fontWeight: 'bold',
-            color: theme.textColor,
+            color: theme.colors.textColor,
         },
         summaryItemValueContainer: {
             flexDirection: 'row',

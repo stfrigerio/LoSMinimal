@@ -4,8 +4,7 @@ import Svg, { G, Path, Circle, Text, Line } from 'react-native-svg';
 import * as d3 from 'd3';
 import { format, parse } from 'date-fns';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { parseTimeToDecimal } from '@/src/utils/timeUtils';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { parseTimeToDecimal } from '@/src/utils/timeUtils';
 
 import { SleepData } from '@/src/features/PeriodicNote/types/Sleep';
 
@@ -18,8 +17,8 @@ interface SleepChartProps {
 }
 
 const SleepChart: React.FC<SleepChartProps> = ({ sleepData, openNoteForDay, width: propWidth, height: propHeight, isMonthView }) => {
-	const { theme, themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const { width: windowWidth } = useWindowDimensions();
 	const width = propWidth || windowWidth;
@@ -208,7 +207,7 @@ const SleepChart: React.FC<SleepChartProps> = ({ sleepData, openNoteForDay, widt
 	);
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
 	const { width } = Dimensions.get('window');
 	const isSmall = width > 768;
 	const isDesktop = Platform.OS === 'web';
@@ -222,16 +221,16 @@ const getStyles = (theme: any) => {
 		},
 		axisDomain: {
 			fill: 'none',
-			stroke: theme.borderColor,
+			stroke: theme.colors.borderColor,
 		},
 		ridgeLine: {
-			stroke: theme.borderColor,
+			stroke: theme.colors.borderColor,
 		},
 		tickText: {
 			fill: '#828282',
 		},
 		tickLine: {
-			stroke: theme.borderColor,
+			stroke: theme.colors.borderColor,
 		},
 		areaPath: {
 			fill: 'rgba(140, 237, 215, 0.4)',
@@ -246,7 +245,7 @@ const getStyles = (theme: any) => {
 			fill: 'rgba(100, 200, 180, 0.5)',
 		},
 		midnightLine: {
-			stroke: `${theme.textColorBold}40`,
+			stroke: `${theme.colors.textColorBold}40`,
 			strokeWidth: 2,
 		},
 	};

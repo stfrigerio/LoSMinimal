@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useThemeStyles } from '../../../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../../../styles/useThemeStyles';
 
 export interface EntryData {
 	color: string;
@@ -45,7 +45,7 @@ const EntriesList: React.FC<EntriesListProps> = ({ entries, title, valueLabel })
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		marginTop: theme.spacing.xs,
 	},

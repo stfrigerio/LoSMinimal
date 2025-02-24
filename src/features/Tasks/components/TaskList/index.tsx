@@ -4,8 +4,7 @@ import { faCheckCircle, faCircle, faList, faRepeat } from '@fortawesome/free-sol
 
 import TaskEntry from './components/TaskEntry';
 import { TaskData } from '@/src/types/Task';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useTasksData } from '../../hooks/useTasksData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useTasksData } from '../../hooks/useTasksData';
 import { FilterType } from './components/FilterIcon';
 import { FilterTray } from './components/FilterTray';
 import MobileNavbar from '@/src/components/NavBar';
@@ -14,8 +13,8 @@ import { navItems } from '../../constants/navItems';
 
 const TaskListScreen = () => {
     const [filter, setFilter] = useState<FilterType>('all');
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
@@ -152,12 +151,12 @@ const TaskListScreen = () => {
     )
 };
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         container: {
             flex: 1,
             paddingTop: 50,
-            backgroundColor: themeColors.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
         },
         filterContainer: {
             marginTop: 15,
@@ -171,7 +170,7 @@ const getStyles = (themeColors: any, designs: any) => {
         },
         divider: {
             height: 1,
-            backgroundColor: themeColors.borderColor,
+            backgroundColor: theme.colors.borderColor,
             marginVertical: 20,
         },
         todayLine: {
@@ -182,17 +181,17 @@ const getStyles = (themeColors: any, designs: any) => {
         todayLineLeft: {
             flex: 1,
             height: 1,
-            backgroundColor: themeColors.borderColor,
+            backgroundColor: theme.colors.borderColor,
             marginRight: 10,
         },
         todayLineRight: {
             flex: 1,
             height: 1,
-            backgroundColor: themeColors.borderColor,
+            backgroundColor: theme.colors.borderColor,
             marginLeft: 10,
         },
         todayText: {
-            color: themeColors.textColorItalic,
+            color: theme.colors.textColorItalic,
             fontSize: 12,
             fontFamily: 'serif',
             fontWeight: 'bold',

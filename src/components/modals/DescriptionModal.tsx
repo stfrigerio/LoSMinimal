@@ -6,8 +6,7 @@ import AddTagDescriptionModal from '@/src/features/UserSettings/components/modal
 
 import { useDescriptionModal } from './helpers/useDescriptionModal';
 import { useTagsAndDescriptions } from './helpers/useTagsAndDescriptions';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import { PrimaryButton } from '../atoms/PrimaryButton';
 import { UniversalModal } from './UniversalModal';
@@ -20,8 +19,8 @@ interface DescriptionModalProps {
 }
 
 const DescriptionModal: React.FC<DescriptionModalProps> = ({ isOpen, selectedTag, setSelectionData, sourceTable }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
     const {
@@ -58,7 +57,7 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({ isOpen, selectedTag
                                 style={[
                                     styles.descriptionItem,
                                     index === descriptions.length - 1 ? styles.lastItem : null,
-                                    { backgroundColor: themeColors.backgroundColor },
+                                    { backgroundColor: theme.colors.backgroundColor },
                                 ]}
                                 onPress={() => handleDescriptionSelect(item)}
                                 testID={`description-item-${index}`}
@@ -100,13 +99,13 @@ const DescriptionModal: React.FC<DescriptionModalProps> = ({ isOpen, selectedTag
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     descriptionItem: {
 		alignItems: 'center',
 		padding: 15,
 		marginVertical: 2,
 		borderBottomWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: theme.colors.borderColor,
 		borderRadius: 5,
     },
     descriptionsContainer: {

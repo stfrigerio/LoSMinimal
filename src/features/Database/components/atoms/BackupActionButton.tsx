@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Pressable, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface BackupActionButtonProps {
     label: string;
     icon: IconDefinition;
@@ -19,8 +18,8 @@ const BackupActionButton = ({
     isLoading = false,
     disabled = false 
 }: BackupActionButtonProps) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <View style={styles.buttonAndLabelContainer}>
@@ -31,23 +30,23 @@ const BackupActionButton = ({
                 disabled={disabled || isLoading}
             >
                 {isLoading ? (
-                    <ActivityIndicator color={themeColors.accentColor} />
+                    <ActivityIndicator color={theme.colors.accentColor} />
                 ) : (
-                    <FontAwesomeIcon icon={icon} size={20} color={themeColors.accentColor} />
+                    <FontAwesomeIcon icon={icon} size={20} color={theme.colors.accentColor} />
                 )}
             </Pressable>
         </View>
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     buttonAndLabelContainer: {
         flexDirection: 'column',
         alignItems: 'center',
         margin: 5,
     },
     buttonLabel: {
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         fontSize: 10,
         marginBottom: 5,
     },
@@ -55,7 +54,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         padding: 10,
         borderRadius: 10,
         minWidth: 90,

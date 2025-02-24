@@ -1,8 +1,7 @@
 import React from 'react';
 import { Modal as RNModal, Pressable, Text, ScrollView, DimensionValue, View } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { modalStyles } from '@/src/styles/modal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { modalStyles } from '@/src/styles/modal';
 
 interface UniversalModalProps {
     isVisible: boolean;

@@ -9,8 +9,7 @@ import Svg, {
 
 import { setWeek, format, addDays } from 'date-fns';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { getNextMonthColor } from '@/src/features/DailyNote/helpers/useDateHeader';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getNextMonthColor } from '@/src/features/DailyNote/helpers/useDateHeader';
 import { getFillColorForMonth } from '@/src/styles/monthsColor';
 import { DateHeaderProps } from '@/src/features/DailyNote/types/DateHeader';
 
@@ -35,8 +34,8 @@ const DateHeader: React.FC<DateHeaderProps> = ({ formattedDate, periodType }) =>
         }).start();
     }, [fadeAnim]);
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     let dateText = formattedDate;
     let startColor = '';
@@ -93,7 +92,7 @@ const DateHeader: React.FC<DateHeaderProps> = ({ formattedDate, periodType }) =>
                 </Defs>
                 {/* Add a shadow effect by duplicating the text */}
                 <SvgText
-                    fill={themeColors.shadowColor}
+                    fill={theme.colors.shadowColor}
                     stroke="none"
                     fontSize="24"
                     letterSpacing={1}
@@ -128,7 +127,7 @@ const DateHeader: React.FC<DateHeaderProps> = ({ formattedDate, periodType }) =>
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         alignItems: 'center',
     },
@@ -136,10 +135,10 @@ const getStyles = (theme: any) => StyleSheet.create({
         marginVertical: 10,
         textAlign: 'center',
         fontSize: 22,
-        color: theme.textColor,
+        color: theme.colors.textColor,
         fontFamily: 'Roboto',
         fontStyle: 'italic',
-        textShadowColor: theme.shadowColor,
+        textShadowColor: theme.colors.shadowColor,
         textShadowOffset: { width: 1, height: 2 },
         textShadowRadius: 8,
     },

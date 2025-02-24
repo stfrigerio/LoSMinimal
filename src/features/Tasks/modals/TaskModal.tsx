@@ -8,8 +8,7 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import createTimePicker from '@/src/components/DateTimePicker';
 
 import { useTasksData } from '@/src/features/Tasks/hooks/useTasksData';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useChecklist } from '@/src/contexts/checklistContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useChecklist } from '@/src/contexts/checklistContext';
 
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import { TaskBasicInfo } from './components/TaskModal/TaskBasicInfo';
@@ -56,8 +55,8 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 
 	const { pillars, uncompletedObjectives } = useTasksData();
 	const { showPicker, picker } = createTimePicker();
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 	const { updateChecklist } = useChecklist();
 
 
@@ -248,7 +247,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
                 onPress={() => setShowMoreOptions(!showMoreOptions)}
             >
                 {({ pressed }) => (
-                    <Text style={[styles.moreOptionsText, { color: pressed ? themeColors.accentColor : themeColors.textColor }]}>
+                    <Text style={[styles.moreOptionsText, { color: pressed ? theme.colors.accentColor : theme.colors.textColor }]}>
                         {showMoreOptions ? '− Less Options' : '+ More Options'}
                     </Text>
                 )}
@@ -348,7 +347,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	switchContainer: {
 		width: '100%',
 	},
@@ -362,13 +361,13 @@ const getStyles = (theme: any) => StyleSheet.create({
 	dateTimeButton: {
 		flex: 1,
 		padding: 10,
-		borderColor: theme.borderColor,
+		borderColor: theme.colors.borderColor,
 		borderWidth: 1,
 		borderRadius: 5,
 		alignItems: 'center',
 	},
 	dateTimeText: {
-		color: theme.textColor,
+		color: theme.colors.textColor,
 	},
 	moreOptionsButton: {
         padding: 10,
@@ -376,24 +375,24 @@ const getStyles = (theme: any) => StyleSheet.create({
         alignItems: 'center',
     },
     moreOptionsText: {
-        color: theme.textColor,
+        color: theme.colors.textColor,
         fontSize: 16,
     },
     moreOptionsContainer: {
         borderTopWidth: 1,
-        borderTopColor: theme.borderColor,
+        borderTopColor: theme.colors.borderColor,
         paddingTop: 10,
     },
     optionsGroup: {
         marginBottom: 15,
         paddingBottom: 15,
         borderBottomWidth: 1,
-        borderBottomColor: theme.borderColor,
+        borderBottomColor: theme.colors.borderColor,
     },
     groupTitle: {
         fontSize: 16,
         fontWeight: 'bold',
-        color: theme.textColor,
+        color: theme.colors.textColor,
         marginBottom: 10,
     },
 });

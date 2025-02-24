@@ -8,8 +8,7 @@ import SummaryItem from '../atoms/SummaryItem';
 import { formatTimeEntries } from '../../helpers/dataTransformer';
 import { processTimeSunburstData } from '../../helpers/dataProcessing';
 import { processMultiDayHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 import { calculateTimeSummary } from '../../helpers/timeHelpers';
 
 interface ChartSectionProps {
@@ -23,8 +22,8 @@ const ChartSection: React.FC<ChartSectionProps> = ({
     endDate,
     tagColors,
 }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const [isHeatmapLoaded, setIsHeatmapLoaded] = useState(false);
     const [excludeSleep, setExcludeSleep] = useState(false);
 
@@ -72,8 +71,8 @@ const ChartSection: React.FC<ChartSectionProps> = ({
                 <Switch
                     value={excludeSleep}
                     onValueChange={setExcludeSleep}
-                    trackColor={{ false: theme.switchTrackColor, true: theme.switchTrackColorOn }}
-                    thumbColor={excludeSleep ? theme.switchThumbColorOn : theme.switchThumbColor}
+                    trackColor={{ false: theme.colors.backgroundSecondary, true: theme.colors.accentColor }}
+                    thumbColor={excludeSleep ? theme.colors.backgroundSecondary : theme.colors.accentColor}
                 />
             </View>
             <View >
@@ -126,7 +125,7 @@ const ChartSection: React.FC<ChartSectionProps> = ({
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     const { width } = Dimensions.get('window');
     const isDesktop = Platform.OS === 'web';
 
@@ -135,7 +134,7 @@ const getStyles = (theme: any) => {
             flex: 1,
             padding: 20,
             paddingTop: 0,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
         },
         toggleContainer: {
             flexDirection: 'row',
@@ -146,10 +145,10 @@ const getStyles = (theme: any) => {
         toggleLabel: {
             marginRight: 10,
             fontSize: 16,
-            color: theme.textColor,
+            color: theme.colors.textColor,
         },
         loadHeatmapButton: {
-            backgroundColor: theme.buttonColor,
+            backgroundColor: theme.colors.backgroundColor,
             padding: 10,
             borderRadius: 5,
             margin: 10,
@@ -157,7 +156,7 @@ const getStyles = (theme: any) => {
             alignSelf: 'center',
         },
         loadHeatmapButtonText: {
-            color: theme.textColorItalic,
+            color: theme.colors.textColorItalic,
             fontSize: 16,
             fontStyle: 'italic',
         },
@@ -170,7 +169,7 @@ const getStyles = (theme: any) => {
             fontSize: 20,
             fontWeight: 'bold',
             marginBottom: 15,
-            color: theme.textColor,
+            color: theme.colors.textColor,
             textAlign: 'center',
         },
         summaryGrid: {

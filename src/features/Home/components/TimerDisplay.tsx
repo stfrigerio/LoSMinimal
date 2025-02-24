@@ -4,8 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { formatSecondsToHMS } from '@/src/utils/timeUtils';
 import { databaseManagers } from '@/database/tables';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TimerDisplayProps {
 	initialSeconds: number;
 	tagName?: string;
@@ -19,8 +18,8 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, de
 	const [emoji, setEmoji] = useState<string>('');
 	const [descriptionEmoji, setDescriptionEmoji] = useState<string>('');
 
-	const { theme, themeColors, designs } = useThemeStyles();
-	const styles = getStyles(theme, themeColors);
+	const { theme, theme, designs } = useThemeStyles();
+	const styles = getStyles(theme, theme);
 
 	useEffect(() => {
 		setSeconds(initialSeconds); // Reset seconds state when initialSeconds changes
@@ -96,7 +95,7 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, de
 	);
 };
 
-const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
+const getStyles = (theme: any, theme: any) => StyleSheet.create({
 	timerFlexContainer: {
 		position: 'absolute',
 		left: 0,
@@ -119,16 +118,16 @@ const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
 	},
 	timerTag: {
 		fontWeight: 'bold',
-		color: theme === 'dark' ? themeColors.textColor : '#d3c6aa',
+		color: theme.name === 'dark' ? theme.colors.textColor : '#d3c6aa',
 		fontSize: 10,
 	},
 	timerDescription: {
 		fontSize: 10,
-		color: theme === 'dark' ? themeColors.textColor : '#d3c6aa',
+		color: theme.name === 'dark' ? theme.colors.textColor : '#d3c6aa',
 		opacity: 0.8,
 	},
 	timer: {
-		color: theme === 'dark' ? themeColors.textColor : '#d3c6aa',
+		color: theme.name === 'dark' ? theme.colors.textColor : '#d3c6aa',
 		fontWeight: 'bold',
 		fontSize: 11,
 		minWidth: 30,

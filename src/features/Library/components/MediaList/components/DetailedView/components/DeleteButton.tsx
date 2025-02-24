@@ -2,7 +2,7 @@ import { LibraryData } from "@/src/types/Library";
 import { faTrash } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome"
 import { Pressable, Text, StyleSheet } from "react-native"
-import { useThemeStyles } from "@/src/styles/useThemeStyles";
+import { Theme, useThemeStyles } from "@/src/styles/useThemeStyles";
 
 interface DeleteButtonProps {
     onDelete: (item: LibraryData) => void;
@@ -11,8 +11,8 @@ interface DeleteButtonProps {
 }
 
 export const DeleteButton = ({ onDelete, onClose, item }: DeleteButtonProps) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const handleDelete = async () => {
         onDelete(item);
@@ -21,13 +21,13 @@ export const DeleteButton = ({ onDelete, onClose, item }: DeleteButtonProps) => 
 
     return (
         <Pressable onPress={handleDelete} style={styles.deleteButton}>
-            <FontAwesomeIcon icon={faTrash} size={20} color={themeColors.redOpacity} />
+            <FontAwesomeIcon icon={faTrash} size={20} color={theme.colors.redOpacity} />
             <Text style={styles.deleteButtonText}>{`Delete ${item.type}`}</Text>
         </Pressable>
     )
 }
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     deleteButton: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -36,10 +36,10 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         borderRadius: 12,
         marginTop: 30,
         borderWidth: 1,
-        borderColor: themeColors.redOpacity,
+        borderColor: theme.colors.redOpacity,
     },
     deleteButtonText: {
-        color: themeColors.redOpacity,
+        color: theme.colors.redOpacity,
         fontWeight: 'bold',
         marginLeft: 10,
         fontSize: 16,

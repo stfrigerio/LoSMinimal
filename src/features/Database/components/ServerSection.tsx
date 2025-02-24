@@ -14,12 +14,11 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import BackupActionButton from './atoms/BackupActionButton';
 import { SwitchInput } from '@/src/components/FormComponents';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useServerSection } from '../hooks/useServerSection';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useServerSection } from '../hooks/useServerSection';
 
 const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTableSelector: (value: boolean) => void, showTableSelector: boolean }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 	const [showDestructionSection, setShowDestructionSection] = useState(false);
 
     const {
@@ -82,7 +81,7 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
                             onBlur={handleServerURLBlur}
                             value={serverURL}
                             placeholder="192.168.1.46"
-                            placeholderTextColor={themeColors.gray}
+                            placeholderTextColor={theme.colors.gray}
                             keyboardType={'numeric'}
                         />
                     </View>
@@ -94,7 +93,7 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
                         onValueChange={(value: boolean) => setShowDestructionSection(value)}
                         trueLabel='Engage Database Destruction'
                         falseLabel=''
-                        trackColorTrue={themeColors.accentColor}
+                        trackColorTrue={theme.colors.accentColor}
                         leftLabelOff={true}
                         style={styles.switch}
                     />
@@ -103,7 +102,7 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
                         onValueChange={(value: boolean) => setShowTableSelector(value)}
                         trueLabel='Show Table Selector'
                         falseLabel=''
-                        trackColorTrue={themeColors.accentColor}
+                        trackColorTrue={theme.colors.accentColor}
                         leftLabelOff={true}
                         style={styles.switch}
                     />
@@ -133,7 +132,7 @@ const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTab
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         marginVertical: 10,
     },
@@ -148,7 +147,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         margin: 5,
     },
     buttonLabel: {
-        color: themeColors.gray,
+        color: theme.colors.gray,
         fontSize: 10,
         marginBottom: 5,
     },
@@ -156,7 +155,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         padding: 10,
         borderRadius: 10,
         minWidth: 90,
@@ -171,14 +170,14 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         justifyContent: 'flex-start',
         width: '100%',
         // borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 10,
         padding: 10,
         marginTop: 20,
     },
     switchContainer: {
         // borderWidth: 1,
-        // borderColor: themeColors.redOpacity,
+        // borderColor: theme.colors.redOpacity,
         // borderRadius: 10,
         padding: 10,
 		width: '50%'

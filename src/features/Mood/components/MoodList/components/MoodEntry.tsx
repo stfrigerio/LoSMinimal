@@ -8,8 +8,7 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import MoodModal from '@/src/features/Mood/modals/MoodModal';
 import Collapsible from '@/src/components/Collapsible';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { MoodNoteData } from '@/src/types/Mood';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { MoodNoteData } from '@/src/types/Mood';
 import { useColors } from '@/src/utils/useColors';
 import EditButton from '@/src/components/atoms/EditButton';
 import DeleteButton from '@/src/components/atoms/DeleteButton';
@@ -23,9 +22,9 @@ interface MoodEntryProps {
 }
 
 const MoodEntry: React.FC<MoodEntryProps> = ({ item, isExpanded, toggleExpand, deleteMood, refreshMoods }) => {
-    const { themeColors, designs } = useThemeStyles();
+    const { theme, designs } = useThemeStyles();
     const { colors: tagColors, loading, error } = useColors();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
 
@@ -58,7 +57,7 @@ const MoodEntry: React.FC<MoodEntryProps> = ({ item, isExpanded, toggleExpand, d
         return (
             <View style={styles.tagContainer}>
                 {tags.map((tag, index) => {
-                    const tagColor = tagColors[tag] || themeColors.backgroundColor;
+                    const tagColor = tagColors[tag] || theme.colors.backgroundColor;
                     return (
                         <View 
                             key={`${tag}-${index}`} 
@@ -128,13 +127,13 @@ const MoodEntry: React.FC<MoodEntryProps> = ({ item, isExpanded, toggleExpand, d
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         entryContainer: {
             flexDirection: 'row',
             marginBottom: 20,
             borderBottomWidth: 1,
-            borderBottomColor: themeColors.borderColor,
+            borderBottomColor: theme.colors.borderColor,
             paddingBottom: 15,
         },
         ratingContainer: {
@@ -148,12 +147,12 @@ const getStyles = (themeColors: any, designs: any) => {
         rating: {
             fontSize: 28,
             fontWeight: 'bold',
-            color: themeColors.accentColor,
+            color: theme.colors.accentColor,
             marginBottom: 4,
         },
         dateText: {
             fontSize: 11,
-            color: themeColors.opaqueTextColor,
+            color: theme.colors.opaqueTextColor,
             marginBottom: 2,
         },
         entryHeader: {
@@ -168,7 +167,7 @@ const getStyles = (themeColors: any, designs: any) => {
         },
         comment: {
             fontSize: 15,
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
             lineHeight: 20,
             marginTop: 6,
         },
@@ -180,12 +179,12 @@ const getStyles = (themeColors: any, designs: any) => {
             marginTop: 15,
             paddingTop: 10,
             borderTopWidth: 1,
-            borderTopColor: `${themeColors.borderColor}50` || '#F0F0F0',
+            borderTopColor: `${theme.colors.borderColor}50` || '#F0F0F0',
         },
         actionIcon: {
             padding: 8,
             borderRadius: 8,
-            backgroundColor: `${themeColors.backgroundColor}80`,
+            backgroundColor: `${theme.colors.backgroundColor}80`,
         },
         tagContainer: {
             flexDirection: 'row',

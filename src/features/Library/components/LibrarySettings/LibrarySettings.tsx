@@ -3,14 +3,13 @@ import { View, Text, StyleSheet, ScrollView, Pressable, BackHandler } from 'reac
 
 import AlertModal, { AlertConfig } from '@/src/components/modals/AlertModal';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { fetchAPIKeys, saveAPIKey } from '../../helpers/LibrarySettingsHelper';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { fetchAPIKeys, saveAPIKey } from '../../helpers/LibrarySettingsHelper';
 import { handleSyncMusic, handleClearMusicFolder, handleSyncBooks, handleClearBooksFolder } from './helpers';
 import { renderAPIKeyInput, renderSection } from './components';
 
 const LibrarySettings = ({ onBackPress }: { onBackPress: () => void }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const [booksApiKey, setBooksApiKey] = useState('');
     const [moviesApiKey, setMoviesApiKey] = useState('');
@@ -130,15 +129,15 @@ const LibrarySettings = ({ onBackPress }: { onBackPress: () => void }) => {
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
     },
     pageTitle: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         marginBottom: 20,
         marginHorizontal: 30,
         marginTop: 20,
@@ -146,13 +145,14 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     syncButton: {
         padding: 14,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 12,
         alignItems: 'center',
         marginTop: 10,
         width: '100%',
-        backgroundColor: themeColors.backgroundColor,
-        shadowColor: themeColors.shadowColor,
+        backgroundColor: theme.colors.backgroundColor,
+        shadowColor: theme.colors.shadowColor
+,
         shadowOffset: {
             width: 0,
             height: 2,
@@ -162,11 +162,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         elevation: 5,
     },
     syncingButton: {
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         opacity: 0.8,
     },
     syncButtonText: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         fontWeight: 'bold',
         fontSize: 16,
     },
@@ -175,7 +175,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 24,
         marginBottom: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
 });
 

@@ -7,8 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import DeleteButton from '@/src/components/atoms/DeleteButton';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import AlertModal from '@/src/components/modals/AlertModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import AlertModal from '@/src/components/modals/AlertModal';
 
 import { AggregateTextData, TextNotesData } from '@/src/types/TextNotes';
 import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
@@ -33,8 +32,8 @@ export interface TextSectionProps {
 }
 
 const TextInputs: React.FC<TextSectionProps> = ({ periodType, startDate, endDate }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const { setKeyboardVisible } = useNavbarDrawer();
 
     useEffect(() => {
@@ -167,7 +166,7 @@ const TextInputs: React.FC<TextSectionProps> = ({ periodType, startDate, endDate
                                 <Pressable onPress={() => isEditing ? handleSave(section, index) : toggleEditing(section, index)}>
                                     <FontAwesomeIcon 
                                         icon={isEditing ? faSave : faEdit} 
-                                        color={isEditing ? themeColors.accentColor : themeColors.gray} 
+                                        color={isEditing ? theme.colors.accentColor : theme.colors.gray} 
                                         size={20} 
                                         style={styles.icon}
                                     />
@@ -195,7 +194,7 @@ const TextInputs: React.FC<TextSectionProps> = ({ periodType, startDate, endDate
     );
 }
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     const { width } = Dimensions.get('window');
     const isSmall = width < 1920;
     const isDesktop = Platform.OS === 'web';
@@ -207,7 +206,7 @@ const getStyles = (theme: any) => {
             flexWrap: 'wrap',
             gap: isDesktop ? 20 : 10,
             borderRadius: 10,
-            borderColor: theme.borderColor,
+            borderColor: theme.colors.borderColor,
             padding: isDesktop ? 20 : 10,
             margin: isDesktop ? 20 : 15,
             justifyContent: 'space-between',
@@ -215,7 +214,7 @@ const getStyles = (theme: any) => {
         sectionLabel: {
             marginBottom: 15,
             fontSize: isDesktop ? 20 : 18,
-            color: theme.accentColor,
+            color: theme.colors.accentColor,
             fontWeight: 'bold',
             textAlign: 'left',
         },

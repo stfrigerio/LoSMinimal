@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useColors } from '@/src/utils/useColors';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useColors } from '@/src/utils/useColors';
 import { MoneyData } from '@/src/types/Money';
 
 export const useMoneyColors = (validTransactions: MoneyData[]) => {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
 
     const { colors: tagColors, loading: colorsLoading, error: colorsError } = useColors();
 
@@ -15,10 +14,10 @@ export const useMoneyColors = (validTransactions: MoneyData[]) => {
             return {};
         }
         return validTransactions.reduce((acc, entry) => {
-            acc[entry.id!] = tagColors[entry.tag!] || themeColors.textColor;
+            acc[entry.id!] = tagColors[entry.tag!] || theme.colors.textColor;
             return acc;
         }, {} as Record<number, string>);
-    }, [validTransactions, tagColors, colorsLoading, themeColors.textColor]);
+    }, [validTransactions, tagColors, colorsLoading, theme.colors.textColor]);
 
     return { entryColors, colorsLoading, colorsError };
 };

@@ -15,13 +15,13 @@ import ColorfulTimeline from '@/src/features/DailyNote/components/ColorfulTimeli
 import { calculatePeriodTypeAndFormatDate } from './helpers/periodCalculation';
 import { useDateState } from './helpers/useDateState';
 import { useColors } from '@/src/utils/useColors';
-import { useThemeStyles } from '../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../styles/useThemeStyles';
 import { navigatePeriod } from './helpers/navigatePeriod';
 import { getLocalTimeZone } from '@/src/utils/timezoneBullshit';
 
 const PeriodicNote: React.FC = () => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 	const { colors: tagColors } = useColors();
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [sidebarVisibility, setSidebarVisibility] = useState<'hidden' | 'icons' | 'extended'>('hidden');
@@ -96,23 +96,23 @@ const PeriodicNote: React.FC = () => {
 	);
 };
 
-const getStyles = (theme: any) => {
-	const translucentBackgroundColor = Color(theme.backgroundSecondary).alpha(0.3).toString();
+const getStyles = (theme: Theme) => {
+	const translucentBackgroundColor = Color(theme.colors.backgroundColor).alpha(0.3).toString();
 
 	return StyleSheet.create({
 		mainContainer: {
 			flex: 1,
 			paddingTop: 37,
 			position: 'relative',
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 		},
 		container: {
 			flex: 1,
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 		},
 		contentContainer: {
 			flex: 1,
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 			padding: 20,
 			paddingTop: 0,
 		},

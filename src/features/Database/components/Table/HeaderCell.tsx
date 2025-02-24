@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 const HeaderCell: React.FC<{ value: string }> = ({ value }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	return (
 		<View>
@@ -15,7 +14,7 @@ const HeaderCell: React.FC<{ value: string }> = ({ value }) => {
 	);
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	headerCellContent: {
 		padding: 10,
 		justifyContent: 'center',
@@ -24,7 +23,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 	},
 	headerText: {
 		fontWeight: 'bold',
-		color: themeColors.gray,
+		color: theme.colors.gray,
 		fontSize: 12, // Match the font size of EditableField
 	},
 });

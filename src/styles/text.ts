@@ -15,7 +15,7 @@ export const textStyles = (themeName: any): TextStyles => {
 		title: {
 			fontSize: 36,
 			fontWeight: 'bold',
-			color: theme.textColorBold,
+			color: theme.colors.textColorBold,
 			textAlign: 'center',
 			marginBottom: 10,
 			textShadowColor: theme.shadowColor,
@@ -24,7 +24,7 @@ export const textStyles = (themeName: any): TextStyles => {
 		},
 		subtitle: {
 			fontSize: 18,
-			color: theme.textColor,
+			color: theme.colors.textColor,
 			textAlign: 'center',
 			marginBottom: 30,
 			textShadowColor: theme.shadowColor,
@@ -32,7 +32,7 @@ export const textStyles = (themeName: any): TextStyles => {
 			textShadowRadius: 10,
 		},
 		text: {
-			color: theme.textColor
+			color: theme.colors.textColor
 		},
 		input: {
 			flexDirection: 'row',
@@ -40,9 +40,9 @@ export const textStyles = (themeName: any): TextStyles => {
 			marginBottom: 15,
 			padding: 12,
 			borderWidth: 1,
-			borderColor: theme.borderColor,
+			borderColor: theme.colors.borderColor,
 			borderRadius: 5,
-			color: theme.textColor,
+			color: theme.colors.textColor,
 		},
 	});
 };

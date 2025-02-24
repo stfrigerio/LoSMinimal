@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, Dimensions, Text, Platform } from 'react-native';
 import Svg, { Rect, Text as SvgText } from 'react-native-svg';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useColors } from '@/src/utils/useColors';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useColors } from '@/src/utils/useColors';
 
 interface HeatmapChartProps {
     data: { [date: string]: boolean };
@@ -21,15 +20,15 @@ const BooleansHeatmap: React.FC<HeatmapChartProps> = ({
     width, 
     height,
 }) => {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
     const windowDimensions = Dimensions.get('window');
     const chartWidth = width || windowDimensions.width;
     const chartHeight = height || 200;
     const { colors: tagColors } = useColors();
 
-    const trueColor = tagColors[habitName] || themeColors.accentColor;
-    const falseColor = themeColors.borderColor;
-    const noDataColor = themeColors.backgroundColor;
+    const trueColor = tagColors[habitName] || theme.colors.accentColor;
+    const falseColor = theme.colors.borderColor;
+    const noDataColor = theme.colors.backgroundColor;
 
     const { startDate, endDate, daysToShow, weeksToShow, startDayOffset } = useMemo(() => {
         const dates = Object.keys(data).sort();
@@ -63,7 +62,7 @@ const BooleansHeatmap: React.FC<HeatmapChartProps> = ({
                             x={weekIndex * (cellSize + cellGap) + 45 + cellSize / 2}
                             y={10}
                             fontSize={10}
-                            fill={themeColors.textColor}
+                            fill={theme.colors.textColor}
                         >
                             {month}
                         </SvgText>
@@ -75,7 +74,7 @@ const BooleansHeatmap: React.FC<HeatmapChartProps> = ({
                         x={25}
                         y={(cellSize + cellGap) * index + cellSize / 2 + monthLabelWidth}
                         fontSize={10}
-                        fill={themeColors.textColor}
+                        fill={theme.colors.textColor}
                         textAnchor="end"
                         alignmentBaseline="middle"
                     >

@@ -3,8 +3,7 @@ import { View, Text, FlatList, StyleSheet, BackHandler } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import SearchComponent from './components/SearchComponent';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useMediaList } from '@/src/features/Library/hooks/useMediaList';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useMediaList } from '@/src/features/Library/hooks/useMediaList';
 
 import { LibraryData } from '@/src/types/Library';
 import { SectionHeader } from './components/SectionHeader';
@@ -44,8 +43,8 @@ const MediaList: React.FC<MediaListProps> = ({
     const [showWantToList, setShowWantToList] = useState(false);
     const [showDownloadedOnly, setShowDownloadedOnly] = useState(false);
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const {
         items,
@@ -137,7 +136,7 @@ const MediaList: React.FC<MediaListProps> = ({
                                 {/* <Picker
                                     selectedValue={sortOption}
                                     onValueChange={(itemValue) => setSortOption(itemValue)}
-                                    style={{ color: themeColors.textColor }}
+                                    style={{ color: theme.colors.textColor }}
                                 >
                                     <Picker.Item label="Seen" value="seen" />
                                     <Picker.Item label="Release Year" value="year" />
@@ -171,12 +170,12 @@ const MediaList: React.FC<MediaListProps> = ({
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         container: {
             flex: 1,
             height: '100%',
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             padding: 10,
             paddingTop: 50
         },
@@ -198,7 +197,7 @@ const getStyles = (theme: any) => {
             flexDirection: 'column',
         },
         sortText: {
-            color: theme.textColor,
+            color: theme.colors.textColor,
             marginLeft: 10
         },
         searchContainer: {

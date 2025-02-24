@@ -6,8 +6,7 @@ import TagModal from '@/src/components/modals/TagModal';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import createTimePicker from '@/src/components/DateTimePicker';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useMoodNoteModal } from '@/src/features/Mood/modals/hooks/useMoodModal'
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useMoodNoteModal } from '@/src/features/Mood/modals/hooks/useMoodModal'
 
 import { MoodNoteData } from '@/src/types/Mood';
 import { SelectionData } from '@/src/features/Home/components/TimerComponent';
@@ -26,8 +25,8 @@ interface MoodNoteModalProps {
 }
 
 const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, initialMoodNote, refreshMoods, isEdit, tagColors }) => {
-	const { theme, themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 	const { showPicker } = createTimePicker();
 
 	const [showCommentScreen, setShowCommentScreen] = useState(false);
@@ -166,7 +165,7 @@ const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, i
                             onChangeText={handleCommentChange}
                             value={moodNote.comment}
                             placeholder="Type your detailed comment here..."
-                            placeholderTextColor={themeColors.gray}
+                            placeholderTextColor={theme.colors.gray}
                             multiline={true}
                         />
 						<PrimaryButton
@@ -215,13 +214,13 @@ const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, i
 								>
 									<Text style={[
 										styles.tagText, 
-										{ color: tag.color ? getContrastColor(tag.color) : theme.textColor }
+										{ color: tag.color ? getContrastColor(tag.color) : theme.colors.textColor }
 									]}>
 										{tag.text}
 									</Text>
 									<Text style={[
 										styles.removeTag, 
-										{ color: tag.color ? getContrastColor(tag.color) : theme.textColor }
+										{ color: tag.color ? getContrastColor(tag.color) : theme.colors.textColor }
 									]}>
 										×
 									</Text>
@@ -246,7 +245,7 @@ const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, i
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	inputText: {
 		fontFamily: 'serif',
 	},
@@ -262,7 +261,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		padding: 10,
 		justifyContent: 'center',
 		borderWidth: 2,
-		borderColor: theme.borderColor,
+		borderColor: theme.colors.borderColor,
 		borderRadius: 10
 	},
 	tagContainer: {
@@ -270,7 +269,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		flexWrap: 'wrap',
 		marginVertical: 10,
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: theme.colors.borderColor,
 		padding: 10,
 		borderRadius: 10,
 		minHeight: 50,
@@ -283,7 +282,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 		paddingVertical: 4,
 		margin: 2,
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: theme.colors.borderColor,
 	},
 	tagText: {
 		fontSize: 12,

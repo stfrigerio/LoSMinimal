@@ -2,8 +2,7 @@ import React from 'react';
 import { View, Pressable, Text, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus, faFileExport, faFileImport } from '@fortawesome/free-solid-svg-icons';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface HeaderActionsProps {
     handleAddProject: () => void;
     handleExportProjects: () => void;
@@ -11,8 +10,8 @@ interface HeaderActionsProps {
 }
 
 export const HeaderActions = ({ handleAddProject, handleExportProjects, handleImportProjects }: HeaderActionsProps) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     return (
         <View style={styles.headerActions}>
@@ -27,7 +26,7 @@ export const HeaderActions = ({ handleAddProject, handleExportProjects, handleIm
                     <FontAwesomeIcon 
                         icon={faPlus} 
                         size={20} 
-                        color={themeColors.accentColor} 
+                        color={theme.colors.accentColor} 
                     />
                     <Text style={styles.iconText}>New Project</Text>
                 </View>
@@ -43,7 +42,7 @@ export const HeaderActions = ({ handleAddProject, handleExportProjects, handleIm
                     <FontAwesomeIcon 
                         icon={faFileExport} 
                         size={20} 
-                        color={themeColors.accentColor} 
+                        color={theme.colors.accentColor} 
                     />
                     <Text style={styles.iconText}>Export</Text>
                 </View>
@@ -59,7 +58,7 @@ export const HeaderActions = ({ handleAddProject, handleExportProjects, handleIm
                     <FontAwesomeIcon 
                         icon={faFileImport} 
                         size={20} 
-                        color={themeColors.accentColor} 
+                        color={theme.colors.accentColor} 
                     />
                     <Text style={styles.iconText}>Import</Text>
                 </View>
@@ -68,7 +67,7 @@ export const HeaderActions = ({ handleAddProject, handleExportProjects, handleIm
     )
 }
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         headerActions: {
             flexDirection: 'row',
@@ -87,10 +86,10 @@ const getStyles = (themeColors: any, designs: any) => {
         },
         iconText: {
             fontSize: 10,
-            color: themeColors.gray,
+            color: theme.colors.gray,
         },
         iconButtonPressed: {
-            backgroundColor: themeColors.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
             borderRadius: 16,
             opacity: 0.7,
         },

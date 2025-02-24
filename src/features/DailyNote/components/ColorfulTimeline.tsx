@@ -3,7 +3,7 @@ import moment from 'moment';
 import { StyleSheet, Dimensions, Animated } from 'react-native';
 import { Svg, Rect, Text as SvgText, Circle, G } from 'react-native-svg';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 
 type ColorfulTimelineProps = {
     title: string;
@@ -12,7 +12,7 @@ type ColorfulTimelineProps = {
 const deviceWidth = Dimensions.get('window').width;
 
 const ColorfulTimeline: React.FC<ColorfulTimelineProps> = ({ title }) => {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const radiusAnim = useRef(new Animated.Value(80)).current;
 
@@ -102,19 +102,19 @@ const ColorfulTimeline: React.FC<ColorfulTimelineProps> = ({ title }) => {
     const SVG_HEIGHT = 250;
 
     return (
-        <Animated.View style={[styles(themeColors).container, { opacity: fadeAnim }]}>
+        <Animated.View style={[styles(theme).container, { opacity: fadeAnim }]}>
             <Svg 
                 height='55'
                 width={deviceWidth} 
                 viewBox={`-40 50 ${SVG_WIDTH} ${SVG_HEIGHT}`}
             >
-                <G style={styles(themeColors).bars}>
+                <G style={styles(theme).bars}>
                     {monthBlocks.map(block => (
                     <Rect 
                         key={`${block.monthName}-${block.start}`}
                         x={block.start * 10} 
                         width={block.width} 
-                        height={styles(themeColors).monthBlock.height} 
+                        height={styles(theme).monthBlock.height} 
                         fill={getFillColorForMonth(block.monthName)}
                     />
                     ))}
@@ -124,7 +124,7 @@ const ColorfulTimeline: React.FC<ColorfulTimelineProps> = ({ title }) => {
                     <SvgText
                         key={label.monthName}
                         fill="#b0b0b0"
-                        fontSize={styles(themeColors).monthLabel.fontSize}
+                        fontSize={styles(theme).monthLabel.fontSize}
                         x={label.start * 10 + 10}
                         y="300"
                     >
@@ -137,9 +137,9 @@ const ColorfulTimeline: React.FC<ColorfulTimelineProps> = ({ title }) => {
                         cx={marker * 10}
                         cy={125} 
                         r={radiusAnim}
-                        stroke={themeColors.backgroundColor}
+                        stroke={theme.colors.backgroundColor}
                         strokeWidth="16"
-                        fill={themeColors.accentColor}
+                        fill={theme.colors.accentColor}
                     />
                 </G>
             </Svg>
@@ -147,9 +147,9 @@ const ColorfulTimeline: React.FC<ColorfulTimelineProps> = ({ title }) => {
     );
 };
 
-const styles = (themeColors: any) => StyleSheet.create({
+const styles = (theme: Theme) => StyleSheet.create({
     container: {
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
     },
     bars: {
         paddingBottom: 50,

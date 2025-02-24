@@ -1,7 +1,6 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet, View } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faLocationPin } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
@@ -24,8 +23,8 @@ export const ChecklistItem: React.FC<ChecklistItemProps> = ({
     onDelete,
     indentLevel
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const cleanText = text.replace(/^(\s*)- \[[x ]\] /, '');
 
     return (
@@ -36,7 +35,7 @@ export const ChecklistItem: React.FC<ChecklistItemProps> = ({
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             >
                 <View style={styles.checklistItem}>
-                    <View style={[styles.checklistItemCheckbox, { backgroundColor: isChecked ? themeColors.accentColor : 'transparent' }]}/>
+                    <View style={[styles.checklistItemCheckbox, { backgroundColor: isChecked ? theme.colors.accentColor : 'transparent' }]}/>
                     <Text 
                         style={[isChecked ? styles.checked : styles.unchecked]}
                         numberOfLines={2}
@@ -52,13 +51,13 @@ export const ChecklistItem: React.FC<ChecklistItemProps> = ({
                         style={styles.actionButton}
                         onPress={() => onCreateTask?.(cleanText)}
                     >
-                        <FontAwesomeIcon icon={faLocationPin} color={themeColors.gray} />
+                        <FontAwesomeIcon icon={faLocationPin} color={theme.colors.gray} />
                     </Pressable>
                     <Pressable
                         style={styles.actionButton}
                         onPress={onDelete}
                     >
-                        <FontAwesomeIcon icon={faTrash} color={themeColors.gray} />
+                        <FontAwesomeIcon icon={faTrash} color={theme.colors.gray} />
                     </Pressable>
                 </View>
             )}
@@ -66,14 +65,14 @@ export const ChecklistItem: React.FC<ChecklistItemProps> = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     checklistItemCheckbox: {
         width: 20,
         height: 20,
         marginRight: 8,
         borderRadius: 12,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
     },
     container: {
         flexDirection: 'row',
@@ -90,7 +89,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flex: 1,
     },
     unchecked: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         flex: 1,
     },
     checked: {

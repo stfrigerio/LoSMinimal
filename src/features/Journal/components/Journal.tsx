@@ -6,8 +6,7 @@ import { faEdit, faCheck, faMapMarkerAlt, faTrash } from '@fortawesome/free-soli
 
 import Navbar from '@/src/components/NavBar';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import { useJournal } from '../hooks/useJournal';
@@ -24,8 +23,8 @@ const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = 
 
     const { setKeyboardVisible } = useNavbarDrawer();
 
-    const { themeColors, designs, markdownStyles } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs, markdownStyles } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const handleSave = useCallback(async () => {
         if (localJournalEntry !== journalEntry) {
@@ -159,7 +158,7 @@ const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = 
                     <FontAwesomeIcon 
                         icon={isEditing ? faCheck : faEdit} 
                         size={24} 
-                        color={isEditing ? themeColors.accentColor : themeColors.gray} 
+                        color={isEditing ? theme.colors.accentColor : theme.colors.gray} 
                         style={{ marginRight: 10 }}
                     />
                     </Pressable>
@@ -199,12 +198,12 @@ const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = 
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         container: {
             flex: 1,
             padding: 10,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
         },
         textInput: {
             flex: 1,
@@ -212,8 +211,8 @@ const getStyles = (theme: any) => {
             marginBottom: 10,
             fontSize: 16,
             fontFamily: 'serif',
-            color: theme.textColor,
-            borderColor: theme.borderColor,
+            color: theme.colors.textColor,
+            borderColor: theme.colors.borderColor,
             borderRadius: 5,
             textAlignVertical: 'top',
         },
@@ -226,23 +225,23 @@ const getStyles = (theme: any) => {
             zIndex: 10000
         },
         readOnlyInput: {
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
         },
         title: {
             fontFamily: 'serif',
             fontSize: 28,
             marginTop: 70,
-            color: theme.textColorBold
+            color: theme.colors.textColorBold
         },
         journalText: {
             fontSize: 16,
             fontFamily: 'serif',
-            color: theme.textColor,
+            color: theme.colors.textColor,
         },
         place: {
             fontFamily: 'serif',
             fontStyle: 'italic',
-            color: theme.textColorItalic,
+            color: theme.colors.textColorItalic,
             alignSelf: 'center',
             marginTop: 0,
             marginBottom: 20,

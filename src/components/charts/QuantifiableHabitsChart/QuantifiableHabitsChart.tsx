@@ -8,8 +8,7 @@ import Legend from './components/Legend';
 import ChartToggle from './components/ChartToggle'
 
 import { renderChart } from './renderChart';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { getRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
 import { useColors } from '@/src/utils/useColors';
 
 import { QuantifiableHabitsChartProps, ChartData, ViewType } from './types/types';
@@ -34,8 +33,8 @@ const QuantifiableHabitsChart: React.FC<QuantifiableHabitsChartProps> = ({
 	width,
 	height
 }) => {
-	const { themeColors, designs } = useThemeStyles();
-	const styles = useMemo(() => getStyles(themeColors), [themeColors]);
+	const { theme, designs } = useThemeStyles();
+	const styles = useMemo(() => getStyles(theme), [theme]);
 	const { colors: tagColors, loading, error: colorError } = useColors();
 	const [isLoading, setIsLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -189,7 +188,7 @@ const QuantifiableHabitsChart: React.FC<QuantifiableHabitsChartProps> = ({
 							y={chartDimensions.y} 
 							width={chartWidth} 
 							height={chartHeight} 
-							theme={themeColors} 
+							theme={theme} 
 							viewType={viewType}
 							data={data}
 						/>
@@ -205,7 +204,7 @@ const QuantifiableHabitsChart: React.FC<QuantifiableHabitsChartProps> = ({
 };
 
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
 	const { width } = Dimensions.get('window');
 	const isDesktop = width > 768;
 
@@ -229,11 +228,11 @@ const getStyles = (theme: any) => {
 			borderRadius: 5,
 		},
 		activeChartButton: {
-			backgroundColor: theme.accentColor,
+			backgroundColor: theme.colors.accentColor,
 		},
 		chartButtonText: {
 			marginLeft: 3, 
-			color: theme.textColor,
+			color: theme.colors.textColor,
 			fontSize: 12,
 		},
 		activeChartButtonText: {
@@ -253,7 +252,7 @@ const getStyles = (theme: any) => {
 			height: 300,
 		},
 		errorText: {
-			color: theme.errorColor || 'red',
+			color: theme.colors.redOpacity,
 			textAlign: 'center',
 		},
 	});

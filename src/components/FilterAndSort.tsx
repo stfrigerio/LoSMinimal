@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, Pressable, TextInput, Animated } from 'react-na
 import createTimePicker from '@/src/components/DateTimePicker';
 import { PickerInput } from '@/src/components/FormComponents';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface FilterAndSortProps {
     onFilterChange: (filters: FilterOptions) => void;
     onSortChange: (sortOption: SortOption) => void;
@@ -22,8 +21,8 @@ export interface FilterOptions {
 export type SortOption = 'recent' | 'oldest' | 'highestValue' | 'lowestValue';
 
 const FilterAndSort: React.FC<FilterAndSortProps> = ({ onFilterChange, onSortChange, tags, searchPlaceholder, isActive }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, isActive), [themeColors, isActive]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, isActive), [theme, isActive]);
     const TimePicker = useCallback(createTimePicker, [])();
     const slideAnim = useRef(new Animated.Value(0)).current;
 
@@ -155,7 +154,7 @@ const FilterAndSort: React.FC<FilterAndSortProps> = ({ onFilterChange, onSortCha
     );
 };
 
-const getStyles = (themeColors: any, isActive: boolean) => StyleSheet.create({
+const getStyles = (theme: any, isActive: boolean) => StyleSheet.create({
     container: {
         position: 'absolute',
         bottom: 0,
@@ -168,14 +167,14 @@ const getStyles = (themeColors: any, isActive: boolean) => StyleSheet.create({
         marginBottom: 90,
         borderWidth: 1,
         borderRadius: 16,
-        borderColor: themeColors.borderColor,
-        backgroundColor: themeColors.backgroundColor,
+        borderColor: theme.colors.borderColor,
+        backgroundColor: theme.colors.backgroundColor,
     },
     title: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     dateContainer: {
         flexDirection: 'column',
@@ -188,14 +187,14 @@ const getStyles = (themeColors: any, isActive: boolean) => StyleSheet.create({
         margin: 4,
         borderRadius: 16,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
     },
     tagsContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         marginBottom: 16,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         padding: 8,
         borderRadius: 16,
     },
@@ -203,24 +202,24 @@ const getStyles = (themeColors: any, isActive: boolean) => StyleSheet.create({
         padding: 8,
         margin: 4,
         borderRadius: 16,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
     },
     tagButtonSelected: {
-        backgroundColor: themeColors.accentColor,
+        backgroundColor: theme.colors.accentColor,
     },
     tagText: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     tagTextSelected: {
-        color: themeColors.backgroundColor,
+        color: theme.colors.backgroundColor,
     },
     searchInput: {
         height: 40,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderWidth: 1,
         marginBottom: 16,
         paddingHorizontal: 8,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         borderRadius: 8,
     },
     sectionTitle: {

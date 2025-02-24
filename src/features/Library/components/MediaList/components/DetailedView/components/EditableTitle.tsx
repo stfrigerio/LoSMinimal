@@ -1,5 +1,5 @@
 import { databaseManagers } from "@/database/tables";
-import { useThemeStyles } from "@/src/styles/useThemeStyles";
+import { Theme, useThemeStyles } from "@/src/styles/useThemeStyles";
 import { LibraryData } from "@/src/types/Library";
 import { Pressable, TextInput, Text, StyleSheet } from "react-native"
 
@@ -20,8 +20,8 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
     setEditedTitle,
     updateItem, 
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
 
     const handleTitleEdit = async () => {
         if (isEditingTitle) {
@@ -51,18 +51,18 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
 
 export default EditableTitle;
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     title: {
         ...designs.text.title,
         fontSize: 28,
         fontWeight: 'bold',
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         marginBottom: 15,
         letterSpacing: 0.5,
     },
     titleInput: {
         borderBottomWidth: 1,
-        borderBottomColor: themeColors.borderColor,
+        borderBottomColor: theme.colors.borderColor,
         paddingBottom: 5,
     },
 });

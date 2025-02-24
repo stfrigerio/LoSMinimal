@@ -1,5 +1,4 @@
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 export const habitThresholds = {
     Cigarettes: { green: 0, yellow: 4, red: 6 },
     Herbs: { green: 0, yellow: 4, red: 5 },

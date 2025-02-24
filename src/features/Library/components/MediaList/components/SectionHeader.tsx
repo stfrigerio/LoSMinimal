@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, Pressable, Switch } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { LibraryData } from '@/src/types/Library';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { LibraryData } from '@/src/types/Library';
 
 interface SectionHeaderProps {
     section: string;
@@ -23,8 +22,8 @@ export const SectionHeader = ({
     showDownloadedOnly,
     setShowDownloadedOnly,
 }: SectionHeaderProps) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const getTitle = () => {
         if (section === 'music') return '🎧 Music';
@@ -62,7 +61,7 @@ export const SectionHeader = ({
                 >
                     <FontAwesomeIcon 
                         icon={faArrowLeft} 
-                        color={themeColors.textColor} 
+                        color={theme.colors.textColor} 
                         size={20} 
                     />
                 </Pressable>
@@ -76,8 +75,8 @@ export const SectionHeader = ({
                             <Switch
                                 value={showDownloadedOnly}
                                 onValueChange={setShowDownloadedOnly}
-                                trackColor={{ false: themeColors.gray, true: themeColors.accentColor }}
-                                thumbColor={themeColors.accentColor}
+                                trackColor={{ false: theme.colors.gray, true: theme.colors.accentColor }}
+                                thumbColor={theme.colors.accentColor}
                             />
                         </View>
                     )}
@@ -89,8 +88,8 @@ export const SectionHeader = ({
                             <Switch
                                 value={showWantToList}
                                 onValueChange={setShowWantToList}
-                                trackColor={{ false: themeColors.gray, true: themeColors.accentColor }}
-                                thumbColor={themeColors.accentColor}
+                                trackColor={{ false: theme.colors.gray, true: theme.colors.accentColor }}
+                                thumbColor={theme.colors.accentColor}
                             />
                         </View>
                     )}
@@ -100,21 +99,21 @@ export const SectionHeader = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 10,
         paddingVertical: 0,
-        backgroundColor: themeColors.cardColor,
+        backgroundColor: theme.colors.backgroundSecondary,
         marginHorizontal: 20,
         borderRadius: 20,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
     },
     backButton: {
         padding: 10,
-        backgroundColor: themeColors.cardColor,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 12,
         marginRight: 15,
     },
@@ -122,7 +121,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flex: 1,
         fontSize: 18,
         fontWeight: 'bold',
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         textAlign: 'center',
     },
     switchesContainer: {
@@ -135,7 +134,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         alignItems: 'center',
     },
     switchLabel: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         marginRight: 8,
         fontSize: 12,
     },

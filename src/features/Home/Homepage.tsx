@@ -8,8 +8,7 @@ import TimerComponent from './components/TimerComponent';
 import QuickButton from './components/QuickButton';
 import NextObjective from './components/NextObjective';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { fetchNextTask } from './hooks/fetchNextTask';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { fetchNextTask } from './hooks/fetchNextTask';
 import { DrawerStateManager } from '@/src/contexts/DrawerState';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 import DayNotesStatus from './components/DayNotesStatus';
@@ -141,7 +140,7 @@ const Homepage = () => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
     },

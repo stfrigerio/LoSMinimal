@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { MarkedDateDetails } from '@/src/types/Task';
 import { databaseManagers } from '@/database/tables';
-import { formatMarkedDates } from '../_helpers/calendarUtils';
+import { formatMarkedDates } from '../helpers/calendarUtils';
 import {
     parseChecklistItems,
     getUpdatedBirthdayDates,

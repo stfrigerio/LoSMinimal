@@ -1,8 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TableCellProps {
 	displayValue: string;
 	tableName: string;
@@ -11,8 +10,8 @@ interface TableCellProps {
 }
 
 const TableCell: React.FC<TableCellProps> = ({ displayValue, tableName, columnName }) => {
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const renderEditableContent = () => {
 		if (tableName.toLowerCase() === 'time') {
@@ -47,13 +46,13 @@ const TableCell: React.FC<TableCellProps> = ({ displayValue, tableName, columnNa
 };
 
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	textContainer: {
 		justifyContent: 'center',
 		minHeight: 40,
 	},
 	rowText: {
-		color: theme.textColor,
+		color: theme.colors.textColor,
 		fontSize: 12,
 	}
 });

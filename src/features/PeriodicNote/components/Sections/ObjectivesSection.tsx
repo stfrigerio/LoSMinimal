@@ -8,8 +8,7 @@ import { AddObjectivesModal } from '@/src/features/PeriodicNote/modals/Objective
 import ImageSlideShow from '../ImageSlideShow';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useObjectives } from '@/src/features/PeriodicNote/hooks/useObjectives';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useObjectives } from '@/src/features/PeriodicNote/hooks/useObjectives';
 import { getDateRangeForPeriod, formatDate } from '@/src/utils/timezoneBullshit';
 
 import { ExtendedObjectiveData } from '../../types/ObjectivesSection';
@@ -34,8 +33,8 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
 
     const { startDate, endDate } = getDateRangeForPeriod(currentDate);
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [itemToDelete, setItemToDelete] = useState<ExtendedObjectiveData | null>(null);
@@ -123,9 +122,9 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
                                             faXmarkCircle
                                         } 
                                         color={
-                                            objective.completed === 0 ? themeColors.gray :
-                                            objective.completed === 1 ? themeColors.accentColor :
-                                            themeColors.redOpacity
+                                            objective.completed === 0 ? theme.colors.gray :
+                                            objective.completed === 1 ? theme.colors.accentColor :
+                                            theme.colors.redOpacity
                                         } 
                                         size={20} 
                                     /> 
@@ -135,7 +134,7 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
                                     style={styles.actionButton}
                                 >
                                     {({ pressed }) => (
-                                        <FontAwesomeIcon icon={faRotateRight} color={pressed ? themeColors.accentColor : themeColors.gray} size={20} />
+                                        <FontAwesomeIcon icon={faRotateRight} color={pressed ? theme.colors.accentColor : theme.colors.gray} size={20} />
                                     )}
                                 </Pressable>
                                 <Pressable 
@@ -143,7 +142,7 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
                                     style={styles.actionButton}
                                 >
                                     {({ pressed }) => (
-                                        <FontAwesomeIcon icon={faTrash} color={pressed ? themeColors.accentColor : themeColors.gray} size={20} />
+                                        <FontAwesomeIcon icon={faTrash} color={pressed ? theme.colors.accentColor : theme.colors.gray} size={20} />
                                     )}
                                 </Pressable>
                             </View>
@@ -183,7 +182,7 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         // paddingTop: 20,
     },
@@ -199,7 +198,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         alignItems: 'center',
         marginBottom: 12,
         padding: 12,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         borderRadius: 8,
     },
     pillarEmoji: {
@@ -209,13 +208,13 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     objectiveText: {
         flex: 1,
         fontSize: 12,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     completedObjectiveText: {
-        color: themeColors.greenOpacity,
+        color: theme.colors.greenOpacity,
     },
     failedObjectiveText: {
-        color: themeColors.redOpacity,
+        color: theme.colors.redOpacity,
         textDecorationLine: 'line-through',
     },
     completionToggle: {

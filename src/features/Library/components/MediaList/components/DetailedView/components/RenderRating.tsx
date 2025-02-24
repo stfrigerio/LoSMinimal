@@ -1,8 +1,7 @@
 import { View, Pressable, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 export const RenderRating = (rating: number, handleRatingChange: (star: number) => void) => {
     const { theme, designs } = useThemeStyles();
     const styles = getStyles(theme, designs);

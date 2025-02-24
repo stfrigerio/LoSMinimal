@@ -5,6 +5,9 @@ import { modalStyles, ModalStyles } from '@/src/styles/modal';
 import { textStyles, TextStyles } from '@/src/styles/text';
 import { StyleSheet, TextStyle } from 'react-native';
 
+import { Theme } from '@/src/styles/types';
+export type { Theme };
+
 type StylesType = {
 	modal: ModalStyles;
 	text: TextStyles;

@@ -2,11 +2,11 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import Banner from '@/src/components/Banner';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 
 export const Welcome: React.FC = () => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
 
     return (
         <View style={styles.welcomeSection}>

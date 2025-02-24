@@ -16,16 +16,15 @@ import {
     faMusic 
 } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface NavbarQuickButtonProps {
     quickButtonFunction: () => void;
     screen?: string;
 }
 
 const NavbarQuickButton: React.FC<NavbarQuickButtonProps> = ({ quickButtonFunction, screen }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const iconMap = {
         mood: faCommentDots,
@@ -55,7 +54,7 @@ const NavbarQuickButton: React.FC<NavbarQuickButtonProps> = ({ quickButtonFuncti
                 <FontAwesomeIcon 
                     icon={selectedIcon} 
                     size={24} 
-                    color={pressed ? themeColors.textColor : themeColors.backgroundColor} 
+                    color={pressed ? theme.colors.textColor : theme.colors.backgroundColor} 
                     style={{ 
                         transform: [
                             { scale: pressed ? 0.9 : 1 },
@@ -69,9 +68,9 @@ const NavbarQuickButton: React.FC<NavbarQuickButtonProps> = ({ quickButtonFuncti
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     floatingButton: {
-        backgroundColor: theme.accentColor,
+        backgroundColor: theme.colors.accentColor,
         width: 50,
         height: 50,
         borderRadius: 25,

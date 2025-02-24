@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Pressable, View, Animated, Text, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 
 interface DrawerContentProps {
     items: { label: string; onPress: () => void }[];
@@ -9,8 +8,8 @@ interface DrawerContentProps {
 }
 
 const DrawerContent: React.FC<DrawerContentProps> = ({ items, activeIndex }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const { isOpen, toggleDrawer } = useNavbarDrawer();
 
     const [fadeAnims, setFadeAnims] = useState<Animated.Value[]>([]);
@@ -85,7 +84,7 @@ const DrawerContent: React.FC<DrawerContentProps> = ({ items, activeIndex }) => 
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     drawerContainer: {
         position: 'absolute',
         left: 0,
@@ -101,7 +100,7 @@ const getStyles = (theme: any) => StyleSheet.create({
         bottom: 60,
         width: 150,
         borderWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         backgroundColor: 'rgba(0, 0, 0, 0.4)',
         marginHorizontal: 10,
         borderRadius: 20,
@@ -110,7 +109,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     drawerItem: {
         padding: 10,
-        backgroundColor: theme.accentColorShade,
+        backgroundColor: theme.colors.accentColorShade,
         marginBottom: 8,
         borderRadius: 20,
         justifyContent: 'center',
@@ -118,10 +117,10 @@ const getStyles = (theme: any) => StyleSheet.create({
         width: '90%'
     },
     activeDrawerItem: {
-        backgroundColor: theme.accentColor,
+        backgroundColor: theme.colors.accentColor,
     },
     drawerItemText: {
-        color: theme.backgroundColor,
+        color: theme.colors.backgroundColor,
         fontSize: 14,
     },
 });

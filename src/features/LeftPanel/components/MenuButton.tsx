@@ -2,8 +2,7 @@ import React from 'react';
 import { Pressable, Text, View, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface MenuButtonProps {
     icon: IconDefinition;
     label: string;
@@ -47,7 +46,7 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, on
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     button: {
         padding: theme.spacing.sm,
         paddingVertical: theme.spacing.md,

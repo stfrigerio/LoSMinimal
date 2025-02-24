@@ -12,32 +12,31 @@ import { ChecklistProvider } from '../src/contexts/checklistContext';
 import { MusicPlayerProvider } from '../src/contexts/MusicPlayerContext';
 import { InitializeDatabasesWrapper } from '@/database/databaseInitializer';
 import { AppInitializer } from '../src/AppInitializer';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 // Create a separate component for the theme-dependent content
 function AppContent() {
-    const { themeColors, theme } = useThemeStyles();
-    const isDarkMode = theme === 'dark';
+    const { theme } = useThemeStyles();
+    const isDarkMode = theme.name === 'dark';
     const pathname = usePathname();
     const isHomepage = pathname === '/' || pathname === '/features/Home/Homepage';
 
     const toastConfig = {
         success: (internalState: any) => (
-            themeColors && (
+            theme && (
                 <BaseToast
                     {...internalState}
                     style={{ 
-                        borderLeftColor: themeColors.accentColor, 
-                        backgroundColor: themeColors.backgroundSecondary 
+                        borderLeftColor: theme.colors.accentColor, 
+                        backgroundColor: theme.colors.backgroundSecondary 
                     }}
                     text1Style={{
                         fontSize: 15,
                         fontWeight: 'bold',
-                        color: themeColors.textColorBold
+                        color: theme.colors.textColorBold
                     }}
                     text2Style={{
                         fontSize: 13,
-                        color: themeColors.textColor
+                        color: theme.colors.textColor
                     }}
                 />
             )
@@ -67,13 +66,13 @@ function AppContent() {
 }
 
 function ThemedRootLayout() {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
     
     return (
         <SafeAreaProvider
             style={{ 
                 flex: 1, 
-                backgroundColor: themeColors?.backgroundColor 
+                backgroundColor: theme.colors.backgroundColor 
             }}
         >
             <GestureHandlerRootView style={{ flex: 1 }}>

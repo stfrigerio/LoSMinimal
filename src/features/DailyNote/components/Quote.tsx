@@ -3,8 +3,7 @@ import { Text, StyleSheet, Animated, Pressable, View } from 'react-native';
 import { Svg, Path } from 'react-native-svg';
 
 import quotes from '@/assets/quotes.json';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 type QuoteType = {
     content: string;
     author: string;
@@ -38,19 +37,19 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
 
     const fadeAnim = useRef(new Animated.Value(0)).current; // Using useRef to persist the animated value across renders
 
-    const { theme, themeColors, designs } = useThemeStyles();
+    const { theme } = useThemeStyles();
 
     const styles = StyleSheet.create({
         quoteContainer: {
             maxWidth: 600,
             alignSelf: 'center',
-            backgroundColor: themeColors.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
         },
         quoteContent: {
             lineHeight: 28,
             textAlign: 'center',
             fontStyle: 'italic',
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
             marginHorizontal: 50,
             fontSize: 12,
             letterSpacing: 0.5,
@@ -61,7 +60,7 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
             fontFamily: 'serif',
             fontSize: 12,
             marginTop: 10,
-            color: themeColors.gray,
+            color: theme.colors.gray,
             fontWeight: '600',
             letterSpacing: 1,
             marginRight: 60,
@@ -69,7 +68,7 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
         horizontalSeparator: {
             marginHorizontal: 50,
             borderTopWidth: 1,
-            borderColor: themeColors.borderColor,
+            borderColor: theme.colors.borderColor,
         },
     });
 
@@ -123,7 +122,7 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
         <Pressable onPress={toggleExpanded} style={{ marginTop: -30 }}>
             <Animated.View style={[styles.quoteContainer, { opacity: fadeAnim }]}>
                 <FlourishBorder 
-                    color={themeColors.borderColor} 
+                    color={theme.colors.borderColor} 
                     style={{ marginLeft: 1}}
                 />
                 <View style={[styles.horizontalSeparator, { marginBottom: 10}]} />
@@ -137,7 +136,7 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
                 )}
                 <View style={[styles.horizontalSeparator, { marginTop: 10}]} />
                 <FlourishBorder 
-                    color={themeColors.borderColor} 
+                    color={theme.colors.borderColor} 
                     style={{ transform: [{ rotate: '180deg' }] }}
                 />
             </Animated.View>

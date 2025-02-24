@@ -9,7 +9,7 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 import { useSpotifyFetcher, Album } from '../api/musicFetcher';
-import { useThemeStyles } from '../../../styles/useThemeStyles';
+import { Theme, useThemeStyles } from '../../../styles/useThemeStyles';
 import { databaseManagers } from '@/database/tables';
 
 import { LibraryData, TrackData } from '@/src/types/Library';
@@ -34,8 +34,8 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
     const [tracks, setTracks] = useState<TrackData[]>([]);
     const [error, setError] = useState<string | null>(null);
 
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const { fetchAlbums, getAlbumById, getTrackDetails, apiGet, getAccessToken, clearStoredTokens } = useSpotifyFetcher();
 
@@ -256,7 +256,7 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
                                     <FontAwesomeIcon 
                                         icon={faStar} 
                                         size={20} 
-                                        color={star <= personalRating ? themeColors.textColor : 'gray'} 
+                                        color={star <= personalRating ? theme.colors.textColor : 'gray'} 
                                     />
                                 </Pressable>
                             ))}
@@ -283,14 +283,14 @@ const MusicSearchModal: React.FC<MusicSearchModalProps> = ({ isOpen, onClose, on
 
 export default MusicSearchModal;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     albumItem: {
         paddingHorizontal: 10,
         padding: 15,
         marginVertical: 0,
-        backgroundColor: theme.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderBottomWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 5,
     },
     albumImage: {
@@ -310,12 +310,12 @@ const getStyles = (theme: any) => StyleSheet.create({
     loadingTrackName: {
         fontStyle: 'italic',
         textAlign: 'center',
-        color: theme.textColorFaded || 'gray',
+        color: theme.colors.gray || 'gray',
     },
     ratingContainer: {
         flexDirection: 'row',
         marginBottom: 20,
-        backgroundColor: theme.cardColor,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 12,
         borderRadius: 12,
         justifyContent: 'center',

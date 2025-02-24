@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput, Text } from 'react-native';
 import ColorPicker from 'react-native-wheel-color-picker';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface ColorPickerComponentProps {
     onColorSelected: (color: string) => void;
     style: object;
@@ -14,8 +13,8 @@ const ColorPickerComponent: React.FC<ColorPickerComponentProps> = ({ onColorSele
     const [color, setColor] = useState(initialColor);
     const [inputColor, setInputColor] = useState(initialColor);
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     useEffect(() => {
         setColor(initialColor);
@@ -52,7 +51,7 @@ const ColorPickerComponent: React.FC<ColorPickerComponentProps> = ({ onColorSele
                     style={styles.input}
                     value={inputColor}
                     onChangeText={handleInputChange}
-                    placeholder={themeColors.gray}
+                    placeholder={theme.colors.gray}
                     maxLength={7}
                 />
             </View>
@@ -60,7 +59,7 @@ const ColorPickerComponent: React.FC<ColorPickerComponentProps> = ({ onColorSele
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -74,13 +73,13 @@ const getStyles = (theme: any) => StyleSheet.create({
     inputLabel: {
         marginRight: 10,
         fontSize: 16,
-        color: theme.textColor,
+        color: theme.colors.textColor,
     },
     input: {
         width: '50%',
-        color: theme.textColor,
+        color: theme.colors.textColor,
         borderWidth: 1,
-        borderColor: theme.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 5,
         padding: 10,
     },

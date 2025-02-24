@@ -11,8 +11,7 @@ import {
     faMusic
 } from '@fortawesome/free-solid-svg-icons';
 import Slider from '@react-native-community/slider';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useMusicPlayer } from '../../../contexts/MusicPlayerContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useMusicPlayer } from '../../../contexts/MusicPlayerContext';
 import { useNavigationComponents } from '../../LeftPanel/helpers/useNavigation';
 
 interface MusicPlayerControlsProps {
@@ -139,7 +138,7 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     playerControls: {
         padding: theme.spacing.xs,
         backgroundColor: 'transparent',

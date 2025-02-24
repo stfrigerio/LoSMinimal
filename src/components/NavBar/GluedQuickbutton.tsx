@@ -3,16 +3,15 @@ import { Pressable, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faPlus, faCheckCircle, faTag, faBuildingColumns, faBullseye } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 type GluedQuickbuttonProps = {
     onPress: () => void;
     screen: string;
 }
 
 const GluedQuickbutton = ({ onPress, screen }: GluedQuickbuttonProps) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const getIconForScreen = (screen: string) => {
         switch (screen) {
@@ -44,7 +43,7 @@ const GluedQuickbutton = ({ onPress, screen }: GluedQuickbuttonProps) => {
             {({ pressed }) => (
                 <FontAwesomeIcon 
                     icon={icon} 
-                    color={pressed ? themeColors.textColor : themeColors.backgroundColor} 
+                    color={pressed ? theme.colors.textColor : theme.colors.backgroundColor} 
                     size={24} 
                 />
             )}
@@ -52,7 +51,7 @@ const GluedQuickbutton = ({ onPress, screen }: GluedQuickbuttonProps) => {
     );
 }
 
-const getStyles = (themeColors: any) => {
+const getStyles = (theme: any) => {
     return StyleSheet.create({
         floatingButton: {
             position: 'absolute',
@@ -61,7 +60,7 @@ const getStyles = (themeColors: any) => {
             width: 50,
             height: 50,
             borderRadius: 25,
-            backgroundColor: themeColors.accentColor,
+            backgroundColor: theme.colors.accentColor,
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'row',

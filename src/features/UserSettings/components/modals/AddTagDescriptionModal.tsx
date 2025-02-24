@@ -7,8 +7,7 @@ import ColorPicker from './components/ColorPicker';
 import AlertModal from '@/src/components/modals/AlertModal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useTagDescriptionForm } from './hooks/useTagDescriptionModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useTagDescriptionForm } from './hooks/useTagDescriptionModal';
 
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
@@ -32,8 +31,8 @@ const AddTagDescriptionModal: React.FC<AddTagDescriptionModalProps> = ({
 	currentSection,
 	getLinkedDescriptions,
 }) => {
-	const { designs, themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { designs, theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const {
 		itemData,
@@ -147,7 +146,7 @@ const AddTagDescriptionModal: React.FC<AddTagDescriptionModalProps> = ({
 
 			<TextInput
 				placeholder={isTagSelected ? "Tag" : "Description"}
-				placeholderTextColor={themeColors.gray}
+				placeholderTextColor={theme.colors.gray}
 				value={itemData.text}
 				onChangeText={(text) => updateItemData('text', text)}
 				style={[designs.text.input]}
@@ -157,7 +156,7 @@ const AddTagDescriptionModal: React.FC<AddTagDescriptionModalProps> = ({
 				<>
 					<TextInput
 						placeholder="Emoji (optional)"
-						placeholderTextColor={themeColors.gray}
+						placeholderTextColor={theme.colors.gray}
 						value={itemData.emoji}
 						onChangeText={(emoji) => updateItemData('emoji', emoji)}
 						style={[designs.text.input]}
@@ -241,7 +240,7 @@ const AddTagDescriptionModal: React.FC<AddTagDescriptionModalProps> = ({
 	);
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     modalButtonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -259,7 +258,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		height: 30,
 		borderRadius: 15,
 		borderWidth: 1,
-		borderColor: themeColors.borderColor,
+		borderColor: theme.colors.borderColor,
 	},
 	colorPickerButton: {
 		flexDirection: 'row',
@@ -273,7 +272,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		marginLeft: 15,
 		textAlign: 'center',
 		fontWeight: 'bold',
-		color: themeColors.textColor,
+		color: theme.colors.textColor,
 	},
 	colorPickerContainer: {
 		flex: 1,
@@ -282,7 +281,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	colorPickerContent: {
-		backgroundColor: themeColors.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 		borderRadius: 10,
 		padding: 20,
 		width: '90%',
@@ -296,7 +295,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 	tagItem: {
 		padding: 10,
 		borderBottomWidth: 1,
-		borderBottomColor: themeColors.borderColor,
+		borderBottomColor: theme.colors.borderColor,
 	},
 }); 
 

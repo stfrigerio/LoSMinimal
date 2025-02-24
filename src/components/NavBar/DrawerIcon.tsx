@@ -1,15 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import { Pressable, Animated, StyleSheet } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 
 interface DrawerIconProps {
 }
 
 const DrawerIcon: React.FC<DrawerIconProps> = () => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const { isOpen, toggleDrawer } = useNavbarDrawer();
     const iconAnimation = useRef(new Animated.Value(0)).current;
 
@@ -91,7 +90,7 @@ const DrawerIcon: React.FC<DrawerIconProps> = () => {
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     iconWrapper: {
         width: 60,
         height: 54,
@@ -117,7 +116,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         position: 'absolute',
         width: 24,
         height: 2,
-        backgroundColor: themeColors.gray,
+        backgroundColor: theme.colors.gray,
     },
     topLine: {
         top: 0,

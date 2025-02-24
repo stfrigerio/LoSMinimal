@@ -6,8 +6,7 @@ import { faTrash, faCheckCircle, faCircle } from '@fortawesome/free-solid-svg-ic
 import EditTimeEntryModal from '../../../modals/EditModal';
 
 import { TimeData } from '@/src/types/Time';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TimeEntryProps {
 	item: TimeData;
 	onUpdateTimeEntry: (updatedEntry: TimeData) => void;
@@ -29,8 +28,8 @@ const TimeEntry: React.FC<TimeEntryProps> = React.memo(({
 	toggleSelect,
 	isFilterActive,
 }) => {
-	const { themeColors, designs } = useThemeStyles();
-	const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+	const { theme, designs } = useThemeStyles();
+	const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
 	const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -114,7 +113,7 @@ const TimeEntry: React.FC<TimeEntryProps> = React.memo(({
 	);
 });
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
 	container: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -122,10 +121,10 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
 		padding: 10,
 		borderRadius: 8,
 		marginBottom: 10,
-		backgroundColor: themeColors.backgroundSecondary,
+		backgroundColor: theme.colors.backgroundSecondary,
 	},
 	selectedContainer: {
-		backgroundColor: themeColors.backgroundColor, // Define a color for selected state
+		backgroundColor: theme.colors.backgroundColor, // Define a color for selected state
 	},
 	selectionIcon: {
 		marginRight: 10,
@@ -158,7 +157,7 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
 	},
 	tagText: {
 		...designs.text.text,
-		color: themeColors.textColorOnAccent,
+		color: theme.colors.accentColor,
 		fontWeight: 'bold',
 		textAlign: 'center',
 	},

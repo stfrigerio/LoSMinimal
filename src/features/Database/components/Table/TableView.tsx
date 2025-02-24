@@ -5,8 +5,7 @@ import DeleteButton from '@/src/components/atoms/DeleteButton';
 import HeaderCell from './HeaderCell';
 import TableCell from './TableCell';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { formatValue, getInputType, formatDateForDisplay, formatDateTimeForDisplay } from '@/src/features/Database/helpers/helper';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { formatValue, getInputType, formatDateForDisplay, formatDateTimeForDisplay } from '@/src/features/Database/helpers/helper';
 
 
 interface RowData {
@@ -32,8 +31,8 @@ const TableView: React.FC<TableViewProps> = ({
 	itemsPerPage,
 	visibleColumns
 }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const columns = useMemo(() => {
 		if (!tableData || tableData.length === 0) return [];
@@ -120,32 +119,32 @@ const TableView: React.FC<TableViewProps> = ({
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	tableContainer: {
 		flex: 1,
 	},
 	headerRow: {
 		backgroundColor: '#1f1e1e',
 		borderBottomWidth: 1,
-		borderBottomColor: theme.opaqueTextColor,
+		borderBottomColor: theme.colors.opaqueTextColor,
 	},
 	row: {
 		flexDirection: 'row',
 		borderBottomWidth: 1,
 		maxHeight: 80,
-		borderBottomColor: theme.borderColor,
+		borderBottomColor: theme.colors.borderColor,
 	},
 	cell: {
 		padding: 10,
 		borderRightWidth: 1,
-		borderRightColor: theme.borderColor,
+		borderRightColor: theme.colors.borderColor,
 		justifyContent: 'center',
 		alignItems: 'flex-start',
 	},
 	noData: {
 		textAlign: 'center',
 		marginTop: 20,
-		color: theme.textColor,
+		color: theme.colors.textColor,
 	},
 });
 

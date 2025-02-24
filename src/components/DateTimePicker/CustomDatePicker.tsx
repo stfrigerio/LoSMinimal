@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Modal, Pressable, StyleSheet, ScrollView } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TimePickerOptions {
     mode: 'date' | 'time' | 'datetime';
     value: Date;
@@ -12,8 +11,8 @@ const CustomTimePicker = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [selectedHour, setSelectedHour] = useState(0);
     const [selectedMinute, setSelectedMinute] = useState(0);
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     
     const [currentCallback, setCurrentCallback] = useState<((date: Date | undefined) => void) | null>(null);
 
@@ -116,7 +115,7 @@ const CustomTimePicker = () => {
     return { showPicker, picker };
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     modalOverlay: {
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -124,7 +123,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         alignItems: 'center',
     },
     pickerContainer: {
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 16,
         padding: 20,
         width: '80%',
@@ -133,7 +132,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: '600',
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         textAlign: 'center',
         marginBottom: 20,
     },
@@ -149,7 +148,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     separator: {
         fontSize: 24,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         marginHorizontal: 10,
     },
     timeOption: {
@@ -158,15 +157,15 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         justifyContent: 'center',
     },
     selectedTimeOption: {
-        backgroundColor: themeColors.primary,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 8,
     },
     timeText: {
         fontSize: 20,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     selectedTimeText: {
-        color: themeColors.white,
+        color: theme.colors.textColor,
         fontWeight: '600',
     },
     buttonContainer: {
@@ -182,15 +181,15 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         alignItems: 'center',
     },
     confirmButton: {
-        backgroundColor: themeColors.primary,
+        backgroundColor: theme.colors.backgroundColor,
     },
     buttonText: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         fontSize: 16,
         fontWeight: '500',
     },
     confirmButtonText: {
-        color: themeColors.white,
+        color: theme.colors.textColor,
     },
 });
 

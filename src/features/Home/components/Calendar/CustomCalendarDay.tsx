@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable, Platform } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface CustomDayProps {
     date?: { day: number; month: number; year: number; timestamp: number; dateString: string };
     marking?: { dots?: Array<{ key: string; color: string }> };
@@ -73,7 +72,7 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         width: 32,
         height: 32,

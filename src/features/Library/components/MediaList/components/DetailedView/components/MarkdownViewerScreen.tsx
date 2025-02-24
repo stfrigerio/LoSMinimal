@@ -1,7 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable, TextInput, Platform, BackHandler, Text, ScrollView } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import MobileMarkdown from '@/src/components/Markdown/Markdown';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import MobileMarkdown from '@/src/components/Markdown/Markdown';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AlertModal from '@/src/components/modals/AlertModal';
@@ -9,9 +8,9 @@ import { saveMarkdownContent } from '../helpers/openMarkdownViewer';
 
 export const MarkdownViewerScreen: React.FC = () => {
     const { content: initialContent, title } = useLocalSearchParams<{ content: string; title: string }>();
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
 
-    const styles = useMemo(() => getStyles(themeColors), [themeColors]);
+    const styles = useMemo(() => getStyles(theme), [theme]);
     const [isEditing, setIsEditing] = useState(false);
     const [content, setContent] = useState(initialContent);
     const [showDiscardModal, setShowDiscardModal] = useState(false);
@@ -58,14 +57,14 @@ export const MarkdownViewerScreen: React.FC = () => {
                         <Ionicons 
                             name="arrow-back" 
                             size={24} 
-                            color={pressed ? themeColors.accentColor : themeColors.textColor} 
+                            color={pressed ? theme.colors.accentColor : theme.colors.textColor} 
                         />
                     )}
                 </Pressable>
                 <View style={styles.headerButtons}>
                     {!isEditing ? (
                         <Pressable onPress={() => setIsEditing(true)} style={styles.editButton}>
-                            <Ionicons name="pencil" size={24} color={themeColors.textColor} />
+                            <Ionicons name="pencil" size={24} color={theme.colors.textColor} />
                         </Pressable>
                     ) : (
                         <Pressable 
@@ -76,7 +75,7 @@ export const MarkdownViewerScreen: React.FC = () => {
                             <Ionicons 
                                 name={isSaving ? "hourglass" : "checkmark"} 
                                 size={24} 
-                                color={themeColors.textColor} 
+                                color={theme.colors.textColor} 
                             />
                         </Pressable>
                     )}
@@ -124,10 +123,10 @@ export const MarkdownViewerScreen: React.FC = () => {
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         position: 'absolute',
         top: 0,
         left: 0,
@@ -146,7 +145,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         justifyContent: 'space-between',
         padding: 16,
         borderBottomWidth: 1,
-        borderBottomColor: themeColors.borderColor,
+        borderBottomColor: theme.colors.borderColor,
     },
     headerButtons: {
         flexDirection: 'row',
@@ -167,7 +166,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flex: 1,
         padding: 16,
         fontSize: 14,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         textAlignVertical: 'top',
         fontFamily: 'monospace',
     },
@@ -175,13 +174,13 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         opacity: 0.5,
     },
     errorContainer: {
-        backgroundColor: themeColors.redOpacity,
+        backgroundColor: theme.colors.redOpacity,
         padding: 8,
         margin: 16,
         borderRadius: 4,
     },
     errorText: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         textAlign: 'center',
     },
 });

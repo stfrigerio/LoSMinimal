@@ -5,8 +5,7 @@ import { DrawerContentComponentProps } from '@react-navigation/drawer';
 
 import TimeChart from './TimeChart'
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import MusicPlayerControls from '../Music/components/MusicPlayerControls';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import MusicPlayerControls from '../Music/components/MusicPlayerControls';
 
 const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
     const { theme } = useThemeStyles();
@@ -33,7 +32,7 @@ const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
         height: Dimensions.get('window').height,

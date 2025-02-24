@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 
 type QuantifiableHabitProps = {
     emoji: string;
@@ -14,9 +14,9 @@ type QuantifiableHabitProps = {
 };
 
 const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, value, color, onIncrement, onDecrement, showName }) => {
-    const { themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
 
-    const getStyles = (theme: any) => StyleSheet.create({
+    const getStyles = (theme: Theme) => StyleSheet.create({
         habit: {
             flexDirection: 'row',
             alignItems: 'center',
@@ -35,7 +35,7 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
             marginRight: 8,
         },
         habitName: {
-            color: theme.textColor,
+            color: theme.colors.textColor,
             fontSize: 14,
             textAlignVertical: 'center',
         },
@@ -53,12 +53,12 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
             alignItems: 'center',
         },
         buttonText: {
-            color: theme.gray,
+            color: theme.colors.gray,
             fontSize: 20,
         },
     });
 
-    const styles = getStyles(themeColors);
+    const styles = getStyles(theme);
 
     return (
         <View style={styles.habit}>
@@ -70,7 +70,7 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
                 style={[styles.button]} 
                 onPress={onDecrement} 
                 android_ripple={{ 
-                    color: themeColors.accentColor,
+                    color: theme.colors.accentColor,
                     radius: 20
                 }}>
                 <Text style={styles.buttonText}>-</Text>
@@ -80,7 +80,7 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
                 style={[styles.button]} 
                 onPress={onIncrement} 
                 android_ripple={{ 
-                    color: themeColors.accentColor,
+                    color: theme.colors.accentColor,
                     radius: 20 
                 }}>
                 <Text style={[styles.buttonText]}>+</Text>

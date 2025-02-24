@@ -6,8 +6,7 @@ import EntriesList from '@/src/features/PeriodicNote/components/atoms/EntriesLis
 
 import { formatMoneyEntries } from '@/src/features/PeriodicNote/helpers/dataTransformer';
 import { processMoneySunburstData } from '@/src/features/PeriodicNote/helpers/dataProcessing';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useColors } from '@/src/utils/useColors';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useColors } from '@/src/utils/useColors';
 import { useTransactionData } from '../hooks/useTransactionData';
 import MobileNavbar from '@/src/components/NavBar';
 import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';
@@ -25,8 +24,8 @@ const MoneyGraphs: React.FC = () => {
     const [showFilter, setShowFilter] = useState(false);
     const [sortOption, setSortOption] = useState<SortOption>('recent');
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const { colors: tagColors} = useColors();
 
     const { transactions } = useTransactionData();
@@ -79,12 +78,12 @@ const MoneyGraphs: React.FC = () => {
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         container: {
             paddingTop: 60,
             flex: 1,
-            backgroundColor: theme.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             position: 'relative',
         },
     });

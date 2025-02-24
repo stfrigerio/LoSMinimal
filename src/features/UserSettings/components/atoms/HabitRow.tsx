@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import AddHabitModal from '../modals/AddHabitModal';
 import AlertModal from '@/src/components/modals/AlertModal';
 import { useColors } from '@/src/utils/useColors';
@@ -17,8 +16,8 @@ interface HabitRowProps {
 }
 
 const HabitRow: React.FC<HabitRowProps> = ({ habitName, setting, updateSetting, deleteRecord }) => {
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors, designs);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme, designs);
 	const { colors: tagColors } = useColors();
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [showAlert, setShowAlert] = useState(false);
@@ -72,13 +71,13 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
 		paddingVertical: 10,
 		paddingHorizontal: 15,
 		borderBottomWidth: 1,
-		borderBottomColor: theme.borderColor,
+		borderBottomColor: theme.colors.borderColor,
 		width: '100%',
 	},
 	habitName: {
 		width: '40%',
 		paddingRight: 10,
-		color: theme.textColor,
+		color: theme.colors.textColor,
 	},
 	emoji: {
 		width: '20%',
@@ -95,7 +94,7 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
 		borderRadius: 5,
 		marginRight: 10,
 		borderWidth: 1,
-		borderColor: theme.borderColor,
+		borderColor: theme.colors.borderColor,
 	},
 	deleteButtonContainer: {
 		width: '10%',

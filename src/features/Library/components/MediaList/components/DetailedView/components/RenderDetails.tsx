@@ -1,5 +1,4 @@
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import React, { useEffect, useState } from 'react';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 import { formatDate, getActionText, cleanText, openEpubFile } from '../helpers';
@@ -10,8 +9,8 @@ import { Album } from '@/src/features/Music/types';
 import { openMarkdownViewer } from '../helpers';
 
 export const RenderDetail = (label: string, value: string | number | undefined) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <View style={styles.detailContainer}>
@@ -22,8 +21,8 @@ export const RenderDetail = (label: string, value: string | number | undefined) 
 };
 
 export const RenderCommonDetails = (item: any) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <>
@@ -47,8 +46,8 @@ export const RenderSpecificDetails: React.FC<RenderSpecificDetailsProps> = ({
     album, 
     updateItem 
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const [hasMarkdown, setHasMarkdown] = useState(false);
     const [hasEpub, setHasEpub] = useState(false);
 
@@ -137,12 +136,12 @@ export const RenderSpecificDetails: React.FC<RenderSpecificDetailsProps> = ({
     }
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     ratings: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 10,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 15,
         borderRadius: 12,
     },
@@ -154,26 +153,26 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         justifyContent: 'space-between', // Evenly space label and value
     },
     ratingLabel: {
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
         fontSize: 12,
         textAlign: 'center', // Center text if it wraps
     },
     ratingValue: {
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         fontSize: 16,
         fontWeight: '600',
     },
     details: {
         flex: 1,
         padding: 20,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         fontSize: 14,
     }, 
     detailContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 12,
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 15,
         borderRadius: 12,
     },
@@ -181,18 +180,18 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         flex: 1,
         fontSize: 16,
         fontWeight: '600',
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
     },
     detailValue: {
         flex: 2,
         fontSize: 16,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         textAlign: 'right',
     },
     openButton: {
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
-        backgroundColor: themeColors.backgroundColor,
+        borderColor: theme.colors.borderColor,
+        backgroundColor: theme.colors.backgroundColor,
         padding: 15,
         borderRadius: 12,
         marginTop: 12,
@@ -203,7 +202,7 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         transform: [{ scale: 0.98 }]
     },
     openButtonText: {
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         fontSize: 16,
         fontWeight: '600',
     },

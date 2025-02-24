@@ -2,8 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { View, StyleSheet, Pressable, TextInput, BackHandler, Platform, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Markdown from '@/src/components/Markdown/Markdown';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { Project } from '../types/types';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { Project } from '../types/types';
 import AlertModal from '@/src/components/modals/AlertModal';
 import TaskModal from '../../../modals/TaskModal';
 import { TaskData } from '@/src/types/Task';
@@ -17,8 +16,8 @@ interface ProjectViewProps {
 }
 
 const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, onDelete }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = useMemo(() => getStyles(themeColors), [themeColors]);
+    const { theme } = useThemeStyles();
+    const styles = useMemo(() => getStyles(theme), [theme]);
     const [isEditing, setIsEditing] = useState(false);
     const [content, setContent] = useState(project.markdown);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -126,24 +125,24 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
         <View style={styles.container}>
             <View style={styles.header}>
                 <Pressable onPress={onClose} style={styles.backButton}>
-                    <Ionicons name="arrow-back" size={24} color={themeColors.textColor} />
+                    <Ionicons name="arrow-back" size={24} color={theme.colors.textColor} />
                 </Pressable>
                 <View style={styles.headerButtons}>
                     {!isEditing ? (
                         <>
                             <Pressable onPress={() => setIsEditing(true)} style={styles.editButton}>
-                                <Ionicons name="pencil" size={24} color={themeColors.textColor} />
+                                <Ionicons name="pencil" size={24} color={theme.colors.textColor} />
                             </Pressable>
                             <Pressable 
                                 onPress={() => setShowDeleteModal(true)} 
                                 style={styles.deleteButton}
                             >
-                                <Ionicons name="trash" size={24} color={themeColors.redOpacity} />
+                                <Ionicons name="trash" size={24} color={theme.colors.redOpacity} />
                             </Pressable>
                         </>
                     ) : (
                         <Pressable onPress={handleSave} style={styles.saveButton}>
-                            <Ionicons name="checkmark" size={24} color={themeColors.textColor} />
+                            <Ionicons name="checkmark" size={24} color={theme.colors.textColor} />
                         </Pressable>
                     )}
                 </View>
@@ -217,10 +216,10 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onClose, onUpdate, o
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         position: 'absolute',
         top: 0,
         left: 0,
@@ -237,7 +236,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         padding: 8,
         borderWidth: 1,
         borderRadius: 20,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
     },
     headerButtons: {
         flexDirection: 'row',
@@ -262,7 +261,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flex: 1,
         padding: 16,
         fontSize: 14,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         textAlignVertical: 'top',
         fontFamily: 'monospace',
     },

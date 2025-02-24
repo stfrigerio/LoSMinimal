@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Pressable, ActivityIndicator, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface ActionButtonsProps {
 	isConfirming: boolean;
@@ -10,8 +9,8 @@ interface ActionButtonsProps {
 }
 
 const ActionButtons: React.FC<ActionButtonsProps> = ({ isConfirming, onConfirm, onCancel }) => {
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	return (
 		<View style={styles.actionButtons}>
@@ -26,7 +25,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ isConfirming, onConfirm, 
 
 export default ActionButtons;
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 		disabledButton: {
 				opacity: 0.5,
 		},

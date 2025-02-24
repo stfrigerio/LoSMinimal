@@ -3,8 +3,7 @@ import { View, Dimensions, StyleSheet, Platform, Text } from 'react-native';
 
 import QuantifiableHabitsChart from '@/src/components/charts/QuantifiableHabitsChart/QuantifiableHabitsChart';
 import AlertModal from '@/src/components/modals/AlertModal';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 
 interface QuantifiableSectionProps {
     startDate: Date;
@@ -19,8 +18,8 @@ const QuantifiableSection: React.FC<QuantifiableSectionProps> = ({
     tagColors,
     periodType,
 }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const [error, setError] = useState<Error | null>(null);
 
     const { width } = Dimensions.get('window');
@@ -124,7 +123,7 @@ const QuantifiableSection: React.FC<QuantifiableSectionProps> = ({
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     const { width } = Dimensions.get('window');
     const isDesktop = Platform.OS === 'web';
 

@@ -5,8 +5,7 @@ import { format } from 'date-fns';
 
 import createTimePicker from '@/src/components/DateTimePicker';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { DailyNoteData } from '@/src/types/DailyNote';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { DailyNoteData } from '@/src/types/DailyNote';
 import ButtonsSlider from '@/src/components/atoms/ButtonsSlider';
 
 type EveningDataProps = {
@@ -21,8 +20,8 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
         dayRating: data?.dayRating || 0,
         sleepTime: data?.sleepTime || '',
     };
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const [eveningData, setEveningData] = useState(initialData);
 
     useEffect(() => {
@@ -67,11 +66,11 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
         const time = parseFloat(bedTime || '0');
     
         if ((time >= 23 && time <= 24) || (time >= 0 && time < 1)) {
-            return themeColors.greenOpacity;
+            return theme.colors.greenOpacity;
         } else if (time >= 1 && time < 5) {
-            return themeColors.yellowOpacity;
+            return theme.colors.yellowOpacity;
         } else {
-            return themeColors.redOpacity;
+            return theme.colors.redOpacity;
         }
     };
 
@@ -86,7 +85,7 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
                     value={eveningData.success}
                     onChangeText={(value) => handleInputChange('success', value)}
                     placeholder="Share your successes..."
-                    placeholderTextColor={themeColors.gray}
+                    placeholderTextColor={theme.colors.gray}
                     numberOfLines={1}
                 />
             </View>
@@ -98,7 +97,7 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
                     value={eveningData.beBetter}
                     onChangeText={(value) => handleInputChange('beBetter', value)}
                     placeholder="Areas for improvement..."
-                    placeholderTextColor={themeColors.gray}
+                    placeholderTextColor={theme.colors.gray}
                     numberOfLines={1}
                 />
             </View>
@@ -115,13 +114,13 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
                 {/* <Text style={styles.label}>🛏️ Bedtime</Text> */}
                 <Pressable style={styles.timeInputWrapper} onPress={showSleepTimePicker}>
                     <View style={[styles.input, styles.timeInput]}>
-                        <Text style={{ color: eveningData.sleepTime ? getSleepTimeColor(eveningData.sleepTime) : themeColors.opaqueTextColor }}>
+                        <Text style={{ color: eveningData.sleepTime ? getSleepTimeColor(eveningData.sleepTime) : theme.colors.opaqueTextColor }}>
                             {eveningData.sleepTime || 'Set time'}
                         </Text>
                         <MaterialCommunityIcons 
                             name="clock-outline" 
                             size={20} 
-                            color={themeColors.opaqueTextColor} 
+                            color={theme.colors.opaqueTextColor} 
                         />
                     </View>
                 </Pressable>
@@ -133,13 +132,14 @@ const EveningData: React.FC<EveningDataProps> = ({ data, onUpdate }) => {
 
 export default EveningData;
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     eveningContainer: {
         padding: 20,
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 16,
         marginVertical: 10,
-        // shadowColor: themeColors.shadowColor,
+        // shadowColor: theme.colors.shadowColor
+,
         // shadowOffset: { width: 0, height: 2 },
         // shadowOpacity: 0.1,
         // shadowRadius: 8,
@@ -148,7 +148,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     sectionTitle: {
         fontSize: 18,
         fontWeight: '600',
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         marginBottom: 15,
         alignSelf: 'center',
     },
@@ -157,17 +157,17 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        color: themeColors.opaqueTextColor,
+        color: theme.colors.opaqueTextColor,
         marginBottom: 8,
         fontWeight: '500',
     },
     input: {
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         borderRadius: 10,
         padding: 10,
-        color: themeColors.textColor,
-        backgroundColor: themeColors.backgroundSecondary,
+        color: theme.colors.textColor,
+        backgroundColor: theme.colors.backgroundSecondary,
         fontSize: 16,
     },
     timeInputWrapper: {

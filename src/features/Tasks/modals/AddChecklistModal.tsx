@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface AddChecklistModalProps {
@@ -12,8 +11,8 @@ interface AddChecklistModalProps {
 }
 
 const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ visible, onClose, onAdd, initialChecklist }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors, designs);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
     const [checklistName, setChecklistName] = useState('');
 
     useEffect(() => {
@@ -57,7 +56,7 @@ const AddChecklistModal: React.FC<AddChecklistModalProps> = ({ visible, onClose,
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     modalContent: {
         width: '100%',
         alignItems: 'center',
@@ -69,10 +68,10 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
         alignSelf: 'center',
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         paddingHorizontal: 18,
         width: '100%',
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         height: 60
     },
     buttonContainer: {

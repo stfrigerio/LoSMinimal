@@ -18,8 +18,7 @@ import DateNavigation from '@/src/components/DateNavigation';
 import ImagePickerComponent from './components/ImagePickerComponent';
 
 // Functions
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { getStartOfToday, getLocalTimeZone, navigateDate } from '@/src/utils/timezoneBullshit';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getStartOfToday, getLocalTimeZone, navigateDate } from '@/src/utils/timezoneBullshit';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 
 import ColorfulTimeline from '@/src/features/DailyNote/components/ColorfulTimeline';
@@ -39,8 +38,8 @@ const DailyNote = () => {
 	const { dailyData, onUpdateDaySections } = useDailyData(new Date(dateParam), lastSubmissionTime);
 	const [ settings ] = useDailySettings();
 
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	useEffect(() => {
         setLastSubmissionTime(Date.now());
@@ -95,13 +94,13 @@ const DailyNote = () => {
 export default DailyNote;
 
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
 	return StyleSheet.create({
 		mainContainer: {
 			flex: 1,
 			paddingTop: 37,
 			position: 'relative',
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 		},
 		noteContainer: {
 			paddingHorizontal: 20,

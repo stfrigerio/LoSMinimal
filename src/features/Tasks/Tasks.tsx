@@ -4,8 +4,7 @@ import { View, StyleSheet, Dimensions, Platform, Pressable, Text } from 'react-n
 import TaskModal from '@/src/features/Tasks/modals/TaskModal';
 import MobileNavbar from '@/src/components/NavBar';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useTasksData } from './hooks/useTasksData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useTasksData } from './hooks/useTasksData';
 
 import { TaskData } from '@/src/types/Task';
 import { Project } from './components/Projects/types/types';
@@ -14,8 +13,8 @@ import Banner from '@/src/components/Banner';
 
 
 const TasksHub: React.FC = () => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors), [themeColors]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme), [theme]);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const { tasks } = useTasksData(); 
@@ -77,14 +76,14 @@ const TasksHub: React.FC = () => {
                         <Text style={styles.summaryLabel}>Completion Rate</Text>
                         <Text style={[
                             styles.summaryValue,
-                            { color: taskStats.completionRate > 50 ? themeColors.greenOpacity : themeColors.yellowOpacity }
+                            { color: taskStats.completionRate > 50 ? theme.colors.greenOpacity : theme.colors.yellowOpacity }
                         ]}>{taskStats.completionRate}%</Text>
                     </View>
                 </View>
                 <View style={styles.summaryRow}>
                     <View style={styles.summaryItem}>
                         <Text style={styles.summaryLabel}>Pending</Text>
-                        <Text style={[styles.summaryValue, { color: themeColors.yellowOpacity }]}>
+                        <Text style={[styles.summaryValue, { color: theme.colors.yellowOpacity }]}>
                             {taskStats.pendingTasks}
                         </Text>
                     </View>
@@ -117,16 +116,16 @@ const TasksHub: React.FC = () => {
     );
 };
 
-const getStyles = (themeColors: any) => {    
+const getStyles = (theme: Theme) => {    
     return StyleSheet.create({
         container: {
             flex: 1,
-            backgroundColor: themeColors.backgroundColor,
+            backgroundColor: theme.colors.backgroundColor,
             padding: 20,
             paddingTop: 40,
         },
         summaryContainer: {
-            backgroundColor: themeColors.cardBackground,
+            backgroundColor: theme.colors.backgroundSecondary,
             borderRadius: 12,
             padding: 15,
             marginBottom: 20,
@@ -151,13 +150,13 @@ const getStyles = (themeColors: any) => {
         },
         summaryLabel: {
             fontSize: 14,
-            color: themeColors.textColorItalic,
+            color: theme.colors.textColorItalic,
             marginBottom: 5,
         },
         summaryValue: {
             fontSize: 24,
             fontWeight: 'bold',
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
         },
     });
 };

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Pressable, StyleSheet, Animated, Platform } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { databaseManagers } from '@/database/tables';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { databaseManagers } from '@/database/tables';
 import { getISOWeekData } from '@/src/utils/timezoneBullshit';
 import { useTimer } from '@/src/features/Home/hooks/useTimer';
 
@@ -248,7 +247,7 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         padding: theme.spacing.sm,
         backgroundColor: 'rgba(255, 255, 255, 0.05)',

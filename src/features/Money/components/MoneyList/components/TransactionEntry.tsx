@@ -8,8 +8,7 @@ import TransactionModal from '@/src/features/Money/modals/TransactionModal';
 import AlertModal from '@/src/components/modals/AlertModal';
 
 import { MoneyData } from '@/src/types/Money';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TransactionEntryProps {
     transaction: MoneyData;
     deleteTransaction: (uuid: string) => void;
@@ -29,8 +28,8 @@ const TransactionEntry: React.FC<TransactionEntryProps> = ({
     isSelected,
     toggleSelect,
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteAlertVisible, setIsDeleteAlertVisible] = useState(false);
@@ -123,7 +122,7 @@ const TransactionEntry: React.FC<TransactionEntryProps> = ({
 };
 
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
     const { width } = Dimensions.get('window');
     const isSmall = width < 1920;
     const isDesktop = Platform.OS === 'web';
@@ -137,10 +136,10 @@ const getStyles = (themeColors: any, designs: any) => {
             paddingHorizontal: 15,
             borderRadius: 8,
             marginBottom: 10,
-            backgroundColor: themeColors.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
         },
         selectedContainer: {
-            backgroundColor: themeColors.backgroundColor, // Define a color for selected state
+            backgroundColor: theme.colors.backgroundColor, // Define a color for selected state
         },
         selectionIcon: {
             marginRight: 10,
@@ -170,7 +169,7 @@ const getStyles = (themeColors: any, designs: any) => {
             paddingVertical: 4,
             borderRadius: 4,
             marginHorizontal: 5,
-            backgroundColor: themeColors.tagBackground,
+            backgroundColor: theme.colors.backgroundSecondary,
         },
         tagText: {
             fontWeight: 'bold',

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { Settings } from '@/src/types/UserSettings';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { Settings } from '@/src/types/UserSettings';
 import { UserSettingData } from '@/src/types/UserSettings';
 
 interface AppSettingRowProps {
@@ -14,8 +13,8 @@ interface AppSettingRowProps {
 }
 
 const AppSettingRow: React.FC<AppSettingRowProps> = ({ settingKey, label, type, settings, updateSetting }) => {
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors, designs);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme, designs);
 
 	const setting = settings[settingKey];
 	const [isEnabled, setIsEnabled] = useState(setting?.value === 'true');
@@ -44,8 +43,8 @@ const AppSettingRow: React.FC<AppSettingRowProps> = ({ settingKey, label, type, 
 			<View style={styles.container}>
 				<Text style={styles.label}>{label}</Text>
 				<Switch
-					trackColor={{ false: themeColors.backgroundColor, true: themeColors.backgroundColor }}
-					thumbColor={isEnabled ? themeColors.accentColor : themeColors.gray}
+					trackColor={{ false: theme.colors.backgroundColor, true: theme.colors.backgroundColor }}
+					thumbColor={isEnabled ? theme.colors.accentColor : theme.colors.gray}
 					onValueChange={handleToggle}
 					value={isEnabled}
 				/>
@@ -54,10 +53,10 @@ const AppSettingRow: React.FC<AppSettingRowProps> = ({ settingKey, label, type, 
 	);
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
 	outsideContainer: {
 		borderBottomWidth: 1,
-		borderBottomColor: themeColors.backgroundColor,
+		borderBottomColor: theme.colors.backgroundColor,
 		paddingHorizontal: 16,
 	},
 	container: {
@@ -66,10 +65,10 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
 		alignItems: 'center',
 	},
 	label: {
-		color: themeColors.textColor,
+		color: theme.colors.textColor,
 	},
 	explainerText: {
-		color: themeColors.gray,
+		color: theme.colors.gray,
 	},
 });
 

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, Platform, Modal } from 'react-native';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import AlertModal from '@/src/components/modals/AlertModal'; 
 
 import { useSettings } from '../../hooks/useSettings';
@@ -21,8 +20,8 @@ interface AddHabitModalProps {
 }
 
 const AddHabitModal: React.FC<AddHabitModalProps> = ({ visible, onClose, initialHabit, onUpdate }) => {
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 	const [newHabitName, setNewHabitName] = useState('');
 	const [newHabitType, setNewHabitType] = useState<'booleanHabits' | 'quantifiableHabits'>('booleanHabits');
 	const [habitColor, setHabitColor] = useState('#FFFFFF');
@@ -221,7 +220,7 @@ const AddHabitModal: React.FC<AddHabitModalProps> = ({ visible, onClose, initial
 	);
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	modalContent: {
 		width: '100%',
 		alignItems: 'center',
@@ -232,10 +231,10 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		alignSelf: 'center',
 		borderWidth: 1,
 		borderRadius: 10,
-		borderColor: themeColors.borderColor,
+		borderColor: theme.colors.borderColor,
 		paddingHorizontal: 18,
 		width: '100%',
-		color: themeColors.textColor,
+		color: theme.colors.textColor,
 		height: 60
 	},
 	habitTypeContainer: {
@@ -247,20 +246,20 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		flex: 1,
 		padding: 10,
 		borderWidth: 1,
-		borderColor: themeColors.borderColor,
+		borderColor: theme.colors.borderColor,
 		borderRadius: 10,
 		marginHorizontal: 5,
 		alignItems: 'center',
 	},
 	selectedHabitType: {
-		borderColor: themeColors.accentColor,
+		borderColor: theme.colors.accentColor,
 	},
 	habitTypeText: {
-		color: themeColors.textColor,
+		color: theme.colors.textColor,
 		fontSize: 10,
 	},
 	selectedHabitTypeText: {
-		color: themeColors.accentColor,
+		color: theme.colors.accentColor,
 		fontWeight: 'bold',
 	},
 	colorSelectionContainer: {
@@ -274,7 +273,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 		height: 30,
 		borderRadius: 15,
 		borderWidth: 1,
-		borderColor: themeColors.borderColor,
+		borderColor: theme.colors.borderColor,
 	},
 	colorPickerButton: {
 		flexDirection: 'row',
@@ -286,13 +285,13 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 	},
 	colorPickerButtonText: {
 		marginLeft: 15,
-		color: themeColors.textColor,
+		color: theme.colors.textColor,
 		textAlign: 'center',
 		fontWeight: 'bold',
 	},
 	colorPickerContent: {
 		marginTop: 20,
-		backgroundColor: themeColors.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 		borderRadius: 10,
 		height: 500,
 	},

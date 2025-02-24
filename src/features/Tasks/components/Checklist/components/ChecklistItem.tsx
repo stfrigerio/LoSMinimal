@@ -3,7 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCheckCircle, faCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ChecklistItemProps } from '../types';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 
 const ChecklistItem: React.FC<ChecklistItemProps> = ({ 
     task, 
@@ -11,7 +11,7 @@ const ChecklistItem: React.FC<ChecklistItemProps> = ({
     onDelete,
     textColor
 }) => {
-    const { themeColors, designs } = useThemeStyles();
+    const { theme, designs } = useThemeStyles();
     const styles = React.useMemo(() => getStyles(designs), [designs]);
 
     return (
@@ -23,14 +23,14 @@ const ChecklistItem: React.FC<ChecklistItemProps> = ({
             >
                 <FontAwesomeIcon 
                     icon={task.completed ? faCheckCircle : faCircle} 
-                    color={task.completed ? themeColors.accentColor : textColor} 
+                    color={task.completed ? theme.colors.accentColor : textColor} 
                     size={20} 
                     style={styles.checkIcon}
                 />
                 <Text 
                     style={[
                         styles.itemText, 
-                        { color: themeColors.textColor }, 
+                        { color: theme.colors.textColor }, 
                         task.completed && styles.completedText
                     ]}
                     numberOfLines={2}  // Added to handle long text

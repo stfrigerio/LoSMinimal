@@ -5,14 +5,14 @@ import Navbar from '@/src/components/NavBar';
 import EditTimeEntryModal from './modals/EditModal';
 import Banner from '@/src/components/Banner';
 
-import { useThemeStyles } from '../../styles/useThemeStyles';
+import { useThemeStyles, Theme } from '../../styles/useThemeStyles';
 import { useTimeData } from './hooks/useTimeData';
 import { TimeData } from '../../types/Time';
 import { navItems } from './constants/navItems';
 
 const TimeHub: React.FC = () => {
-	const { theme, themeColors, designs } = useThemeStyles();
-	const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+	const { theme, designs } = useThemeStyles();
+	const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
 	// Assume useTimeData now provides a list of timeEntries
@@ -104,11 +104,11 @@ const TimeHub: React.FC = () => {
 	);
 };
 
-const getStyles = (themeColors: any, designs: any) => {
+const getStyles = (theme: Theme, designs: any) => {
 	return StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: themeColors.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 			padding: 20,
 			paddingTop: 37,
 		},
@@ -123,12 +123,12 @@ const getStyles = (themeColors: any, designs: any) => {
 			flex: 1,
 		},
 		summaryLabel: {
-			color: themeColors.textColorItalic,
+			color: theme.colors.textColorItalic,
 			marginBottom: 5,
 			textAlign: 'center',
 		},
 		summaryValue: {
-			color: themeColors.textColor,
+			color: theme.colors.textColor,
 			fontWeight: 'bold',
 			textAlign: 'center',
 		},

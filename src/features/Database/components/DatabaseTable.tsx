@@ -4,8 +4,7 @@ import { View, StyleSheet, Text, Switch, useWindowDimensions } from 'react-nativ
 import TableView from './Table/TableView';
 import Pagination from './Table/Pagination';
 import { TableData } from '../types/types';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface HiddenColumns {
 	common: string[];
 	specific: {
@@ -28,8 +27,8 @@ const DatabaseTable: React.FC<DatabaseTableProps> = ({
 	handleRemove,
 	hiddenColumns,
 }) => {
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 	const { width: screenWidth } = useWindowDimensions();
 	const [currentPage, setCurrentPage] = useState(1);
 	const itemsPerPage = 30;
@@ -82,7 +81,7 @@ const DatabaseTable: React.FC<DatabaseTableProps> = ({
 
 export default DatabaseTable;
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		flex: 1,
 		marginBottom: 100,
@@ -95,12 +94,12 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 	},
 	toggleText: {
 		marginRight: 10,
-		color: themeColors.gray,
+		color: theme.colors.gray,
 	},
 	tableWrapper: {
 		flex: 1,
 		borderWidth: 1,
-		borderColor: themeColors.borderColor,
+		borderColor: theme.colors.borderColor,
 		borderRadius: 5,
 		overflow: 'hidden',
 	},

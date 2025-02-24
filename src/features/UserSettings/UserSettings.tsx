@@ -7,12 +7,11 @@ import Navbar from '@/src/components/NavBar';
 import PillarManager from './components/Pillars';
 import { NotificationManager } from './components/NotificationManager';
 
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 const UserSettings: React.FC = () => {
 	const [pageIndex, setPageIndex] = useState(0);
-	const { themeColors } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const screens = [
 		'Tags', 
@@ -60,7 +59,7 @@ const UserSettings: React.FC = () => {
 	);
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
 	return StyleSheet.create({
 		content: {
 			flex: 1,
@@ -68,26 +67,26 @@ const getStyles = (theme: any) => {
 		mainContainer: {
 			paddingTop: 37,
 			flex: 1,
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 		},
 		button: {
 			margin: 10,
 			padding: 8,
-			backgroundColor: theme.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 			borderRadius: 10,
 			alignSelf: 'flex-start',
 		},
 		activeButton: {
-			backgroundColor: theme.accentColor,
+			backgroundColor: theme.colors.accentColor,
 		},
 		text: {
-			color: theme.textColor,
+			color: theme.colors.textColor,
 		},
 		navBar: {
 			flexDirection: 'row',
 			flexWrap: 'wrap', 
 			justifyContent: 'space-around',
-			backgroundColor: theme.borderColor
+			backgroundColor: theme.colors.borderColor
 		},
 		pagerView: {
 			flex: 1,

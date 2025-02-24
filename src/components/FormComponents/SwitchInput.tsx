@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface SwitchInputProps {
     value: boolean;
     onValueChange: (value: boolean) => void;
@@ -23,8 +22,8 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
     leftLabelOff = false,
     style
 }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <View style={[styles.switchContainer]}>
@@ -42,7 +41,7 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
                     value={value}
                     onValueChange={onValueChange}
                     trackColor={{ false: trackColorFalse, true: trackColorTrue }}
-                    thumbColor={themeColors.accentColor}
+                    thumbColor={theme.colors.accentColor}
                 />
                 <Text style={[
                     styles.switchLabel, 
@@ -57,7 +56,7 @@ export const SwitchInput: React.FC<SwitchInputProps> = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     switchContainer: {
         width: '100%',
         marginBottom: 10,
@@ -66,11 +65,11 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
     },
     switchLabel: {
         flex: 1,
-        color: themeColors.gray,
+        color: theme.colors.gray,
         opacity: 0.6,
         fontSize: 14,
         textAlign: 'center',

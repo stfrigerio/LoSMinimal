@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { ScrollView, Pressable, Text, StyleSheet } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { ChecklistData } from './types';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ChecklistData } from './types';
 import SingleChecklist from './components/SingleChecklist';
 import AddChecklistModal from '../../modals/AddChecklistModal';
 
@@ -11,8 +10,8 @@ import MobileNavbar from '@/src/components/NavBar';
 import { navItems } from '../../constants/navItems';
 
 const Checklist: React.FC= () => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     const { 
         tasks, 
@@ -174,7 +173,7 @@ const Checklist: React.FC= () => {
                         <Text 
                             style={[
                                 styles.addChecklistButtonText, 
-                                { color: pressed ? themeColors.accentColor : themeColors.textColor }
+                                { color: pressed ? theme.colors.accentColor : theme.colors.textColor }
                             ]}
                         >
                             Add New Checklist
@@ -203,16 +202,16 @@ const Checklist: React.FC= () => {
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     container: {
-        backgroundColor: themeColors.backgroundColor,
+        backgroundColor: theme.colors.backgroundColor,
         borderRadius: 8,
         padding: 10,
         paddingTop: 50,
         marginBottom: 60
     },
     addChecklistButton: {
-        backgroundColor: themeColors.backgroundSecondary,
+        backgroundColor: theme.colors.backgroundSecondary,
         padding: 10,
         borderRadius: 8,
         alignItems: 'center',
@@ -220,7 +219,7 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     },
     addChecklistButtonText: {
         ...designs.text.text,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
 });
 

@@ -4,8 +4,7 @@ import { View, StyleSheet, FlatList, Dimensions, Platform, Text, Pressable } fro
 import TimeEntry from './components/TimeEntry';
 import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';
 import BatchTimeEntryModal from '../../modals/BatchTimeEntryModal';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useColors } from '@/src/utils/useColors';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useColors } from '@/src/utils/useColors';
 
 import { TimeData } from '@/src/types/Time';
 import { useTimeData } from '../../hooks/useTimeData';
@@ -15,7 +14,7 @@ import EditTimeEntryModal from '../../modals/EditModal';
 
 
 const TimeList: React.FC = () => {
-	const { themeColors, designs } = useThemeStyles();
+	const { theme, designs } = useThemeStyles();
 	const [selectionState, setSelectionState] = useState({
 		selectedUuids: new Set<string>(),
 		isSelectionMode: false
@@ -28,7 +27,7 @@ const TimeList: React.FC = () => {
     });
     const [sortOption, setSortOption] = useState<SortOption>('recent');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-	const styles = React.useMemo(() => getStyles(themeColors, designs, showFilter, selectionState.isSelectionMode), [themeColors, designs, showFilter, selectionState.isSelectionMode]);
+	const styles = React.useMemo(() => getStyles(theme, designs, showFilter, selectionState.isSelectionMode), [theme, designs, showFilter, selectionState.isSelectionMode]);
 	const { colors: tagColors, loading: colorsLoading, error: colorsError } = useColors();
     const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
 
@@ -95,10 +94,10 @@ const TimeList: React.FC = () => {
             return {};
         }
         return entries.reduce((acc, entry) => {
-            acc[entry.id!] = tagColors[entry.tag!] || themeColors.textColor;
+            acc[entry.id!] = tagColors[entry.tag!] || theme.colors.textColor;
             return acc;
         }, {} as Record<number, string>);
-    }, [entries, tagColors, colorsLoading, themeColors.textColor]);
+    }, [entries, tagColors, colorsLoading, theme.colors.textColor]);
 
 	const toggleSelect = (uuid: string) => {
 		setSelectionState(prevState => {
@@ -152,7 +151,7 @@ const TimeList: React.FC = () => {
 			item={item}
 			onUpdateTimeEntry={editTimeEntry}
 			deleteTimeEntry={deleteTimeEntry}
-			tagColor={entryColors[item.id!] || themeColors.textColor}
+			tagColor={entryColors[item.id!] || theme.colors.textColor}
 			isSelectionMode={selectionState.isSelectionMode}
 			isSelected={selectionState.selectedUuids.has(item.uuid!)}
 			toggleSelect={toggleSelect}
@@ -234,7 +233,7 @@ const TimeList: React.FC = () => {
 	);
 };
 
-const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelectionMode: boolean) => {
+const getStyles = (theme: Theme, designs: any, showFilter: boolean, isSelectionMode: boolean) => {
 	const { width } = Dimensions.get('window');
 	const isSmall = width < 1920;
 	const isDesktop = Platform.OS === 'web';
@@ -242,7 +241,7 @@ const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelect
 	return StyleSheet.create({
 		container: {
             flex: 1,
-			backgroundColor: themeColors.backgroundColor,
+			backgroundColor: theme.colors.backgroundColor,
 			paddingTop: 20,
             position: 'relative',
         },
@@ -258,9 +257,9 @@ const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelect
             left: 0,
             right: 0,
             height: 60,
-            backgroundColor: themeColors.backgroundSecondary,
+            backgroundColor: theme.colors.backgroundSecondary,
             borderBottomWidth: 1,
-            borderBottomColor: themeColors.borderColor,
+            borderBottomColor: theme.colors.borderColor,
             borderRadius: 10,
             flexDirection: 'row',
             alignItems: 'center',
@@ -277,7 +276,7 @@ const getStyles = (themeColors: any, designs: any, showFilter: boolean, isSelect
             marginRight: 10,
         },
         batchButtonText: {
-            color: themeColors.textColor,
+            color: theme.colors.textColor,
             fontWeight: 'bold',
         },
         cancelButton: {

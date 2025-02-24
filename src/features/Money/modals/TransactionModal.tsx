@@ -8,8 +8,7 @@ import DescriptionModal from '@/src/components/modals/DescriptionModal';
 import TagDescriptionSelector from '@/src/components/atoms/TagDescriptionSelector';
 import { FormInput, RepeatFrequencySelector, SwitchInput } from '@/src/components/FormComponents';
 import createTimePicker from '@/src/components/DateTimePicker';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import AlertModal from '@/src/components/modals/AlertModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import AlertModal from '@/src/components/modals/AlertModal';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
 import { MoneyData } from '@/src/types/Money';
@@ -25,8 +24,8 @@ interface TransactionModalProps {
 }
 
 const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransactionModal, initialTransaction }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const { showPicker, picker } = createTimePicker();
 
     const [isTagModalOpen, setIsTagModalOpen] = useState(false);
@@ -222,8 +221,8 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
                         onValueChange={handleTypeChange}
                         trueLabel="Expense"
                         falseLabel="Income"
-                        trackColorFalse={themeColors.greenOpacity}
-                        trackColorTrue={themeColors.redOpacity}
+                        trackColorFalse={theme.colors.greenOpacity}
+                        trackColorTrue={theme.colors.redOpacity}
                     />  
 
                     <View style={{ width: '100%', marginBottom: 20 }}>
@@ -284,12 +283,12 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
     );
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
     datePickerButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: theme.backgroundColor,
-        borderColor: theme.borderColor,
+        backgroundColor: theme.colors.backgroundColor,
+        borderColor: theme.colors.borderColor,
         width: '100%',
     },
 });

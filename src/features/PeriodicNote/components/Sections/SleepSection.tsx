@@ -5,8 +5,7 @@ import SleepChart from '@/src/components/charts/SleepChart/SleepChart';
 
 import { processSleepData } from '../../helpers/dataProcessing';
 import { useSleepData } from '../../helpers/sleepCalculation';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 
 interface ChartSectionProps {
     startDate: Date;
@@ -25,8 +24,8 @@ const SleepSection: React.FC<ChartSectionProps> = ({
     endDate,
     periodType,
 }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const { current: { dailyNoteData } } = usePeriodicData(startDate, endDate);
     const sleepData = useMemo(() => {
@@ -81,7 +80,7 @@ const SleepSection: React.FC<ChartSectionProps> = ({
     );
 };
 
-const getStyles = (theme: any) => {
+const getStyles = (theme: Theme) => {
     const { width } = Dimensions.get('window');
     const isDesktop = Platform.OS === 'web';
 

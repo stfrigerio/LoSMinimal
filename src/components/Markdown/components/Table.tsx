@@ -1,13 +1,12 @@
 import React from 'react';
 import { View, Text, ScrollView, Dimensions } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TableProps {
     content: string;
 }
 
 const Table: React.FC<TableProps> = ({ content }) => {
-    const { markdownStyles, themeColors } = useThemeStyles();
+    const { markdownStyles, theme } = useThemeStyles();
     const screenWidth = Dimensions.get('window').width;
     const defaultColumnWidth = Math.min(150, screenWidth / 3); // Responsive column width
 
@@ -33,7 +32,7 @@ const Table: React.FC<TableProps> = ({ content }) => {
     const cellStyle = {
         padding: 8,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         width: defaultColumnWidth,
         justifyContent: 'center' as const,
     };
@@ -59,7 +58,7 @@ const Table: React.FC<TableProps> = ({ content }) => {
                             style={[
                                 cellStyle,
                                 {
-                                    backgroundColor: themeColors.backgroundSecondary,
+                                    backgroundColor: theme.colors.backgroundSecondary,
                                 }
                             ]}
                         >

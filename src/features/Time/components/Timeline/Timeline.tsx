@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
-import { useThemeStyles } from '@/src/styles/useThemeStyles';
-
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 interface TimelineEvent {
 	date: string;
 	title: string;
@@ -11,8 +10,8 @@ interface TimelineEvent {
 export const Timeline: React.FC = () => {
 	const [events, setEvents] = useState<TimelineEvent[]>([]);
 	const [loading, setLoading] = useState(true);
-	const { themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	useEffect(() => {
 		loadEvents();
@@ -32,7 +31,7 @@ export const Timeline: React.FC = () => {
 	if (loading) {
 		return (
 			<View style={styles.loadingContainer}>
-				<ActivityIndicator size="large" color={themeColors.accentColor} />
+				<ActivityIndicator size="large" color={theme.colors.accentColor} />
 			</View>
 		);
 	}
@@ -57,24 +56,24 @@ export const Timeline: React.FC = () => {
 						</View>
 					</View>
 				))}
-				{events.length === 0 && <Text style={{...designs.text, color: themeColors.textColor}}>Nothing to see here</Text>}
+				{events.length === 0 && <Text style={{...designs.text, color: theme.colors.textColor}}>Nothing to see here</Text>}
 			</View>
 			
 		</ScrollView>
 	);
 };
 
-const getStyles = (theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: 26,
-		backgroundColor: theme.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 	},
 	loadingContainer: {
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		backgroundColor: theme.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 	},
 	timelineContainer: {
 		paddingVertical: 20,
@@ -91,7 +90,7 @@ const getStyles = (theme: any) => StyleSheet.create({
 	dateText: {
 		fontSize: 14,
 		fontWeight: '600',
-		color: theme.textColor,
+		color: theme.colors.textColor,
 		textAlign: 'right',
 	},
 	lineContainer: {
@@ -102,12 +101,12 @@ const getStyles = (theme: any) => StyleSheet.create({
 		width: 12,
 		height: 12,
 		borderRadius: 6,
-		backgroundColor: theme.accentColor || '#3498db',
+		backgroundColor: theme.colors.accentColor || '#3498db',
 	},
 	line: {
 		width: 2,
 		flex: 1,
-		backgroundColor: theme.borderColor || '#e0e0e0',
+		backgroundColor: theme.colors.borderColor || '#e0e0e0',
 		position: 'absolute',
 		top: 16,
 		bottom: -20,
@@ -120,12 +119,12 @@ const getStyles = (theme: any) => StyleSheet.create({
 	titleText: {
 		fontSize: 16,
 		fontWeight: '600',
-		color: theme.textColor,
+		color: theme.colors.textColor,
 		marginBottom: 4,
 	},
 	descriptionText: {
 		fontSize: 14,
-		color: theme.secondaryTextColor || theme.textColor,
+		color: theme.colors.textColor,
 		lineHeight: 20,
 	},
 });
