@@ -26,8 +26,8 @@ export const UniversalModal: React.FC<UniversalModalProps> = ({
     closeOnBackdropPress = true,
     testID = 'universal-modal'
 }) => {
-    const { theme, designs, themeColors } = useThemeStyles();
-    const styles = modalStyles(theme);
+    const { theme, designs } = useThemeStyles();
+    const styles = modalStyles(theme.name);
 
     const handleBackdropPress = () => {
         if (closeOnBackdropPress) {
@@ -48,7 +48,7 @@ export const UniversalModal: React.FC<UniversalModalProps> = ({
                     <Text 
                         style={[
                             styles.closeButtonText,
-                            pressed && { color: themeColors.accentColor, transform: [{ scale: 0.88 }] }
+                            pressed && { color: theme.colors.accentColor, transform: [{ scale: 0.88 }] }
                         ]}
                     >
                         ✕

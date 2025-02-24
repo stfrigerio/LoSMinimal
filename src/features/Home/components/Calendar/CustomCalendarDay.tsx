@@ -16,8 +16,8 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
         return <View />;
     }
 
-    const { themeColors, theme } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const isCurrentMonth = date.month === currentMonth;
     // For current month dates:
@@ -27,13 +27,14 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
     //   - In dark mode: use faded text color
     //   - In light mode: use gray (for less emphasis)
     const textColor = isCurrentMonth ? 
-        theme === 'dark' ? 
-            themeColors.textColor : '#d3c6aa' 
-        : theme === 'dark' ? 
-            themeColors.opaqueTextColor : 'rgba(211, 198, 170, 0.5)';
+        theme.name === 'dark' ? 
+            theme.colors.textColor : '#d3c6aa' 
+        : theme.name === 'dark' ? 
+            theme.colors.opaqueTextColor : 'rgba(211, 198, 170, 0.5)';
 
     return (
         <Pressable 
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}  // <-- Increase tap area
             style={({ pressed }) => [
                 styles.container,
                 pressed && { 
@@ -43,7 +44,7 @@ const CustomDay: React.FC<CustomDayProps> = ({ date, marking, onPress, currentMo
             ]} 
             onPress={onPress}
             android_ripple={{ 
-                color: themeColors.accentColor,
+                color: theme.colors.accentColor,
                 radius: 16,
             }}
         >
@@ -93,7 +94,7 @@ const getStyles = (theme: any) => StyleSheet.create({
     },
     todayText: {
         fontSize: 16,
-        color: theme.accentColor,
+        color: theme.colors.accentColor,
         fontWeight: 'bold'
     },
     todayContainer: {

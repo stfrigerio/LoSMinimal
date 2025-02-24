@@ -25,8 +25,8 @@ function TimeSunburstChart() {
     const [showHoursSunburst, setShowHoursSunburst] = useState(false);
     const [is12HourView, setIs12HourView] = useState(false);
 
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
     const { colors: tagColors } = useColors();
 
     async function fetchData(dateRange: string[]) {
@@ -136,7 +136,7 @@ function TimeSunburstChart() {
                     <FontAwesomeIcon
                         icon={faChartPie}
                         size={24}
-                        color={!showHoursSunburst ? themeColors.accentColor : 'gray'}
+                        color={!showHoursSunburst ? theme.colors.accentColor : 'gray'}
                     />
                 </Pressable>
                 <Pressable
@@ -146,7 +146,7 @@ function TimeSunburstChart() {
                     <FontAwesomeIcon
                         icon={faClock}
                         size={24}
-                        color={showHoursSunburst ? themeColors.accentColor : 'gray'}
+                        color={showHoursSunburst ? theme.colors.accentColor : 'gray'}
                     />
                 </Pressable>
             </View>
@@ -164,11 +164,11 @@ function TimeSunburstChart() {
             )}
 
             <View style={styles.controlsContainer}>
-                <Text style={theme === 'dark' ? designs.text.text : { color: 'white' }}>
+                <Text style={theme.name === 'dark' ? designs.text.text : { color: 'white' }}>
                     {showHoursSunburst ? is12HourView ? `12-Hour View` : '24-Hour View' : (isWeekly ? 'Weekly Data' : 'Daily Data')}
                 </Text>
                 {showHoursSunburst && is12HourView ? <Text style={styles.ampmText}>({currentHalfDay.toLowerCase()})</Text> : null}
-                <Text style={theme === 'dark' ? designs.text.text : { color: 'white' }}>{totalHours.toFixed(2)} hrs</Text>
+                <Text style={theme.name === 'dark' ? designs.text.text : { color: 'white' }}>{totalHours.toFixed(2)} hrs</Text>
                 {showHoursSunburst ? (
                     <View style={{ marginTop: 10 }}>
                         <Switch
@@ -197,32 +197,32 @@ export default TimeSunburstChart;
 const getStyles = (theme: any) => StyleSheet.create({
     controlsContainer: {
         flexDirection: 'row', // Horizontal layout for the switch and texts
-        padding: 5,
+        padding: theme.spacing.xs,
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     container: {
-        padding: 5,
+        padding: theme.spacing.xs,
         paddingVertical: 0,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     entriesContainer: {
-        marginLeft: -15
+        marginLeft: -theme.spacing.xs
     },
     viewToggleContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginBottom: 10,
+        marginBottom: theme.spacing.xs,
     },
     iconButton: {
         padding: 5,
-        marginHorizontal: 10,
+        marginHorizontal: theme.spacing.xs,
     },
     ampmText: {
         color: 'gray',
-        marginLeft: -12,
+        marginLeft: -theme.spacing.xs,
         fontSize: 12
     },
 });

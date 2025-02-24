@@ -36,8 +36,8 @@ const AlertModal: React.FC<AlertModalProps> = ({
     singleButton = false,
     customButtons,
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors, designs), [themeColors, designs]);
+    const { theme, designs } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     const renderButtons = () => {
         if (customButtons && customButtons.length > 0) {
@@ -115,10 +115,10 @@ const AlertModal: React.FC<AlertModalProps> = ({
     );
 };
 
-const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
+const getStyles = (theme: any, designs: any) => StyleSheet.create({
     modalText: {
         ...designs.text.text,
-        marginBottom: 20,
+        marginBottom: theme.spacing.md,
         textAlign: 'center',
         fontSize: 16,
     },
@@ -140,31 +140,31 @@ const getStyles = (themeColors: any, designs: any) => StyleSheet.create({
     },
     buttonCancel: {
         borderWidth: 1,
-        borderColor: themeColors.redOpacity,
-        backgroundColor: themeColors.backgroundColor,
+        borderColor: theme.colors.redOpacity,
+        backgroundColor: theme.colors.backgroundColor,
     },
     buttonConfirm: {
         borderWidth: 1,
-        borderColor: themeColors.greenOpacity,
-        backgroundColor: themeColors.backgroundColor,
+        borderColor: theme.colors.greenOpacity,
+        backgroundColor: theme.colors.backgroundColor,
     },
     buttonCustom: {
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
-        backgroundColor: themeColors.backgroundColor,
+        borderColor: theme.colors.borderColor,
+        backgroundColor: theme.colors.backgroundColor,
     },
     buttonPressed: {
         transform: [{ scale: 0.98 }],
-        backgroundColor: themeColors.greenOpacity,
+        backgroundColor: theme.colors.greenOpacity,
         opacity: 0.9,
     },
     buttonPressedCancel: {
         transform: [{ scale: 0.98 }],
-        backgroundColor: themeColors.redOpacity,
+        backgroundColor: theme.colors.redOpacity,
         opacity: 0.9,
     },
     textStyle: {
-        color: themeColors.textColorBold,
+        color: theme.colors.textColorBold,
         textAlign: 'center',
         fontSize: 14,
     },

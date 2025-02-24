@@ -35,8 +35,8 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
         updateTrackRating,
     } = useMusicPlayer();
 
-    const { themeColors } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
     const { openMusic } = useNavigationComponents();
 
     const handleRatingChange = useCallback((rating: number) => {
@@ -67,7 +67,7 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
                         <FontAwesomeIcon 
                             icon={faStar} 
                             size={18} 
-                            color={star <= currentRating ? themeColors.textColor : themeColors.borderColor} 
+                            color={star <= currentRating ? theme.colors.textColor : theme.colors.borderColor} 
                         />
                     </Pressable>
                 ))}
@@ -81,7 +81,7 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
         return (
             <Pressable onPress={openMusic} style={[styles.emptyStateButton]}>
                 {({pressed}) => (
-                    <FontAwesomeIcon icon={faMusic} color={pressed ? themeColors.accentColor : themeColors.textColor} size={22} />
+                    <FontAwesomeIcon icon={faMusic} color={pressed ? theme.colors.accentColor : theme.colors.textColor} size={22} />
                 )}
             </Pressable>
         );
@@ -99,7 +99,7 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
 
             <Pressable onPress={stopSound} style={styles.closeButton}>
                 {({pressed}) => (
-                    <FontAwesomeIcon icon={faTimes} color={pressed ? themeColors.accentColor : themeColors.textColor} size={20} />
+                    <FontAwesomeIcon icon={faTimes} color={pressed ? theme.colors.accentColor : theme.colors.textColor} size={20} />
                 )}
             </Pressable>
 
@@ -111,9 +111,9 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
                     maximumValue={duration}
                     value={position}
                     onSlidingComplete={seekTo}
-                    minimumTrackTintColor={themeColors.accentColorShade}
-                    maximumTrackTintColor={themeColors.borderColor}
-                    thumbTintColor={themeColors.accentColor}
+                    minimumTrackTintColor={theme.colors.accentColorShade}
+                    maximumTrackTintColor={theme.colors.borderColor}
+                    thumbTintColor={theme.colors.accentColor}
                 />
                 <Text style={styles.timeText}>{formatTime(duration)}</Text>
             </View>
@@ -121,17 +121,17 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
             <View style={styles.controlButtons}>
                 <Pressable onPress={playPreviousSong} style={[styles.controlButton]}>
                     {({pressed}) => (
-                        <FontAwesomeIcon icon={faStepBackward} color={pressed ? themeColors.accentColor : themeColors.textColor} size={24} />
+                        <FontAwesomeIcon icon={faStepBackward} color={pressed ? theme.colors.accentColor : theme.colors.textColor} size={24} />
                     )}
                 </Pressable>
                 <Pressable onPress={isPlaying ? pauseSound : resumeSound} style={styles.controlButton}>
                     {({pressed}) => (
-                        <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} color={pressed ? themeColors.accentColor : themeColors.textColor} size={24} />
+                        <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} color={pressed ? theme.colors.accentColor : theme.colors.textColor} size={24} />
                     )}
                 </Pressable>
                 <Pressable onPress={playNextSong} style={styles.controlButton}>
                     {({pressed}) => (
-                        <FontAwesomeIcon icon={faStepForward} color={pressed ? themeColors.accentColor : themeColors.textColor} size={24} />
+                        <FontAwesomeIcon icon={faStepForward} color={pressed ? theme.colors.accentColor : theme.colors.textColor} size={24} />
                     )}
                 </Pressable>
             </View>
@@ -139,33 +139,33 @@ const MusicPlayerControls: React.FC<MusicPlayerControlsProps> = ({ screen = 'hom
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     playerControls: {
-        padding: 10,
+        padding: theme.spacing.xs,
         backgroundColor: 'transparent',
-        borderRadius: 15,
+        borderRadius: theme.borderRadius.sm,
         alignItems: 'center',
 
     },
     nowPlaying: {
         fontSize: 16,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
         textAlign: 'center',
-        marginBottom: 4,
+        marginBottom: theme.spacing.xs,
         fontFamily: 'serif'
     },
     sliderContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: theme.spacing.xs,
     },
     slider: {
         flex: 1,
-        marginHorizontal: 10,
+        marginHorizontal: theme.spacing.xs,
     },
     timeText: {
         fontSize: 12,
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     controlButtons: {
         zIndex: 1000,
@@ -175,7 +175,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     controlButton: {
         padding: 10,
-        marginHorizontal: 20,
+        marginHorizontal: theme.spacing.xs,
     },
     closeButton: {
         position: 'absolute',
@@ -193,8 +193,8 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     emptyStateButton: {
         backgroundColor: 'transparent',
-        borderRadius: 8,
-        padding: 20,
+        borderRadius: theme.borderRadius.sm,
+        padding: theme.spacing.xs,
     },
 });
 

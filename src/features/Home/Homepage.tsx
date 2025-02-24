@@ -16,7 +16,7 @@ import DayNotesStatus from './components/DayNotesStatus';
 import { getStartOfToday } from '@/src/utils/timezoneBullshit';
 
 const Homepage = () => {
-    const { theme, themeColors } = useThemeStyles();
+    const { theme } = useThemeStyles();
     const styles = getStyles(theme);
 
     const [isQuickButtonExpanded, setIsQuickButtonExpanded] = useState(false);
@@ -82,12 +82,12 @@ const Homepage = () => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Pressable onPress={() => openMusic()} style={{ padding: 20, borderRadius: 8 }}>
                                 {({ pressed }) => (
-                                    <FontAwesomeIcon icon={faMusic} size={pressed ? 18 : 22} color={pressed ? themeColors.accentColor : '#d3c6aa'} />
+                                    <FontAwesomeIcon icon={faMusic} size={pressed ? 18 : 22} color={pressed ? theme.colors.accentColor : '#d3c6aa'} />
                                 )}
                             </Pressable>
                             <Pressable onPress={() => openDailyNote(getStartOfToday().toString())} style={{ padding: 20, borderRadius: 8 }}>
                                 {({ pressed }) => (
-                                    <FontAwesomeIcon icon={faCalendarDay} size={pressed ? 18 : 22} color={pressed ? themeColors.accentColor : '#d3c6aa'} />
+                                    <FontAwesomeIcon icon={faCalendarDay} size={pressed ? 18 : 22} color={pressed ? theme.colors.accentColor : '#d3c6aa'} />
                                 )}
                             </Pressable>
                         </View>
@@ -129,7 +129,7 @@ const Homepage = () => {
                                 <FontAwesomeIcon 
                                     icon={faCog} 
                                     size={28} 
-                                    color={pressed ? themeColors.accentColor : themeColors.gray}
+                                    color={pressed ? theme.colors.accentColor : theme.colors.gray}
                                     style={{ transform: [{ scale: pressed ? 0.8 : 1 }] }}
                                 />
                             )}

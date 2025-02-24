@@ -13,21 +13,20 @@ import { useMarkedDates } from './_hooks/useMarkedDates';
 import { useTaskModal } from './_hooks/useTaskModal';
 
 const CustomCalendar = () => {
-	const { theme, themeColors } = useThemeStyles();
+	const { theme } = useThemeStyles();
 	const styles = getStyles(theme);
 	
-    // const isDarkMode = theme === 'dark';
 	const isDarkMode = true;
 
     const calendarTheme = {
         backgroundColor: 'transparent',
         calendarBackground: 'transparent',
 		//this controls the week color but for some reason only accept the dark mode color
-        textDisabledColor: isDarkMode ? darkTheme.opaqueTextColor : lightTheme.borderColor, 
-        monthTextColor: isDarkMode ? darkTheme.textColorItalic : lightTheme.textColorItalic,
-        arrowColor: isDarkMode ? darkTheme.gray : lightTheme.gray,
-        textSectionTitleColor: isDarkMode ? darkTheme.gray : lightTheme.gray,
-        weekVerticalMargin: 8
+        textDisabledColor: isDarkMode ? darkTheme.colors.opaqueTextColor : lightTheme.colors.borderColor, 
+        monthTextColor: isDarkMode ? darkTheme.colors.textColorItalic : lightTheme.colors.textColorItalic,
+        arrowColor: isDarkMode ? darkTheme.colors.gray : lightTheme.colors.gray,
+        textSectionTitleColor: isDarkMode ? darkTheme.colors.gray : lightTheme.colors.gray,
+        weekVerticalMargin: theme.spacing.sm
     };
 
 	const { checklistUpdated, resetChecklistUpdate } = useChecklist();
@@ -36,7 +35,7 @@ const CustomCalendar = () => {
 	const currentMonth = new Date().getMonth() + 1;
 	const currentDay = new Date().getDate();
 
-	const { markedDates, fetchMarkedDates } = useMarkedDates(currentYear, themeColors);
+	const { markedDates, fetchMarkedDates } = useMarkedDates(currentYear, theme);
 
     const {
         showModal,

@@ -18,8 +18,8 @@ interface QuickButtonProps {
 import { useTasksData } from '@/src/features/Tasks/hooks/useTasksData';
 
 const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) => {
-	const { themeColors, theme } = useThemeStyles();
-	const styles = getStyles(themeColors, theme);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 	const [buttonsVisible, setButtonsVisible] = useState(false);
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 	const [isTransactionModalOpen, setIsTransactionModalOpen] = useState(false);
@@ -161,7 +161,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
                     <FontAwesomeIcon 
                         icon={isExpanded ? faMinus : faPlus} 
                         size={24} 
-                        color={theme === 'dark' ? themeColors.backgroundColor : '#333333'} 
+                        color={theme.name === 'dark' ? theme.colors.backgroundColor : '#333333'} 
                     />
                 </Pressable>
             </Animated.View>
@@ -196,7 +196,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 	);
 };
 
-const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
 	container: {
 		alignItems: 'flex-end',
 		zIndex: 2
@@ -224,7 +224,7 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
 		alignItems: 'center',  
 	},
 	buttonText: {
-		color: theme === 'dark' ? themeColors.backgroundColor : '#333333',
+		color: theme.name === 'dark' ? theme.colors.backgroundColor : '#333333',
 		fontSize: 16,
 	},
 	buttonContainer: {
@@ -234,13 +234,13 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
 		alignItems: 'flex-end',
 	},
 	mainButtonText: {
-		color: themeColors.borderColor,
+		color: theme.colors.borderColor,
 		fontSize: 16,
 		marginBottom: 3
 	},
 	modalContainer: {
 		flex: 1,
-		backgroundColor: themeColors.backgroundColor,
+		backgroundColor: theme.colors.backgroundColor,
 		marginTop: -40,
 	},
 });

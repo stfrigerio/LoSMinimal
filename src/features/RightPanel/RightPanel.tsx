@@ -9,15 +9,15 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import MusicPlayerControls from '../Music/components/MusicPlayerControls';
 
 const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = useMemo(() => getStyles(themeColors, theme), [themeColors, theme]);
+    const { theme } = useThemeStyles();
+    const styles = useMemo(() => getStyles(theme), [theme]);
 
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <BlurView 
-                    intensity={theme === 'dark' ? 100 : 20} 
-                    tint={theme === 'dark' ? 'dark' : 'light'} 
+                    intensity={theme.name === 'dark' ? 100 : 20} 
+                    tint={theme.name === 'dark' ? 'dark' : 'light'} 
                     style={[StyleSheet.absoluteFill, { zIndex: 1 }]} 
                 />
                 <View style={styles.content}>
@@ -33,7 +33,7 @@ const RightPanel: React.FC<DrawerContentComponentProps> = (props) => {
     );
 };
 
-const getStyles = (themeColors: any, theme: 'dark' | 'light') => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     container: {
         flex: 1,
         height: Dimensions.get('window').height,
@@ -45,14 +45,14 @@ const getStyles = (themeColors: any, theme: 'dark' | 'light') => StyleSheet.crea
     },
     content: {
         flex: 1,
-        padding: 20,
-        paddingTop: 50,
+        padding: theme.spacing.md,
+        paddingTop: theme.spacing.md,
         zIndex: 1000,
         height: '100%',
     },
     chartContainer: {
         borderColor: 'black',
-        borderRadius: 5,
+        borderRadius: theme.borderRadius.sm,
         backgroundColor: 'transparent',
     },
     separator: {
@@ -61,18 +61,18 @@ const getStyles = (themeColors: any, theme: 'dark' | 'light') => StyleSheet.crea
         marginVertical: 20, 
     },
     button: {
-        padding: 10,
+        padding: theme.spacing.sm,
         borderWidth: 1,
-        borderColor: 'black',
-        borderRadius: 10,
-        marginVertical: 4,
+        borderColor: theme.colors.borderColor,
+        borderRadius: theme.borderRadius.sm,
+        marginVertical: theme.spacing.xs,
     },
     buttonText: {
         alignSelf: 'center',
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
     },
     musicControlsContainer: {
-        marginVertical: 10
+        marginVertical: theme.spacing.xs
     }
 });
 

@@ -38,8 +38,8 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 	toggleItemCompletion,
 	updateChecklistItems,
 }) => {
-	const { theme, themeColors, designs } = useThemeStyles();
-	const styles = getStyles(themeColors);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 	const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 	const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
 	const [showTaskModal, setShowTaskModal] = useState(false);
@@ -143,7 +143,7 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 						{({ pressed }) => (
 							<FontAwesomeIcon 
 								icon={faChevronLeft} 
-								color={pressed ? themeColors.accentColor : themeColors.gray} 
+								color={pressed ? theme.colors.accentColor : theme.colors.gray} 
 								size={18} 
 							/>
 						)}
@@ -153,7 +153,7 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 						{({ pressed }) => (
 							<FontAwesomeIcon 
 								icon={faChevronRight} 
-								color={pressed ? themeColors.accentColor : themeColors.gray} 
+								color={pressed ? theme.colors.accentColor : theme.colors.gray} 
 								size={18} 
 							/>
 						)}
@@ -185,19 +185,19 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 
 				<View style={styles.footerNavigation}>
 					<Pressable onPress={handleGoToDay} style={styles.footerButton}>
-						<FontAwesomeIcon icon={faCalendarDay} color={themeColors.gray} size={20} />
+						<FontAwesomeIcon icon={faCalendarDay} color={theme.colors.gray} size={20} />
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Day</Text>
 					</Pressable>
 					<Pressable onPress={() => setShowTaskModal(true)} style={styles.footerButton}>
 						{({ pressed }) => (
 							<>
-								<FontAwesomeIcon icon={faPlus} color={pressed ? themeColors.accentColor : themeColors.gray} size={20} />
+								<FontAwesomeIcon icon={faPlus} color={pressed ? theme.colors.accentColor : theme.colors.gray} size={20} />
 								<Text style={[designs.text.text, styles.footerButtonText]}>Add Task</Text>
 							</>
 						)}
 					</Pressable>
 					<Pressable onPress={handleGoToWeek} style={styles.footerButton}>
-						<FontAwesomeIcon icon={faCalendarWeek} color={themeColors.gray} size={20} />
+						<FontAwesomeIcon icon={faCalendarWeek} color={theme.colors.gray} size={20} />
 						<Text style={[designs.text.text, styles.footerButtonText]}>Go to Week</Text>
 					</Pressable>
 				</View>
@@ -231,24 +231,24 @@ const ViewTaskModal: React.FC<TaskModalProps> = ({
 	);
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
 	modalTitle: {
 		textAlign: 'center',
 		fontWeight: 'bold',
 		fontSize: 18,
-		color: themeColors.accentColor,
+		color: theme.colors.accentColor,
 		fontFamily: 'serif'
 	},
 	birthdayText: {
 		fontStyle: 'italic',
-		color: themeColors.textColor,
+		color: theme.colors.textColor,
 		fontSize: 16,
 		marginBottom: 10
 	},
 	divider: {
 		height: 1,
 		width: '100%',
-		backgroundColor: themeColors.borderColor,
+		backgroundColor: theme.colors.borderColor,
 		marginBottom: 10
 	},
 	dateNavigation: {
@@ -274,7 +274,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
 	footerButtonText: {
 		marginTop: 5,
 		fontSize: 12,
-		color: themeColors.gray
+		color: theme.colors.gray
 	},
 });
 

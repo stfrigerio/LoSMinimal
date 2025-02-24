@@ -7,6 +7,7 @@ import { faCheckCircle, faMoon, faSun, faCalendarDay, faCommentDots, faDatabase,
 
 import { MenuButton } from './components/MenuButton';
 import PopupMenu, { MenuItem } from './components/PopupMenu';
+import { ThemeSelector } from './components/ThemeSelector';
 
 import { NotePeriod, useNavigationComponents } from './helpers/useNavigation';
 import { useTheme } from '@/src/contexts/ThemeContext';
@@ -15,9 +16,9 @@ import { useThemeStyles } from '@/src/styles/useThemeStyles';
 import { getISOWeekData, getStartOfToday } from '@/src/utils/timezoneBullshit';
 
 const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
-    const { theme, toggleTheme } = useTheme();
-    const { themeColors, designs } = useThemeStyles();
-    const styles = useMemo(() => getStyles(themeColors, theme), [themeColors, theme]);
+    const { themeName, setTheme } = useTheme(); // Update this line
+    const { theme } = useThemeStyles();
+    const styles = useMemo(() => getStyles(theme), [theme]);
     const [activePopup, setActivePopup] = useState<'tasks' | 'money' | 'time' | 'mood' | null>(null);
     const [menuPosition, setMenuPosition] = useState<{ x: number; y: number } | null>(null);
 
@@ -147,8 +148,8 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <BlurView 
-                    intensity={theme === 'dark' ? 50 : 20} 
-                    tint={theme === 'dark' ? 'dark' : 'light'} 
+                    intensity={themeName === 'dark' ? 50 : 20} 
+                    tint={themeName === 'dark' ? 'dark' : 'light'} 
                     style={[StyleSheet.absoluteFill, { zIndex: 1 }]} 
                 />
                 <View style={styles.content}>
@@ -237,19 +238,11 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                     {/* Footer section */}
                     <View style={styles.footerContainer}>
                         <View style={styles.header}>
-                            <Pressable 
-                                onPress={toggleTheme} 
-                                style={({ pressed }) => [
-                                    styles.themeToggle,
-                                    pressed && styles.themeTogglePressed
-                                ]}
-                            >
-                                <FontAwesomeIcon 
-                                    icon={theme === 'dark' ? faSun : faMoon}
-                                    size={20}
-                                    color={theme === 'dark' ? themeColors.textColor : themeColors.borderColor}
-                                />
-                            </Pressable>
+                            <ThemeSelector
+                                currentTheme={themeName}
+                                onSelectTheme={setTheme}
+                                themeColors={theme.colors}
+                            />
                         </View>
                     </View>
                 </View>
@@ -267,7 +260,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
     );
 };
 
-const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     container: {
         flex: 1,
         height: Dimensions.get('window').height,
@@ -290,8 +283,8 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: theme === 'dark' ? themeColors.borderColor : themeColors.gray,
-        marginVertical: 10,
+        backgroundColor: theme.name === 'dark' ? theme.colors.borderColor : theme.colors.gray,
+        marginVertical: theme.spacing.md,
     },
     header: {
         flexDirection: 'row',
@@ -307,7 +300,7 @@ const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
         borderRadius: 20,
     },
     themeTogglePressed: {
-        backgroundColor: `${themeColors.backgroundColor}EE`,
+        backgroundColor: `${theme.colors.backgroundColor}EE`,
         transform: [{ scale: 0.9 }],
     },
     gridRow: {

@@ -17,8 +17,8 @@ interface EntriesListProps {
 
 const EntriesList: React.FC<EntriesListProps> = ({ entries, title, valueLabel }) => {
 	const [isVisible, setIsVisible] = useState(false);
-	const { themeColors, theme } = useThemeStyles();
-	const styles = getStyles(theme, themeColors);
+	const { theme } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	const sortedEntries = [...entries].sort((a, b) => parseFloat(b.percentage) - parseFloat(a.percentage));
 
@@ -45,9 +45,9 @@ const EntriesList: React.FC<EntriesListProps> = ({ entries, title, valueLabel })
 	);
 };
 
-const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
 	container: {
-		marginTop: 10,
+		marginTop: theme.spacing.xs,
 	},
 	toggleButton: {
 		padding: 10,
@@ -57,7 +57,7 @@ const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
 		marginBottom: 10,
 	},
 	toggleButtonText: {
-		color: theme === 'dark' ? themeColors.textColor : 'white',
+		color: theme.name === 'dark' ? theme.colors.textColor : 'white',
 		fontSize: 16,
 	},
 	entriesList: {
@@ -69,7 +69,7 @@ const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
 		marginBottom: 4,
 		paddingBottom: 10,
 		borderBottomWidth: 1,
-		borderBottomColor: themeColors.borderColor,
+		borderBottomColor: theme.colors.borderColor,
 	},
 	lastEntry: {
 		borderBottomWidth: 0,
@@ -88,18 +88,18 @@ const getStyles = (theme: any, themeColors: any) => StyleSheet.create({
 		flex: 1,
 	},
 	descriptionText: {
-		color: theme === 'dark' ? themeColors.textColor : 'white',
+		color: theme.name === 'dark' ? theme.colors.textColor : 'white',
 		flex: 1,
-		marginRight: 10,
+		marginRight: theme.spacing.xs,
 	},
 	percentageText: {
-		color: theme === 'dark' ? themeColors.textColor : 'white',
+		color: theme.name === 'dark' ? theme.colors.textColor : 'white',
 		width: 50,
 		textAlign: 'center',
-		marginRight: 10,
+		marginRight: theme.spacing.xs,
 	},
 	valueText: {
-		color: theme === 'dark' ? themeColors.textColor : 'white',
+		color: theme.name === 'dark' ? theme.colors.textColor : 'white',
 		width: 80,
 		textAlign: 'right',
 	},

@@ -15,8 +15,8 @@ interface PopupMenuProps {
 }
 
 const PopupMenu: React.FC<PopupMenuProps> = ({ isVisible, onClose, menuItems, anchorPosition }) => {
-    const { themeColors } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(themeColors), [themeColors]);
+    const { theme } = useThemeStyles();
+    const styles = React.useMemo(() => getStyles(theme), [theme]);
     const [menuLayout, setMenuLayout] = useState({ width: 0, height: 0 });
     const windowDimensions = Dimensions.get('window');
     const animatedHeight = useRef(new Animated.Value(0)).current;
@@ -125,17 +125,17 @@ const PopupMenu: React.FC<PopupMenuProps> = ({ isVisible, onClose, menuItems, an
 };
 
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     modalOverlay: {
         flex: 1,
     },
     popupMenu: {
-        backgroundColor: themeColors.backgroundColor,
-        borderRadius: 12,
-        padding: 8,
+        backgroundColor: theme.colors.backgroundColor,
+        borderRadius: theme.borderRadius.sm,
+        padding: theme.spacing.xs,
         minWidth: 180,
         borderWidth: 1,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -151,10 +151,10 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         marginVertical: 2,
     },
     menuItemPressed: {
-        backgroundColor: `${themeColors.borderColor}40`,
+        backgroundColor: `${theme.colors.borderColor}40`,
     },
     menuItemText: {
-        color: themeColors.textColor,
+        color: theme.colors.textColor,
         fontSize: 16,
     },
 });

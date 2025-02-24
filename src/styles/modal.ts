@@ -1,5 +1,5 @@
 import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
-import { lightTheme, darkTheme } from './theme';
+import { themes, ThemeName } from './theme';
 
 export interface ModalStyles {
 	modalContainer: ViewStyle;
@@ -12,8 +12,8 @@ export interface ModalStyles {
 	tagsDescriptionModalView: ViewStyle;
 }
 
-export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
-	const theme = themeName === 'light' ? lightTheme : darkTheme;
+export const modalStyles = (themeName: ThemeName): ModalStyles => {
+	const theme = themes[themeName];
 
 	return StyleSheet.create({
 		modalContainer: {
@@ -23,14 +23,14 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 			alignItems: 'center',
 		},
 		modalView: {
-			backgroundColor: theme.backgroundColor,
-			borderRadius: 12,
-			padding: 20,
+			backgroundColor: theme.colors.backgroundColor,
+			borderRadius: theme.borderRadius.md,
+			padding: theme.spacing.md,
 			width: '90%',
 			maxHeight: '80%',
 			borderWidth: 1,
-			borderColor: theme.borderColor,
-			shadowColor: theme.shadowColor,
+			borderColor: theme.colors.borderColor,
+			shadowColor: theme.colors.shadowColor,
 			shadowOffset: {
 				width: 0,
 				height: 2,
@@ -40,12 +40,12 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 			elevation: 5,
 		},
 		title: {
-			fontSize: 24,
-			fontWeight: 'bold',
-			color: `${theme.textColorBold}DD`,
+			fontSize: theme.typography.fontSize.xl,
+			fontWeight: theme.typography.fontWeight.bold,
+			color: `${theme.colors.textColorBold}DD`,
 			textAlign: 'center',
-			marginBottom: 20,
-			textShadowColor: theme.shadowColor,
+			marginBottom: theme.spacing.md,
+			textShadowColor: theme.colors.shadowColor,
 			textShadowOffset: { width: -1, height: 1 },
 			textShadowRadius: 10,
 		},
@@ -54,13 +54,13 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 			top: 12,
 			right: 12,
 			padding: 8,
-			zIndex: 1,
+			zIndex: 100,
 			borderRadius: 20,
 		},
 		closeButtonText: {
-			fontSize: 20,
-			fontWeight: 'bold',
-			color: theme.gray,
+			fontSize: theme.typography.fontSize.md,
+			fontWeight: theme.typography.fontWeight.bold,
+			color: theme.colors.gray,
 			lineHeight: 20,
 		},
 		scrollView: {
@@ -68,18 +68,18 @@ export const modalStyles = (themeName: 'light' | 'dark'): ModalStyles => {
 		},
 		scrollViewContent: {
 			flexGrow: 1,
-			paddingTop: 16,
+			paddingTop: theme.spacing.md,
 		},
 		tagsDescriptionModalView: {
 			flex: 1,
 			maxHeight: '90%',
 			width: '80%',  
-			backgroundColor: theme.backgroundColor,
-			borderRadius: 20,
+			backgroundColor: theme.colors.backgroundColor,
+			borderRadius: theme.borderRadius.md,
 			borderWidth: 1,
-			padding: 30,
+			padding: theme.spacing.md,
 			alignItems: 'center',
-			shadowColor: theme.shadowColor,
+			shadowColor: theme.colors.shadowColor,
 			shadowOffset: {
 				width: 0,
 				height: 2,

@@ -21,8 +21,8 @@ const TaskView: React.FC<TaskViewProps> = ({
     onLongPress,
     onPostpone,
 }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const formatDateTimeDisplay = (isoString: string) => {
         const date = new Date(isoString);
@@ -62,7 +62,7 @@ const TaskView: React.FC<TaskViewProps> = ({
                     {({ pressed }) => (
                         <FontAwesomeIcon 
                             icon={faRotateRight} 
-                            color={pressed ? themeColors.accentColor : themeColors.gray} 
+                            color={pressed ? theme.colors.accentColor : theme.colors.gray} 
                             size={15} 
                         />
                     )}
@@ -74,7 +74,7 @@ const TaskView: React.FC<TaskViewProps> = ({
                 {({ pressed }) => (
                     <FontAwesomeIcon 
                         icon={faTrash} 
-                        color={pressed ? themeColors.accentColor : themeColors.gray} 
+                        color={pressed ? theme.colors.accentColor : theme.colors.gray} 
                         size={15} 
                     />
                 )}
@@ -83,7 +83,7 @@ const TaskView: React.FC<TaskViewProps> = ({
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -98,10 +98,10 @@ const getStyles = (themeColors: any) => StyleSheet.create({
         width: 18,
         borderRadius: 12,
         borderWidth: 2,
-        borderColor: themeColors.borderColor,
+        borderColor: theme.colors.borderColor,
     },
     completedCircle: {
-        backgroundColor: themeColors.greenOpacity,
+        backgroundColor: theme.colors.greenOpacity,
     },
     dueHourContainer: {
         width: '20%',
@@ -110,12 +110,12 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     dueText: {
         fontSize: 12,
-        color: themeColors.textColorItalic,
+        color: theme.colors.textColorItalic,
     },
     separator: {
         width: 1,
         height: 50,
-        backgroundColor: themeColors.borderColor,
+        backgroundColor: theme.colors.borderColor,
         marginHorizontal: 6,
         marginRight: 12,
     },
@@ -130,7 +130,7 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     completedText: {
         fontSize: 12,
-        color: themeColors.gray,
+        color: theme.colors.gray,
         textDecorationLine: 'line-through',
     },
 });

@@ -17,8 +17,8 @@ interface NextObjectiveProps {
 }
 
 const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
-    const { theme, themeColors, designs } = useThemeStyles();
-    const styles = getStyles(themeColors);
+    const { theme } = useThemeStyles();
+    const styles = getStyles(theme);
 
     const [objectives, setObjectives] = useState<ObjectiveWithPillarEmoji[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -204,7 +204,7 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
                                 { 
                                     fontWeight: isExpanded ? 'bold' : 'normal', 
                                     fontSize: isExpanded ? 14 : 8,
-                                    color: isExpanded ? themeColors.textColorBold : '#d3c6aa', 
+                                    color: isExpanded ? theme.colors.textColorBold : '#d3c6aa', 
                                     alignSelf: 'center',
                                     marginTop: isExpanded ? 0 : 5,
                                 }
@@ -226,7 +226,7 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
                                 { 
                                     fontWeight: isExpanded ? 'bold' : 'normal', 
                                     fontSize: isExpanded ? 14 : 8,
-                                    color: isExpanded ? themeColors.textColorBold : themeColors.textColor, 
+                                    color: isExpanded ? theme.colors.textColorBold : theme.colors.textColor, 
                                     marginTop: isExpanded ? 40 : 5,
                                     alignSelf: 'center'
                                 }
@@ -248,11 +248,11 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
     );
 };
 
-const getStyles = (themeColors: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     container: {
-        padding: 10,
+        padding: theme.spacing.sm,
         backgroundColor: 'rgba(255, 255, 255, 0.05)',
-        borderRadius: 10,
+        borderRadius: theme.borderRadius.sm,
         overflow: 'hidden',
         width: '100%',
     },
@@ -272,16 +272,16 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     miniHeader: {
         fontSize: 16,
-        color: themeColors.gray,
+        color: theme.colors.gray,
         fontWeight: 'bold',
-        marginBottom: 5,
+        marginBottom: theme.spacing.xs,
         alignSelf: 'center',
     },
     miniHeaderSeparator: {
         height: 1,
         width: '100%',
-        backgroundColor: themeColors.gray,
-        marginBottom: 12,
+        backgroundColor: theme.colors.gray,
+        marginBottom: theme.spacing.md,
     },
     nextTaskWrapper: {
         flex: 1,
@@ -297,13 +297,13 @@ const getStyles = (themeColors: any) => StyleSheet.create({
     },
     nextTask: {
         fontSize: 10,
-        color: themeColors.gray,
+        color: theme.colors.gray,
         textAlign: 'center',
     },
     timeLeft: {
         fontSize: 12,
-        marginTop: 8,
-        color: themeColors.gray,
+        marginTop: theme.spacing.xs,
+        color: theme.colors.gray,
         fontStyle: 'italic',
     },
 });

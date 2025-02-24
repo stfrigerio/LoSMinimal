@@ -3,7 +3,6 @@ import { Pressable, Text, View, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { useThemeStyles } from '@/src/styles/useThemeStyles';
-import { useTheme } from '@/src/contexts/ThemeContext';
 
 interface MenuButtonProps {
     icon: IconDefinition;
@@ -14,9 +13,8 @@ interface MenuButtonProps {
 }
 
 export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, onLongPress, color }) => {
-    const { themeColors, designs } = useThemeStyles();
-    const { theme } = useTheme();
-    const styles = getStyles(themeColors, theme);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme);
 
     return (
         <Pressable 
@@ -33,13 +31,13 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, on
                         <FontAwesomeIcon 
                             icon={icon} 
                             size={20}
-                            color={pressed ? themeColors.accentColor : color || themeColors.gray}
+                            color={pressed ? theme.colors.accentColor : color || theme.colors.gray}
                         />
                     </View>
                     <Text style={[
                         designs.text.text,
                         styles.buttonText,
-                        { color: theme === 'dark' ? themeColors.textColor : themeColors.textColor }
+                        { color: theme.colors.textColor }
                     ]}>
                         {label}
                     </Text>
@@ -49,20 +47,20 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, on
     );
 };
 
-const getStyles = (themeColors: any, theme: any) => StyleSheet.create({
+const getStyles = (theme: any) => StyleSheet.create({
     button: {
-        padding: 10,
-        paddingVertical: 20,
-        borderRadius: 12,
-        backgroundColor: theme === 'light' ? `${themeColors.backgroundColor}CC` : `${themeColors.borderColor}E6`,
-        marginVertical: 16, 
-        marginHorizontal: 4,
+        padding: theme.spacing.sm,
+        paddingVertical: theme.spacing.md,
+        borderRadius: theme.borderRadius.md,
+        backgroundColor: theme.name === 'light' ? `${theme.colors.backgroundColor}CC` : `${theme.colors.borderColor}E6`,
+        marginVertical: theme.spacing.md, 
+        marginHorizontal: theme.spacing.sm,
         borderWidth: 1,
-        borderColor: theme === 'light' ? 'transparent' : themeColors.backgroundColor,
+        borderColor: theme.name === 'light' ? 'transparent' : theme.colors.backgroundColor,
         flex: 1, 
     },
     buttonPressed: {
-        backgroundColor: `${themeColors.backgroundColor}EE`,
+        backgroundColor: `${theme.colors.backgroundColor}EE`,
         transform: [{ scale: 0.95 }],
     },
     buttonContent: {
