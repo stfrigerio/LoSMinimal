@@ -2,19 +2,31 @@ import React, { useMemo, useState } from 'react';
 import { View, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
-import { faCheckCircle, faCalendarDay, faCommentDots, faDatabase, faMoneyBill, faJournalWhills, faUsers, faMusic, faClock } from '@fortawesome/free-solid-svg-icons';
+import { 
+    faCheckCircle, 
+    faCalendarDay, 
+    faCommentDots, 
+    faDatabase, 
+    faMoneyBill, 
+    faJournalWhills, 
+    faUsers, 
+    faMusic, 
+    faClock 
+} from '@fortawesome/free-solid-svg-icons';
 
 import { MenuButton } from './components/MenuButton';
-import PopupMenu, { MenuItem } from './components/PopupMenu';
+import PopupMenu from './components/PopupMenu';
 import { ThemeSelector } from './components/ThemeSelector';
 
-import { NotePeriod, useNavigationComponents } from './helpers/useNavigation';
+import { useNavigationComponents } from './helpers/useNavigation';
 import { useTheme } from '@/src/contexts/ThemeContext';
 import { colorRainbow } from '@/src/styles/theme';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getISOWeekData, getStartOfToday } from '@/src/utils/timezoneBullshit';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { getISOWeekData } from '@/src/utils/timezoneBullshit';
+import { getMenuItems, getNavigationHandlers } from './helpers/getMenuItems';
 
 const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
-    const { themeName, setTheme } = useTheme(); // Update this line
+    const { setTheme } = useTheme();
     const { theme } = useThemeStyles();
     const styles = useMemo(() => getStyles(theme), [theme]);
     const [activePopup, setActivePopup] = useState<'tasks' | 'money' | 'time' | 'mood' | null>(null);
@@ -33,98 +45,29 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
         openTime
     } = useNavigationComponents();
 
-    const withNavigationDelay = <T extends (...args: any[]) => void>(action: T) => {
-        return ((...args: Parameters<T>): void => {
-            setTimeout(() => action(...args), 150);
-        }) as unknown as T;
-    };
-    
-    const handleOpenTasks = withNavigationDelay(() => openTasks());
-    const handleOpenDailyNote = withNavigationDelay(() => openDailyNote(getStartOfToday().toString()));
-    const handleOpenNote = withNavigationDelay((type: string, date: string) => openNote(type as NotePeriod, date));
-    const handleOpenMood = withNavigationDelay(() => openMoods());
-    const handleOpenDatabase = withNavigationDelay(() => openDatabase());
-    const handleOpenMoney = withNavigationDelay(() => openMoney());
-    const handleOpenJournal = withNavigationDelay(() => openJournal());
-    const handleOpenPeople = withNavigationDelay(() => openPeople());
-    const handleOpenLibrary = withNavigationDelay(() => openLibrary());
-    const handleOpenTime = withNavigationDelay(() => openTime());
-
-    const getMenuItems = (type: 'tasks' | 'money' | 'time' | 'mood'): MenuItem[] => {
-        switch (type) {
-            case 'tasks':
-                return [
-                    { 
-                        label: 'Dashboard', 
-                        onPress: withNavigationDelay(() => openTasks())
-                    },
-                    { 
-                        label: 'Task List', 
-                        onPress: withNavigationDelay(() => openTasks('list'))
-                    },
-                    { 
-                        label: 'Checklist', 
-                        onPress: withNavigationDelay(() => openTasks('checklist'))
-                    },
-                    { 
-                        label: 'Projects', 
-                        onPress: withNavigationDelay(() => openTasks('projects'))
-                    },
-                ];
-            case 'money':
-                return [
-                    { 
-                        label: 'Dashboard', 
-                        onPress: withNavigationDelay(() => openMoney())
-                    },
-                    { 
-                        label: 'List', 
-                        onPress: withNavigationDelay(() => openMoney('list'))
-                    },
-                    { 
-                        label: 'Graph', 
-                        onPress: withNavigationDelay(() => openMoney('graph'))
-                    },
-                    // Add more money-related options
-                ];
-            case 'time':
-                return [
-                    { 
-                        label: 'Dashboard', 
-                        onPress: withNavigationDelay(() => openTime())
-                    },
-                    { 
-                        label: 'List', 
-                        onPress: withNavigationDelay(() => openTime('list'))
-                    },
-                    { 
-                        label: 'Timeline', 
-                        onPress: withNavigationDelay(() => openTime('timeline'))
-                    },
-                    { 
-                        label: 'Graph', 
-                        onPress: withNavigationDelay(() => openTime('graph'))
-                    },
-                ];
-            case 'mood':
-                return [
-                    { 
-                        label: 'Dashboard', 
-                        onPress: withNavigationDelay(() => openMoods())
-                    },
-                    { 
-                        label: 'List', 
-                        onPress: withNavigationDelay(() => openMoods('list'))
-                    },
-                    { 
-                        label: 'Graph', 
-                        onPress: withNavigationDelay(() => openMoods('graph'))
-                    },
-                ];
-            default:
-                return [];
-        }
-    };
+    const { 
+        handleOpenTasks, 
+        handleOpenDailyNote, 
+        handleOpenNote, 
+        handleOpenMood, 
+        handleOpenDatabase, 
+        handleOpenMoney, 
+        handleOpenJournal, 
+        handleOpenPeople, 
+        handleOpenLibrary, 
+        handleOpenTime 
+    } = getNavigationHandlers({
+        openTasks,
+        openDailyNote,
+        openNote,
+        openMoods,
+        openDatabase,
+        openMoney,
+        openJournal,
+        openPeople,
+        openLibrary,
+        openTime
+    });
 
     const today = new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric' });
     const { week, year } = getISOWeekData(new Date());
@@ -142,12 +85,30 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
         setActivePopup(type);
     };
 
+    const getBlurIntensity = (themeName: string) => {
+        switch (themeName) {
+            case 'dark': return 50;
+            case 'light': return 20;
+            case 'signalis': return 35;
+            default: return 35;
+        }
+    };
+
+    const getTint = (themeName: string) => {
+        switch (themeName) {
+            case 'dark': return 'dark';
+            case 'light': return 'light';
+            case 'signalis': return 'dark';
+            default: return 'dark';
+        }
+    };
+
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <BlurView 
-                    intensity={themeName === 'dark' ? 50 : 20} 
-                    tint={themeName === 'dark' ? 'dark' : 'light'} 
+                    intensity={getBlurIntensity(theme.name)} 
+                    tint={getTint(theme.name)} 
                     style={[StyleSheet.absoluteFill, { zIndex: 1 }]} 
                 />
                 <View style={styles.content}>
@@ -237,7 +198,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                     <View style={styles.footerContainer}>
                         <View style={styles.header}>
                             <ThemeSelector
-                                currentTheme={themeName}
+                                currentTheme={theme.name}
                                 onSelectTheme={setTheme}
                                 theme={theme}
                             />
@@ -251,7 +212,19 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                     setActivePopup(null);
                     setMenuPosition(null);
                 }}
-                menuItems={activePopup ? getMenuItems(activePopup) : []}
+                menuItems={activePopup ? getMenuItems({
+                    type: activePopup,
+                    openTasks,
+                    openDailyNote,
+                    openNote,
+                    openMoods,
+                    openDatabase,
+                    openMoney,
+                    openJournal,
+                    openPeople,
+                    openLibrary,
+                    openTime
+                }) : []}
                 anchorPosition={menuPosition || undefined}
             />
         </View>
