@@ -107,6 +107,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     },
     buttonText: {
         color: theme.colors.textColor,
+        fontFamily: theme.typography.fontFamily.primary,
         fontSize: 16,
         fontWeight: '500',
     },

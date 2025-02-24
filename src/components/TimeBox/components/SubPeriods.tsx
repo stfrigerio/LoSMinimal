@@ -148,5 +148,6 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     subPeriodText: {
         fontSize: 14,
         color: theme.colors.accentColor,
+        fontFamily: theme.typography.fontFamily.primary,
     },
 });

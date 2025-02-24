@@ -96,8 +96,8 @@ const DateHeader: React.FC<DateHeaderProps> = ({ formattedDate, periodType }) =>
                     stroke="none"
                     fontSize="24"
                     letterSpacing={1}
-                    fontWeight='600'
-                    fontFamily='serif'
+                    fontWeight={theme.name === 'signalis' ? '0' : '600'}
+                    fontFamily={theme.typography.fontFamily.primary}
                     x="152"
                     y="37"
                     textAnchor="middle"
@@ -109,8 +109,8 @@ const DateHeader: React.FC<DateHeaderProps> = ({ formattedDate, periodType }) =>
                     stroke="none"
                     fontSize="24"
                     letterSpacing={1}
-                    fontWeight='600'
-                    fontFamily='serif'
+                    fontWeight={theme.name === 'signalis' ? '0' : '600'}
+                    fontFamily={theme.typography.fontFamily.primary}
                     x="150"
                     y="35"
                     textAnchor="middle"
@@ -136,8 +136,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         textAlign: 'center',
         fontSize: 22,
         color: theme.colors.textColor,
-        fontFamily: 'Roboto',
-        fontStyle: 'italic',
+        fontFamily: theme.typography.fontFamily.primary,
         textShadowColor: theme.colors.shadowColor,
         textShadowOffset: { width: 1, height: 2 },
         textShadowRadius: 8,

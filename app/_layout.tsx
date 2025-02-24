@@ -1,9 +1,12 @@
+import { useEffect } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Slot, usePathname } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import * as Font from 'expo-font';
+import * as NavigationBar from 'expo-navigation-bar';
+import { Platform, View } from 'react-native';
 
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import { DrawerStateProvider } from '../src/contexts/DrawerState';
@@ -77,12 +80,20 @@ function AppContent() {
 
 function ThemedRootLayout() {
     const { theme } = useThemeStyles();
-    
+    const pathname = usePathname();
+    const isHomepage = pathname === '/' || pathname === '/features/Home/Homepage';
+
+    useEffect(() => {
+        if (Platform.OS === 'android') {
+            // Set the navigation bar color
+            NavigationBar.setBackgroundColorAsync('rgb(12, 12, 12)');
+        }
+    }, [theme]);
+
     return (
         <SafeAreaProvider
             style={{ 
-                flex: 1, 
-                backgroundColor: theme.colors.backgroundColor 
+                flex: 1
             }}
         >
             <GestureHandlerRootView style={{ flex: 1 }}>

@@ -125,6 +125,7 @@ const ColorfulTimeline: React.FC<ColorfulTimelineProps> = ({ title }) => {
                         key={label.monthName}
                         fill="#b0b0b0"
                         fontSize={styles(theme).monthLabel.fontSize}
+                        fontFamily={theme.typography.fontFamily.primary}
                         x={label.start * 10 + 10}
                         y="300"
                     >
@@ -158,8 +159,8 @@ const styles = (theme: Theme) => StyleSheet.create({
         height: 250,
     },
     monthLabel: {
-        fontSize: 56,
-        fontWeight: 'bold'
+        fontSize: theme.name === 'signalis' ? 46 : 56,
+        fontWeight: 'bold',
     },
     timelineDayWeekMarker: {
         display: 'none',

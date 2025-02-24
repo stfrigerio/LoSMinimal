@@ -18,7 +18,7 @@ const Habit: React.FC<BooleanHabitProps> = ({ name, value, setValue }) => {
             <Switch
                 value={value}
                 onValueChange={setValue}
-                trackColor={{ false: theme.colors.gray, true: theme.colors.greenOpacity }}
+                trackColor={{ false: theme.colors.backgroundColor, true: theme.colors.accentColor }}
                 thumbColor={value ? theme.colors.backgroundSecondary : theme.colors.backgroundSecondary}
                 ios_backgroundColor={theme.colors.gray}
             />

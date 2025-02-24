@@ -36,7 +36,6 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, on
                     <Text style={[
                         designs.text.text,
                         styles.buttonText,
-                        { color: theme.colors.textColor }
                     ]}>
                         {label}
                     </Text>
@@ -52,7 +51,7 @@ const getBackground = (theme: Theme) => {
     } else if (theme.name === 'dark') {
         return `${theme.colors.borderColor}E6`;
     } else if (theme.name === 'signalis') {
-        return `${theme.colors.accentColor}`;
+        return `${theme.colors.backgroundSecondary}`;
     }
 }
 
@@ -82,9 +81,9 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        fontSize: 12,
+        fontSize: theme.name === 'signalis' ? 14 : 12,
         flex: 1,
-        color: theme.name === 'signalis' ? theme.colors.backgroundColor : theme.colors.textColor,
+        color: theme.colors.textColor,
         fontFamily: theme.typography.fontFamily.primary,
     },
 });

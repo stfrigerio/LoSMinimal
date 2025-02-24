@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { databaseManagers } from '@/database/tables';
-import { UseBooleanHabitsType, UseBooleanHabitsReturnType } from '@/src/features/DailyNote/_types/BooleanHabits';
+import { UseBooleanHabitsType, UseBooleanHabitsReturnType } from '@/src/features/DailyNote/types/BooleanHabits';
 import { BooleanHabitSetting, BooleanHabitsData } from '@/src/types/BooleanHabits';
 
 export const useBooleanHabits: UseBooleanHabitsType = (data, date): UseBooleanHabitsReturnType => {

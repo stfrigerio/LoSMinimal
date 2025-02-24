@@ -276,6 +276,8 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     title: {
         marginBottom: 16,
         textAlign: 'center',
+        fontFamily: theme.typography.fontFamily.primary,
+        color: theme.colors.textColorBold,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -298,7 +300,8 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     buttonText: {
         color: theme.colors.opaqueTextColor,
         textAlign: 'center',
-        fontSize: 15,
+        fontSize: theme.name === 'signalis' ? 20 : 15,
+        fontFamily: theme.typography.fontFamily.secondary,
         fontWeight: '500',
     },
     imageScroll: {

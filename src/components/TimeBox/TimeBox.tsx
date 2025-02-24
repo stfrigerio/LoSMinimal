@@ -154,6 +154,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         textShadowColor: theme.colors.shadowColor,
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 4,
+        fontFamily: theme.typography.fontFamily.primary,
     },
     currentPeriodText: {
         fontWeight: '600',
@@ -172,28 +173,6 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         color: theme.colors.accentColor,
         opacity: 0.8,
         fontSize: 18, // Slightly smaller than other periods
-    },
-    subPeriodsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        // borderWidth: 1,
-        // borderColor: 'red',
-        flexWrap: 'wrap',
-        marginTop: 8,
-        gap: 8,
-    },
-    subPeriodsScroll: {
-        maxHeight: 50,
-    },
-    subPeriodButton: {
-        padding: 6,
-        borderRadius: 4,
-
-        backgroundColor: theme.colors.backgroundSecondary,
-    },
-    subPeriodText: {
-        fontSize: 14,
-        color: theme.colors.accentColor,
     },
 });
 

@@ -60,16 +60,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         backgroundColor: theme.colors.backgroundColor,
         borderRadius: 16,
         marginVertical: 10,
-        // shadowColor: theme.shadowColor,
-        // shadowOffset: { width: 0, height: 2 },
-        // shadowOpacity: 0.1,
-        // shadowRadius: 8,
-        // elevation: 3,
     },
     separator: {
         height: 1,
-        backgroundColor: theme.colors.borderColor,
-        marginVertical: 4, 
+        backgroundColor: theme.colors.borderColor, 
     },
     habitNameContainer: {
         flexDirection: 'row',

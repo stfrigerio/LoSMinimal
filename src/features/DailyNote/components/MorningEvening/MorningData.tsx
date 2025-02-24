@@ -96,7 +96,11 @@ const MorningData: React.FC<MorningDataProps> = ({ data, onUpdate }) => {
                 {/* <Text style={styles.label}>🌞 Wake-up Time</Text> */}
                 <Pressable style={styles.timeInputWrapper} onPress={showWakeHourPicker}>
                     <View style={[styles.input, styles.timeInput]}>
-                        <Text style={{ color: morningData.wakeHour ? getWakeHourColor(morningData.wakeHour) : theme.colors.gray }}>
+                        <Text style={{ 
+                            color: morningData.wakeHour ? getWakeHourColor(morningData.wakeHour) : theme.colors.opaqueTextColor, 
+                            fontFamily: theme.typography.fontFamily.secondary,
+                            fontSize: theme.name === 'signalis' ? 18 : 14,
+                        }}>
                             {morningData.wakeHour || 'Set time'}
                         </Text>
                         <MaterialCommunityIcons 
@@ -120,36 +124,34 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         backgroundColor: theme.colors.backgroundColor,
         borderRadius: 16,
         marginVertical: 10,
-        // shadowColor: theme.colors.shadowColor,
-        // shadowOffset: { width: 0, height: 2 },
-        // shadowOpacity: 0.1,
-        // shadowRadius: 8,
-        // elevation: 3,
     },
     sectionTitle: {
         fontSize: 18,
-        fontWeight: '600',
-        color: theme.colors.textColor,
+        fontWeight: theme.name === 'signalis' ? undefined : '400',
+        color: theme.colors.textColorBold,
         marginBottom: 15,
         alignSelf: 'center',
+        fontFamily: theme.typography.fontFamily.primary,
     },
     inputGroup: {
         marginBottom: 15,
     },
     label: {
         fontSize: 14,
+        fontFamily: theme.typography.fontFamily.secondary,
         color: theme.colors.opaqueTextColor,
         marginBottom: 8,
-        fontWeight: '500',
+        // fontWeight: '500',
     },
     input: {
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
-        borderRadius: 10,
+        borderRadius: theme.borderRadius.md,
         padding: 10,
         color: theme.colors.textColor,
         backgroundColor: theme.colors.backgroundSecondary,
-        fontSize: 16,
+        fontSize: theme.name === 'signalis' ? 18 : 14,
+        fontFamily: theme.typography.fontFamily.secondary,
     },
     timeInputWrapper: {
         position: 'relative',

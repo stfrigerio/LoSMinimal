@@ -98,6 +98,14 @@ export const darkTheme: Theme = {
 		gray: 'gray',
 	},
 	...tokens,
+	typography: {
+        ...tokens.typography,
+        fontFamily: {
+            primary: 'serif',
+            secondary: 'system',
+            mono: 'SpaceMono',
+        },
+    }
 };
 
 export const lightTheme: Theme = {
@@ -132,15 +140,15 @@ export const lightTheme: Theme = {
 export const signalisTheme: Theme = {
 	name: 'signalis',
 	colors: {
-		backgroundColor: '#0e0d0d',
-		backgroundSecondary: '#333232',
+		backgroundColor: 'rgb(12, 12, 12)',
+		backgroundSecondary: '#1a1a1a',
 		textColor: '#ffffff',
 		textColorBold: '#c79428',
 		textColorItalic: '#CBA95F',
-		opaqueTextColor: 'rgba(211, 198, 170, 0.5)',
+		opaqueTextColor: 'rgba(255, 255, 255, 0.5)',
 		borderColor: '#270e0e',
 		accentColor: '#FF0000',
-		accentColorShade: '#f0868b',
+		accentColorShade: '#8f0000',
 		hoverColor: '#ffffff',
 
 		shadowColor: 'rgba(0, 0, 0, 1)',

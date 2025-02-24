@@ -20,6 +20,7 @@ const Homepage = () => {
 
     const [isQuickButtonExpanded, setIsQuickButtonExpanded] = useState(false);
     const settingsSlideAnim = useRef(new Animated.Value(0)).current;
+    const settingsOpacityAnim = useRef(new Animated.Value(0)).current;
     const settingsRotateAnim = useRef(new Animated.Value(0)).current;
     const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -35,6 +36,11 @@ const Homepage = () => {
         Animated.parallel([
             Animated.timing(settingsSlideAnim, {
                 toValue: isQuickButtonExpanded ? -80 : 0,
+                duration: 300,
+                useNativeDriver: true,
+            }),
+            Animated.timing(settingsOpacityAnim, {
+                toValue: isQuickButtonExpanded ? 1 : 0,
                 duration: 300,
                 useNativeDriver: true,
             }),
@@ -72,6 +78,9 @@ const Homepage = () => {
             <ImageBackground 
                 source={theme.name === 'signalis' ? require('@/assets/images/signalis.webp') : require('@/assets/images/evening.jpg')}
                 style={styles.backgroundImage}
+                imageStyle={{
+                    transform: [{ translateY: theme.name === 'signalis' ? 150 : 0 }],
+                }}
                 resizeMode="cover"
             >
                 <View style={styles.overlay}>
@@ -81,12 +90,12 @@ const Homepage = () => {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Pressable onPress={() => openMusic()} style={{ padding: 20, borderRadius: 8 }}>
                                 {({ pressed }) => (
-                                    <FontAwesomeIcon icon={faMusic} size={pressed ? 18 : 22} color={pressed ? theme.colors.accentColor : '#d3c6aa'} />
+                                    <FontAwesomeIcon icon={faMusic} size={pressed ? 18 : 22} color={pressed ? theme.colors.accentColor : theme.colors.textColor} />
                                 )}
                             </Pressable>
                             <Pressable onPress={() => openDailyNote(getStartOfToday().toString())} style={{ padding: 20, borderRadius: 8 }}>
                                 {({ pressed }) => (
-                                    <FontAwesomeIcon icon={faCalendarDay} size={pressed ? 18 : 22} color={pressed ? theme.colors.accentColor : '#d3c6aa'} />
+                                    <FontAwesomeIcon icon={faCalendarDay} size={pressed ? 18 : 22} color={pressed ? theme.colors.accentColor : theme.colors.textColor} />
                                 )}
                             </Pressable>
                         </View>
@@ -120,7 +129,8 @@ const Homepage = () => {
                             transform: [
                                 { translateX: settingsSlideAnim },
                                 { rotate: spin }
-                            ] 
+                            ],
+                            opacity: settingsOpacityAnim
                         }
                     ]}>
                         <Pressable onPress={openSettings} >
@@ -143,6 +153,8 @@ const Homepage = () => {
 const getStyles = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
+        overflow: 'hidden',
+        backgroundColor: '#0f0f0f',
     },
     backgroundImage: {
         flex: 1,

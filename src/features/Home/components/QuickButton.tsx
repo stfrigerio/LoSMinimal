@@ -160,7 +160,7 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
                     <FontAwesomeIcon 
                         icon={isExpanded ? faMinus : faPlus} 
                         size={24} 
-                        color={theme.name === 'dark' ? theme.colors.backgroundColor : '#333333'} 
+                        color={theme.name === 'light' ? '#333333' : theme.colors.backgroundColor} 
                     />
                 </Pressable>
             </Animated.View>
@@ -205,7 +205,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		alignItems: 'center',
 	},
 	floatingButton: {
-		backgroundColor: '#CC5359',
+		backgroundColor: theme.name === 'light' ? '#CC5359' : `${theme.colors.accentColor}80`,
 		width: 56,
 		height: 56,
 		borderRadius: 28,
@@ -214,17 +214,18 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		elevation: 4,
 	},
 	secondaryButton: {
-		backgroundColor: `#f0868b99`,
+		backgroundColor: theme.name === 'light' ? `#f0868b99` : theme.colors.accentColorShade,
 		marginBottom: 16,
 		width: 150,
 		height: 40,
-		borderRadius: 20,
+		borderRadius: theme.borderRadius.md,
 		justifyContent: 'center',
 		alignItems: 'center',  
 	},
 	buttonText: {
-		color: theme.name === 'dark' ? theme.colors.backgroundColor : '#333333',
-		fontSize: 16,
+		color: theme.name === 'light' ? '#333333' : theme.colors.backgroundColor,
+		fontSize: theme.name === 'signalis' ? 14 : 16,
+		fontFamily: theme.typography.fontFamily.primary,
 	},
 	buttonContainer: {
 		position: 'absolute',

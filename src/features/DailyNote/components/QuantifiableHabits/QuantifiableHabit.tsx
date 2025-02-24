@@ -21,7 +21,8 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginRight: 8
+            marginRight: 8,
+            marginBottom: theme.name === 'signalis' ? 10 : 0
         },
         nameContainer: {
             flexDirection: 'row',
@@ -45,6 +46,7 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
             marginRight: 5,
             color: color,
             lineHeight: 24,
+            fontFamily: theme.typography.fontFamily.primary,
         },
         button: {
             padding: 8,
@@ -55,6 +57,7 @@ const QuantifiableHabit: React.FC<QuantifiableHabitProps> = ({ emoji, name, valu
         buttonText: {
             color: theme.colors.gray,
             fontSize: 20,
+            fontFamily: theme.typography.fontFamily.primary,
         },
     });
 

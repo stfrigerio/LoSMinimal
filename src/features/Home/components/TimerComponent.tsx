@@ -89,7 +89,7 @@ const TimerComponent: React.FC = () => {
                         <FontAwesomeIcon 
                             icon={faPlay} 
                             size={16} 
-                            color={theme.name === 'dark' ? theme.colors.backgroundColor : '#333333'} 
+                            color={theme.name === 'light' ? '#333333' : theme.colors.backgroundColor} 
                             style={{ marginLeft: 3}}
                         />
                     </Pressable>
@@ -143,7 +143,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		alignItems: 'flex-start',
 	},
 	floatingButton: {
-		backgroundColor: '#CC5359',
+		backgroundColor: theme.name === 'light' ? '#CC5359' : `${theme.colors.accentColor}80`,
 		width: 56,
 		height: 56,
 		borderRadius: 28,

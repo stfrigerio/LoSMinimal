@@ -67,7 +67,8 @@
     "string-similarity": "^4.0.4",
     "typescript": "^5.3.3",
     "uuid": "^11.0.3",
-    "expo-font": "~13.0.4"
+    "expo-font": "~13.0.4",
+    "expo-navigation-bar": "~4.0.8"
   },
   "devDependencies": {
     "@types/color": "^4.2.0",
