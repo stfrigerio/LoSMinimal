@@ -18,8 +18,8 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, de
 	const [emoji, setEmoji] = useState<string>('');
 	const [descriptionEmoji, setDescriptionEmoji] = useState<string>('');
 
-	const { theme, theme, designs } = useThemeStyles();
-	const styles = getStyles(theme, theme);
+	const { theme, designs } = useThemeStyles();
+	const styles = getStyles(theme);
 
 	useEffect(() => {
 		setSeconds(initialSeconds); // Reset seconds state when initialSeconds changes
@@ -95,7 +95,7 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, de
 	);
 };
 
-const getStyles = (theme: any, theme: any) => StyleSheet.create({
+const getStyles = (theme: Theme) => StyleSheet.create({
 	timerFlexContainer: {
 		position: 'absolute',
 		left: 0,

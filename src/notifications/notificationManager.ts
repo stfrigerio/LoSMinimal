@@ -59,71 +59,71 @@ export const registerForPushNotificationsAsync = async (): Promise<string | unde
 };
 
 // Schedules a notification for the next 11 AM to remind the user about their morning routine.
-export const scheduleMorningRoutineReminder = async (): Promise<void> => {
-    // Calculate the next 11 AM from now
-    let trigger = new Date();
-    trigger.setHours(11, 0, 0, 0); // Set to 11:00 AM today
+// export const scheduleMorningRoutineReminder = async (): Promise<void> => {
+//     // Calculate the next 11 AM from now
+//     let trigger = new Date();
+//     trigger.setHours(11, 0, 0, 0); // Set to 11:00 AM today
 
-    if (trigger < new Date()) {
-        trigger.setDate(trigger.getDate() + 1); // If it's already past 11:00 AM, set for tomorrow
-    }
+//     if (trigger < new Date()) {
+//         trigger.setDate(trigger.getDate() + 1); // If it's already past 11:00 AM, set for tomorrow
+//     }
 
-    // Schedule the notification
-    await Notifications.scheduleNotificationAsync({
-        content: {
-        title: "Morning Routine Reminder",
-        body: "Rise and shine 🌞, or just rise… 🧟",
-        data: { screen: 'DailyNote' }, // Custom data to determine action on notification interaction
-        },
-        trigger,
-    });
-};
+//     // Schedule the notification
+//     await Notifications.scheduleNotificationAsync({
+//         content: {
+//         title: "Morning Routine Reminder",
+//         body: "Rise and shine 🌞, or just rise… 🧟",
+//         data: { screen: 'DailyNote' }, // Custom data to determine action on notification interaction
+//         },
+//         trigger,
+//     });
+// };
 
-export const scheduleMoodReminder15 = async (): Promise<void> => {
-    const now = new Date();
+// export const scheduleMoodReminder15 = async (): Promise<void> => {
+//     const now = new Date();
     
-    // Setting the notification for 15:00 today or the next day
-    const todayAtThree = new Date(now);
-    todayAtThree.setHours(15, 0, 0, 0);
-    if (todayAtThree <= now) { // If it's already past 15:00, set for tomorrow
-        todayAtThree.setDate(todayAtThree.getDate() + 1);
-    }
+//     // Setting the notification for 15:00 today or the next day
+//     const todayAtThree = new Date(now);
+//     todayAtThree.setHours(15, 0, 0, 0);
+//     if (todayAtThree <= now) { // If it's already past 15:00, set for tomorrow
+//         todayAtThree.setDate(todayAtThree.getDate() + 1);
+//     }
 
 
-    // Schedule notification for 15:00
-    await Notifications.scheduleNotificationAsync({
-        content: {
-            title: "Mood Reminder",
-            body: "Time for a Mood entry? ✨",
-            data: { type: 'MoodReminder15' }
-        },
-        trigger: todayAtThree,
-    });
+//     // Schedule notification for 15:00
+//     await Notifications.scheduleNotificationAsync({
+//         content: {
+//             title: "Mood Reminder",
+//             body: "Time for a Mood entry? ✨",
+//             data: { type: 'MoodReminder15' }
+//         },
+//         trigger: todayAtThree,
+//     });
 
 
-};
+// };
 
-export const scheduleMoodReminder19 = async (): Promise<void> => {
-    const now = new Date();
+// export const scheduleMoodReminder19 = async (): Promise<void> => {
+//     const now = new Date();
 
-    // Setting the notification for 19:00 today or the next day
-    const todayAtSeven = new Date(now);
-    todayAtSeven.setHours(19, 0, 0, 0);
-    if (todayAtSeven <= now) { // If it's already past 19:00, set for tomorrow
-        todayAtSeven.setDate(todayAtSeven.getDate() + 1);
-    }
+//     // Setting the notification for 19:00 today or the next day
+//     const todayAtSeven = new Date(now);
+//     todayAtSeven.setHours(19, 0, 0, 0);
+//     if (todayAtSeven <= now) { // If it's already past 19:00, set for tomorrow
+//         todayAtSeven.setDate(todayAtSeven.getDate() + 1);
+//     }
 
 
-    // Schedule notification for 19:00
-    await Notifications.scheduleNotificationAsync({
-        content: {
-            title: "Mood Reminder",
-            body: "Time for a Mood entry? 🎆",
-            data: { type: 'MoodReminder19' }
-        },
-        trigger: todayAtSeven,
-    });
-}
+//     // Schedule notification for 19:00
+//     await Notifications.scheduleNotificationAsync({
+//         content: {
+//             title: "Mood Reminder",
+//             body: "Time for a Mood entry? 🎆",
+//             data: { type: 'MoodReminder19' }
+//         },
+//         trigger: todayAtSeven,
+//     });
+// }
 
 export const checkMorningRoutineReminderScheduled = async () => {
     const notifications = await Notifications.getAllScheduledNotificationsAsync();

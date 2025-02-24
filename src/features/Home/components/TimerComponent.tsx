@@ -28,7 +28,7 @@ const TimerComponent: React.FC = () => {
 	const { timerRunning, initialSeconds, startTimer, stopTimer, getCurrentTimerSecondsRef, tag, description, fetchActiveTimer, checkAndClearStuckNotification } = useTimer();
 	const scaleAnim = useRef(new Animated.Value(1)).current;
 
-	const { theme, theme } = useThemeStyles();
+	const { theme } = useThemeStyles();
 	const styles = getStyles(theme);
 
 	const handleTagDescriptionSelection = () => {

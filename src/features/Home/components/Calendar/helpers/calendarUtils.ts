@@ -1,8 +1,9 @@
 import { MarkedDateDetails, ExtendedTaskData } from '@/src/types/Task';
+import { Theme } from '@/src/styles/useThemeStyles';
 
 export const formatMarkedDates = (
     dueDates: any,
-    theme: any
+    theme: Theme
 ): Record<string, MarkedDateDetails> => {
     const newMarkedDates: Record<string, MarkedDateDetails> = {};
 
@@ -19,7 +20,7 @@ export const formatMarkedDates = (
             marked: true,
             dots: [
                 details.isBirthday ? { key: 'birthday', color: theme.colors.accentColor } : null,
-                repeatedTasks.length > 0 ? { key: 'repeated', color: allRepeatedCompleted ? theme.colors.greenOpacity : theme.blueOpacity } : null,
+                repeatedTasks.length > 0 ? { key: 'repeated', color: allRepeatedCompleted ? theme.colors.greenOpacity : theme.colors.blueOpacity } : null,
                 normalTasks.length > 0 ? { key: 'normal', color: allNormalCompleted ? theme.colors.greenOpacity : theme.colors.yellowOpacity } : null,
             ].filter(Boolean) as Array<{key: string, color: string}>,
         };

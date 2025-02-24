@@ -1,5 +1,6 @@
 import { databaseManagers } from '@/database/tables';
-    
+import { Theme } from '@/src/styles/useThemeStyles';
+
 interface BirthdayRecord {
     birthDay: string;
     name: string;
@@ -7,7 +8,7 @@ interface BirthdayRecord {
 
 import { TaskData, TempDueDates, MarkedDateDetails, ExtendedTaskData } from '@/src/types/Task'; 
 
-export const parseChecklistItems = (items: TaskData[], theme: any): TempDueDates => {
+export const parseChecklistItems = (items: TaskData[], theme: Theme): TempDueDates => {
     const tempDueDates: TempDueDates = {};
     items.forEach(item => {
         if (item.due) {
@@ -43,7 +44,7 @@ export const getUpdatedBirthdayDates = async (
         const age = calculateAge(birthday.birthDay);
         updatedBirthdayDates[fullDate] = {
             marked: true,
-            dotColor: theme.colors.accentColor,  // Changed from hardcoded 'rgba(247, 92, 120, 0.8)'
+            dotColor: theme.colors.accentColor,
             isBirthday: true,
             name: birthday.name, 
             dateOfBirth: birthday.birthDay,

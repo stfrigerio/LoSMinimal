@@ -5,7 +5,8 @@ import { format } from 'date-fns';
 
 import createTimePicker from '@/src/components/DateTimePicker';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { DailyNoteData } from '@/src/types/DailyNote';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { DailyNoteData } from '@/src/types/DailyNote';
 import ButtonsSlider from '@/src/components/atoms/ButtonsSlider';
 
 type EveningDataProps = {
@@ -139,7 +140,6 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         borderRadius: 16,
         marginVertical: 10,
         // shadowColor: theme.colors.shadowColor
-,
         // shadowOffset: { width: 0, height: 2 },
         // shadowOpacity: 0.1,
         // shadowRadius: 8,
