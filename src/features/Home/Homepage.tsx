@@ -70,7 +70,7 @@ const Homepage = () => {
     return (
         <View style={styles.container}>
             <ImageBackground 
-                source={require('@/assets/images/evening.jpg')}
+                source={theme.name === 'signalis' ? require('@/assets/images/signalis.webp') : require('@/assets/images/evening.jpg')}
                 style={styles.backgroundImage}
                 resizeMode="cover"
             >

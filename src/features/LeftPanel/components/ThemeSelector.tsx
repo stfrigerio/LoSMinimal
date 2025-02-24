@@ -19,12 +19,12 @@ export const ThemeSelector: React.FC<{
         container: {
             position: 'absolute',
             bottom: 60,
-            right: 10,
-            backgroundColor: theme.colors.backgroundSecondary,
-            borderRadius: 8,
+            right: 8,
+            backgroundColor: theme.colors.backgroundColor,
+            borderRadius: theme.borderRadius.md,
             padding: 8,
             display: isOpen ? 'flex' : 'none',
-            borderWidth: 1,
+            borderWidth: 2,
             borderColor: theme.colors.borderColor,
         },
         option: {
@@ -47,12 +47,11 @@ export const ThemeSelector: React.FC<{
                 onPress={() => setIsOpen(!isOpen)}
                 style={({ pressed }) => [
                     {
-                        padding: 8,
-                        borderRadius: 20,
+                        marginTop: 20,
+                        padding: theme.spacing.sm,
                     },
                     pressed && {
-                        backgroundColor: `${theme.colors.backgroundColor}EE`,
-                        transform: [{ scale: 0.9 }],
+                        transform: [{ scale: 0.8 }],
                     }
                 ]}
             >

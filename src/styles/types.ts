@@ -1,4 +1,5 @@
 export interface Spacing {
+    xxs: number;
     xs: number;
     sm: number;
     md: number;
@@ -22,6 +23,11 @@ export type FontWeight =
 	| 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 
 export interface Typography {
+    fontFamily: {
+        primary: string;
+        secondary: string;
+        mono: string;
+    };
     fontSize: {
         xs: number;
         sm: number;

@@ -1,5 +1,5 @@
 import { StyleSheet, TextStyle } from 'react-native';
-import { lightTheme, darkTheme } from './theme';
+import { Theme } from './types';
 
 export interface TextStyles {
 	title: TextStyle;
@@ -8,9 +8,7 @@ export interface TextStyles {
 	text: TextStyle;
 }
 
-export const textStyles = (themeName: any): TextStyles => {
-	const theme = themeName === 'light' ? lightTheme : darkTheme;
-
+export const textStyles = (theme: Theme): TextStyles => {
 	return StyleSheet.create({
 		title: {
 			fontSize: 36,
@@ -18,7 +16,7 @@ export const textStyles = (themeName: any): TextStyles => {
 			color: theme.colors.textColorBold,
 			textAlign: 'center',
 			marginBottom: 10,
-			textShadowColor: theme.shadowColor,
+			textShadowColor: theme.colors.shadowColor,
 			textShadowOffset: { width: -1, height: 1 },
 			textShadowRadius: 10,
 		},
@@ -27,12 +25,13 @@ export const textStyles = (themeName: any): TextStyles => {
 			color: theme.colors.textColor,
 			textAlign: 'center',
 			marginBottom: 30,
-			textShadowColor: theme.shadowColor,
+			textShadowColor: theme.colors.shadowColor,
 			textShadowOffset: { width: -1, height: 1 },
 			textShadowRadius: 10,
 		},
 		text: {
-			color: theme.colors.textColor
+			color: theme.colors.textColor,
+            fontFamily: 'BigBlueTerm437NerdFont-Regular',
 		},
 		input: {
 			flexDirection: 'row',

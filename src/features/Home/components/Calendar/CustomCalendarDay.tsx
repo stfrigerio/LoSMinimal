@@ -84,6 +84,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     },
     text: {
         fontSize: 14,
+        fontFamily: theme.typography.fontFamily.primary,
     },
     dotsContainer: {
         flexDirection: 'row',
@@ -94,7 +95,8 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     todayText: {
         fontSize: 16,
         color: theme.colors.accentColor,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: theme.typography.fontFamily.primary,
     },
     todayContainer: {
         width: 32,

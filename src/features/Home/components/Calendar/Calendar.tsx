@@ -25,7 +25,7 @@ const CustomCalendar = () => {
         monthTextColor: isDarkMode ? darkTheme.colors.textColorItalic : lightTheme.colors.textColorItalic,
         arrowColor: isDarkMode ? darkTheme.colors.gray : lightTheme.colors.gray,
         textSectionTitleColor: isDarkMode ? darkTheme.colors.gray : lightTheme.colors.gray,
-        weekVerticalMargin: theme.spacing.sm
+        weekVerticalMargin: theme.spacing.sm,
     };
 
 	const { checklistUpdated, resetChecklistUpdate } = useChecklist();
@@ -68,9 +68,7 @@ const CustomCalendar = () => {
 				onDayPress={onDayPress}
 				firstDay={1}
 				showWeekNumbers={true}
-				theme={{
-					...calendarTheme,
-				}}
+                theme={calendarTheme}
 				style={[
 					styles.calendar
 				]}

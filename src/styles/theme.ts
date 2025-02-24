@@ -4,6 +4,7 @@ import { Theme, FontWeight } from './types';
 // Design tokens
 export const tokens = {
 	spacing: {
+		xxs: 2,
 		xs: 4,
 		sm: 8,
 		md: 16,
@@ -20,6 +21,11 @@ export const tokens = {
 		circular: 9999,
 	},
 	typography: {
+		fontFamily: {
+			primary: 'System',
+			secondary: 'serif',
+			mono: 'monospace',
+		},
 		fontSize: {
 			xs: 12,
 			sm: 14,
@@ -128,7 +134,7 @@ export const signalisTheme: Theme = {
 	colors: {
 		backgroundColor: '#0e0d0d',
 		backgroundSecondary: '#333232',
-		textColor: '#d3c6aa',
+		textColor: '#ffffff',
 		textColorBold: '#c79428',
 		textColorItalic: '#CBA95F',
 		opaqueTextColor: 'rgba(211, 198, 170, 0.5)',
@@ -150,6 +156,14 @@ export const signalisTheme: Theme = {
 		gray: 'gray',
 	},
 	...tokens,
+	typography: {
+        ...tokens.typography,
+        fontFamily: {
+            primary: 'BigBlueTerm437NerdFont',
+            secondary: 'PokemonDP',
+            mono: 'SpaceMono',
+        },
+    },
 	borderRadius: {
 		...tokens.borderRadius,
 		sm: 0,

@@ -1,5 +1,6 @@
 import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
-import { themes, ThemeName } from './theme';
+import { themes } from './theme';  // Import themes
+import { Theme, ThemeName } from './types';
 
 export interface ModalStyles {
 	modalContainer: ViewStyle;
@@ -13,7 +14,7 @@ export interface ModalStyles {
 }
 
 export const modalStyles = (themeName: ThemeName): ModalStyles => {
-	const theme = themes[themeName];
+    const theme = themes[themeName];  // Get the theme using themeName
 
 	return StyleSheet.create({
 		modalContainer: {

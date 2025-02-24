@@ -59,6 +59,20 @@
         ]
       ]
     },
+    "fonts": [
+      {
+        "asset": "./assets/fonts/BigBlueTerm437NerdFont-Regular.ttf",
+        "family": "BigBlueTerm437NerdFont"
+      },
+      {
+        "asset": "./assets/fonts/pokemon-dp-pro.ttf",
+        "family": "PokemonDP"
+      },
+      {
+        "asset": "./assets/fonts/SpaceMono-Regular.ttf",
+        "family": "SpaceMono"
+      }
+    ],
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
@@ -81,15 +95,16 @@
           "android": {
             "extraMavenRepos": [
               "../../node_modules/@notifee/react-native/android/libs"
-              ]
+            ]
           },
-          "ios": {  }
+          "ios": {}
         }
       ],
       "expo-router",
       "expo-sqlite",
       "expo-notifications",
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-font"
     ],
     "newArchEnabled": true
   }

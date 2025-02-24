@@ -46,13 +46,23 @@ export const MenuButton: React.FC<MenuButtonProps> = ({ icon, label, onPress, on
     );
 };
 
+const getBackground = (theme: Theme) => {    
+    if (theme.name === 'light') {
+        return `${theme.colors.backgroundColor}CC`;
+    } else if (theme.name === 'dark') {
+        return `${theme.colors.borderColor}E6`;
+    } else if (theme.name === 'signalis') {
+        return `${theme.colors.accentColor}`;
+    }
+}
+
 const getStyles = (theme: Theme) => StyleSheet.create({
     button: {
         padding: theme.spacing.sm,
         paddingVertical: theme.spacing.md,
         borderRadius: theme.borderRadius.md,
-        backgroundColor: theme.name === 'light' ? `${theme.colors.backgroundColor}CC` : `${theme.colors.borderColor}E6`,
-        marginVertical: theme.spacing.md, 
+        backgroundColor: getBackground(theme),
+        marginVertical: theme.name === 'signalis' ? theme.spacing.xxs : theme.spacing.md, 
         marginHorizontal: theme.spacing.sm,
         borderWidth: 1,
         borderColor: theme.name === 'light' ? 'transparent' : theme.colors.backgroundColor,
@@ -74,6 +84,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     buttonText: {
         fontSize: 12,
         flex: 1,
-        fontWeight: '700',
+        color: theme.name === 'signalis' ? theme.colors.backgroundColor : theme.colors.textColor,
+        fontFamily: theme.typography.fontFamily.primary,
     },
 });

@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
+import { StyleSheet, TextStyle } from 'react-native';
+
 import { useTheme } from '@/src/contexts/ThemeContext';
 import { markdownStyles as createMarkdownStyles, ThemeName } from '@/src/styles/theme';
 import { modalStyles, ModalStyles } from '@/src/styles/modal';
 import { textStyles, TextStyles } from '@/src/styles/text';
-import { StyleSheet, TextStyle } from 'react-native';
-
 import { Theme } from '@/src/styles/types';
 export type { Theme };
 
@@ -24,9 +24,9 @@ export const useThemeStyles = () => {
 
 	// Memoize the designs so that they are only recalculated when themeName changes.
 	const designs: StylesType = useMemo(() => ({
-		modal: modalStyles(themeName as ThemeName),
-		text: textStyles(themeName as ThemeName),
-	}), [themeName]);
+		modal: modalStyles(theme.name),
+		text: textStyles(theme),
+	}), [theme]);
 
 	// Memoize the markdown styles so they are only recalculated when the theme changes.
 	const markdownStyles = useMemo<MarkdownStylesType>(() => 

@@ -89,7 +89,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
         switch (themeName) {
             case 'dark': return 50;
             case 'light': return 20;
-            case 'signalis': return 35;
+            case 'signalis': return 50;
             default: return 35;
         }
     };
@@ -128,7 +128,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                                 color={colorRainbow[2]}
                             />
                         </GridRow>
-                        <View style={styles.separator} />
+                        {theme.name !== 'signalis' && <View style={styles.separator} />}
                         <GridRow>
                             <MenuButton
                                 icon={faMoneyBill}
@@ -145,7 +145,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                                 color={colorRainbow[5]}
                             />
                         </GridRow>
-                        <View style={styles.separator} />
+                        {theme.name !== 'signalis' && <View style={styles.separator} />}
                         <GridRow>
                             <MenuButton 
                                 icon={faClock}
@@ -162,7 +162,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                                 color={colorRainbow[6]}
                             />
                         </GridRow>
-                        <View style={styles.separator} />
+                        {theme.name !== 'signalis' && <View style={styles.separator} />}
                         <GridRow>
                             <MenuButton 
                                 icon={faJournalWhills}
@@ -177,7 +177,7 @@ const LeftPanel: React.FC<DrawerContentComponentProps> = (props) => {
                                 color={colorRainbow[12]}
                             />
                         </GridRow>
-                        <View style={styles.separator} />
+                        {theme.name !== 'signalis' && <View style={styles.separator} />}
                         <GridRow>
                             <MenuButton
                                 icon={faMusic}
@@ -275,9 +275,9 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         transform: [{ scale: 0.9 }],
     },
     gridRow: {
-        flexDirection: 'row',
+        flexDirection: theme.name === 'signalis' ? 'column' : 'row',
         justifyContent: 'space-between',
-        marginVertical: 2,
+        marginVertical: theme.spacing.xxs,
     },
 });
 
