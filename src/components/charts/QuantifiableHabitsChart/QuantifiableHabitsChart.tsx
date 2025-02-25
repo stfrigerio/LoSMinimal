@@ -209,42 +209,10 @@ const getStyles = (theme: Theme) => {
 	const isDesktop = width > 768;
 
 	return StyleSheet.create({
-		svgContainer: {
-			flex: 1,
-			alignItems: 'center',
-			justifyContent: 'center',
-		},
-		chartToggle: {
-			flexDirection: 'row',
-			flexWrap: 'wrap', // Allow wrapping on smaller screens
-			justifyContent: isDesktop? 'center' : 'center',
-			marginBottom: 10,
-		},
-		chartButton: {
-			flexDirection: 'row',
-			alignItems: 'center',
-			padding: 8,
-			marginHorizontal: 3,
-			borderRadius: 5,
-		},
-		activeChartButton: {
-			backgroundColor: theme.colors.accentColor,
-		},
-		chartButtonText: {
-			marginLeft: 3, 
-			color: theme.colors.textColor,
-			fontSize: 12,
-		},
-		activeChartButtonText: {
-			color: 'gray',
-		},
 		loadingContainer: {
 			justifyContent: 'center',
 			alignItems: 'center',
 			height: 300,
-		},
-		loadingText: {
-			marginTop: 10,
 		},
 		errorContainer: {
 			justifyContent: 'center',

@@ -12,6 +12,7 @@ import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { use
 import { getDateRangeForPeriod, formatDate } from '@/src/utils/timezoneBullshit';
 
 import { ExtendedObjectiveData } from '../../types/ObjectivesSection';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 interface ObjectivesSectionProps {       
     currentDate: string;
@@ -93,7 +94,7 @@ export const ObjectivesSection: React.FC<ObjectivesSectionProps> = ({ currentDat
     return (
         <>
             <View style={styles.container}>
-                <Text style={styles.title}>{getTitle()}</Text>
+                <GlitchText style={styles.title}>{getTitle()}</GlitchText>
                 {objectives.map((objective: ExtendedObjectiveData) => (
                     <Pressable
                         key={objective.uuid}

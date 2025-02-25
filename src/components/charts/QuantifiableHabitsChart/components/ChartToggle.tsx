@@ -18,7 +18,7 @@ const ChartToggle: React.FC<ChartToggleProps> = ({
 			{availableViewTypes.map((type) => (
 				<Pressable
 					key={type}
-					style={[styles.chartButton]}
+					style={[styles.chartButton, viewType === type && styles.activeChartButton]}
 					onPress={() => setViewType(type)}
 				>
 					<FontAwesomeIcon 
@@ -28,7 +28,7 @@ const ChartToggle: React.FC<ChartToggleProps> = ({
 							type === 'monthly' ? faCalendar :
 							faChartPie
 						}
-						color={viewType === type ? theme.colors.accentColor : theme.colors.textColor}
+						color={viewType === type ? theme.name === 'signalis' ? theme.colors.backgroundColor : theme.colors.accentColor : theme.colors.textColor}
 					/>
 					<Text style={[styles.chartButtonText, viewType === type && styles.activeChartButtonText]}>
 						{type.charAt(0).toUpperCase() + type.slice(1)}
@@ -56,15 +56,33 @@ const getStyles = (theme: Theme) => {
 			alignItems: 'center',
 			padding: 8,
 			borderRadius: 5,
-			// borderWidth: 1
 		},
 		chartButtonText: {
 			marginLeft: 10,
 			fontSize: 12,
-			color: theme.colors.textColor
+			color: theme.colors.gray,
+			fontFamily: theme.typography.fontFamily.primary,
+			...(theme.name === 'signalis' && {
+				fontSize: theme.typography.fontSize.md,
+				fontFamily: theme.typography.fontFamily.secondary,
+			}),
+		},
+		activeChartButton: {
+			...(theme.name === 'signalis' && {
+				borderRadius: theme.borderRadius.sm,
+				backgroundColor: theme.colors.accentColor,
+			}),
 		},
 		activeChartButtonText: {
-			color: theme.colors.gray,
+			color: theme.colors.textColor,
+			...(theme.name === 'signalis' && {
+				fontSize: theme.typography.fontSize.xs,
+				fontFamily: theme.typography.fontFamily.primary,
+				textShadowColor: theme.colors.accentColor,
+				textShadowOffset: { width: 1, height: 1 },
+				textShadowRadius: 16,
+				color: theme.colors.backgroundColor,
+			}),
 		},
 	});
 };
