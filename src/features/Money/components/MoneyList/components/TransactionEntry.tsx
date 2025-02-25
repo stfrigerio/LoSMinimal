@@ -123,10 +123,6 @@ const TransactionEntry: React.FC<TransactionEntryProps> = ({
 
 
 const getStyles = (theme: Theme, designs: any) => {
-    const { width } = Dimensions.get('window');
-    const isSmall = width < 1920;
-    const isDesktop = Platform.OS === 'web';
-
     return StyleSheet.create({
         container: {
             flexDirection: 'row',
@@ -134,12 +130,12 @@ const getStyles = (theme: Theme, designs: any) => {
             alignItems: 'center',
             paddingVertical: 10,
             paddingHorizontal: 15,
-            borderRadius: 8,
+            borderRadius: theme.borderRadius.md,
             marginBottom: 10,
             backgroundColor: theme.colors.backgroundSecondary,
         },
         selectedContainer: {
-            backgroundColor: theme.colors.backgroundColor, // Define a color for selected state
+            backgroundColor: theme.colors.backgroundColor,
         },
         selectionIcon: {
             marginRight: 10,
@@ -158,6 +154,15 @@ const getStyles = (theme: Theme, designs: any) => {
             ...designs.text.text,
             fontSize: 18,
             fontWeight: 'bold',
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 16,
+                fontWeight: 'normal',
+                color: theme.colors.textColorBold,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 6,
+            })
         },
         dateMonth: {
             ...designs.text.text,
@@ -174,6 +179,15 @@ const getStyles = (theme: Theme, designs: any) => {
         tagText: {
             fontWeight: 'bold',
             textAlign: 'left',
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 12,
+                fontWeight: 'normal',
+                color: theme.colors.textColorBold,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 6,
+            })
         },
         description: {
             ...designs.text.text,

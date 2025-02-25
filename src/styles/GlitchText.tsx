@@ -11,11 +11,6 @@ interface GlitchTextProps {
 export function GlitchText({ children, style, glitch = false }: GlitchTextProps) {
     const { theme } = useThemeStyles();
 
-    // If glitch effect is not enabled, simply render a plain Text.
-    if (!glitch) {
-        return <Text style={style}>{children}</Text>;
-    }
-
     const styles = getStyles(theme);
 
     // State controlling whether glitching is active.
@@ -61,6 +56,11 @@ export function GlitchText({ children, style, glitch = false }: GlitchTextProps)
             clearTimeout(glitchStopTimer);
         };
     }, []);
+
+    // If glitch effect is not enabled, simply render a plain Text.
+    if (!glitch) {
+        return <Text style={style}>{children}</Text>;
+    }
 
     return (
         <View style={styles.wrapper}>

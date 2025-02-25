@@ -2,6 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 
 import TransactionModal from './modals/TransactionModal';
+import { GlitchText } from '@/src/styles/GlitchText';
 import MobileNavbar from '@/src/components/NavBar';
 
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
@@ -43,9 +44,11 @@ const MoneyHub: React.FC = () => {
         <View style={styles.container}>
             <View style={styles.container}>
                 <Banner imageSource={require('@/assets/images/money.webp')} />
-                <Text style={styles.title}>
-                    Moneyz
-                </Text>
+                <View style={styles.titleContainer}>
+                    <GlitchText style={styles.title} glitch={theme.name === 'signalis'}>
+                        Moneyz
+                    </GlitchText>
+                </View>
                 <View style={styles.summaryContainer}>
                     <View style={styles.summaryItem}>
                         <Text style={styles.summaryLabel}>Total Income</Text>
@@ -89,9 +92,12 @@ const getStyles = (theme: Theme, designs: any) => {
             paddingHorizontal: 10,
             paddingTop: 20,
         },
+        titleContainer: {
+            alignItems: 'center',
+            marginBottom: 20,
+        },
         title: {
             ...designs.text.title,
-            marginBottom: 20,
         },
         summaryContainer: {
             flexDirection: 'row',
@@ -108,7 +114,7 @@ const getStyles = (theme: Theme, designs: any) => {
         },
         summaryValue: {
             ...designs.text.text,
-            fontWeight: 'bold',
+            // fontWeight: 'bold',
         },
         subtitle: {
             ...designs.text.title,

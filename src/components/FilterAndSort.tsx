@@ -137,7 +137,7 @@ const FilterAndSort: React.FC<FilterAndSortProps> = ({ onFilterChange, onSortCha
                         placeholder={searchPlaceholder}
                         value={filters.searchTerm}
                         onChangeText={handleSearchChange}
-                        placeholderTextColor={'gray'}
+                        placeholderTextColor={theme.colors.gray}
                     />
 
                     <PickerInput
@@ -185,7 +185,7 @@ const getStyles = (theme: any, isActive: boolean) => StyleSheet.create({
     dateButton: {
         padding: 10,
         margin: 4,
-        borderRadius: 16,
+        borderRadius: theme.borderRadius.lg,
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
     },
@@ -196,7 +196,7 @@ const getStyles = (theme: any, isActive: boolean) => StyleSheet.create({
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
         padding: 8,
-        borderRadius: 16,
+        borderRadius: theme.borderRadius.lg,
     },
     tagButton: {
         padding: 8,
@@ -209,9 +209,27 @@ const getStyles = (theme: any, isActive: boolean) => StyleSheet.create({
     },
     tagText: {
         color: theme.colors.textColor,
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.primary,
+            fontSize: 12,
+            fontWeight: 'normal',
+            color: theme.colors.textColor,
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        })
     },
     tagTextSelected: {
         color: theme.colors.backgroundColor,
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.primary,
+            fontSize: 12,
+            fontWeight: 'normal',
+            color: theme.colors.textColor,
+            textShadowColor: theme.colors.backgroundColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        })
     },
     searchInput: {
         height: 40,
@@ -220,13 +238,28 @@ const getStyles = (theme: any, isActive: boolean) => StyleSheet.create({
         marginBottom: 16,
         paddingHorizontal: 8,
         color: theme.colors.textColor,
-        borderRadius: 8,
+        borderRadius: theme.borderRadius.md,
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontSize: 18,
+            fontWeight: 'normal',
+            color: theme.colors.textColor,
+        })   
     },
     sectionTitle: {
-        color: 'gray',
+        color: theme.colors.gray,
         marginBottom: 8,
         fontWeight: 'bold',
         textAlign: 'center',
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.primary,
+            fontSize: 12,
+            fontWeight: 'normal',
+            color: theme.colors.textColorBold,
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        })
     }
 });
 

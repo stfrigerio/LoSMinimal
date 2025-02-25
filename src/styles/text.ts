@@ -19,6 +19,15 @@ export const textStyles = (theme: Theme): TextStyles => {
 			textShadowColor: theme.colors.shadowColor,
 			textShadowOffset: { width: -1, height: 1 },
 			textShadowRadius: 10,
+			...(theme.name === 'signalis' && {
+				fontFamily: theme.typography.fontFamily.primary,
+				fontSize: 36,
+				fontWeight: 'normal',
+				color: theme.colors.accentColor,
+				textShadowColor: theme.colors.accentColor,
+				textShadowOffset: { width: 1, height: 1 },
+				textShadowRadius: 6,
+			})
 		},
 		subtitle: {
 			fontSize: 18,
