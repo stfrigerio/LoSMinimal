@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 import { stripFrontmatter } from './utils/markdownParser';
 import renderLine from './helpers/renderLine';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
 
 interface MarkdownProps {
     children: string;
@@ -16,6 +17,7 @@ const MobileMarkdown: React.FC<MarkdownProps> = ({ children, style, onChange, ac
     const contentWithoutFrontmatter = stripFrontmatter(children);
     const lines = contentWithoutFrontmatter.split('\n');
     let insideCodeFence = false;
+    const { markdownStyles } = useThemeStyles();
 
     return (
         <View>
@@ -28,7 +30,8 @@ const MobileMarkdown: React.FC<MarkdownProps> = ({ children, style, onChange, ac
                     onChange,
                     activeChecklists,
                     onCreateTask,
-                    children
+                    children,
+                    markdownStyles
                 );
                 insideCodeFence = newInsideCodeFence;
                 return <View key={`line-${index}`}>{element}</View>;

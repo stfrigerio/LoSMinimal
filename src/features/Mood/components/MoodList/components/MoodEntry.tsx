@@ -142,7 +142,7 @@ const getStyles = (theme: Theme, designs: any) => {
             alignItems: 'center',
             marginRight: 20,
             padding: 10,
-            borderRadius: 12,
+            borderRadius: theme.borderRadius.lg,
             minWidth: 60,
         },
         rating: {

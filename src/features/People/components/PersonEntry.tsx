@@ -122,11 +122,21 @@ const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 4,
         fontFamily: 'serif',
+        ...(theme.name === 'signalis' && {
+            fontSize: 24,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontWeight: 'normal',
+            color: theme.colors.textColorBold,
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        })
     },
     details: {
         ...designs.text.text,
         color: 'gray',
         marginBottom: 2,
+
     },
     actions: {
         flexDirection: 'row',

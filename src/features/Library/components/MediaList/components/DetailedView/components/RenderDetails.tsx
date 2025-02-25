@@ -144,7 +144,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         marginTop: 10,
         backgroundColor: theme.colors.backgroundSecondary,
         padding: 15,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
     },
     ratingItem: {
         flex: 1,
@@ -168,6 +168,11 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         padding: 20,
         color: theme.colors.textColor,
         fontSize: 14,
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     }, 
     detailContainer: {
         flexDirection: 'row',
@@ -175,26 +180,37 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         marginBottom: 12,
         backgroundColor: theme.colors.backgroundSecondary,
         padding: 15,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
     },
     detailLabel: {
         flex: 1,
         fontSize: 16,
         fontWeight: '600',
         color: theme.colors.textColorBold,
+        ...(theme.name === 'signalis' && {
+            fontSize: 14,
+            fontFamily: theme.typography.fontFamily.primary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     detailValue: {
         flex: 2,
         fontSize: 16,
         color: theme.colors.textColor,
         textAlign: 'right',
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     openButton: {
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
         backgroundColor: theme.colors.backgroundColor,
         padding: 15,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         marginTop: 12,
         alignItems: 'center',
     },
@@ -206,5 +222,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         color: theme.colors.textColorBold,
         fontSize: 16,
         fontWeight: '600',
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
 });

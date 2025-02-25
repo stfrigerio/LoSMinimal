@@ -291,7 +291,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         backgroundColor: theme.colors.backgroundSecondary,
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -317,7 +317,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         position: 'relative',
     },
     imagePressable: {
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         overflow: 'hidden',
         shadowColor: theme.colors.shadowColor,
         shadowOffset: { width: 0, height: 2 },
@@ -328,7 +328,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     imageThumbnail: {
         width: 120,
         height: 120,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         resizeMode: 'cover',
     },
     deleteIcon: {

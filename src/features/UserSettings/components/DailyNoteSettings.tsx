@@ -218,7 +218,7 @@ const getStyles = (theme: Theme, designs: any) => {
         },
         sectionContainer: {
             marginBottom: 20,
-            borderRadius: 12,
+            borderRadius: theme.borderRadius.lg,
             backgroundColor: theme.colors.backgroundSecondary,
             padding: 10
         },

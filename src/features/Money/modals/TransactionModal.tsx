@@ -199,7 +199,7 @@ const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, closeTransa
                     isVisible={isOpen}
                     onClose={closeTransactionModal}
                 >
-                    <Text style={designs.modal.title}>💸 New transaction</Text>
+                    <Text style={[designs.modal.title, { marginTop: 20 }]}>💸 New transaction</Text>
                     <Pressable onPress={showDatePicker} style={styles.datePickerButton}>
                         <FormInput
                             label="Date"

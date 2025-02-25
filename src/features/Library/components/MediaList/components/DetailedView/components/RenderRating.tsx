@@ -28,7 +28,7 @@ export const RenderRating = (rating: number, handleRatingChange: (star: number) 
 const getStyles = (theme: any, designs: any) => StyleSheet.create({
     ratingContainer: {
         flexDirection: 'row',
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         justifyContent: 'center',
     },
 });

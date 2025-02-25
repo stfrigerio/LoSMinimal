@@ -156,7 +156,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         width: cardWidth,
         height: 160,
         backgroundColor: theme.colors.backgroundSecondary,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         justifyContent: 'center',
         alignItems: 'center',
         elevation: 3,
@@ -170,5 +170,14 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         color: theme.colors.textColor,
         fontSize: 16,
         fontWeight: 'bold',
+        ...(theme.name === 'signalis' && {
+            fontSize: 24,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        })
     },
 }); 

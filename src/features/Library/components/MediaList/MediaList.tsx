@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, BackHandler } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import React, { useState } from 'react';
+import { View, FlatList, StyleSheet } from 'react-native';
 
 import SearchComponent from './components/SearchComponent';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';

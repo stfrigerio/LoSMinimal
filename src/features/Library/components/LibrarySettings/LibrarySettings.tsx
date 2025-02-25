@@ -147,7 +147,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         padding: 14,
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         alignItems: 'center',
         marginTop: 10,
         width: '100%',

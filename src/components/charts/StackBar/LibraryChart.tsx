@@ -105,9 +105,10 @@ export const LibraryChart: React.FC<LibraryChartProps> = ({
                             <SvgText
                                 x={scales.xScale.bandwidth() / 2}
                                 y={20}
-                                fontSize={10}
+                                fontSize={12}
                                 fill={theme.colors.textColor}
                                 textAnchor="middle"
+                                fontFamily={theme.typography.fontFamily.secondary}
                             >
                                 {week.toString().slice(1)} {/* Remove the 'W' prefix */}
                             </SvgText>
@@ -119,10 +120,11 @@ export const LibraryChart: React.FC<LibraryChartProps> = ({
                         <G key={`y-${tick}`} transform={`translate(0,${scales.yScale(tick)})`}>
                             <SvgText
                                 x={-10}
-                                fontSize={10}
+                                fontSize={12}
                                 fill={theme.colors.textColor}
                                 textAnchor="end"
                                 alignmentBaseline="middle"
+                                fontFamily={theme.typography.fontFamily.secondary}
                             >
                                 {tick}
                             </SvgText>

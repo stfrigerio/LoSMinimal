@@ -33,7 +33,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 15,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         marginTop: 30,
         borderWidth: 1,
         borderColor: theme.colors.redOpacity,

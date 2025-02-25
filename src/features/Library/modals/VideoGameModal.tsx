@@ -229,7 +229,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         marginBottom: 20,
         backgroundColor: theme.colors.backgroundSecondary,
         padding: 12,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         justifyContent: 'center',
     },
 });

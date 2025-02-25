@@ -77,14 +77,6 @@ const TracksHeader = ({
 
 
 const getStyles = (theme: Theme) => StyleSheet.create({
-    sectionTitle: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: theme.colors.textColorBold,
-        marginBottom: 16,
-        paddingHorizontal: 20,
-        textAlign: 'center',
-    },
     autoLinkButton: {
         zIndex: 1000,
     },

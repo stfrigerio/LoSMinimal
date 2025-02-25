@@ -1,7 +1,8 @@
 import { databaseManagers } from "@/database/tables";
 import { Theme, useThemeStyles } from "@/src/styles/useThemeStyles";
 import { LibraryData } from "@/src/types/Library";
-import { Pressable, TextInput, Text, StyleSheet } from "react-native"
+import { Pressable, TextInput, Text, StyleSheet, View } from "react-native"
+import { GlitchText } from "@/src/styles/GlitchText";
 
 interface EditableTitleProps {
     isEditingTitle: boolean;
@@ -43,7 +44,14 @@ const EditableTitle: React.FC<EditableTitleProps> = ({
                     autoFocus
                 />
             ) : (
-                <Text style={styles.title}>{item.title}</Text>
+                <View style={styles.titleContainer}>
+                    <GlitchText
+                        style={styles.title}
+                        glitch={theme.name === 'signalis'}
+                >
+                    {item.title}
+                    </GlitchText>
+                </View>
             )}
         </Pressable>
     )
@@ -59,6 +67,9 @@ const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
         color: theme.colors.textColorBold,
         marginBottom: 15,
         letterSpacing: 0.5,
+    },
+    titleContainer: {
+        alignItems: 'center',  
     },
     titleInput: {
         borderBottomWidth: 1,

@@ -32,7 +32,7 @@ const getStyles = (designs: any, theme: Theme) => StyleSheet.create({
     input: {
         borderWidth: 1,
         borderColor: theme.colors.backgroundColor,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         padding: 12,
         backgroundColor: theme.colors.backgroundColor,
         color: theme.colors.textColor,

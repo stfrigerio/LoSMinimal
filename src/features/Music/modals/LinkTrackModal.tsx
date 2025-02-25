@@ -73,7 +73,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     },
     modalContent: {
         backgroundColor: theme.colors.backgroundColor,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         padding: 20,
         maxHeight: '80%',
     },

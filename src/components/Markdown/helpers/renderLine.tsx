@@ -2,7 +2,6 @@ import React from 'react';
 import { View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import { ChecklistItem } from '../components/ChecklistItem';
 import { HeaderComponent } from '../components/Headers';
 import Table from '../components/Table';
@@ -20,9 +19,11 @@ const renderLine = (
     onChange: ((content: string) => void) | undefined,
     activeChecklists: boolean | undefined,
     onCreateTask: ((title: string) => void) | undefined,
-    children: string
+    children: string,
+    markdownStyles: any
 ) => {
-    const { markdownStyles } = useThemeStyles();
+
+    
     // todo this was breaking the journal
     // const { 
     //     isHeader, 

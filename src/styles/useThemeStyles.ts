@@ -17,16 +17,30 @@ type MarkdownStylesType = {
 	body: TextStyle;
 	heading1: TextStyle;
 	heading2: TextStyle;
+	heading3: TextStyle;
+	blockquote: TextStyle;
+	code_inline: TextStyle;
+	fence: TextStyle;
+	hr: TextStyle;
+	list_item: TextStyle;
+	bullet_list: TextStyle;
+	ordered_list: TextStyle;
+	strong: TextStyle;
+	em: TextStyle;
 };
+
 
 export const useThemeStyles = () => {
 	const { theme, themeName } = useTheme();
 
 	// Memoize the designs so that they are only recalculated when themeName changes.
+	const modalStyle = useMemo(() => modalStyles(theme.name), [theme.name]);
+	const textStyle = useMemo(() => textStyles(theme), [theme]);
+	
 	const designs: StylesType = useMemo(() => ({
-		modal: modalStyles(theme.name),
-		text: textStyles(theme),
-	}), [theme]);
+		modal: modalStyle,
+		text: textStyle,
+	}), [modalStyle, textStyle]);
 
 	// Memoize the markdown styles so they are only recalculated when the theme changes.
 	const markdownStyles = useMemo<MarkdownStylesType>(() => 

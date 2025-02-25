@@ -26,10 +26,16 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     input: {
         height: 40,
         borderColor: theme.colors.borderColor,
-        borderRadius: 10,
+        borderRadius: theme.borderRadius.lg,
         borderWidth: 1,
         padding: 10,
-        color: theme.colors.textColor
+        color: theme.colors.textColor,
+        ...(theme.name === 'signalis' && {
+            fontSize: 16,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
 });
 

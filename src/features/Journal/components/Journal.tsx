@@ -13,6 +13,7 @@ import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import { useJournal } from '../hooks/useJournal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import MobileMarkdown from '@/src/components/Markdown/Markdown';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = ({ date, uuid, onClose }) => {
     const { journalEntry, loadJournalEntry, saveJournalEntry, deleteJournalEntry, place, setPlace } = useJournal(date, uuid);
@@ -122,7 +123,14 @@ const Journal: React.FC<{ date: string; uuid: string, onClose?: () => void }> = 
 
     return (
         <View style={styles.container}>
-            <Text style={[designs.text.title, styles.title]}>{formatDateTime(date)}</Text>
+            <View style={{ alignSelf: 'center' }}>
+                <GlitchText
+                    style={[designs.text.title, styles.title]}
+                    glitch={theme.name === 'signalis'}
+                >
+                    {formatDateTime(date)}
+                </GlitchText>
+            </View>
             <Text style={[styles.place]}>{place}</Text>
             {isEditing ? (
                 <TextInput
@@ -232,7 +240,16 @@ const getStyles = (theme: Theme) => {
             fontFamily: 'serif',
             fontSize: 28,
             marginTop: 70,
-            color: theme.colors.textColorBold
+            color: theme.colors.textColorBold,
+            ...(theme.name === 'signalis' && {
+                fontSize: 22,
+                fontFamily: theme.typography.fontFamily.primary,
+                fontWeight: 'normal',
+                color: theme.colors.textColorBold,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 6,
+            })
         },
         journalText: {
             fontSize: 16,
@@ -247,6 +264,16 @@ const getStyles = (theme: Theme) => {
             marginTop: 0,
             marginBottom: 20,
             fontSize: 22,
+            ...(theme.name === 'signalis' && {
+                fontSize: 32,
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontWeight: 'normal',
+                fontStyle: 'normal',
+                color: theme.colors.accentColor,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 6,
+            })
         },
         backIcon: {
             position: 'absolute',

@@ -71,7 +71,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         width: 20,
         height: 20,
         marginRight: 8,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
     },

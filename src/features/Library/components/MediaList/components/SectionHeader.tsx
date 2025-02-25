@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
-import { LibraryData } from '@/src/types/Library';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 interface SectionHeaderProps {
     section: string;
@@ -108,14 +108,14 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         paddingVertical: 0,
         backgroundColor: theme.colors.backgroundSecondary,
         marginHorizontal: 20,
-        borderRadius: 20,
+        borderRadius: theme.borderRadius.lg,
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
     },
     backButton: {
         padding: 10,
         backgroundColor: theme.colors.backgroundSecondary,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         marginRight: 15,
     },
     title: {
@@ -124,6 +124,15 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontWeight: 'bold',
         color: theme.colors.textColorBold,
         textAlign: 'center',
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.primary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            color: theme.colors.accentColor,
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 1,
+        })
     },
     switchesContainer: {
         flexDirection: 'column',
@@ -138,5 +147,11 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         color: theme.colors.textColor,
         marginRight: 8,
         fontSize: 12,
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            fontSize: 16,
+        })
     },
 }); 

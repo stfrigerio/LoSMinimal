@@ -5,6 +5,7 @@ import { LibraryData } from '@/src/types/Library';
 import { formatDistanceToNow } from 'date-fns';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import { router } from 'expo-router';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 interface RecentActivityProps {
     recentActivity: LibraryData[];
@@ -40,7 +41,14 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ recentActivity }
     return (
         <>
             <View style={[styles.separator, { marginTop: 16 }]} />
-            <Text style={styles.sectionTitle}>Recent Activity</Text>
+            <View style={{ alignSelf: 'center' }}>
+                <GlitchText
+                    style={styles.sectionTitle}
+                    glitch={theme.name === 'signalis'}
+                >
+                    Recent Activity
+                </GlitchText>
+            </View>
             <View style={[styles.separator, { marginBottom: 28 }]} />
             <ScrollView 
                 horizontal 
@@ -124,9 +132,21 @@ const getStyles = (theme: Theme, design: any) => StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: theme.colors.textColor,
+        ...(theme.name === 'signalis' && {
+            fontSize: 16,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     recentSubtitle: {
         fontSize: 12,
         color: theme.colors.textColor + '99',
+        ...(theme.name === 'signalis' && {
+            fontSize: 14,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
 }); 

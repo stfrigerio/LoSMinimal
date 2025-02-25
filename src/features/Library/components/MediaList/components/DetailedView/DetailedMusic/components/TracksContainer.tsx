@@ -137,7 +137,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: theme.colors.backgroundSecondary,
         padding: 15,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         marginBottom: 8,
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
@@ -161,11 +161,26 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontSize: 16,
         color: theme.colors.textColor,
         marginBottom: 4,
+        ...(theme.name === 'signalis' && {
+            fontSize: 20,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     trackNumber: {
         fontSize: 14,
         color: theme.colors.textColorItalic,
         fontFamily: 'monospace',
+        ...(theme.name === 'signalis' && {
+            fontSize: 16,
+            fontFamily: theme.typography.fontFamily.primary,
+            // textShadowColor: theme.colors.accentColor,
+            // textShadowOffset: { width: 1, height: 1 },
+            // textShadowRadius: 6,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     trackMetadata: {
         flexDirection: 'row',
@@ -179,11 +194,12 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     playCount: {
         fontSize: 12,
         color: theme.colors.textColorItalic,
-    },
-    duration: {
-        fontSize: 12,
-        color: theme.colors.textColorItalic,
-        fontFamily: 'monospace',
+        ...(theme.name === 'signalis' && {
+            fontSize: 16,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     linkButton: {
         flexDirection: 'row',
@@ -201,6 +217,12 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     },
     dbTrackName: {
         fontStyle: 'italic',
+        ...(theme.name === 'signalis' && {
+            fontSize: 20,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     dbIndicator: {
         fontSize: 10,

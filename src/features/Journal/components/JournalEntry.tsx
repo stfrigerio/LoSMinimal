@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +13,7 @@ interface JournalEntryProps {
 
 const JournalEntry: React.FC<JournalEntryProps> = ({ item, onSelect }) => {
     const { theme, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
+    const styles = useMemo(() => getStyles(theme, designs), [theme, designs]);
 
     const formatDateTime = (date: string | number | Date) => {
         const d = new Date(date);

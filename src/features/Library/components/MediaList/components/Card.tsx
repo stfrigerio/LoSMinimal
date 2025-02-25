@@ -53,7 +53,7 @@ const Card: React.FC<CardProps> = ({ item, onPress, onToggleDownload }) => {
                     <Image source={{ uri: ensureHttpsUrl(item.mediaImage) }} style={styles.poster} />
                 )}
                 <View style={{ flexDirection: 'column', flexShrink: 1 }}>
-                    <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+                    <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">
                         {item.title}
                     </Text>
                     <View style={styles.descriptionContainer}>
@@ -96,7 +96,7 @@ const getStyles = (theme: Theme) => {
     return StyleSheet.create({
         card: {
             backgroundColor: theme.colors.backgroundSecondary,
-            borderRadius: 10,
+            borderRadius: theme.borderRadius.sm,
             padding: 10,
             marginVertical: 5,
             marginHorizontal: 10,
@@ -123,17 +123,24 @@ const getStyles = (theme: Theme) => {
         title: {
             fontSize: 18,
             fontWeight: 'bold',
-            color: theme.colors.textColorBold
+            color: theme.colors.textColorBold,
+            ...(theme.name === 'signalis' && {
+                fontSize: 15,
+                fontFamily: theme.typography.fontFamily.primary,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 6,
+            })
         },
         rating: {
-            fontSize: 14,
-            color: theme.colors.textColor,
             marginTop: 10,
         },
         poster: {
             width: 100,
             height: 100,
-            borderRadius: 10,
+            borderRadius: theme.borderRadius.sm,
             marginRight: 10,
         },
         creator: {
@@ -142,23 +149,38 @@ const getStyles = (theme: Theme) => {
             marginTop: 5,
             width: 150,
             marginRight: 10,
-            fontStyle: 'italic'
+            fontStyle: 'italic',
+            ...(theme.name === 'signalis' && {
+                fontSize: 16,
+                color: theme.colors.textColor,
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+            })
         },
         year: {
             marginTop: 5,
             fontSize: 12,
             color: theme.colors.textColor,
             flexGrow: 1,
-        },
-        text: {
-            color: theme.colors.textColor,
-            fontSize: 10,
-            marginTop: 5
+            ...(theme.name === 'signalis' && {
+                fontSize: 10,
+                color: theme.colors.textColorItalic,
+                fontFamily: theme.typography.fontFamily.primary,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+            })
         },
         seenText: {
             color: theme.colors.gray,
             fontSize: 10,
-            marginTop: 5
+            marginTop: 5,
+            ...(theme.name === 'signalis' && {
+                fontSize: 14,
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontStyle: 'normal',
+                fontWeight: 'normal',
+            })
         },
         ratingSwitchContainer: {
             flexDirection: 'row',

@@ -95,7 +95,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     circle: {
         height: 18,
         width: 18,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         borderWidth: 2,
         borderColor: theme.colors.borderColor,
     },

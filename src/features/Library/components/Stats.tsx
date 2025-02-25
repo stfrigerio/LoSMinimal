@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faChartLine, faClock, faListCheck } from '@fortawesome/free-solid-svg-icons';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { GlitchText } from '@/src/styles/GlitchText';
 interface StatsProps {
     stats: {
         totalItems: number;
@@ -25,7 +26,14 @@ export const Stats: React.FC<StatsProps> = ({ stats }) => {
     return (
         <>
             <View style={[styles.separator, { marginTop: 8 }]} />
-            <Text style={styles.sectionTitle}>Stats</Text>
+            <View style={{ alignSelf: 'center' }}>
+                <GlitchText
+                    style={styles.sectionTitle}
+                    glitch={theme.name === 'signalis'}
+                >
+                    Stats
+                </GlitchText>
+            </View>
             <View style={[styles.separator, { marginBottom: 16 }]} />
             <View style={styles.statsContainer}>
                 <View style={styles.statCard}>
@@ -69,7 +77,7 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
     statCard: {
         backgroundColor: theme.colors.backgroundSecondary,
         padding: 16,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         alignItems: 'center',
         width: '30%',
         elevation: 2,
@@ -83,17 +91,28 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         fontWeight: 'bold',
         color: theme.colors.textColor,
         marginTop: 8,
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     statLabel: {
         fontSize: 12,
         color: theme.colors.textColor + '99',
         marginTop: 4,
+        ...(theme.name === 'signalis' && {
+            fontSize: 16,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     genreContainer: {
         backgroundColor: theme.colors.backgroundSecondary,
         marginHorizontal: 16,
         padding: 16,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.lg,
         elevation: 2,
         shadowColor: theme.colors.shadowColor,
         shadowOffset: { width: 0, height: 1 },
@@ -106,6 +125,14 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         color: theme.colors.textColorBold,
         marginBottom: 12,
         textAlign: 'center',
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.primary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        })
     },
     genreRow: {
         flexDirection: 'row',
@@ -119,10 +146,22 @@ const getStyles = (theme: any, design: any) => StyleSheet.create({
         fontSize: 14,
         textTransform: 'capitalize',
         fontWeight: '500',
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     genreText: {
         color: theme.colors.textColor + 'CC',
         fontSize: 14,
+        ...(theme.name === 'signalis' && {
+            fontSize: 16,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        })
     },
     sectionTitle: {
         ...design.text.title,
