@@ -8,9 +8,9 @@ interface TaskDateTimeProps {
 }
 
 export const TaskDateTime: React.FC<TaskDateTimeProps> = ({ 
-  dateInput, 
-  showDateTimePicker,
-  styles 
+	dateInput, 
+	showDateTimePicker,
+	styles 
 }) => {
 	return (
 		<View style={styles.dateTimeContainer}>

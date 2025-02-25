@@ -6,6 +6,7 @@ import Toast from 'react-native-toast-message';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import AlertModal from '@/src/components/modals/AlertModal';
 import createTimePicker from '@/src/components/DateTimePicker';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 import { useTasksData } from '@/src/features/Tasks/hooks/useTasksData';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
@@ -228,9 +229,14 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
 
 	const modalContent = (
 		<>
-			<Text style={[designs.modal.title]}>
-				{task ? '✏️ Edit Task' : '✅  Create Task'}
-			</Text>
+			<View style={{ marginVertical: 30, justifyContent: 'center', alignItems: 'center' }}>
+				<GlitchText
+					style={[designs.modal.title]}
+					glitch={theme.name === 'signalis'}
+				>
+					{task ? '✏️ Edit Task' : '✅  Create Task'}
+				</GlitchText>
+			</View>
 
 			<TaskBasicInfo 
 				itemName={itemName}
@@ -276,7 +282,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ isOpen, onClose, onAddItem, onUpd
                             styles={styles}
                         />
                     </View>
-
+					
                     {/* Organization Group */}
                     <View style={styles.optionsGroup}>
                         <Text style={styles.groupTitle}>Organization</Text>
@@ -369,6 +375,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 	},
 	dateTimeText: {
 		color: theme.colors.textColor,
+		...(theme.name === 'signalis' && {
+			fontSize: 16,
+			fontFamily: theme.typography.fontFamily.secondary,
+		})
 	},
 	moreOptionsButton: {
         padding: 10,
@@ -378,6 +388,9 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     moreOptionsText: {
         color: theme.colors.textColor,
         fontSize: 16,
+		...(theme.name === 'signalis' && {
+			fontFamily: theme.typography.fontFamily.primary,
+		})
     },
     moreOptionsContainer: {
         borderTopWidth: 1,
@@ -395,6 +408,12 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontWeight: 'bold',
         color: theme.colors.textColor,
         marginBottom: 10,
+		...(theme.name === 'signalis' && {
+			fontWeight: 'normal',
+			fontSize: 18,
+			color: theme.colors.textColorBold,
+			fontFamily: theme.typography.fontFamily.primary,
+		})
     },
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pressable, Text, StyleSheet, Animated } from 'react-native';
+import { Pressable, Text, StyleSheet, Animated, View } from 'react-native';
 
 import { GlitchText } from '@/src/styles/GlitchText';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
@@ -48,12 +48,14 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
                     disabled && styles.disabled,
                 ]}
             >
-                <GlitchText 
-                    style={styles.buttonText} 
-                    glitch={theme.name === 'signalis'}
-                >
-                    {text}
-                </GlitchText>
+                <View style={styles.buttonTextContainer}>
+                    <GlitchText 
+                        style={styles.buttonText} 
+                        glitch={theme.name === 'signalis'}
+                    >
+                        {text}
+                    </GlitchText>
+                </View>
             </Pressable>
         </Animated.View>
     );
@@ -103,4 +105,7 @@ const getStyles = (theme: Theme, variant: string) => StyleSheet.create({
         fontWeight: theme.name === 'signalis' ? 'normal' : 'bold',
         fontFamily: theme.typography.fontFamily.primary,
     },
+    buttonTextContainer: {
+        alignItems: 'center',
+    }
 });

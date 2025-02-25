@@ -73,6 +73,11 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         opacity: 0.6,
         fontSize: 14,
         textAlign: 'center',
+        ...(theme.name === 'signalis' && {
+            opacity: 1,
+            fontSize: 20,
+            fontFamily: theme.typography.fontFamily.secondary,
+        })
     },
     activeSwitchLabel: {
         opacity: 1,

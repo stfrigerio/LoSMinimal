@@ -23,7 +23,6 @@ export const TaskPriority: React.FC<TaskPriorityProps> = ({
         <>
             <View style={styles.switchContainer}>
                 <SwitchInput
-                    label="Add Priority"
                     value={showPriority}
                     trueLabel="Add priority"
                     falseLabel=""

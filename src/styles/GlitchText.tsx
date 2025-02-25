@@ -21,6 +21,8 @@ export function GlitchText({ children, style, glitch = false }: GlitchTextProps)
         y1: 0,
         x2: 0,
         y2: 0,
+        x3: 0,
+        y3: 0,
     });
 
     useEffect(() => {
@@ -33,6 +35,8 @@ export function GlitchText({ children, style, glitch = false }: GlitchTextProps)
                     y1: Math.random() * 10 - 5,
                     x2: Math.random() * 10 - 5,
                     y2: Math.random() * 10 - 5,
+                    x3: Math.random() * 10 - 5,
+                    y3: Math.random() * 10 - 5,
                 });
             }, 50);
 
@@ -91,6 +95,21 @@ export function GlitchText({ children, style, glitch = false }: GlitchTextProps)
                             transform: [
                             { translateX: offsets.x2 },
                             { translateY: offsets.y2 },
+                            ],
+                        },
+                        ]}
+                    >
+                        {children}
+                    </Text>
+                    <Text
+                        style={[
+                        style,
+                        styles.glitchLayer,
+                        {
+                            color: 'rgba(255, 255, 255, 0.4)',
+                            transform: [
+                            { translateX: offsets.x3 },
+                            { translateY: offsets.y3 },
                             ],
                         },
                         ]}

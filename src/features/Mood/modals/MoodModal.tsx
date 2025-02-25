@@ -15,6 +15,7 @@ import { TagData } from '@/src/types/TagsAndDescriptions';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import ButtonsSlider from '@/src/components/atoms/ButtonsSlider';
 import Toast from 'react-native-toast-message';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 interface MoodNoteModalProps {
 	isOpen: boolean;
@@ -156,8 +157,14 @@ const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, i
 			onClose={closeMoodModal}
 			hideCloseButton={showCommentScreen}
 		>
-			<Text style={[designs.modal.title, { marginBottom: 30 }]}>        
-			{showCommentScreen ? 'Add Detailed Comment' : '💭 Mood Entry'}</Text>
+			<View style={{ marginVertical: 30, justifyContent: 'center', alignItems: 'center' }}>
+				<GlitchText
+					style={[designs.modal.title]}
+					glitch={theme.name === 'signalis'}
+				>
+					{showCommentScreen ? 'Add Detailed Comment' : '💭 Mood Entry'}
+				</GlitchText>
+			</View>
 			{showCommentScreen ? (
 				<>
 					<View style={{ width: '100%', flex: 1, minHeight: 200 }}>
@@ -249,6 +256,15 @@ const MoodNoteModal: React.FC<MoodNoteModalProps> = ({ isOpen, closeMoodModal, i
 const getStyles = (theme: Theme) => StyleSheet.create({
 	inputText: {
 		fontFamily: 'serif',
+		...(theme.name === 'signalis' && {
+			fontSize: 18,
+			fontFamily: theme.typography.fontFamily.secondary,
+			fontWeight: 'normal',
+			color: theme.colors.textColor,
+			textShadowColor: theme.colors.accentColor,
+			textShadowOffset: { width: 1, height: 1 },
+			textShadowRadius: 6,
+		})
 	},
 	buttonsContainer: {
 		flexDirection: 'row',
@@ -263,7 +279,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		justifyContent: 'center',
 		borderWidth: 2,
 		borderColor: theme.colors.borderColor,
-		borderRadius: 10
+		borderRadius: theme.borderRadius.md
 	},
 	tagContainer: {
 		flexDirection: 'row',
@@ -289,6 +305,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		fontSize: 12,
 		fontWeight: '600',
 		marginRight: 4,
+		...(theme.name === 'signalis' && {
+			fontSize: 16,
+			fontFamily: theme.typography.fontFamily.secondary,
+		})
 	},
 	removeTag: {
 		fontSize: 16,

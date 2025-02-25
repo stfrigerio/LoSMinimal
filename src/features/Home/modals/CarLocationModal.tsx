@@ -156,10 +156,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         marginTop: 10,
         borderWidth: 1,
         borderColor: theme.colors.borderColor,
-        borderRadius: 12,
+        borderRadius: theme.borderRadius.md,
         padding: 15,
         backgroundColor: theme.colors.backgroundColor,
-        shadowColor: theme.shadowColor || '#000',
+        shadowColor: theme.colors.shadowColor,
         shadowOffset: {
             width: 0,
             height: 2,
@@ -174,6 +174,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         marginTop: -15,
         marginBottom: 20,
         fontSize: 12,
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontFamily: theme.typography.fontFamily.secondary,
+        })
     },
 });
 

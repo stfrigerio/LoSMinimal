@@ -47,6 +47,15 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         color: theme.colors.gray,
         textAlign: 'center',
         fontSize: 16,
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontWeight: 'normal',
+            color: theme.colors.textColorBold,
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        })
     },
     tagText: {
         padding: 4,
