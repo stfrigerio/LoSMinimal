@@ -132,7 +132,7 @@ const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         entryContainer: {
             flexDirection: 'row',
-            marginBottom: 20,
+            marginVertical: 20,
             borderBottomWidth: 1,
             borderBottomColor: theme.colors.borderColor,
             paddingBottom: 15,
@@ -150,11 +150,28 @@ const getStyles = (theme: Theme, designs: any) => {
             fontWeight: 'bold',
             color: theme.colors.accentColor,
             marginBottom: 4,
+            ...(theme.name === 'signalis' && {
+                fontSize: 20,
+                fontFamily: theme.typography.fontFamily.primary,
+                fontWeight: 'normal',
+                color: theme.colors.textColorBold,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 6,
+            }),
         },
         dateText: {
             fontSize: 11,
             color: theme.colors.opaqueTextColor,
             marginBottom: 2,
+            ...(theme.name === 'signalis' && {
+                fontSize: 12,
+                fontFamily: theme.typography.fontFamily.secondary,
+                color: theme.colors.textColor,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 0.5, height: 0.5 },
+                textShadowRadius: 3,
+            }),
         },
         entryHeader: {
             flexDirection: 'row',
@@ -167,10 +184,16 @@ const getStyles = (theme: Theme, designs: any) => {
             justifyContent: 'center',
         },
         comment: {
+            ...designs.text.text,
             fontSize: 15,
             color: theme.colors.textColor,
+            marginRight: 10,
             lineHeight: 20,
             marginTop: 6,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 16,
+            })
         },
         actionIcons: {
             flexDirection: 'row',
@@ -203,6 +226,13 @@ const getStyles = (theme: Theme, designs: any) => {
         tagText: {
             fontSize: 12,
             fontWeight: '600',
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontWeight: 'normal',
+                // textShadowColor: theme.colors.accentColor,
+                // textShadowOffset: { width: 1, height: 1 },
+                // textShadowRadius: 4,
+            }),
         },
     });
 };

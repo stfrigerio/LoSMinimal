@@ -9,6 +9,7 @@ import { useThemeStyles, Theme } from '../../styles/useThemeStyles';
 import { useTimeData } from './hooks/useTimeData';
 import { TimeData } from '../../types/Time';
 import { navItems } from './constants/navItems';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 const TimeHub: React.FC = () => {
 	const { theme, designs } = useThemeStyles();
@@ -58,9 +59,14 @@ const TimeHub: React.FC = () => {
 	return (
 		<View style={styles.container}>
 			<Banner imageSource={require('@/assets/images/time.webp')} />
-			<Text style={designs.text.title}>
-				Time
-			</Text>
+			<View style={styles.titleContainer}>
+				<GlitchText
+					style={designs.text.title}
+					glitch={theme.name === 'signalis'}
+				>
+					Time
+				</GlitchText>
+			</View>
 			
 			<View style={styles.summaryContainer}>
 				<View style={styles.summaryItem}>
@@ -112,6 +118,10 @@ const getStyles = (theme: Theme, designs: any) => {
 			padding: 20,
 			paddingTop: 37,
 		},
+		titleContainer: {
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
 		summaryContainer: {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
@@ -126,11 +136,23 @@ const getStyles = (theme: Theme, designs: any) => {
 			color: theme.colors.textColorItalic,
 			marginBottom: 5,
 			textAlign: 'center',
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+				fontWeight: 'normal',
+				color: theme.colors.textColorItalic,
+			})
 		},
 		summaryValue: {
 			color: theme.colors.textColor,
 			fontWeight: 'bold',
 			textAlign: 'center',
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+				fontWeight: 'normal',
+				color: theme.colors.textColor,
+			})
 		},
 	});
 };

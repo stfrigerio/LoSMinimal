@@ -188,7 +188,6 @@ const TimeList: React.FC = () => {
 				maxToRenderPerBatch={5}
 				windowSize={5}
 				removeClippedSubviews={true}
-				
 			/>
             {!selectionState.isSelectionMode && (
 				<FilterAndSort
@@ -235,9 +234,6 @@ const TimeList: React.FC = () => {
 };
 
 const getStyles = (theme: Theme, designs: any, showFilter: boolean, isSelectionMode: boolean) => {
-	const { width } = Dimensions.get('window');
-	const isSmall = width < 1920;
-	const isDesktop = Platform.OS === 'web';
 
 	return StyleSheet.create({
 		container: {

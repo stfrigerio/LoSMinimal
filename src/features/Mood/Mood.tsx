@@ -9,6 +9,7 @@ import { useMoodData } from './hooks/useMoodData';
 
 import { navItems } from './constants/navItems';
 import Banner from '@/src/components/Banner';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 const Moods: React.FC = () => {
     const { theme, designs } = useThemeStyles();
@@ -55,7 +56,14 @@ const Moods: React.FC = () => {
     return (
         <View style={styles.container}>
             <Banner imageSource={require('@/assets/images/mood.webp')} />
-            <Text style={designs.text.title}>Moods</Text>
+            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                <GlitchText 
+                    style={designs.text.title}
+                    glitch={theme.name === 'signalis'}
+                >
+                    Moods
+                </GlitchText>
+            </View>
 
             {/* Summary Section */}
             <View style={styles.summaryContainer}>
@@ -108,16 +116,25 @@ const getStyles = (theme: Theme, designs: any) => {
 			alignItems: 'center',
 			flex: 1,
 		},
-		summaryLabel: {
-			color: theme.colors.textColorItalic,
-			marginBottom: 5,
-			textAlign: 'center',
-		},
-		summaryValue: {
-			color: theme.colors.textColor,
-			fontWeight: 'bold',
-			textAlign: 'center',
-		},
+        summaryLabel: {
+            fontSize: 14,
+            color: theme.colors.textColorItalic,
+            marginBottom: 5,
+            ...(theme.name === 'signalis' && {  
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 18,
+            })
+        },
+        summaryValue: {
+            fontSize: 22,
+            fontWeight: 'bold',
+            color: theme.colors.textColor,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 20,
+                fontWeight: 'normal',
+            })
+        },
     });
 };
 

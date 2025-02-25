@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { View, Dimensions, StyleSheet, Platform, Text, ScrollView, Pressable } from 'react-native';
+import { View, Dimensions, StyleSheet, Platform, Text, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 
 import SunburstChart from '@/src/components/charts/Sunburst/SunburstChart';
 import EntriesList from '@/src/features/PeriodicNote/components/atoms/EntriesList';
@@ -83,8 +83,8 @@ const TimeGraphs: React.FC = () => {
 
     if (!timeSunburstData || !timeEntries) {
         return (
-            <View style={styles.container}>
-                <Text style={{ color: 'gray' }}>No Time data available.</Text>
+            <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator size="large" color={theme.colors.accentColor} />
             </View>
         );
     }

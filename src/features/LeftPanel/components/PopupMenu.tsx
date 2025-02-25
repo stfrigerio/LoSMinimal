@@ -155,6 +155,12 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     menuItemText: {
         color: theme.colors.textColor,
         fontSize: 16,
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontWeight: 'normal',
+            color: theme.colors.textColorItalic,
+        })
     },
 });
 

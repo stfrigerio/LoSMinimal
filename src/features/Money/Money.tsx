@@ -108,17 +108,23 @@ const getStyles = (theme: Theme, designs: any) => {
             alignItems: 'center',
         },
         summaryLabel: {
-            ...designs.text.text,
-            color: 'gray',
+            fontSize: 14,
+            color: theme.colors.textColorItalic,
             marginBottom: 5,
+            ...(theme.name === 'signalis' && {  
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 18,
+            })
         },
         summaryValue: {
-            ...designs.text.text,
-            // fontWeight: 'bold',
-        },
-        subtitle: {
-            ...designs.text.title,
-            marginBottom: 10,
+            fontSize: 24,
+            fontWeight: 'bold',
+            color: theme.colors.textColor,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 24,
+                fontWeight: 'normal',
+            })
         },
     });
 };

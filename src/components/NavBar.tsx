@@ -130,6 +130,9 @@ const getStyles = (theme: Theme) => {
             left: 0,
             right: 0,
             zIndex: 200,
+            ...(theme.name === 'signalis' && {
+                borderColor: theme.colors.accentColorShade,
+            })
         },
         backIconWrapper: {
             width: 60,

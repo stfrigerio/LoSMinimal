@@ -123,6 +123,12 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     drawerItemText: {
         color: theme.colors.backgroundColor,
         fontSize: 14,
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontWeight: 'normal',
+            color: theme.colors.textColorItalic,
+        })
     },
 });
 

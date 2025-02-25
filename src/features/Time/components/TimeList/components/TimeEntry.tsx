@@ -143,6 +143,15 @@ const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
 		...designs.text.text,
 		fontSize: 18,
 		fontWeight: 'bold',
+		...(theme.name === 'signalis' && {
+			fontSize: 18,
+			fontFamily: theme.typography.fontFamily.primary,
+			fontWeight: 'normal',
+			color: theme.colors.textColorBold,
+			textShadowColor: theme.colors.accentColor,
+			textShadowOffset: { width: 1, height: 1 },
+			textShadowRadius: 6,
+		})
 	},
 	dateMonth: {
 		...designs.text.text,
@@ -160,6 +169,15 @@ const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
 		color: theme.colors.accentColor,
 		fontWeight: 'bold',
 		textAlign: 'center',
+		...(theme.name === 'signalis' && {
+			fontSize: 12,
+			fontFamily: theme.typography.fontFamily.primary,
+			fontWeight: 'normal',
+			color: theme.colors.textColorItalic,
+			textShadowColor: theme.colors.accentColor,
+			textShadowOffset: { width: 1, height: 1 },
+			textShadowRadius: 6,
+		})
 	},
 	description: {
 		...designs.text.text,

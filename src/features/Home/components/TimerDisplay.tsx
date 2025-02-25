@@ -5,6 +5,7 @@ import { formatSecondsToHMS } from '@/src/utils/timeUtils';
 import { databaseManagers } from '@/database/tables';
 
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { GlitchText } from '@/src/styles/GlitchText';
 interface TimerDisplayProps {
 	initialSeconds: number;
 	tagName?: string;
@@ -89,7 +90,14 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, de
 						{descriptionEmoji} {description}
 					</Text>
 				</View>
-				<Text style={[styles.timer]}>{formatSecondsToHMS(seconds)}</Text>
+				<View>
+					<GlitchText
+						style={styles.timer}
+						glitch={theme.name === 'signalis'}
+					>
+						{formatSecondsToHMS(seconds)}
+					</GlitchText>
+				</View>
 			</View>
 		</View>
 	);
@@ -118,16 +126,34 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		marginRight: 2,
 	},
 	timerTag: {
-		fontWeight: theme.name === 'signalis' ? 'normal' : 'bold',
+		fontWeight: 'bold',
 		color: theme.name === 'light' ? '#d3c6aa': theme.colors.textColor,
 		fontFamily: theme.typography.fontFamily.secondary,
-		fontSize: theme.name === 'signalis' ? 12 : 10,
+		fontSize: 10,
+		...(theme.name === 'signalis' && {
+			fontSize: 10,
+			fontFamily: theme.typography.fontFamily.primary,
+			fontWeight: 'normal',
+			color: theme.colors.textColorItalic,
+			textShadowColor: theme.colors.accentColor,
+			textShadowOffset: { width: 1, height: 1 },
+			textShadowRadius: 6,
+		})
 	},
 	timerDescription: {
 		color: theme.name === 'light' ? '#d3c6aa': theme.colors.textColor,
 		fontFamily: theme.typography.fontFamily.secondary,
-		fontSize: theme.name === 'signalis' ? 11 : 10,
+		fontSize: 10,
 		opacity: 0.8,
+		...(theme.name === 'signalis' && {
+			fontSize: 12,
+			fontFamily: theme.typography.fontFamily.secondary,
+			fontWeight: 'normal',
+			color: theme.colors.textColor,
+			textShadowColor: theme.colors.accentColor,
+			textShadowOffset: { width: 1, height: 1 },
+			textShadowRadius: 6,
+		})
 	},
 	timer: {
 		color: theme.name === 'light' ? '#d3c6aa': theme.colors.textColor,
