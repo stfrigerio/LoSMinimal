@@ -277,7 +277,6 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     gridRow: {
         flexDirection: theme.name === 'signalis' ? 'column' : 'row',
         justifyContent: 'space-between',
-        marginVertical: theme.spacing.xxs,
     },
 });
 

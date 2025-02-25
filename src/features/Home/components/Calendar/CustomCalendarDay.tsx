@@ -93,10 +93,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         height: 4,
     },
     todayText: {
-        fontSize: 16,
+        fontSize: theme.name === 'signalis' ? 22 : 16,
         color: theme.colors.accentColor,
-        fontWeight: 'bold',
-        fontFamily: theme.typography.fontFamily.primary,
+        fontWeight: theme.name === 'signalis' ? 'normal' : 'bold',
+        fontFamily: theme.typography.fontFamily.secondary,
     },
     todayContainer: {
         width: 32,

@@ -70,7 +70,7 @@ const TagModal: React.FC<TagModalProps> = ({ isOpen, setSelectionData, sourceTab
                                         <Text style={designs.text.text}>{item.emoji}</Text>
                                         <View style={[styles.colorDot, { backgroundColor: item.color }]} />
                                         <Text 
-											style={[isMoodTable ? styles.moodTagText : designs.text.text]} 
+											style={[isMoodTable ? styles.moodTagText : designs.text.text, styles.tagText]} 
 											numberOfLines={1}
 											ellipsizeMode="tail"
 										>
@@ -114,6 +114,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		borderColor: theme.colors.borderColor,
 		borderRadius: 5,
 	},
+	tagText: {
+		fontFamily: theme.name === 'signalis' ? theme.typography.fontFamily.secondary : theme.typography.fontFamily.primary,
+		fontSize: theme.name === 'signalis' ? 18 : undefined,
+	},
 	lastItem: {
 		borderBottomWidth: 0
 	},
@@ -135,9 +139,6 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     moodTagItem: {
         flex: 1,
         minWidth: '20%',
-
-        // borderWidth: 1,
-        // borderColor: theme.colors.borderColor,
     },
 	moodTagText: {
 		color: theme.colors.textColor,

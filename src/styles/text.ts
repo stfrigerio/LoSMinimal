@@ -31,7 +31,8 @@ export const textStyles = (theme: Theme): TextStyles => {
 		},
 		text: {
 			color: theme.colors.textColor,
-            fontFamily: 'BigBlueTerm437NerdFont-Regular',
+            fontFamily: theme.name === 'signalis' ? theme.typography.fontFamily.secondary : theme.typography.fontFamily.primary,
+			fontSize: theme.name === 'signalis' ? 18 : undefined,
 		},
 		input: {
 			flexDirection: 'row',

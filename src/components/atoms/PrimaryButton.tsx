@@ -55,19 +55,34 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
 
 const getButtonColor = (theme: any, variant: string) => {
     if (variant === 'primary') {
-        return theme.name === 'dark' ? theme.colors.textColor : theme.colors.backgroundSecondary;
+        if (theme.name === 'signalis') {
+            return theme.colors.accentColor;
+        } else {
+            return theme.name === 'dark' ? theme.colors.textColor : theme.colors.backgroundSecondary;
+        }
     }
     return theme.colors.accentColor;
 }
 
+const getButtonTextColor = (theme: any, variant: string) => {
+    if (variant === 'primary') {
+        if (theme.name === 'signalis') {
+            return theme.colors.backgroundColor;
+        } else {
+            return theme.name === 'dark' ? theme.colors.backgroundColor : theme.colors.textColor;
+        }
+    }
+    return theme.colors.backgroundColor;
+}
+
 const getStyles = (theme: Theme, variant: string) => StyleSheet.create({
     button: {
-        paddingVertical: 10,
-        paddingHorizontal: 20,  
+        paddingVertical: theme.spacing.md,
+        paddingHorizontal: theme.spacing.lg,  
         backgroundColor: getButtonColor(theme, variant),
         borderWidth: theme.name === 'dark' ? 2 : 1,
         borderColor: theme.colors.borderColor,
-        borderRadius: 10,
+        borderRadius: theme.borderRadius.lg,
         minWidth: 120,  
     },
     pressed: {
@@ -78,7 +93,8 @@ const getStyles = (theme: Theme, variant: string) => StyleSheet.create({
     },
     buttonText: {
         alignSelf: 'center',
-        color: theme.name === 'dark' ? theme.colors.backgroundColor : theme.colors.textColor,
-        fontWeight: 'bold',
+        color: getButtonTextColor(theme, variant),
+        fontWeight: theme.name === 'signalis' ? 'normal' : 'bold',
+        fontFamily: theme.typography.fontFamily.primary,
     },
 });

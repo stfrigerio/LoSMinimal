@@ -42,13 +42,14 @@ export const modalStyles = (themeName: ThemeName): ModalStyles => {
 		},
 		title: {
 			fontSize: theme.typography.fontSize.xl,
-			fontWeight: theme.typography.fontWeight.bold,
+			fontWeight: theme.name === 'signalis' ? 'normal' : theme.typography.fontWeight.bold,
 			color: `${theme.colors.textColorBold}DD`,
 			textAlign: 'center',
 			marginBottom: theme.spacing.md,
 			textShadowColor: theme.colors.shadowColor,
 			textShadowOffset: { width: -1, height: 1 },
 			textShadowRadius: 10,
+			fontFamily: theme.typography.fontFamily.primary,
 		},
 		closeButton: {
 			position: 'absolute',

@@ -12,6 +12,7 @@ import { setWeek, format, addDays } from 'date-fns';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getNextMonthColor } from '@/src/features/DailyNote/helpers/useDateHeader';
 import { getFillColorForMonth } from '@/src/styles/monthsColor';
 import { DateHeaderProps } from '@/src/features/DailyNote/types/DateHeader';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 // Utility function to validate color strings using regex
 const isValidColor = (color: string) => {
@@ -120,7 +121,12 @@ const DateHeader: React.FC<DateHeaderProps> = ({ formattedDate, periodType }) =>
             </Svg>
             {periodType === 'day' && (
                 <Animated.Text style={[styles.dayOfWeek, { opacity: fadeAnim }]}>
-                    {formattedDate.split(', ')[0]}
+                    <GlitchText
+                        glitch={theme.name === 'signalis'}
+                        style={styles.dayOfWeek}
+                    >
+                        {formattedDate.split(', ')[0]}
+                    </GlitchText>
                 </Animated.Text>
             )}
         </View>
@@ -137,9 +143,9 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontSize: 22,
         color: theme.colors.textColor,
         fontFamily: theme.typography.fontFamily.primary,
-        textShadowColor: theme.colors.shadowColor,
-        textShadowOffset: { width: 1, height: 2 },
-        textShadowRadius: 8,
+        textShadowColor: theme.name === 'signalis' ? theme.colors.textColor : theme.colors.shadowColor,
+        textShadowOffset: { width: 1, height: 1 },
+        textShadowRadius: 6,
     },
 });
 

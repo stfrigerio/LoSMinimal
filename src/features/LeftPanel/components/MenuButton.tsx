@@ -61,7 +61,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         paddingVertical: theme.spacing.md,
         borderRadius: theme.borderRadius.md,
         backgroundColor: getBackground(theme),
-        marginVertical: theme.name === 'signalis' ? theme.spacing.xxs : theme.spacing.md, 
+        marginVertical: theme.name === 'signalis' ? theme.spacing.sm : theme.spacing.md, 
         marginHorizontal: theme.spacing.sm,
         borderWidth: 1,
         borderColor: theme.name === 'light' ? 'transparent' : theme.colors.backgroundColor,
@@ -85,5 +85,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         flex: 1,
         color: theme.colors.textColor,
         fontFamily: theme.typography.fontFamily.primary,
+        ...(theme.name === 'signalis' && {
+            textShadowColor: theme.colors.textColor,
+            textShadowOffset: { width: 0, height: 0 },
+            textShadowRadius: 6,
+        }),
     },
 });

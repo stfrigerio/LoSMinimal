@@ -6,7 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import Toast, { BaseToast } from 'react-native-toast-message';
 import * as Font from 'expo-font';
 import * as NavigationBar from 'expo-navigation-bar';
-import { Platform, View } from 'react-native';
+import { Animated, Platform } from 'react-native';
 
 import { ThemeProvider } from '../src/contexts/ThemeContext';
 import { DrawerStateProvider } from '../src/contexts/DrawerState';
@@ -14,7 +14,8 @@ import { NavbarDrawerProvider } from '../src/contexts/NavbarContext';
 import { ChecklistProvider } from '../src/contexts/checklistContext';
 import { InitializeDatabasesWrapper } from '@/database/databaseInitializer';
 import { AppInitializer } from '../src/AppInitializer';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useThemeStyles } from '@/src/styles/useThemeStyles';
+import { Scanlines } from '@/src/styles/scanLines';
 
 // Create a separate component for the theme-dependent content
 function AppContent() {
@@ -80,8 +81,7 @@ function AppContent() {
 
 function ThemedRootLayout() {
     const { theme } = useThemeStyles();
-    const pathname = usePathname();
-    const isHomepage = pathname === '/' || pathname === '/features/Home/Homepage';
+    const showScanlines = theme.name === 'signalis';
 
     useEffect(() => {
         if (Platform.OS === 'android') {
@@ -98,6 +98,7 @@ function ThemedRootLayout() {
         >
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <AppContent />
+                <Scanlines visible={showScanlines} />
             </GestureHandlerRootView>
         </SafeAreaProvider>
     );

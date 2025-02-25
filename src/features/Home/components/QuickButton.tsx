@@ -195,6 +195,24 @@ const QuickButton: React.FC<QuickButtonProps> = ({ isExpanded, setIsExpanded }) 
 	);
 };
 
+const getFloatingButtonColor = (theme: Theme) => {
+	if (theme.name === 'light') {
+		return '#CC5359';
+	} else if (theme.name === 'signalis') {
+		return `${theme.colors.accentColor}80`;
+	} else {
+		return `${theme.colors.accentColor}`;
+	}
+};
+
+const getSecondaryButtonColor = (theme: Theme) => {
+	if (theme.name === 'light') {
+		return `#f0868b99`;
+	} else {
+		return `${theme.colors.accentColorShade}`;
+	}
+};
+
 const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		alignItems: 'flex-end',
@@ -205,7 +223,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		alignItems: 'center',
 	},
 	floatingButton: {
-		backgroundColor: theme.name === 'light' ? '#CC5359' : `${theme.colors.accentColor}80`,
+		backgroundColor: getFloatingButtonColor(theme),
 		width: 56,
 		height: 56,
 		borderRadius: 28,
@@ -214,13 +232,15 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		elevation: 4,
 	},
 	secondaryButton: {
-		backgroundColor: theme.name === 'light' ? `#f0868b99` : theme.colors.accentColorShade,
+		backgroundColor: getSecondaryButtonColor(theme),
 		marginBottom: 16,
 		width: 150,
 		height: 40,
-		borderRadius: theme.borderRadius.md,
+		borderRadius: theme.borderRadius.pill,
 		justifyContent: 'center',
 		alignItems: 'center',  
+		borderWidth: theme.name == 'signalis' ? 1 : 0,
+		borderColor: theme.colors.borderColor,
 	},
 	buttonText: {
 		color: theme.name === 'light' ? '#333333' : theme.colors.backgroundColor,

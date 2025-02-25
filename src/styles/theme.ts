@@ -7,7 +7,7 @@ export const tokens = {
 		xxs: 2,
 		xs: 4,
 		sm: 8,
-		md: 16,
+		md: 12,
 		lg: 24,
 		xl: 32,
 		xxl: 48,
@@ -101,8 +101,8 @@ export const darkTheme: Theme = {
 	typography: {
         ...tokens.typography,
         fontFamily: {
-            primary: 'serif',
-            secondary: 'system',
+            primary: 'system',
+            secondary: 'serif',
             mono: 'SpaceMono',
         },
     }
@@ -146,9 +146,9 @@ export const signalisTheme: Theme = {
 		textColorBold: '#c79428',
 		textColorItalic: '#CBA95F',
 		opaqueTextColor: 'rgba(255, 255, 255, 0.5)',
-		borderColor: '#270e0e',
+		borderColor: '#1c1c1c',
 		accentColor: '#FF0000',
-		accentColorShade: '#8f0000',
+		accentColorShade: '#7f0000',
 		hoverColor: '#ffffff',
 
 		shadowColor: 'rgba(0, 0, 0, 1)',
@@ -177,6 +177,7 @@ export const signalisTheme: Theme = {
 		sm: 0,
 		md: 0,
 		lg: 0,
+		pill: 0
 	},
 };
 

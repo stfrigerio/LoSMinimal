@@ -39,7 +39,6 @@ export const usePersonModal = (onClose: () => void, initialPerson?: PersonData) 
                 return;
             }
             
-            console.log('about to save person', person);
             databaseManagers.people.upsert(person);
             resetForm();
             onClose();

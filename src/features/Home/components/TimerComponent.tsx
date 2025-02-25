@@ -25,7 +25,17 @@ const TimerComponent: React.FC = () => {
 		isDescriptionModalOpen: false,
 	});
 
-	const { timerRunning, initialSeconds, startTimer, stopTimer, getCurrentTimerSecondsRef, tag, description, fetchActiveTimer, checkAndClearStuckNotification } = useTimer();
+	const { 
+		timerRunning, 
+		initialSeconds, 
+		startTimer, 
+		stopTimer, 
+		getCurrentTimerSecondsRef, 
+		tag, 
+		description, 
+		fetchActiveTimer, 
+		checkAndClearStuckNotification 
+	} = useTimer();
 	const scaleAnim = useRef(new Animated.Value(1)).current;
 
 	const { theme } = useThemeStyles();
@@ -138,12 +148,22 @@ const TimerComponent: React.FC = () => {
 	);
 };
 
+const getFloatingButtonColor = (theme: Theme) => {
+	if (theme.name === 'light') {
+		return '#CC5359';
+	} else if (theme.name === 'signalis') {
+		return `${theme.colors.accentColor}80`;
+	} else {
+		return `${theme.colors.accentColor}`;
+	}
+};
+
 const getStyles = (theme: Theme) => StyleSheet.create({
 	container: {
 		alignItems: 'flex-start',
 	},
 	floatingButton: {
-		backgroundColor: theme.name === 'light' ? '#CC5359' : `${theme.colors.accentColor}80`,
+		backgroundColor: getFloatingButtonColor(theme),
 		width: 56,
 		height: 56,
 		borderRadius: 28,

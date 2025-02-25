@@ -80,20 +80,21 @@ const TimerDisplay: React.FC<TimerDisplayProps> = ({ initialSeconds, tagName, de
 				}
 			]}>
 				<View style={styles.tagContainer}>
-					<Text style={[styles.timerTag, { fontSize: 10 }]} numberOfLines={1} ellipsizeMode="tail">
+					<Text style={[styles.timerTag]} numberOfLines={1} ellipsizeMode="tail">
 						{emoji} {tagName}
 					</Text>
 				</View>
 				<View style={styles.descriptionContainer}>
-					<Text style={[styles.timerDescription, { fontSize: 10 }]} numberOfLines={1} ellipsizeMode="tail">
+					<Text style={[styles.timerDescription]} numberOfLines={1} ellipsizeMode="tail">
 						{descriptionEmoji} {description}
 					</Text>
 				</View>
-				<Text style={[styles.timer, { fontSize: 10 }]}>{formatSecondsToHMS(seconds)}</Text>
+				<Text style={[styles.timer]}>{formatSecondsToHMS(seconds)}</Text>
 			</View>
 		</View>
 	);
 };
+
 
 const getStyles = (theme: Theme) => StyleSheet.create({
 	timerFlexContainer: {
@@ -117,19 +118,22 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		marginRight: 2,
 	},
 	timerTag: {
-		fontWeight: 'bold',
-		color: theme.name === 'dark' ? theme.colors.textColor : '#d3c6aa',
-		fontSize: 10,
+		fontWeight: theme.name === 'signalis' ? 'normal' : 'bold',
+		color: theme.name === 'light' ? '#d3c6aa': theme.colors.textColor,
+		fontFamily: theme.typography.fontFamily.secondary,
+		fontSize: theme.name === 'signalis' ? 12 : 10,
 	},
 	timerDescription: {
-		fontSize: 10,
-		color: theme.name === 'dark' ? theme.colors.textColor : '#d3c6aa',
+		color: theme.name === 'light' ? '#d3c6aa': theme.colors.textColor,
+		fontFamily: theme.typography.fontFamily.secondary,
+		fontSize: theme.name === 'signalis' ? 11 : 10,
 		opacity: 0.8,
 	},
 	timer: {
-		color: theme.name === 'dark' ? theme.colors.textColor : '#d3c6aa',
-		fontWeight: 'bold',
-		fontSize: 11,
+		color: theme.name === 'light' ? '#d3c6aa': theme.colors.textColor,
+		fontFamily: theme.typography.fontFamily.secondary,
+		fontWeight: theme.name === 'signalis' ? 'normal' : 'bold',
+		fontSize: theme.name === 'signalis' ? 14 : 10,
 		minWidth: 30,
 		textAlign: 'right',
 	},

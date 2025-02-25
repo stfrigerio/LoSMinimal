@@ -4,6 +4,7 @@ import { Svg, Path } from 'react-native-svg';
 
 import quotes from '@/assets/quotes.json';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { GlitchText } from '@/src/styles/GlitchText';
 type QuoteType = {
     content: string;
     author: string;
@@ -55,15 +56,34 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
             fontStyle: theme.name === 'signalis' ? 'normal' : 'italic',
             fontFamily: theme.typography.fontFamily.secondary,
         },
+        quoteContentShadow: {
+            textShadowColor: theme.colors.textColor,
+            textShadowOffset: { width: 0, height: 0 },
+            textShadowRadius: 6,
+        },
+        quoteContentAccentShadow: {
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 6, height: 6 },
+            textShadowRadius: 6,
+        },
+        authorContainer: {
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'flex-end',  // Change from alignItems to justifyContent
+            marginTop: 10,
+            paddingRight: 50,  // Add right padding to match the quote content margins
+        },        
         quoteAuthor: {
-            textAlign: 'right',
             fontFamily: theme.typography.fontFamily.secondary,
             fontSize: theme.name === 'signalis' ? 14 : 12,
-            marginTop: 10,
             color: theme.colors.gray,
             fontWeight: '600',
             letterSpacing: 1,
-            marginRight: 60,
+            ...(theme.name === 'signalis' && {
+                textShadowColor: theme.colors.gray,
+                textShadowOffset: { width: 0, height: 0 },
+                textShadowRadius: 8,
+            }),
         },
         horizontalSeparator: {
             marginHorizontal: 50,
@@ -104,7 +124,6 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
         }
     }, [isFixed]);
 
-    // Start the animation every time the quote changes
     useEffect(() => {
         fadeAnim.setValue(0); // Reset the opacity to 0
         Animated.timing(fadeAnim, {
@@ -128,8 +147,35 @@ const Quote: React.FC<QuoteProps> = ({ isCollapse, isFixed }) => {
                 <View style={[styles.horizontalSeparator, { marginBottom: 10}]} />
                 {expanded ? (
                     <>
-                        <Text style={styles.quoteContent}>{quote.content}</Text>
-                        <Text style={styles.quoteAuthor}>- {quote.author}</Text>
+                        {theme.name === 'signalis' && (
+                            <Text style={[
+                                styles.quoteContent,
+                                styles.quoteContentAccentShadow,
+                                { 
+                                    color: 'transparent',
+                                    position: 'absolute',
+                                    top: 62,
+                                    left: 0,
+                                    right: 0,
+                                    opacity: 0.7, 
+                                    zIndex: -1
+                                }
+                            ]}>
+                                {quote.content}
+                            </Text>
+                        )}
+                        <Text style={[
+                            styles.quoteContent, 
+                            theme.name === 'signalis' && styles.quoteContentShadow
+                        ]}>
+                            {quote.content}
+                        </Text>
+
+                        <View style={styles.authorContainer}>
+                            <GlitchText glitch={theme.name === 'signalis'} style={styles.quoteAuthor}>
+                                - {quote.author}
+                            </GlitchText>
+                        </View>
                     </>
                 ) : (
                     <Text style={[styles.quoteAuthor, { textAlign: 'center', marginRight: 0 }]}>- {quote.author}</Text>

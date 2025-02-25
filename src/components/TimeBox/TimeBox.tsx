@@ -151,7 +151,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontSize: 20,
         color: theme.colors.accentColor,
         fontWeight: '500',
-        textShadowColor: theme.colors.shadowColor,
+        textShadowColor: theme.name === 'signalis' ? theme.colors.accentColor : theme.colors.shadowColor,
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 4,
         fontFamily: theme.typography.fontFamily.primary,

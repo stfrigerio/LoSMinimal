@@ -55,7 +55,6 @@ export const RecentActivity: React.FC<RecentActivityProps> = ({ recentActivity }
                         <View key={item.id} style={styles.recentCard}>
                             {item.mediaImage ? (
                                 item.type === 'videogame' ? (
-                                    console.log('item.mediaImage', item.mediaImage),
                                     <Image 
                                         source={{ uri: `https:${item.mediaImage}` }} 
                                         style={styles.recentImage}

@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, CalendarProps } from 'react-native-calendars';
 import { StyleSheet } from 'react-native';
 
 import { darkTheme, lightTheme } from '@/src/styles/theme';
@@ -17,7 +17,7 @@ const CustomCalendar = () => {
 	
 	const isDarkMode = true;
 
-    const calendarTheme = {
+    const calendarTheme: CalendarProps['theme'] = {
         backgroundColor: 'transparent',
         calendarBackground: 'transparent',
 		//this controls the week color but for some reason only accept the dark mode color
@@ -26,6 +26,10 @@ const CustomCalendar = () => {
         arrowColor: isDarkMode ? darkTheme.colors.gray : lightTheme.colors.gray,
         textSectionTitleColor: isDarkMode ? darkTheme.colors.gray : lightTheme.colors.gray,
         weekVerticalMargin: theme.spacing.sm,
+
+		textDayFontFamily: theme.typography.fontFamily.secondary, // week numbers
+		textMonthFontFamily: theme.typography.fontFamily.primary,
+		textDayHeaderFontFamily: theme.typography.fontFamily.secondary,
     };
 
 	const { checklistUpdated, resetChecklistUpdate } = useChecklist();
