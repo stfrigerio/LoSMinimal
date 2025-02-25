@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Theme, useThemeStyles } from '../../../../styles/useThemeStyles';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 export interface EntryData {
 	color: string;
@@ -25,7 +26,12 @@ const EntriesList: React.FC<EntriesListProps> = ({ entries, title, valueLabel })
 	return (
 		<View style={styles.container}>
 			<Pressable onPress={() => setIsVisible(!isVisible)} style={styles.toggleButton}>
-				<Text style={styles.toggleButtonText}>{isVisible ? `Hide ${title}` : `Show ${title}`}</Text>
+				<GlitchText
+					glitch={theme.name === 'signalis'}
+					style={styles.toggleButtonText}
+				>
+					{isVisible ? `Hide ${title}` : `Show ${title}`}
+				</GlitchText>
 			</Pressable>
 			{isVisible && (
 				<View style={styles.entriesList}>
@@ -51,7 +57,6 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 	},
 	toggleButton: {
 		padding: 10,
-		// marginLeft: 10, //^ 
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginBottom: 10,
@@ -59,9 +64,17 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 	toggleButtonText: {
 		color: theme.name === 'dark' ? theme.colors.textColor : 'white',
 		fontSize: 16,
+		...(theme.name === 'signalis' && {
+			fontSize: 12,
+			color: theme.colors.textColor,
+			fontFamily: theme.typography.fontFamily.primary,
+			textShadowColor: theme.colors.textColorBold,
+			textShadowOffset: { width: 1, height: 1 },
+			textShadowRadius: 12,
+		}),
 	},
 	entriesList: {
-		paddingHorizontal: 20,
+		paddingHorizontal: 10,
 	},
 	entryContainer: {
 		flexDirection: 'row',
@@ -91,17 +104,29 @@ const getStyles = (theme: Theme) => StyleSheet.create({
 		color: theme.name === 'dark' ? theme.colors.textColor : 'white',
 		flex: 1,
 		marginRight: theme.spacing.xs,
+		...(theme.name === 'signalis' && {
+			fontFamily: theme.typography.fontFamily.secondary,
+			fontSize: 18,
+		}),
 	},
 	percentageText: {
 		color: theme.name === 'dark' ? theme.colors.textColor : 'white',
 		width: 50,
 		textAlign: 'center',
 		marginRight: theme.spacing.xs,
+		...(theme.name === 'signalis' && {
+			fontFamily: theme.typography.fontFamily.primary,
+			fontSize: 12,
+		}),
 	},
 	valueText: {
 		color: theme.name === 'dark' ? theme.colors.textColor : 'white',
 		width: 80,
 		textAlign: 'right',
+		...(theme.name === 'signalis' && {
+			fontFamily: theme.typography.fontFamily.primary,
+			fontSize: 12,
+		}),
 	},
 });
 

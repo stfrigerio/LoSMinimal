@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { View, Dimensions, Platform, StyleSheet } from 'react-native';
 import Svg, { Rect, Text, G } from 'react-native-svg';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ProcessedHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { ProcessedHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
 import { useColors } from '@/src/utils/useColors';
 
 interface HeatmapChartProps {

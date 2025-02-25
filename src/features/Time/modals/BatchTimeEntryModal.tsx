@@ -7,7 +7,8 @@ import TagDescriptionSelector from '@/src/components/atoms/TagDescriptionSelecto
 import TagModal from '@/src/components/modals/TagModal';
 import DescriptionModal from '@/src/components/modals/DescriptionModal';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TimeData } from '@/src/types/Time';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { TimeData } from '@/src/types/Time';
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import { SelectionData } from '../../Home/components/TimerComponent';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';

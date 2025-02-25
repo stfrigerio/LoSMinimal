@@ -7,7 +7,8 @@ import TaskModal from '../../../modals/TaskModal';
 import AlertModal from '@/src/components/modals/AlertModal';
 
 import { handlePostponeTask } from '../../../helpers/postponeTask';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TaskData } from '@/src/types/Task';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { TaskData } from '@/src/types/Task';
 import { PillarData } from '@/src/types/Pillar';
 
 interface TaskEntryProps {

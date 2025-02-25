@@ -8,7 +8,8 @@ import TagModal from '@/src/components/modals/TagModal';
 import DescriptionModal from '@/src/components/modals/DescriptionModal';
 
 import { useTimer } from '@/src/features/Home/hooks/useTimer';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TagData } from '@/src/types/TagsAndDescriptions';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { TagData } from '@/src/types/TagsAndDescriptions';
 
 export interface SelectionData {
 	isTagModalOpen: boolean;

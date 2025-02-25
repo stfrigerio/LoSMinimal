@@ -5,7 +5,8 @@ import SleepChart from '@/src/components/charts/SleepChart/SleepChart';
 
 import { processSleepData } from '../../helpers/dataProcessing';
 import { useSleepData } from '../../helpers/sleepCalculation';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 
 interface ChartSectionProps {
     startDate: Date;

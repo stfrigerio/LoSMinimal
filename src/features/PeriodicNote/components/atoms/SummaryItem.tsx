@@ -39,29 +39,36 @@ const SummaryItem = ({
 
 const getStyles = (theme: Theme) => {
     return StyleSheet.create({
-        summaryTitle: {
-            fontSize: 20,
-            fontWeight: 'bold',
-            marginBottom: 15,
-            color: theme.colors.textColor,
-            textAlign: 'center',
-        },
         summaryItem: {
             width: '48%',
-            marginBottom: 15,
-            padding: 10,
-            borderRadius: 8,
+            marginBottom: theme.spacing.sm,
+            padding: theme.spacing.md,
+            borderRadius: theme.borderRadius.md,
             backgroundColor: theme.colors.backgroundSecondary,
         },
         summaryItemTitle: {
             fontSize: 14,
-            color: 'gray',
+            color: theme.colors.gray,
             marginBottom: 5,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 12,
+                color: theme.colors.gray,
+            })
         },
         summaryItemValue: {
             fontSize: 14,
             fontWeight: 'bold',
             color: theme.colors.textColor,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 18,
+                color: theme.colors.textColor,
+                fontWeight: 'normal',
+                textShadowColor: theme.colors.textColorBold,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 12,
+            })
         },
         summaryItemValueContainer: {
             flexDirection: 'row',

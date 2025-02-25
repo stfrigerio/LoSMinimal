@@ -9,7 +9,8 @@ import Svg, {
 
 import { setWeek, format, addDays } from 'date-fns';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getNextMonthColor } from '@/src/features/DailyNote/helpers/useDateHeader';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { getNextMonthColor } from '@/src/features/DailyNote/helpers/useDateHeader';
 import { getFillColorForMonth } from '@/src/styles/monthsColor';
 import { DateHeaderProps } from '@/src/features/DailyNote/types/DateHeader';
 import { GlitchText } from '@/src/styles/GlitchText';

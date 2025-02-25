@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Pressable, View, Animated, Text, StyleSheet } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 
 interface DrawerContentProps {
     items: { label: string; onPress: () => void }[];

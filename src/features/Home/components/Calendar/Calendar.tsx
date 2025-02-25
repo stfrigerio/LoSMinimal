@@ -3,7 +3,8 @@ import { Calendar, CalendarProps } from 'react-native-calendars';
 import { StyleSheet } from 'react-native';
 
 import { darkTheme, lightTheme } from '@/src/styles/theme';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import CustomDay from './CustomCalendarDay';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import CustomDay from './CustomCalendarDay';
 
 import { useChecklist } from '@/src/contexts/checklistContext';
 import ViewTaskModal from '@/src/features/Home/components/Calendar/modals/ViewTaskModal';

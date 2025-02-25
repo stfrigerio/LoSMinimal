@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Image, StyleSheet, ScrollView, BackHandler } from 'react-native';
 
 import { LibraryData } from '@/src/types/Library';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { Album } from '@/src/features/Music/types';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { Album } from '@/src/features/Music/types';
 import { ensureHttpsUrl, handleMarkAsFinished, handleRatingChange } from './helpers';
 import { RenderRating, RenderFinishButton, RenderCommonDetails, RenderSpecificDetails, EditableTitle, DeleteButton } from './components';
 

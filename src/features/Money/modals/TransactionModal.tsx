@@ -8,7 +8,8 @@ import DescriptionModal from '@/src/components/modals/DescriptionModal';
 import TagDescriptionSelector from '@/src/components/atoms/TagDescriptionSelector';
 import { FormInput, RepeatFrequencySelector, SwitchInput } from '@/src/components/FormComponents';
 import createTimePicker from '@/src/components/DateTimePicker';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import AlertModal from '@/src/components/modals/AlertModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import AlertModal from '@/src/components/modals/AlertModal';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
 import { MoneyData } from '@/src/types/Money';

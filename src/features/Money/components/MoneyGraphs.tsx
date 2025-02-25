@@ -6,7 +6,8 @@ import EntriesList from '@/src/features/PeriodicNote/components/atoms/EntriesLis
 
 import { formatMoneyEntries } from '@/src/features/PeriodicNote/helpers/dataTransformer';
 import { processMoneySunburstData } from '@/src/features/PeriodicNote/helpers/dataProcessing';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useColors } from '@/src/utils/useColors';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useColors } from '@/src/utils/useColors';
 import { useTransactionData } from '../hooks/useTransactionData';
 import MobileNavbar from '@/src/components/NavBar';
 import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';

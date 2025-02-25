@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useMusicPlayer } from '@/src/contexts/MusicPlayerContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useMusicPlayer } from '@/src/contexts/MusicPlayerContext';
 import { useTrackManagement } from '@/src/features/Music/hooks/useTrackManagement';
 import { musicFolderPath } from '@/src/features/Library/helpers/LibrarySettingsHelper';
 import { LibraryData, TrackData } from '@/src/types/Library';

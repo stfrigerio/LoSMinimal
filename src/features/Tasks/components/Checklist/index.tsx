@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { ScrollView, Pressable, Text, StyleSheet } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ChecklistData } from './types';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { ChecklistData } from './types';
 import SingleChecklist from './components/SingleChecklist';
 import AddChecklistModal from '../../modals/AddChecklistModal';
 

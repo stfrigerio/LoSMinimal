@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faGear, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { router } from 'expo-router';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { colorRainbow } from '@/src/styles/theme';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { colorRainbow } from '@/src/styles/theme';
 
 interface MediaGridProps {
     mediaTypes: Array<{

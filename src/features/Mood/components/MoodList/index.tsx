@@ -6,7 +6,8 @@ import MoodEntry from './components/MoodEntry';
 import MoodModal from '@/src/features/Mood/modals/MoodModal';
 
 import { useMoodData } from '../../hooks/useMoodData';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { navItems } from '../../constants/navItems';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { navItems } from '../../constants/navItems';
 import MobileNavbar from '@/src/components/NavBar';
 
 export const MoodList = () => { 

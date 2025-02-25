@@ -4,7 +4,8 @@ import { View, StyleSheet, Dimensions, Platform, Pressable, Text } from 'react-n
 import TaskModal from '@/src/features/Tasks/modals/TaskModal';
 import MobileNavbar from '@/src/components/NavBar';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useTasksData } from './hooks/useTasksData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useTasksData } from './hooks/useTasksData';
 
 import { TaskData } from '@/src/types/Task';
 import { Project } from './components/Projects/types/types';

@@ -6,7 +6,8 @@ import { faEdit, faCheck, faMapMarkerAlt, faTrash } from '@fortawesome/free-soli
 
 import Navbar from '@/src/components/NavBar';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import { useJournal } from '../hooks/useJournal';

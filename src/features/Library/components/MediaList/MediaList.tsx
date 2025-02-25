@@ -3,7 +3,8 @@ import { View, Text, FlatList, StyleSheet, BackHandler } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import SearchComponent from './components/SearchComponent';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useMediaList } from '@/src/features/Library/hooks/useMediaList';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useMediaList } from '@/src/features/Library/hooks/useMediaList';
 
 import { LibraryData } from '@/src/types/Library';
 import { SectionHeader } from './components/SectionHeader';

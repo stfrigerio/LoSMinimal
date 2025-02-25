@@ -14,7 +14,8 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import BackupActionButton from './atoms/BackupActionButton';
 import { SwitchInput } from '@/src/components/FormComponents';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useServerSection } from '../hooks/useServerSection';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useServerSection } from '../hooks/useServerSection';
 
 const ServerSection = ({ setShowTableSelector, showTableSelector }: { setShowTableSelector: (value: boolean) => void, showTableSelector: boolean }) => {
     const { theme, designs } = useThemeStyles();

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, Platform, Modal } from 'react-native';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import AlertModal from '@/src/components/modals/AlertModal'; 
 
 import { useSettings } from '../../hooks/useSettings';

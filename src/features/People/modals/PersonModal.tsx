@@ -5,7 +5,8 @@ import BasicInfoStep from './components/BasicInfoStep';
 import ContactInfoStep from './components/ContactInfoStep';
 import PreferencesStep from './components/PreferencesStep';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePersonModal } from './hooks/usePersonModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { usePersonModal } from './hooks/usePersonModal';
 
 import { PersonData } from '@/src/types/People';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';

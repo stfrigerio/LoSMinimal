@@ -4,11 +4,13 @@ import { View, Dimensions, StyleSheet, Text } from 'react-native';
 import SunburstChart from '@/src/components/charts/Sunburst/SunburstChart';
 import EntriesList from '../atoms/EntriesList';
 import SummaryItem from '../atoms/SummaryItem';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 import { formatMoneyEntries } from '../../helpers/dataTransformer';
 import { processMoneySunburstData } from '../../helpers/dataProcessing';
 import { calculateMoneySummary } from '../../helpers/moneyHelpers';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 
 interface ChartSectionProps {
     startDate: Date;
@@ -61,9 +63,16 @@ const MoneySection: React.FC<ChartSectionProps> = ({
             )}
             
             <View style={styles.summaryContainer}>
-                <Text style={styles.summaryTitle}>Money Summary</Text>
+                <View style={{ alignItems: 'center' }}>
+                    <GlitchText
+                        style={styles.summaryTitle}
+                        glitch={theme.name === 'signalis'}
+                    >
+                        Money Summary
+                    </GlitchText>
+                </View>
                 <View style={styles.summaryGrid}>
-                <SummaryItem 
+                    <SummaryItem 
                         title="Total Expenses" 
                         value={`€${moneySummary.totalExpenses.toFixed(2)}`}
                         change={moneySummary.totalExpensesChange}
@@ -106,8 +115,12 @@ const getStyles = (theme: Theme) => {
             fontSize: 20,
             fontWeight: 'bold',
             marginBottom: 15,
-            color: theme.colors.textColor,
-            textAlign: 'center',
+            color: theme.colors.accentColor,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 18,
+                fontWeight: 'normal',
+            })
         },
         summaryGrid: {
             flexDirection: 'row',

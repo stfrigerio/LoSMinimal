@@ -3,7 +3,8 @@ import { View, ScrollView, Switch, StyleSheet, Text } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ScheduledNotificationItem } from './atoms/ScheduledNotificationItem';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { ScheduledNotificationItem } from './atoms/ScheduledNotificationItem';
 import { useSettings } from '@/src/features/UserSettings/hooks/useSettings';
 
 export const NotificationManager: React.FC = () => {

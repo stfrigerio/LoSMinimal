@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Switch } from 'react-native';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { Settings } from '@/src/types/UserSettings';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { Settings } from '@/src/types/UserSettings';
 import { UserSettingData } from '@/src/types/UserSettings';
 
 interface AppSettingRowProps {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, Pressable, StyleSheet, Modal } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { PillarData } from '@/src/types/Pillar';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { PillarData } from '@/src/types/Pillar';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import Toast from 'react-native-toast-message';

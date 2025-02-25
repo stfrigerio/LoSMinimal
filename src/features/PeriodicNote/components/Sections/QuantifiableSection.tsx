@@ -3,7 +3,8 @@ import { View, Dimensions, StyleSheet, Platform, Text } from 'react-native';
 
 import QuantifiableHabitsChart from '@/src/components/charts/QuantifiableHabitsChart/QuantifiableHabitsChart';
 import AlertModal from '@/src/components/modals/AlertModal';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 
 interface QuantifiableSectionProps {
     startDate: Date;

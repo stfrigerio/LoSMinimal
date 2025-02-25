@@ -84,16 +84,46 @@ const Axes: React.FC<AxesProps> = ({ x, y, width, height, theme, viewType, data 
                 {limitedTicks.map((tick, i) => (
                     <G key={i} transform={`translate(${x(tick)}, 0)`}> 
                         <Line y2={6} stroke={theme.colors.borderColor} />
-                        <SvgText y={9} dy=".71em" textAnchor="middle" fill={theme.colors.textColor} fontSize={10}>
+                        <SvgText 
+                            y={9} 
+                            dy=".71em" 
+                            textAnchor="middle" 
+                            fill={theme.colors.textColor} 
+                            fontSize={10}
+                            {...(theme.name === 'signalis' && {
+                                fontFamily: theme.typography.fontFamily.secondary,
+                                fontSize: 12
+                            })}
+                        >
                             {getXAxisFormat()(tick)}
                         </SvgText>
                         {viewType === 'daily' && data.dates.length > 7 && tick.getDate() === 1 && (
-                            <SvgText y={22} dy=".71em" textAnchor="middle" fill={theme.colors.textColor} fontSize={10}>
+                            <SvgText 
+                                y={22} 
+                                dy=".71em" 
+                                textAnchor="middle" 
+                                fill={theme.colors.textColor} 
+                                fontSize={10}
+                                {...(theme.name === 'signalis' && {
+                                    fontFamily: theme.typography.fontFamily.secondary,
+                                    fontSize: 12
+                                })}
+                            >
                                 {d3.timeFormat("%b")(tick)}
                             </SvgText>
                         )}
                         {viewType === 'quarterly' && (
-                            <SvgText y={22} dy=".71em" textAnchor="middle" fill={theme.colors.textColor} fontSize={10}>
+                            <SvgText 
+                                y={22} 
+                                dy=".71em" 
+                                textAnchor="middle" 
+                                fill={theme.colors.textColor} 
+                                fontSize={10}
+                                {...(theme.name === 'signalis' && {
+                                    fontFamily: theme.typography.fontFamily.secondary,
+                                    fontSize: 12
+                                })}
+                            >
                                 {d3.timeFormat("%Y")(tick)}
                             </SvgText>
                         )}
@@ -107,7 +137,17 @@ const Axes: React.FC<AxesProps> = ({ x, y, width, height, theme, viewType, data 
                 {yAxisTicks.map((tick, i) => (
                     <G key={i} transform={`translate(0, ${y(tick)})`}>
                         <Line x2={-6} stroke={theme.colors.borderColor} />
-                        <SvgText x={-9} dy=".32em" textAnchor="end" fill={theme.colors.textColor} fontSize={10}>
+                        <SvgText 
+                            x={-9} 
+                            dy=".32em" 
+                            textAnchor="end" 
+                            fill={theme.colors.textColor} 
+                            fontSize={10}
+                            {...(theme.name === 'signalis' && {
+                                fontFamily: theme.typography.fontFamily.secondary,
+                                fontSize: 15
+                            })}
+                        >
                             {tick}
                         </SvgText>
                     </G>

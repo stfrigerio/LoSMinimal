@@ -5,7 +5,8 @@ import QuantifiableHabit from './QuantifiableHabit';
 
 import { capitalize } from '@/src/utils/textManipulations';
 import { habitThresholds, getColorForValue } from './helpers/colors';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { QuantifiableHabitsData } from '@/src/types/QuantifiableHabits';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { QuantifiableHabitsData } from '@/src/types/QuantifiableHabits';
 import { useQuantifiableHabits } from '@/src/features/DailyNote/helpers/useQuantifiableHabits';
 
 export interface QuantifiableHabitsProps {

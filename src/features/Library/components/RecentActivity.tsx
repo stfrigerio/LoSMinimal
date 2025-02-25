@@ -3,7 +3,8 @@ import { View, Text, ScrollView, Image, StyleSheet, Pressable } from 'react-nati
 
 import { LibraryData } from '@/src/types/Library';
 import { formatDistanceToNow } from 'date-fns';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { router } from 'expo-router';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { router } from 'expo-router';
 
 interface RecentActivityProps {
     recentActivity: LibraryData[];

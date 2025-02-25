@@ -3,7 +3,8 @@ import React, { useMemo } from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
 
 import { useNavigationComponents, NotePeriod } from '@/src/features/LeftPanel/helpers/useNavigation';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import {
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import {
 	parseDate,
 	formatDate,
 	getStartOfToday,

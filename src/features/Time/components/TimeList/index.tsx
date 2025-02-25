@@ -4,7 +4,8 @@ import { View, StyleSheet, FlatList, Dimensions, Platform, Text, Pressable } fro
 import TimeEntry from './components/TimeEntry';
 import FilterAndSort, { FilterOptions, SortOption } from '@/src/components/FilterAndSort';
 import BatchTimeEntryModal from '../../modals/BatchTimeEntryModal';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useColors } from '@/src/utils/useColors';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useColors } from '@/src/utils/useColors';
 
 import { TimeData } from '@/src/types/Time';
 import { useTimeData } from '../../hooks/useTimeData';

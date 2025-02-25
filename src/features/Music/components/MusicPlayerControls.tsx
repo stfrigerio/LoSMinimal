@@ -11,7 +11,8 @@ import {
     faMusic
 } from '@fortawesome/free-solid-svg-icons';
 import Slider from '@react-native-community/slider';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useMusicPlayer } from '../../../contexts/MusicPlayerContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useMusicPlayer } from '../../../contexts/MusicPlayerContext';
 import { useNavigationComponents } from '../../LeftPanel/helpers/useNavigation';
 
 interface MusicPlayerControlsProps {

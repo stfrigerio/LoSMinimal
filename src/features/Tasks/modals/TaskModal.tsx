@@ -8,7 +8,8 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import createTimePicker from '@/src/components/DateTimePicker';
 
 import { useTasksData } from '@/src/features/Tasks/hooks/useTasksData';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useChecklist } from '@/src/contexts/checklistContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useChecklist } from '@/src/contexts/checklistContext';
 
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 import { TaskBasicInfo } from './components/TaskModal/TaskBasicInfo';

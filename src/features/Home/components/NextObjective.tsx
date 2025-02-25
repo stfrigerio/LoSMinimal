@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Pressable, StyleSheet, Animated, Platform } from 'react-native';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { databaseManagers } from '@/database/tables';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { databaseManagers } from '@/database/tables';
 import { getISOWeekData } from '@/src/utils/timezoneBullshit';
-import { useTimer } from '@/src/features/Home/hooks/useTimer';
 
 import { ObjectiveData } from '@/src/types/Objective';
 
@@ -149,9 +149,16 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
         return null;
     }
 
+    const getOutputRange = () => {
+        if (theme.name === 'signalis') {
+            return ['rgba(255, 255, 255, 0.3)', 'rgba(255, 255, 255, 1)'];
+        }
+        return ['rgba(255, 255, 255, 0.05)', 'rgba(0, 0, 0, 0.8)'];
+    }
+
     const backgroundColor = bgColorAnim.interpolate({
         inputRange: [0, 1],
-        outputRange: ['rgba(255, 255, 255, 0.05)', 'rgba(0, 0, 0, 0.8)']
+        outputRange: getOutputRange()
     });
 
     const renderNextTask = () => {
@@ -206,6 +213,12 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
                                     color: isExpanded ? theme.colors.textColorBold : '#d3c6aa', 
                                     alignSelf: 'center',
                                     marginTop: isExpanded ? 0 : 5,
+                                    ...(theme.name === 'signalis' && {
+                                        fontSize: isExpanded ? 20 : 14,
+                                        fontFamily: theme.typography.fontFamily.secondary,
+                                        color: isExpanded ? theme.colors.backgroundColor : theme.colors.textColor,
+                                        fontWeight: 'normal',
+                                    }),
                                 }
                             ]
                         }
@@ -227,7 +240,13 @@ const NextObjective: React.FC<NextObjectiveProps> = ({ fetchNextTask }) => {
                                     fontSize: isExpanded ? 14 : 8,
                                     color: isExpanded ? theme.colors.textColorBold : theme.colors.textColor, 
                                     marginTop: isExpanded ? 40 : 5,
-                                    alignSelf: 'center'
+                                    alignSelf: 'center',
+                                    ...(theme.name === 'signalis' && {
+                                        fontSize: isExpanded ? 20 : 14,
+                                        fontFamily: theme.typography.fontFamily.secondary,
+                                        color: isExpanded ? theme.colors.backgroundColor : theme.colors.textColor,
+                                        fontWeight: 'normal',
+                                    }),
                                 }
                             ]
                         }
@@ -253,7 +272,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         backgroundColor: 'rgba(255, 255, 255, 0.05)',
         borderRadius: theme.borderRadius.sm,
         overflow: 'hidden',
-        width: '100%',
+        width: '101%',
     },
     objectiveWrapper: {
         flex: 1,
@@ -263,7 +282,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         flex: 1,
     },
     objectiveText: {
-        fontFamily: 'serif',
+        fontFamily: theme.typography.fontFamily.secondary,
         alignSelf: 'center',
     },
     nextButton: {
@@ -275,6 +294,12 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: theme.spacing.xs,
         alignSelf: 'center',
+        ...(theme.name === 'signalis' && {
+            fontSize: 14,
+            fontFamily: theme.typography.fontFamily.primary,
+            color: theme.colors.backgroundColor,
+            fontWeight: 'normal',
+        }),
     },
     miniHeaderSeparator: {
         height: 1,
@@ -298,12 +323,24 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontSize: 10,
         color: theme.colors.gray,
         textAlign: 'center',
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontFamily: theme.typography.fontFamily.secondary,
+            color: theme.colors.backgroundColor,
+        }),
     },
     timeLeft: {
         fontSize: 12,
         marginTop: theme.spacing.xs,
+        marginLeft: theme.spacing.sm,
         color: theme.colors.gray,
         fontStyle: 'italic',
+        ...(theme.name === 'signalis' && {
+            fontSize: 16,
+            fontFamily: theme.typography.fontFamily.secondary,
+            color: theme.colors.backgroundColor,
+            fontStyle: 'normal',
+        }),
     },
 });
 

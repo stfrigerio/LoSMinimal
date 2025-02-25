@@ -2,7 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 import Markdown from 'react-native-markdown-display';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ChecklistItem } from '../components/ChecklistItem';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { ChecklistItem } from '../components/ChecklistItem';
 import { HeaderComponent } from '../components/Headers';
 import Table from '../components/Table';
 

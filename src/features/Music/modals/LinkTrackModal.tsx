@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, Modal, FlatList, Pressable, StyleSheet } from 'react-native';
 import { TrackData } from '@/src/types/Library';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
 interface LinkTrackModalProps {
     isVisible: boolean;

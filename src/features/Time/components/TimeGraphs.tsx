@@ -6,7 +6,8 @@ import EntriesList from '@/src/features/PeriodicNote/components/atoms/EntriesLis
 
 import { formatTimeEntries } from '@/src/features/PeriodicNote/helpers/dataTransformer';
 import { processTimeSunburstData } from '@/src/features/PeriodicNote/helpers/dataProcessing';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { processMultiDayHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { processMultiDayHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
 
 import TimeHeatmap from '@/src/components/charts/Heatmaps/TimeHeatmap/TimeHeatmap';
 import { useColors } from '@/src/utils/useColors';

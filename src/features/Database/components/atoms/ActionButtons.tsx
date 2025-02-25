@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, ActivityIndicator, StyleSheet } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface ActionButtonsProps {
 	isConfirming: boolean;

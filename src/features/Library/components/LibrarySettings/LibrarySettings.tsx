@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, ScrollView, Pressable, BackHandler } from 'reac
 
 import AlertModal, { AlertConfig } from '@/src/components/modals/AlertModal';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { fetchAPIKeys, saveAPIKey } from '../../helpers/LibrarySettingsHelper';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { fetchAPIKeys, saveAPIKey } from '../../helpers/LibrarySettingsHelper';
 import { handleSyncMusic, handleClearMusicFolder, handleSyncBooks, handleClearBooksFolder } from './helpers';
 import { renderAPIKeyInput, renderSection } from './components';
 

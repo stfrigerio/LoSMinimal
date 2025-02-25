@@ -8,7 +8,8 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import MoodModal from '@/src/features/Mood/modals/MoodModal';
 import Collapsible from '@/src/components/Collapsible';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { MoodNoteData } from '@/src/types/Mood';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { MoodNoteData } from '@/src/types/Mood';
 import { useColors } from '@/src/utils/useColors';
 import EditButton from '@/src/components/atoms/EditButton';
 import DeleteButton from '@/src/components/atoms/DeleteButton';

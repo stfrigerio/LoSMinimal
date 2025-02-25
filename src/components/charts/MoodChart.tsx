@@ -3,7 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import Svg, { G, Circle, Text, Line, Path, Rect } from 'react-native-svg';
 import * as d3 from 'd3';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { MoodNoteData } from '@/src/types/Mood';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { MoodNoteData } from '@/src/types/Mood';
 
 interface MoodChartProps {
 	moodData: MoodNoteData[];

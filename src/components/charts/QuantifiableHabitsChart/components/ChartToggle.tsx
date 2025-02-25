@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Pressable, Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCalendarDay, faCalendarWeek, faCalendar, faChartPie } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { ChartToggleProps } from '../types/types';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { ChartToggleProps } from '../types/types';
 
 const ChartToggle: React.FC<ChartToggleProps> = ({ 
 	availableViewTypes, 

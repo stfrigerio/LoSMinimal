@@ -1,14 +1,17 @@
 import React, { useMemo, useState } from 'react';
-import { View, Dimensions, StyleSheet, Platform, Text, Pressable, Switch } from 'react-native';
+import { View, Dimensions, StyleSheet, Platform, Text, Pressable, Switch, ActivityIndicator } from 'react-native';
 
 import EntriesList from '../atoms/EntriesList';
 import SunburstChart from '@/src/components/charts/Sunburst/SunburstChart';
 import TimeHeatmap from '@/src/components/charts/Heatmaps/TimeHeatmap/TimeHeatmap';
 import SummaryItem from '../atoms/SummaryItem';
+import { GlitchText } from '@/src/styles/GlitchText';
+
 import { formatTimeEntries } from '../../helpers/dataTransformer';
 import { processTimeSunburstData } from '../../helpers/dataProcessing';
 import { processMultiDayHourData } from '@/src/components/charts/Sunburst/helpers/dataProcessing';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 import { calculateTimeSummary } from '../../helpers/timeHelpers';
 
 interface ChartSectionProps {
@@ -59,7 +62,7 @@ const ChartSection: React.FC<ChartSectionProps> = ({
     if (!timeSunburstData || !timeEntries) {
         return (
             <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-                <Text style={{ color: 'gray' }}>No Time data available.</Text>
+                <ActivityIndicator size="large" color={theme.colors.accentColor} />
             </View>
         );
     }
@@ -75,7 +78,7 @@ const ChartSection: React.FC<ChartSectionProps> = ({
                     thumbColor={excludeSleep ? theme.colors.backgroundSecondary : theme.colors.accentColor}
                 />
             </View>
-            <View >
+            <View style={{ marginBottom: theme.spacing.xl }}>
                 <SunburstChart
                     data={timeSunburstData}
                     width={chartWidth}
@@ -100,7 +103,14 @@ const ChartSection: React.FC<ChartSectionProps> = ({
                 </View>
             )}
             <View style={styles.summaryContainer}>
-                <Text style={styles.summaryTitle}>Time Summary</Text>
+                <View style={{ alignItems: 'center' }}>
+                    <GlitchText
+                        style={styles.summaryTitle}
+                        glitch={theme.name === 'signalis'}
+                    >
+                        Time Summary
+                    </GlitchText>
+                </View>
                 <View style={styles.summaryGrid}>
                     <SummaryItem 
                         title="Total Time" 
@@ -140,12 +150,16 @@ const getStyles = (theme: Theme) => {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'center',
-            marginBottom: 10,
+            marginBottom: theme.spacing.xl,
         },
         toggleLabel: {
             marginRight: 10,
             fontSize: 16,
-            color: theme.colors.textColor,
+            color: theme.colors.gray,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 12
+            })
         },
         loadHeatmapButton: {
             backgroundColor: theme.colors.backgroundColor,
@@ -159,6 +173,15 @@ const getStyles = (theme: Theme) => {
             color: theme.colors.textColorItalic,
             fontSize: 16,
             fontStyle: 'italic',
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 14,
+                fontStyle: 'normal',
+                color: theme.colors.textColorItalic,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 12,
+            })
         },
         summaryContainer: {
             marginBottom: 20,
@@ -170,7 +193,15 @@ const getStyles = (theme: Theme) => {
             fontWeight: 'bold',
             marginBottom: 15,
             color: theme.colors.textColor,
-            textAlign: 'center',
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 18,
+                fontWeight: 'normal',
+                color: theme.colors.accentColor,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 12,
+            })
         },
         summaryGrid: {
             flexDirection: 'row',

@@ -5,7 +5,8 @@ import PersonEntry from './components/PersonEntry';
 import MobileNavbar from '@/src/components/NavBar';
 import AddPersonModal from './modals/PersonModal';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeopleData } from './hooks/usePeopleData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { usePeopleData } from './hooks/usePeopleData';
 import { useContactData } from './hooks/useContactData';
 
 import { PersonData } from '@/src/types/People';

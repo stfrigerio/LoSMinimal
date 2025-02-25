@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
-import { View, StyleSheet, Platform, useWindowDimensions, Dimensions } from 'react-native';
+import { Platform, useWindowDimensions, Dimensions } from 'react-native';
 import Svg, { G, Path, Circle, Text, Line } from 'react-native-svg';
 import * as d3 from 'd3';
 import { format, parse } from 'date-fns';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { parseTimeToDecimal } from '@/src/utils/timeUtils';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { parseTimeToDecimal } from '@/src/utils/timeUtils';
 
 import { SleepData } from '@/src/features/PeriodicNote/types/Sleep';
 
@@ -120,6 +121,10 @@ const SleepChart: React.FC<SleepChartProps> = ({ sleepData, openNoteForDay, widt
 						fontSize="10"
 						textAnchor="middle"
 						fill={styles.tickText.fill}
+						{...(theme.name === 'signalis' && {
+							fontFamily: theme.typography.fontFamily.secondary,
+							fontSize: 12
+						})}
 					>
 						{tick.label}
 					</Text>
@@ -134,6 +139,10 @@ const SleepChart: React.FC<SleepChartProps> = ({ sleepData, openNoteForDay, widt
 						fontSize="10"
 						textAnchor="end"
 						fill={styles.tickText.fill}
+						{...(theme.name === 'signalis' && {
+							fontFamily: theme.typography.fontFamily.secondary,
+							fontSize: 12
+						})}
 					>
 						{tick.label}
 					</Text>

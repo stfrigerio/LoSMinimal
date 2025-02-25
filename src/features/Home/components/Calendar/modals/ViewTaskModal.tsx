@@ -11,7 +11,8 @@ import TaskModal from '@/src/features/Tasks/modals/TaskModal';
 import TaskView from './TaskView';
 
 import { handlePostponeTask } from '@/src/features/Tasks/helpers/postponeTask';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 
 import { TaskData } from '@/src/types/Task';
 import { ExtendedTaskData } from '@/src/types/Task';

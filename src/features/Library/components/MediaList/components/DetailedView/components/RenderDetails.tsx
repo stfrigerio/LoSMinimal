@@ -1,4 +1,5 @@
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import React, { useEffect, useState } from 'react';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 
 import { formatDate, getActionText, cleanText, openEpubFile } from '../helpers';

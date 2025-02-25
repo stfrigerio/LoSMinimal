@@ -183,13 +183,22 @@ const getStyles = (theme: Theme) => {
 			fontWeight: 'bold',
 			fontSize: 16,
 			color: theme.colors.accentColor,
+			...(theme.name === 'signalis' && {
+				fontFamily: theme.typography.fontFamily.primary,
+				fontSize: 18,
+				fontWeight: 'normal',
+				color: theme.colors.accentColor,
+				textShadowColor: theme.colors.accentColor,
+				textShadowOffset: { width: 1, height: 1 },
+				textShadowRadius: 6,
+			})
 		},
 		weekCard: {
 			backgroundColor: theme.colors.backgroundSecondary,
-			borderRadius: 10,
+			borderRadius: theme.borderRadius.lg,
 			padding: 10,
 			marginVertical: 10,
-			shadowColor: theme.colors.textColor,
+			// shadowColor: theme.colors.textColor,
 			elevation: 5,
 			alignSelf: 'center',
 		},
@@ -200,10 +209,10 @@ const getStyles = (theme: Theme) => {
 		},
 		dayCard: {
 			backgroundColor: theme.colors.backgroundColor,
-			borderRadius: 8,
+			borderRadius: theme.borderRadius.md,
 			padding: 6,
 			marginBottom: 10,
-			shadowColor: theme.colors.textColor,
+			// shadowColor: theme.colors.textColor,
 			elevation: 3,
 			width: '48%', // Adjust this value to control card width
 		},
@@ -212,16 +221,40 @@ const getStyles = (theme: Theme) => {
 			fontSize: 14,
 			marginBottom: 10,
 			color: theme.colors.textColorBold,
+			...(theme.name === 'signalis' && {
+				fontFamily: theme.typography.fontFamily.secondary,
+				fontSize: 18,
+				fontWeight: 'normal',
+				color: theme.colors.textColorBold,
+				textShadowColor: theme.colors.accentColor,
+				textShadowOffset: { width: 1, height: 1 },
+				textShadowRadius: 6,
+			})
 		},
 		listItem: {
 			fontSize: 14,
 			color: theme.colors.textColor,
 			marginBottom: 5,
+			...(theme.name === 'signalis' && {
+				fontFamily: theme.typography.fontFamily.secondary,
+				fontSize: 18,
+				fontWeight: 'normal',
+				color: theme.colors.textColor,
+			})
 		},
 		label: {
 			fontSize: 12,
 			marginBottom: 5,
 			color: theme.colors.gray,
+			...(theme.name === 'signalis' && {
+				fontFamily: theme.typography.fontFamily.secondary,
+				fontSize: 14,
+				fontWeight: 'normal',
+				color: theme.colors.gray,
+				textShadowColor: theme.colors.accentColor,
+				textShadowOffset: { width: 3, height: 3 },
+				textShadowRadius: 6,
+			})
 		},
 		noDataText: {
 			textAlign: 'center',

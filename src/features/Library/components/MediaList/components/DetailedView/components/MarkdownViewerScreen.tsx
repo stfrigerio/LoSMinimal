@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { View, StyleSheet, Pressable, TextInput, Platform, BackHandler, Text, ScrollView } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import MobileMarkdown from '@/src/components/Markdown/Markdown';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import MobileMarkdown from '@/src/components/Markdown/Markdown';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import AlertModal from '@/src/components/modals/AlertModal';

@@ -4,7 +4,8 @@ import { View, StyleSheet, Text } from 'react-native';
 import MobileNavbar from '@/src/components/NavBar';
 import MoodModal from '@/src/features/Mood/modals/MoodModal';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useMoodData } from './hooks/useMoodData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useMoodData } from './hooks/useMoodData';
 
 import { navItems } from './constants/navItems';
 import Banner from '@/src/components/Banner';

@@ -18,7 +18,8 @@ import DateNavigation from '@/src/components/DateNavigation';
 import ImagePickerComponent from './components/ImagePickerComponent';
 
 // Functions
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getStartOfToday, getLocalTimeZone, navigateDate } from '@/src/utils/timezoneBullshit';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { getStartOfToday, getLocalTimeZone, navigateDate } from '@/src/utils/timezoneBullshit';
 import { useNavigationComponents } from '@/src/features/LeftPanel/helpers/useNavigation';
 
 import ColorfulTimeline from '@/src/features/DailyNote/components/ColorfulTimeline';

@@ -4,7 +4,8 @@ import { faCheckCircle, faCircle, faList, faRepeat } from '@fortawesome/free-sol
 
 import TaskEntry from './components/TaskEntry';
 import { TaskData } from '@/src/types/Task';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useTasksData } from '../../hooks/useTasksData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useTasksData } from '../../hooks/useTasksData';
 import { FilterType } from './components/FilterIcon';
 import { FilterTray } from './components/FilterTray';
 import MobileNavbar from '@/src/components/NavBar';

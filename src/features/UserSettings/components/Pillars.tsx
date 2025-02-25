@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, Platform } from 'react-native';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import DeleteButton from '@/src/components/atoms/DeleteButton';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import DeleteButton from '@/src/components/atoms/DeleteButton';
 import EditButton from '@/src/components/atoms/EditButton';
 import AlertModal from '@/src/components/modals/AlertModal';
 

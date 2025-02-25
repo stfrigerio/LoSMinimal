@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Text, Switch } from 'react-native';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { FormInput } from '@/src/components/FormComponents';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { FormInput } from '@/src/components/FormComponents';
 import { StepProps } from '../PersonModal';
 
 const ContactInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {

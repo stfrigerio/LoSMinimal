@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { Pressable, Animated, StyleSheet } from 'react-native';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
 
 interface DrawerIconProps {
 }

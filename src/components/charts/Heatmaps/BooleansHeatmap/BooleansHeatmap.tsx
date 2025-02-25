@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { View, Dimensions, Text, Platform } from 'react-native';
 import Svg, { Rect, Text as SvgText } from 'react-native-svg';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useColors } from '@/src/utils/useColors';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useColors } from '@/src/utils/useColors';
 
 interface HeatmapChartProps {
     data: { [date: string]: boolean };

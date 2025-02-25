@@ -3,7 +3,8 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faMoneyBill, faClock, faSmile } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import DeleteButton from '@/src/components/atoms/DeleteButton';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import DeleteButton from '@/src/components/atoms/DeleteButton';
 import EditButton from '@/src/components/atoms/EditButton';
 import Collapsible from '@/src/components/Collapsible';
 import AlertModal from '@/src/components/modals/AlertModal';

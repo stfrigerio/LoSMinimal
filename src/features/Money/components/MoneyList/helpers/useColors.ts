@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useColors } from '@/src/utils/useColors';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useColors } from '@/src/utils/useColors';
 import { MoneyData } from '@/src/types/Money';
 
 export const useMoneyColors = (validTransactions: MoneyData[]) => {

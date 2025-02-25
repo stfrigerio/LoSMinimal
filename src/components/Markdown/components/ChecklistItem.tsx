@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet, View } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faLocationPin } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 

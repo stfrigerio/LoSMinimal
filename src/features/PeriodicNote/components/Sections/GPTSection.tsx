@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import AlertModal from '@/src/components/modals/AlertModal';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import AlertModal from '@/src/components/modals/AlertModal';
 import { useGPTSection } from '../../hooks/useGPTSection';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
-
+import { GlitchText } from '@/src/styles/GlitchText';
 interface GPTSectionProps {
     startDate: Date;
     endDate: Date;
@@ -28,8 +29,8 @@ const GPTSection: React.FC<GPTSectionProps> = ({ startDate, endDate, currentDate
 
     if (isLoading) {
         return (
-            <View style={styles.noTextcontainer}>
-                <Text style={styles.noDataText}>Loading...</Text>
+            <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                <ActivityIndicator size="large" color={theme.colors.accentColor} />
             </View>
         );
     }
@@ -69,13 +70,27 @@ const GPTSection: React.FC<GPTSectionProps> = ({ startDate, endDate, currentDate
         <View style={styles.container}>
             {aiSummary.reflection.nice && 
                 <View>
-                    <Text style={styles.subheading}>Nice:</Text>
+                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                        <GlitchText
+                            style={styles.subheading}
+                            glitch={theme.name === 'signalis'}
+                        >
+                            Nice:
+                        </GlitchText>
+                    </View>
                     <Text style={styles.text}>{aiSummary.reflection.nice}</Text>
                 </View>
             }
             {aiSummary.reflection.notSoNice && 
                 <View>
-                    <Text style={styles.subheading}>Not so nice:</Text>
+                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                        <GlitchText
+                            style={styles.subheading}
+                            glitch={theme.name === 'signalis'}
+                        >
+                            Not so nice:
+                        </GlitchText>
+                    </View>
                     <Text style={styles.text}>{aiSummary.reflection.notSoNice}</Text>
                 </View>
             }
@@ -111,15 +126,33 @@ const getStyles = (theme: Theme) => {
         },
         subheading: {
             fontSize: 14,
-            color: 'gray',
+            color: theme.colors.gray,
             fontWeight: 'bold',
             marginBottom: 8,
             marginTop: 8,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 16,
+                fontWeight: 'normal',
+                color: theme.colors.textColorBold,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 12,
+            })
         },
         text: {
             fontSize: 12,
             color: theme.colors.textColor,
             marginBottom: 12,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 18,
+                color: theme.colors.textColor,
+                fontWeight: 'normal',
+                textShadowColor: theme.colors.textColorBold,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 12,
+            })
         },
         listItem: {
             fontSize: 12,

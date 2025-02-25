@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, Text, Switch, TextInput } from 'react-native';
 
 import { StepProps } from '../PersonModal';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { FormInput, PickerInput } from '@/src/components/FormComponents';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { FormInput, PickerInput } from '@/src/components/FormComponents';
 
 const BasicInfoStep: React.FC<StepProps> = ({ person, updatePerson }) => {
     const { theme, designs } = useThemeStyles();

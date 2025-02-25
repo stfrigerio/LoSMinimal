@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Image, Pressable, Switch, StyleSheet } from 'react-native';
 
 import { getStarRating } from '@/src/features/Library/helpers/getStarRating';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getActionText, ensureHttpsUrl } from '@/src/features/Library/components/MediaList/components/DetailedView/helpers';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { getActionText, ensureHttpsUrl } from '@/src/features/Library/components/MediaList/components/DetailedView/helpers';
 
 import { LibraryData } from '@/src/types/Library';
 

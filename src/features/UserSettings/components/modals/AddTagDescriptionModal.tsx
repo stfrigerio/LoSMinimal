@@ -7,7 +7,8 @@ import ColorPicker from './components/ColorPicker';
 import AlertModal from '@/src/components/modals/AlertModal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useTagDescriptionForm } from './hooks/useTagDescriptionModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useTagDescriptionForm } from './hooks/useTagDescriptionModal';
 
 import { TagData } from '@/src/types/TagsAndDescriptions';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';

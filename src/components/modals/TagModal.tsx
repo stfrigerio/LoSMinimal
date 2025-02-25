@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { Modal, View, Text, StyleSheet, FlatList, Pressable, Platform } from 'react-native';
 
 import { SelectionData } from '@/src/features/Home/components/TimerComponent';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import AddTagDescriptionModal from '@/src/features/UserSettings/components/modals/AddTagDescriptionModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import AddTagDescriptionModal from '@/src/features/UserSettings/components/modals/AddTagDescriptionModal';
 
 import { useTagsAndDescriptions } from '@/src/features/UserSettings/hooks/useTagsAndDescriptions';
 import { TagData } from '@/src/types/TagsAndDescriptions';

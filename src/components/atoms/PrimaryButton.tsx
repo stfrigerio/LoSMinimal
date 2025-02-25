@@ -1,6 +1,9 @@
 import React from 'react';
 import { Pressable, Text, StyleSheet, Animated } from 'react-native';
+
+import { GlitchText } from '@/src/styles/GlitchText';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+
 interface ButtonProps {
     onPress: () => void;
     text: string;
@@ -45,9 +48,12 @@ export const PrimaryButton: React.FC<ButtonProps> = ({
                     disabled && styles.disabled,
                 ]}
             >
-                <Text style={styles.buttonText}>
+                <GlitchText 
+                    style={styles.buttonText} 
+                    glitch={theme.name === 'signalis'}
+                >
                     {text}
-                </Text>
+                </GlitchText>
             </Pressable>
         </Animated.View>
     );

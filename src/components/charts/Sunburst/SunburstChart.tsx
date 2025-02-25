@@ -3,7 +3,8 @@ import { View, Dimensions, StyleSheet, Platform } from 'react-native';
 import Svg, { Path, G, Text } from 'react-native-svg';
 import * as d3 from 'd3';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { colorPalette, adjustRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { colorPalette, adjustRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
 import { useColors } from '@/src/utils/useColors';
 
 export interface SunBurstRecord {
@@ -96,7 +97,7 @@ const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) =>
 								key={index}
 								d={arcGenerator(node) as string}
 								fill={getColor(node)}
-								stroke={theme.name === 'dark' ? theme.colors.backgroundColor : 'transparent'}
+								stroke={theme.name === 'dark' || theme.name === 'signalis' ? theme.colors.backgroundColor : 'transparent'}
 								strokeWidth="2"
 							/>
 						);
@@ -115,6 +116,10 @@ const SunburstChart: React.FC<SunburstChartProps> = ({ data, width, height }) =>
 								fontSize={10}
 								fill={theme.name === 'dark' ? theme.colors.textColor : 'white'}
 								textAnchor="middle"
+								{...(theme.name === 'signalis' && {
+									fontFamily: theme.typography.fontFamily.secondary,
+									fontSize: 14,
+								})}
 							>
 								{node.data.name}
 							</Text>

@@ -10,7 +10,8 @@ import Navbar from '@/src/components/NavBar';
 import createTimePicker from '@/src/components/DateTimePicker';
 import { UniversalModal } from '@/src/components/modals/UniversalModal';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getFlaskServerURL } from '@/src/features/Database/helpers/databaseConfig';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { getFlaskServerURL } from '@/src/features/Database/helpers/databaseConfig';
 
 import { JournalData } from '@/src/types/Journal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';

@@ -7,7 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faSave, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import DeleteButton from '@/src/components/atoms/DeleteButton';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import AlertModal from '@/src/components/modals/AlertModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import AlertModal from '@/src/components/modals/AlertModal';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 import { AggregateTextData, TextNotesData } from '@/src/types/TextNotes';
 import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
@@ -141,7 +143,9 @@ const TextInputs: React.FC<TextSectionProps> = ({ periodType, startDate, endDate
         <View style={styles.textSummaries}>
             {sections.map((section) => (
             <View style={styles.formSection} key={section}>
-                <Text style={styles.sectionLabel}>{sectionLabels[section]}</Text>
+                <GlitchText style={styles.sectionLabel} glitch={theme.name === 'signalis'}>
+                    {sectionLabels[section]}
+                </GlitchText>
                 {localTextData[section].map((item: any, index: number) => {
                     const isEditing = editingStates[`${section}-${index}`];
                     return (
@@ -205,7 +209,7 @@ const getStyles = (theme: Theme) => {
             flexDirection: isSmall ? 'column' : 'row',
             flexWrap: 'wrap',
             gap: isDesktop ? 20 : 10,
-            borderRadius: 10,
+            borderRadius: theme.borderRadius.md,
             borderColor: theme.colors.borderColor,
             padding: isDesktop ? 20 : 10,
             margin: isDesktop ? 20 : 15,
@@ -217,6 +221,15 @@ const getStyles = (theme: Theme) => {
             color: theme.colors.accentColor,
             fontWeight: 'bold',
             textAlign: 'left',
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 20,
+                fontWeight: 'normal',
+                color: theme.colors.accentColor,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 6,
+            })
         },
         addButton: {
             padding: 12,
@@ -228,6 +241,15 @@ const getStyles = (theme: Theme) => {
         addButtonText: {
             color: 'gray',
             fontWeight: 'bold',
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 28,
+                fontWeight: 'normal',
+                color: theme.colors.textColorBold,
+                textShadowColor: theme.colors.accentColor,
+                textShadowOffset: { width: 1, height: 1 },
+                textShadowRadius: 6,
+            })
         },
         formSection: {
             flex: isSmall ? 0 : 1,

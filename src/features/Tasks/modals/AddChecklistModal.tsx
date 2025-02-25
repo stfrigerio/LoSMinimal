@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { UniversalModal } from '@/src/components/modals/UniversalModal';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { UniversalModal } from '@/src/components/modals/UniversalModal';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 
 interface AddChecklistModalProps {

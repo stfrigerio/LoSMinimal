@@ -1,5 +1,6 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Collapsible from '@/src/components/Collapsible';
 import { useState } from 'react';

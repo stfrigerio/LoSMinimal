@@ -5,7 +5,8 @@ import BooleanHeatmap from '@/src/components/charts/Heatmaps/BooleansHeatmap/Boo
 import AlertModal from '@/src/components/modals/AlertModal';
 import { PickerInput } from '@/src/components/FormComponents';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { usePeriodicData } from '@/src/features/PeriodicNote/hooks/usePeriodicData';
 
 interface BooleanSectionProps {
     startDate: Date;

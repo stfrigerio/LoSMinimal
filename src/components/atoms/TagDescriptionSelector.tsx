@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TagData } from '@/src/types/TagsAndDescriptions';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { TagData } from '@/src/types/TagsAndDescriptions';
 
 interface TagDescriptionSelectorProps {
     tag?: TagData | string;

@@ -3,7 +3,8 @@ import { View, Text, StyleSheet, Pressable, Switch } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { LibraryData } from '@/src/types/Library';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { LibraryData } from '@/src/types/Library';
 
 interface SectionHeaderProps {
     section: string;

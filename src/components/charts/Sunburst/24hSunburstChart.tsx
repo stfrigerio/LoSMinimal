@@ -4,7 +4,8 @@ import Svg, { Path, G, Text } from 'react-native-svg';
 import * as d3 from 'd3';
 import { colorPalette, adjustRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { TimeData } from '@/src/types/Time';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { TimeData } from '@/src/types/Time';
 import { useColors } from '@/src/utils/useColors';
 
 interface TagData {

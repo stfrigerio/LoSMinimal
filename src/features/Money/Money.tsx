@@ -4,7 +4,8 @@ import { View, StyleSheet, Text } from 'react-native';
 import TransactionModal from './modals/TransactionModal';
 import MobileNavbar from '@/src/components/NavBar';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { useTransactionData } from './hooks/useTransactionData';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { useTransactionData } from './hooks/useTransactionData';
 import { navItems } from './constants/navItems';
 import Banner from '@/src/components/Banner';
 

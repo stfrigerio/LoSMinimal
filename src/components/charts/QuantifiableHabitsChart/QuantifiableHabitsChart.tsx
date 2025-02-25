@@ -8,7 +8,8 @@ import Legend from './components/Legend';
 import ChartToggle from './components/ChartToggle'
 
 import { renderChart } from './renderChart';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { getRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { getRgbaOpacity, hexToRgba, isRgba } from '../colorMap';
 import { useColors } from '@/src/utils/useColors';
 
 import { QuantifiableHabitsChartProps, ChartData, ViewType } from './types/types';

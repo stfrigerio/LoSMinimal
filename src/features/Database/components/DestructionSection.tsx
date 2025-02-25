@@ -4,7 +4,8 @@ import { View } from 'react-native';
 import { PickerInput } from '@/src/components/FormComponents';
 import AlertModal from '@/src/components/modals/AlertModal';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { databaseManagers } from '@/database/tables';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { databaseManagers } from '@/database/tables';
 import { databaseManager } from '@/database/databaseManager';
 import { PrimaryButton } from '@/src/components/atoms/PrimaryButton';
 

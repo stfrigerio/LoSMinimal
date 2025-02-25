@@ -6,7 +6,8 @@ import { format } from 'date-fns';
 import createTimePicker from '@/src/components/DateTimePicker';
 import ButtonsSlider from '@/src/components/atoms/ButtonsSlider';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { DailyNoteData } from '@/src/types/DailyNote';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { DailyNoteData } from '@/src/types/DailyNote';
 
 type MorningDataProps = {
     data?: DailyNoteData | null;

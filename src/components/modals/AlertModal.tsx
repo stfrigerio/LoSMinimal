@@ -102,7 +102,7 @@ const AlertModal: React.FC<AlertModalProps> = ({
 
     return (
         <UniversalModal isVisible={isVisible} onClose={onCancel || (() => {})}>
-            <Text style={designs.modal.title}>{title}</Text>
+            <Text style={[designs.modal.title, { marginTop: 20}]}>{title}</Text>
             <Text style={styles.modalText}>{message}</Text>
             <View style={[
                 styles.buttonContainer,
@@ -120,6 +120,10 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
         marginBottom: theme.spacing.md,
         textAlign: 'center',
         fontSize: 16,
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontWeight: 'normal',
+        })
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -133,7 +137,7 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
         gap: 15,
     },
     button: {
-        borderRadius: 25,
+        borderRadius: theme.borderRadius.pill,
         paddingVertical: 12,
         minWidth: 120,
     },
@@ -166,6 +170,14 @@ const getStyles = (theme: any, designs: any) => StyleSheet.create({
         color: theme.colors.textColorBold,
         textAlign: 'center',
         fontSize: 14,
+        ...(theme.name === 'signalis' && {
+            fontFamily: theme.typography.fontFamily.secondary,
+            fontSize: 18,
+            fontWeight: 'normal',
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 12,
+        })
     },
 });
 

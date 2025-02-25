@@ -6,7 +6,8 @@ import { faSliders } from '@fortawesome/free-solid-svg-icons';
 import DrawerContent from './NavBar/DrawerContent';
 import DrawerIcon from './NavBar/DrawerIcon';
 import { useNavbarDrawer } from '@/src/contexts/NavbarContext';
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import NavbarQuickButton from './NavBar/NavbarQuickButton';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import NavbarQuickButton from './NavBar/NavbarQuickButton';
 
 import { MobileNavbarProps } from './NavBar/NavbarTypes';
 

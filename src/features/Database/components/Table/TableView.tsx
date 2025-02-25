@@ -5,7 +5,8 @@ import DeleteButton from '@/src/components/atoms/DeleteButton';
 import HeaderCell from './HeaderCell';
 import TableCell from './TableCell';
 
-import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';import { formatValue, getInputType, formatDateForDisplay, formatDateTimeForDisplay } from '@/src/features/Database/helpers/helper';
+import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
+import { formatValue, getInputType, formatDateForDisplay, formatDateTimeForDisplay } from '@/src/features/Database/helpers/helper';
 
 
 interface RowData {
