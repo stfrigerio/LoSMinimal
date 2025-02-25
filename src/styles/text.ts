@@ -43,6 +43,10 @@ export const textStyles = (theme: Theme): TextStyles => {
 			borderColor: theme.colors.borderColor,
 			borderRadius: 5,
 			color: theme.colors.textColor,
+			fontFamily: theme.name === 'signalis' ? theme.typography.fontFamily.secondary : theme.typography.fontFamily.primary,
+			...(theme.name === 'signalis' && {
+				fontSize: theme.typography.fontSize.lg,
+			}),
 		},
 	});
 };

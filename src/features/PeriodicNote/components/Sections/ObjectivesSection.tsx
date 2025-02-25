@@ -188,10 +188,16 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: theme.name === 'signalis' ? 'normal' : 'bold',
         marginBottom: 16,
-        color: 'gray',
-        alignSelf: 'center'
+        color: theme.colors.textColorBold,
+        alignSelf: 'center',
+        fontFamily: theme.typography.fontFamily.primary,
+        ...(theme.name === 'signalis' && {
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        }),
     },
     objectiveItem: {
         flexDirection: 'row',

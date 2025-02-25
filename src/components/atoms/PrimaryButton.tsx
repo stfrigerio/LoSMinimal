@@ -82,7 +82,7 @@ const getStyles = (theme: Theme, variant: string) => StyleSheet.create({
         backgroundColor: getButtonColor(theme, variant),
         borderWidth: theme.name === 'dark' ? 2 : 1,
         borderColor: theme.colors.borderColor,
-        borderRadius: theme.borderRadius.lg,
+        borderRadius: theme.borderRadius.md,
         minWidth: 120,  
     },
     pressed: {

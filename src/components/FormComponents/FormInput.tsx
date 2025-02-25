@@ -53,6 +53,7 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     inputLabel: {
         color: theme.colors.gray,
         marginLeft: 5,
-        marginBottom: 0,
+        marginBottom: 5,
+        fontFamily: theme.typography.fontFamily.primary,
     },
 });

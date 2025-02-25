@@ -69,9 +69,10 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         marginVertical: 10,
     },
     pickerLabel: {
-        fontSize: 16,
-        color: theme.colors.textColor,
+        color: theme.colors.gray,
         marginBottom: 5,
+        fontFamily: theme.typography.fontFamily.primary,
+        marginLeft: 5,
     },
     pickerTouchable: {
         height: 50,
@@ -83,8 +84,14 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         backgroundColor: theme.colors.backgroundSecondary,
     },
     pickerText: {
-        fontSize: 16,
+        fontSize: theme.name === 'signalis' ? theme.typography.fontSize.lg : 16,
         color: theme.colors.textColor,
+        fontFamily: theme.name === 'signalis' ? theme.typography.fontFamily.secondary : theme.typography.fontFamily.primary,
+        ...(theme.name === 'signalis' && {
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        }),
     },
     modalContent: {
         padding: 16,
@@ -99,8 +106,9 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         backgroundColor: theme.colors.textColor + '20', // 20 is hex for 12% opacity
     },
     optionText: {
-        fontSize: 16,
+        fontSize: theme.name === 'signalis' ? theme.typography.fontSize.lg : 16,
         color: theme.colors.textColor,
+        fontFamily: theme.name === 'signalis' ? theme.typography.fontFamily.secondary : theme.typography.fontFamily.primary,
     },
     selectedOptionText: {
         color: theme.colors.textColorItalic,

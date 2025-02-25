@@ -14,8 +14,8 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
     endDate, 
     intervalMs = 3000 // Default to 3 seconds
 }) => {
-    const { theme } = useThemeStyles();
-    const styles = getStyles(theme);
+    const { theme, designs } = useThemeStyles();
+    const styles = getStyles(theme, designs);
     const [imageUris, setImageUris] = useState<string[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
@@ -72,7 +72,13 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
     }, [imageUris.length]);
 
     if (imageUris.length === 0) {
-        return <Text style={{ color: theme.colors.textColor, marginBottom: 80}}>No images available for this date range.</Text>;
+        return <Text style={{ 
+            ...designs.text.text, 
+            marginBottom: 80, 
+            marginTop: 30,
+            fontSize: 16,
+            textAlign: 'center',
+        }}>No images available for this date range.</Text>;
     }
 
     const INTERVAL_OPTIONS = [
@@ -89,20 +95,20 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
                 source={{ uri: imageUris[currentIndex] }}
                 style={styles.image}
             />
-            <Text style={{ color: theme.colors.textColor, marginLeft: 10 }}>{`${currentIndex + 1} / ${imageUris.length}`}</Text>
+            <Text style={{ ...designs.text.text, marginLeft: 10 }}>{`${currentIndex + 1} / ${imageUris.length}`}</Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Pressable onPress={prevImage} style={styles.button}>
-                    <Text style={{ color: theme.colors.textColor }}>Previous</Text>
+                    <Text style={ designs.text.text }>Previous</Text>
                 </Pressable>
                 <Pressable onPress={togglePlayPause} style={styles.button}>
-                    <Text style={{ color: theme.colors.textColor }}>{isPlaying ? "Pause" : "Play"}</Text>
+                    <Text style={ designs.text.text }>{isPlaying ? "Pause" : "Play"}</Text>
                 </Pressable>
                 <Pressable onPress={nextImage} style={styles.button}>
-                    <Text style={{ color: theme.colors.textColor }}>Next</Text>
+                    <Text style={ designs.text.text }>Next</Text>
                 </Pressable>
             </View>
             <View style={styles.speedControls}>
-                <Text style={{ color: theme.colors.textColor }}>Speed:</Text>
+                <Text style={designs.text.text}>Speed:</Text>
                 <View style={styles.speedButtons}>
                     {INTERVAL_OPTIONS.map((option) => (
                         <Pressable
@@ -129,7 +135,7 @@ const ImageSlideShow: React.FC<ImageSlideShowProps> = ({
 
 export default ImageSlideShow;
 
-const getStyles = (theme: Theme) => {
+const getStyles = (theme: Theme, designs: any) => {
     return StyleSheet.create({
         image: {
             width: 300, 
@@ -171,7 +177,7 @@ const getStyles = (theme: Theme) => {
             borderColor: theme.colors.accentColor
         },
         speedButtonText: {
-            color: theme.colors.textColor,
+            ...designs.text.text,
             fontSize: 12
         },
         speedButtonTextActive: {

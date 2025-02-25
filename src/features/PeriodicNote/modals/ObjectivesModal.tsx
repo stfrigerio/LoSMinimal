@@ -95,7 +95,7 @@ export const AddObjectivesModal: React.FC<AddObjectivesModalProps> = ({ isVisibl
 
     const modalContent = (
         <View style={styles.modalContent}>
-            <Text style={[designs.text.title, styles.title]}>
+            <Text style={[styles.title]}>
                 {objective ? '✏️ Edit Objective' : '🎯 Add New Objective'}
             </Text>
             <View style={{ width: '100%' }}>
@@ -114,16 +114,20 @@ export const AddObjectivesModal: React.FC<AddObjectivesModalProps> = ({ isVisibl
                     placeholder="Enter note (optional)"
                 />
             </View>
-            <PickerInput
-                label="Pillar"
-                selectedValue={selectedPillarUuid || ''}
-                onValueChange={(itemValue) => setSelectedPillarUuid(itemValue)}
-                items={pillarItems}
-            />
-            <PrimaryButton
-                text={objective ? 'Update' : 'Add Objective'}
-                onPress={handleSubmit}
-            />
+            <View style={{ width: '100%', marginBottom: 20 }}>
+                <PickerInput
+                    label="Pillar"
+                    selectedValue={selectedPillarUuid || ''}
+                    onValueChange={(itemValue) => setSelectedPillarUuid(itemValue)}
+                    items={pillarItems}
+                />
+            </View>
+            <View style={{ width: '100%', marginBottom: 20 }}>
+                <PrimaryButton
+                    text={objective ? 'Update' : 'Add Objective'}
+                    onPress={handleSubmit}
+                />
+            </View>
         </View>
     );
 
@@ -150,8 +154,18 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         paddingHorizontal: 5,
     },
     title: {
-        marginBottom: 20,
+        color: theme.colors.textColorBold,
+        fontSize: theme.typography.fontSize.xl,
+        marginTop: theme.spacing.xl,
+        marginBottom: theme.spacing.xl,
         textAlign: 'center',
+        fontWeight: theme.name === 'signalis' ? 'normal' : 'bold',
+        fontFamily: theme.typography.fontFamily.primary,
+        ...(theme.name === 'signalis' && {
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 6,
+        }),
     },
     input: {
         width: '90%',
