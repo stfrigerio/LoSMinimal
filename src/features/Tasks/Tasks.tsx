@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
-import { View, StyleSheet, Dimensions, Platform, Pressable, Text } from 'react-native';
+import React, { useState, useMemo, useCallback } from 'react';
+import { View, StyleSheet, Text } from 'react-native';
 
 import TaskModal from '@/src/features/Tasks/modals/TaskModal';
 import MobileNavbar from '@/src/components/NavBar';
@@ -8,10 +8,9 @@ import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
 import { useTasksData } from './hooks/useTasksData';
 
 import { TaskData } from '@/src/types/Task';
-import { Project } from './components/Projects/types/types';
 import { router } from 'expo-router';
 import Banner from '@/src/components/Banner';
-
+import { GlitchText } from '@/src/styles/GlitchText';
 
 const TasksHub: React.FC = () => {
     const { theme, designs } = useThemeStyles();
@@ -64,7 +63,14 @@ const TasksHub: React.FC = () => {
     return (
         <View style={styles.container}>
             <Banner imageSource={require('@/assets/images/tasks.webp')} />
-            <Text style={designs.text.title}>Tasks</Text>
+            <View style={styles.titleContainer}>
+                <GlitchText
+                    glitch={theme.name === 'signalis'}
+                    style={designs.text.title}
+                >
+                    Tasks
+                </GlitchText>
+            </View>
 
             {/* Add Summary Section */}
             <View style={styles.summaryContainer}>
@@ -125,12 +131,17 @@ const getStyles = (theme: Theme) => {
             padding: 20,
             paddingTop: 40,
         },
+        titleContainer: {
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 20,
+        },
         summaryContainer: {
             backgroundColor: theme.colors.backgroundSecondary,
-            borderRadius: 12,
+            borderRadius: theme.borderRadius.md,
             padding: 15,
             marginBottom: 20,
-            shadowColor: "#000",
+            shadowColor: theme.colors.shadowColor,
             shadowOffset: {
                 width: 0,
                 height: 2,
@@ -153,11 +164,20 @@ const getStyles = (theme: Theme) => {
             fontSize: 14,
             color: theme.colors.textColorItalic,
             marginBottom: 5,
+            ...(theme.name === 'signalis' && {  
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 18,
+            })
         },
         summaryValue: {
             fontSize: 24,
             fontWeight: 'bold',
             color: theme.colors.textColor,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.secondary,
+                fontSize: 24,
+                fontWeight: 'normal',
+            })
         },
     });
 };

@@ -155,11 +155,22 @@ const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
         ...designs.text.text,
         fontWeight: 'bold',
         fontSize: 14,
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontWeight: 'normal',
+            fontFamily: theme.typography.fontFamily.secondary,
+        })
     },
     dueDate: {
         ...designs.text.text,
         fontSize: 12,
-        marginRight: 15
+        marginRight: 15,
+        ...(theme.name === 'signalis' && {
+            fontSize: 14,
+            color: theme.colors.textColorItalic,
+            fontWeight: 'normal',
+            fontFamily: theme.typography.fontFamily.secondary,
+        })
     },
     actions: {
         flexDirection: 'row',

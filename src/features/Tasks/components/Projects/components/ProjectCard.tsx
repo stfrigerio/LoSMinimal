@@ -61,6 +61,11 @@ const getStyles = (theme: Theme, designs: any) => {
             fontWeight: 'bold',
             color: theme.colors.textColor,
             width: '50%', // Fixed width for title
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+                fontSize: 14,
+                fontWeight: 'normal',
+            })
         },
         progressContainer: {
             flexDirection: 'row',

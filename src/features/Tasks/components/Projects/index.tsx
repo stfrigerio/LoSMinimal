@@ -9,6 +9,7 @@ import AlertModal from '@/src/components/modals/AlertModal';
 import { navItems } from '../../constants/navItems';
 import { projectsHelpers } from './helpers';
 import { exportProjects, importProjects } from './hooks';
+import { GlitchText } from '@/src/styles/GlitchText';
 
 import { Project } from './types/types';
 import { useThemeStyles, Theme } from '@/src/styles/useThemeStyles';
@@ -125,7 +126,12 @@ const Projects: React.FC = () => {
         <View style={styles.container}>
             <ScrollView style={[styles.projectsList, { marginBottom: 80 }]}>
                 <View style={styles.projectsListHeader}>
-                    <Text style={styles.projectsListHeaderText}>Projects</Text>
+                    <GlitchText
+                        style={styles.projectsListHeaderText}
+                        glitch={theme.name === 'signalis'}
+                    >
+                        Projects
+                    </GlitchText>
                 </View>
                 <HeaderActions
                     handleAddProject={handleAddProject}
@@ -266,12 +272,23 @@ const getStyles = (theme: Theme) => StyleSheet.create({
     },
     projectsListHeader: {
         padding: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 10,
     },
     projectsListHeaderText: {
         fontSize: 24,
         fontWeight: 'bold',
         textAlign: 'center',
         color: theme.colors.accentColor,
+        ...(theme.name === 'signalis' && {
+            fontSize: 24,
+            fontWeight: 'normal',
+            fontFamily: theme.typography.fontFamily.primary,
+            textShadowColor: theme.colors.accentColor,
+            textShadowOffset: { width: 2, height: 2 },
+            textShadowRadius: 10,
+        })
     },
     sectionContainer: {
         marginBottom: 20,
@@ -281,10 +298,14 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         fontWeight: '600',
-        marginBottom: 10,
+        marginBottom: 20,
         color: theme.colors.textColorItalic,
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontWeight: 'normal',
+            fontFamily: theme.typography.fontFamily.primary,
+        })
     },
 });
-
 
 export default Projects;

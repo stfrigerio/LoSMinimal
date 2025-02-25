@@ -209,23 +209,42 @@ export const markdownStyles = (theme: Theme) => {
 			fontWeight: theme.typography.fontWeight.bold,
 			marginVertical: theme.spacing.lg,
 			alignSelf: 'center',
+			...(theme.name === 'signalis' && {
+				fontFamily: theme.typography.fontFamily.primary,
+				fontSize: 24,
+				fontWeight: 'normal',
+			})
 		},
 		heading2: {
 			fontSize: theme.typography.fontSize.lg,
 			fontWeight: theme.typography.fontWeight.medium,
 			color: theme.colors.textColorBold,
 			marginVertical: theme.spacing.md,
+			...(theme.name === 'signalis' && {
+				fontFamily: theme.typography.fontFamily.primary,
+				fontSize: 20,
+				fontWeight: 'normal',
+			})
 		},
 		heading3: {
 			fontSize: theme.typography.fontSize.md,
 			fontWeight: theme.typography.fontWeight.medium,
 			color: theme.colors.accentColor,
 			marginVertical: theme.spacing.md,
+			...(theme.name === 'signalis' && {
+				fontFamily: theme.typography.fontFamily.primary,
+				fontSize: 18,
+				fontWeight: 'normal',
+			})
 		},
 		body: {
 			fontSize: theme.typography.fontSize.md,
 			fontFamily: 'serif',
 			color: theme.colors.textColor,
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+			})
 		},
 		blockquote: {
 			backgroundColor: theme.colors.backgroundColor,
@@ -235,11 +254,19 @@ export const markdownStyles = (theme: Theme) => {
 			opacity: 0.8,
 			borderRadius: theme.borderRadius.md,
 			fontSize: theme.typography.fontSize.sm,
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+			})
 		},
 		code_inline: {
 			backgroundColor: theme.colors.backgroundSecondary,
 			color: theme.colors.textColorBold,
 			fontSize: theme.typography.fontSize.sm,
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+			})
 		},
 		fence: {
 			backgroundColor: theme.colors.backgroundSecondary,
@@ -248,6 +275,10 @@ export const markdownStyles = (theme: Theme) => {
 			marginVertical: theme.spacing.md,
 			opacity: 0.8,
 			borderRadius: theme.borderRadius.md,
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+			})
 		},
 		hr: {
 			marginVertical: theme.spacing.md,
@@ -255,12 +286,24 @@ export const markdownStyles = (theme: Theme) => {
 		},
 		list_item: {
 			marginBottom: theme.spacing.xs,
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+			})
 		},
 		bullet_list: {
 			marginBottom: theme.spacing.md,
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+			})
 		},
 		ordered_list: {
 			marginBottom: theme.spacing.md,
+			...(theme.name === 'signalis' && {
+				fontSize: 18,
+				fontFamily: theme.typography.fontFamily.secondary,
+			})
 		},
 		strong: {
 			fontWeight: 'bold',

@@ -87,6 +87,9 @@ const getStyles = (theme: Theme, designs: any) => {
         iconText: {
             fontSize: 10,
             color: theme.colors.gray,
+            ...(theme.name === 'signalis' && {
+                fontFamily: theme.typography.fontFamily.primary,
+            })
         },
         iconButtonPressed: {
             backgroundColor: theme.colors.backgroundSecondary,

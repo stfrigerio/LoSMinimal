@@ -236,8 +236,11 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         justifyContent: 'space-between',
         padding: 8,
         borderWidth: 1,
-        borderRadius: 20,
+        borderRadius: theme.borderRadius.lg,
         borderColor: theme.colors.borderColor,
+        ...(theme.name === 'signalis' && {
+            backgroundColor: theme.colors.backgroundSecondary,
+        })
     },
     headerButtons: {
         flexDirection: 'row',
@@ -264,7 +267,6 @@ const getStyles = (theme: Theme) => StyleSheet.create({
         fontSize: 14,
         color: theme.colors.textColor,
         textAlignVertical: 'top',
-        fontFamily: 'monospace',
     },
 });
 

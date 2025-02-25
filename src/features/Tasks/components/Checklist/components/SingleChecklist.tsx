@@ -31,7 +31,7 @@ const SingleChecklist: React.FC<SingleChecklistProps> = ({
     onToggleCollapse,
 }) => {
     const { theme, designs } = useThemeStyles();
-    const styles = React.useMemo(() => getStyles(designs), [designs]);
+    const styles = React.useMemo(() => getStyles(theme, designs), [theme, designs]);
     const inputRef = useRef<TextInput>(null);
     const filteredTasks = tasks
         .filter(task => task.type === `checklist_${checklistData.name}`)
@@ -95,7 +95,7 @@ const SingleChecklist: React.FC<SingleChecklistProps> = ({
     );
 };
 
-const getStyles = (designs: any) => StyleSheet.create({
+const getStyles = (theme: Theme, designs: any) => StyleSheet.create({
     container: {
         marginBottom: 20,
         borderRadius: 8,
@@ -113,6 +113,12 @@ const getStyles = (designs: any) => StyleSheet.create({
         marginBottom: 0,
         marginLeft: 10,
         fontWeight: 'bold',
+        ...(theme.name === 'signalis' && {
+            fontSize: 18,
+            fontWeight: 'normal',
+            color: theme.colors.accentColor,
+            fontFamily: theme.typography.fontFamily.primary,
+        })
     },
     headerIcons: {
         flexDirection: 'row',
